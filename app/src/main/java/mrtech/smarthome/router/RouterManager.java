@@ -1,6 +1,5 @@
 package mrtech.smarthome.router;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.protobuf.ExtensionRegistry;
@@ -9,9 +8,6 @@ import com.stream.NewAllStreamParser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
-
-import javax.security.auth.Subject;
 
 import mrtech.router_demo.BuildConfig;
 import mrtech.smarthome.rpc.Messages;
@@ -159,7 +155,7 @@ public class RouterManager {
     public void addRouter(Router router) {
         if (router == null || getRouter(router.getSN()) != null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
-        router.setContext(innerRouter);
+        router.setRouterSession(innerRouter);
         innerRouter.subscribeRouterStatusChanged(new Action1<Router>() {
             @Override
             public void call(Router router) {
@@ -173,7 +169,7 @@ public class RouterManager {
 
     public void removeRouter(Router router) {
         if (router == null) return;
-        ((RouterClient) router.getContext()).destroy();
+        ((RouterClient) router.getRouterSession()).destroy();
         mRouters.remove(router);
     }
 
@@ -198,7 +194,7 @@ public class RouterManager {
     public Router[] getRouterList(boolean valid) {
         ArrayList<Router> routers = new ArrayList<>();
         for (Router mRouter : mRouters) {
-            if (mRouter.getContext().isAuthenticated() == valid) {
+            if (mRouter.getRouterSession().isAuthenticated() == valid) {
                 routers.add(mRouter);
             }
         }

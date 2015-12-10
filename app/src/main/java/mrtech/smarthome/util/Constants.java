@@ -1,29 +1,16 @@
 package mrtech.smarthome.util;
 
-
-
 public class Constants {
 	public static final String server = "cloud.hzmr-tech.com";// 服务器 ip：120.24.54.40
 	public static final int port = 8300;// 端口
-	//NGngzBgf@umkss83g7brx，CgBANPjs@umkss83g7brx
-//	public static String UMID = "umkss83g7brx"; //umkss7ig4crx,bCPUxrCc umkss76npc9u,ILyvwbmY umkss83g7brx,AxoPgnqw umkss86gncqu,tWNagyCw,AcxMFNrH,ifcsOUIm,AhLsQcGG umkss76gncqu,QXhVEMhM
-//	public static String API_KEY = "NGngzBgf";
-//	public static final String user = "admin";// 设备名
-//	public static final String password = "";// 设备密码
-//	public static final byte NEW_DATA = 0x11;
-//	public static final byte DELETE_FAILED = 0x12;
-//	public static final byte DELETE_SUCCEED = 0x13;
-//	public static final byte ADD_FAILED = 0x14;
-//	public static final byte ADD_SUCCEED = 0x15;
 	public static final String PRIVATE_CODE = "MIIDqTCCApGgAwIBAgIJAOumRs0WlpxwMA0GCSqGSIb3DQEBCwUAMGsxCzAJBgNVBAYTAkNOMRIwEAYDVQQIDAlHdWFuZ2RvbmcxJzAlBgNVBAoMHk1hb3JvbmcgSW50ZWxsaWdlbnQgVGVjaG5vbG9neTEfMB0GA1UEAwwWTWFvcm9uZyBSb290IEF1dGhvcml0eTAeFw0xNTAxMjIwMDU0MDZaFw0zNTAxMTcwMDU0MDZaMGsxCzAJBgNVBAYTAkNOMRIwEAYDVQQIDAlHdWFuZ2RvbmcxJzAlBgNVBAoMHk1hb3JvbmcgSW50ZWxsaWdlbnQgVGVjaG5vbG9neTEfMB0GA1UEAwwWTWFvcm9uZyBSb290IEF1dGhvcml0eTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMkEV6iZH9w32LuIGL4gvxf1BqZo4K2SlGrk8ne7yp7koGiDPUr23BH8YDkPuuJkFXx4ATII1OjoHRb6E3FK6DwiqscgrqMnqZwRu1iK0TJUpm637XirXCny/G8YXYy+sddkV2wugzIlSVd3iJxpH5EBb1FyfavZqq4WlGmwNH4tWOx0bEYRG+J/yoEQgW09nVkAY0yDTVs+InBLcuz0Ovu+1O+agueZnHA7Yf1ScS/7mZqOZGq0/Iw5s1rj0AezUtc/4dSf4IGmT5jVmfpKUIhRbLAF8T3IgyOV+FfrI57KS2s+Q8f4++ORx4MNpOmvkm97Rb9FD3IE+roJ5gH9D68CAwEAAaNQME4wHQYDVR0OBBYEFP+UZKsPa/skvkuROzgrfcLubqNcMB8GA1UdIwQYMBaAFP+UZKsPa/skvkuROzgrfcLubqNcMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAExqdn6BUFIvNU+yzU72b9wpv6FsD/ubOt84IqD9G+WasYZW8wBvGtJruzkt5wM3pjv8556jVDa2T0Og1Y0lr3AceACTZM+dcEJ+AHPnzFo+CdLdtSUXwwUA3gj2Jl6aeF+HYQhYS3ic7ApM9or1IBWYULj5gkCxqBvpV2VklAnRNIiM4Zr0LLPZA0NAN+BvsSDz6olNyR8Fpke7asrCfHIzHZkbv4nBzhdVyjJQn7nvGA6SMI1VjXHkjs6bLfBUNmoTt9J4PIvxjrnXJdunnOHhD+ycKiFMFDRrDVPuYmMqlRquCE+7DQ7nQwY8EgvhYXyd+au8nMZF9vO1Ei3kWWM=";
 	public static final String OAUTH_PRIVATE_CODE = "MIIDTjCCAjYCCQDCxFNADCuQ1DANBgkqhkiG9w0BAQUFADBpMQswCQYDVQQGEwJDTjESMBAGA1UECAwJR3VhbmdEb25nMRAwDgYDVQQHDAdIdWlaaG91MRAwDgYDVQQKDAdNYW9Sb25nMREwDwYDVQQLDAhET0IgVEVTVDEPMA0GA1UEAwwGRG9uZ3FpMB4XDTE1MDcwMzAyMzczMloXDTI1MDYzMDAyMzczMlowaTELMAkGA1UEBhMCQ04xEjAQBgNVBAgMCUd1YW5nRG9uZzEQMA4GA1UEBwwHSHVpWmhvdTEQMA4GA1UECgwHTWFvUm9uZzERMA8GA1UECwwIRE9CIFRFU1QxDzANBgNVBAMMBkRvbmdxaTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALGnT4fy54sL5ShFLc2MArePTRk3jWmztUcHMeH7dhroNKVVwuH/+uNMUW1QaynOerxb7jM8k9Tf4LvJNfRMDhvJ0Z3fO3M1YAaBxwrWOrXlaacedYGNWH0HHOJvcN79zGilHt4ySE+2OVmB2XQnudc1zV7WQOWeTwoJsqzNTqSHgPV/9RzcOLA+jQBC+C+Zj+YCmGOwLGekuREFSuMCWc2iVoTzBhsxi79QvKLGUXsf+DeKdJBaz/k1XvvcgA4srjiZmIYOAR88pB1ey2fM2XP9jlgDmJXbgsJiOnBr4FeHzfJur7gHLEPkQd95OIOIBdse7Qn1OyVeaG3cZY7igyUCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEArdmN5F+huPVzdKHQ+xWGtlX0N+/3VNqoFg4RkkddM3IMt4eV5yhkC9lSkufx4DI44jEcs07GP40XPloUxF6ZiIlpNMOdMsNzDLKHbudx/T+sFnQfbxPOxF6qGCfX2ZADLKv4SPrTWZlbUC9thNJ74EYLiSIHTzdFd8S5fyqqAhXBAhgNxwlvSLU6dULaoLepb5qA+rmxekkDq4fEChoOiHKVPCv5KTum/1ab7ycaM0/OOCkOQgmTjTkW5Fx/eoJYl6tQKpplV4bRHK7t8XXqa44Sa9RZZXvm3WDTw0m1u0bMAAio11urk0spGZtM4amYy+CCFrUqlg0vUjdfP5nRzQ==";
-//	public static PortServerClient portserverclient=new PortServerClient();
 	public static final String apiKey = "route_app";
 	public static final String apiSecret = "74C84CDC-24A2-42BE-AF7C-A2D6C3855251";
 	public static int handle = 0;
 	public static String accessToken = "";
 	public static String tokenType = "";
-	
+
 	public static final int DEFALUT_GROUP_ID = 9999;
 	public static final int ALL_DEVICE_GROUP_ID = 99999;
 	
@@ -32,9 +19,6 @@ public class Constants {
 	
 	public static final String TOKEN_SERVER = "https://connect.hzmr-tech.com/";
 	public static final String HTTPS_SERVER = "https://user.hzmr-tech.com/";
-	
-//	public static List<RouterConnectBean> connectBeans = new ArrayList<RouterConnectBean>();
-//	public static int connectBeanIndex = 1;
 	
 	public static final int NOTIFY_NONE = 0;
 	public static final int NOTIFY_SOUND = 1;

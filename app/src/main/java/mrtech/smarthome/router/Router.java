@@ -9,15 +9,15 @@ import mrtech.smarthome.router.Models.*;
 public class Router {
     private final String SN;
     private final Object Source;
-    private RouterContext Context;
+    private RouterSession routerSession;
 
-    public RouterContext getContext() {
-        return Context;
+    public RouterSession getRouterSession() {
+        return routerSession;
     }
 
-    void setContext(RouterContext context) {
-        if (context != null)
-            Context = context;
+    void setRouterSession(RouterSession routerSession) {
+        if (routerSession != null)
+            this.routerSession = routerSession;
     }
 
     /**

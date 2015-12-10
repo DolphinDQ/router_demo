@@ -15,7 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subjects.AsyncSubject;
 import rx.subjects.PublishSubject;
 
@@ -23,7 +27,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     PublishSubject<String> stringPublishSubject = PublishSubject.create();
 
-    @Override
+    static char i = Character.MAX_VALUE;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -35,12 +40,29 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Log.d("d", "publish");
-                Toast.makeText(MainActivity.this,"hasObservers:"+stringPublishSubject.hasObservers(),Toast.LENGTH_SHORT).show();
+                Log.d("dd", "i=" + (int) i);
+                i++;
+                Log.d("dd", "i=" + (int) i);
+                Toast.makeText(MainActivity.this, "hasObservers:" + stringPublishSubject.hasObservers(), Toast.LENGTH_SHORT).show();
                 stringPublishSubject.onNext("123");
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+
+        final Observable<String> first = stringPublishSubject.timeout(5000, TimeUnit.MILLISECONDS).first();
+        first.doOnError(new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e("e","timeout",throwable);
+            }
+        }).onErrorResumeNext(new Func1<Throwable, Observable<? extends String>>() {
+            @Override
+            public Observable<? extends String> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).subscribe();
+//        first.subscribe();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -70,11 +92,14 @@ public class MainActivity extends AppCompatActivity
                 toolbar.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "first:" + s,Toast.LENGTH_SHORT).show();;
+                        Toast.makeText(MainActivity.this, "first:" + s, Toast.LENGTH_SHORT).show();
+                        ;
                     }
                 });
             }
         });
+
+
     }
 
     @Override
