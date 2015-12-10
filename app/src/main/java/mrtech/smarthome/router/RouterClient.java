@@ -1,33 +1,46 @@
 package mrtech.smarthome.router;
 
 import android.util.Log;
+
+import com.squareup.okhttp.Route;
 import com.stream.NewAllStreamParser;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import mrtech.smarthome.router.Models.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 import java.util.prefs.InvalidPreferencesFormatException;
+
 import javax.net.ssl.SSLSocket;
+
 import mrtech.smarthome.interf.ResponseThreadListener;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.NetUtil;
 import mrtech.smarthome.util.NumberUtil;
 import mrtech.smarthome.util.RequestUtil;
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by sphynx on 2015/12/2.
  */
-class RouterClient implements Router.RouterContext {
+class RouterClient implements RouterContext {
     private static final int ROUTER_REQUEST_TIMEOUT = 2000;
     private static final int ROUTER_KEEP_ALIVE_DELAY = 20000;
     private static final int ROUTER_RECONNECTION_DELAY = 5000;
     private static final int ROUTER_ADD_PORT_DELAY = 5000;
     private static final int ROUTER_AUTH_DELAY = 5000;
     private static final int ROUTER_READ_INTERVAL = 1000;
-    private RouterStatusListener routerStatusListener;
 
     private static void trace(String msg) {
         Log.e(RouterClient.class.getName(), msg);
@@ -48,7 +61,9 @@ class RouterClient implements Router.RouterContext {
     private boolean authenticated;
     private ResponseThreadListener mResponseListener;
     private boolean destroyed = false;
-
+    private PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
+    private PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
+    private rx.Observable<Messages.Response> subjectResponse;
 
     public RouterClient(Router router, int p2pHandle) {
         mManager = RouterManager.getInstance();
@@ -57,7 +72,17 @@ class RouterClient implements Router.RouterContext {
         mRouter = router;
         mSubscribeMap = new HashMap<>();
         mResponseMap = new ConcurrentHashMap<>();
-
+        subjectResponse = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
+            @Override
+            public Boolean call(Messages.Callback callback) {
+                return callback.getType() == Messages.Callback.CallbackType.RESPONSE;
+            }
+        }).map(new Func1<Messages.Callback, Messages.Response>() {
+            @Override
+            public Messages.Response call(Messages.Callback callback) {
+                return callback.getExtension(Messages.Response.callback);
+            }
+        });
     }
 
     private boolean decodeSN() {
@@ -83,6 +108,7 @@ class RouterClient implements Router.RouterContext {
 
     public void init() {
         decodeSN();
+        subjectRouterStatusChanged = PublishSubject.create();
         new Thread(new RouterConnectionTask()).start();
     }
 
@@ -100,12 +126,8 @@ class RouterClient implements Router.RouterContext {
                     socket.close();
                     socket = null;
                     authenticated = false;
-                    callback(new Runnable() {
-                        @Override
-                        public void run() {
-                            routerStatusListener.StatusChanged(mRouter);
-                        }
-                    });
+                    subjectRouterStatusChanged.onNext(mRouter);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     trace(this + "socket close failed..");
@@ -125,12 +147,7 @@ class RouterClient implements Router.RouterContext {
             socket = tempSocket;
             readSocketTask = new SocketListeningTask();
             new Thread(readSocketTask).start();
-            callback(new Runnable() {
-                @Override
-                public void run() {
-                    routerStatusListener.StatusChanged(mRouter);
-                }
-            });
+            subjectRouterStatusChanged.onNext(mRouter);
             trace(this + " created ssl socket." + isConnected());
         } catch (SocketException e) {
             trace(this + "SocketException.!!!!removePort" + e.getMessage());
@@ -142,8 +159,8 @@ class RouterClient implements Router.RouterContext {
         }
         return isConnected();
     }
-//====================================================================================
 
+    //====================================================================================
     private boolean addPort() {
         synchronized (mManager) {
             try {
@@ -151,12 +168,8 @@ class RouterClient implements Router.RouterContext {
                 trace(this + " adding port...");
                 if (NewAllStreamParser.DNPCheckSrvConnState(mP2PHandle) != 2) return false;
                 port = NewAllStreamParser.DNPAddPort(mP2PHandle, p2pSN);
-                callback(new Runnable() {
-                    @Override
-                    public void run() {
-                        routerStatusListener.StatusChanged(mRouter);
-                    }
-                });
+                subjectRouterStatusChanged.onNext(mRouter);
+
                 trace(this + " p2p port:" + port);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -167,7 +180,6 @@ class RouterClient implements Router.RouterContext {
         }
     }
 
-
     private void removePort() {
         if (port == 0) return;
         disconnect();
@@ -175,20 +187,16 @@ class RouterClient implements Router.RouterContext {
             trace(this + " remove port...");
             NewAllStreamParser.DNPDelPort(mP2PHandle, port);
             port = 0;
-            callback(new Runnable() {
-                @Override
-                public void run() {
-                    routerStatusListener.StatusChanged(mRouter);
-                }
-            });
+            subjectRouterStatusChanged.onNext(mRouter);
+
         } catch (Exception e) {
             e.printStackTrace();
             trace(this + " remove port failed...");
         }
         return;
     }
-//====================================================================================
 
+    //====================================================================================
     private boolean doAuth() {
         if (!isConnected()) return false;
         try {
@@ -198,12 +206,8 @@ class RouterClient implements Router.RouterContext {
             authenticated =
                     code == Messages.Response.ErrorCode.SUCCESS ||
                             code == Messages.Response.ErrorCode.ALREADY_AUTHENTICATED;
-            callback(new Runnable() {
-                @Override
-                public void run() {
-                    routerStatusListener.StatusChanged(mRouter);
-                }
-            });
+            subjectRouterStatusChanged.onNext(mRouter);
+
             trace(RouterClient.this + " authentication result :" + code);
         } catch (TimeoutException e) {
             e.printStackTrace();
@@ -227,6 +231,7 @@ class RouterClient implements Router.RouterContext {
     public void destroy() {
         if (destroyed) return;
         destroyed = true;
+        subjectRouterStatusChanged.onCompleted();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -236,25 +241,49 @@ class RouterClient implements Router.RouterContext {
     }
 
     @Override
-    public void addRequest(final Messages.Request request) {
+    public void addRequest(final Messages.Request request, final Action1<Messages.Response> callback) {
         if (request != null) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     if (request != null) {
-                        try {
-                            postRequest(socket, request);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            trace(RouterClient.this + " socket IO exception ,socket will be reset..");
-                            disconnect();
-                            if (mResponseListener != null) {
-                                mResponseListener.onRequestFailure(e.getMessage(), e);
+                        OutputStream os = null;
+                        if (isConnected()) {
+                            try {
+                                os = socket.getOutputStream();
+                                int requestLength = request.getSerializedSize();
+                                byte heightLevelBit = (byte) ((requestLength & 0xff00) >> 8);
+                                byte lowLevelBit = (byte) (requestLength & 0x00ff);
+                                os.write(heightLevelBit);
+                                os.write(lowLevelBit);
+                                request.writeTo(os);
+                            } catch (IOException e) {
+                                disconnect();
+                                trace(RouterClient.this + " socket IO exception ,socket will be reset..");
+                            } finally {
+                                try {
+                                    os.close();
+                                } catch (Exception e2) {
+                                    e2.printStackTrace();
+                                }
+                            }
+                        } else {
+                            if (socket == null) {
+                                trace("socket is null");
+                            } else {
+                                disconnect();
                             }
                         }
                     }
                 }
             }).start();
+            if (callback != null)
+                subjectResponse.first(new Func1<Messages.Response, Boolean>() {
+                    @Override
+                    public Boolean call(Messages.Response resp) {
+                        return resp.getRequestId() == request.getRequestId();
+                    }
+                }).subscribe(callback);
         }
     }
 
@@ -262,7 +291,7 @@ class RouterClient implements Router.RouterContext {
     public Messages.Response addRequestSync(Messages.Request request, final int timeout) throws TimeoutException {
         if (request == null && isConnected()) return null;
         mSubscribeMap.put(request.getRequestId(), request);
-        addRequest(request);
+        addRequest(request, null);
         try {
             int requestId = request.getRequestId();
             int delay = 100;
@@ -313,43 +342,6 @@ class RouterClient implements Router.RouterContext {
         return authenticated;
     }
 
-    private void postRequest(SSLSocket sslSocket, Messages.Request request) throws IOException {
-        OutputStream os = null;
-        if (isConnected()) {
-            try {
-                os = sslSocket.getOutputStream();
-                int requestLength = request.getSerializedSize();
-                byte heightLevelBit = (byte) ((requestLength & 0xff00) >> 8);
-                byte lowLevelBit = (byte) (requestLength & 0x00ff);
-                os.write(heightLevelBit);
-                os.write(lowLevelBit);
-                request.writeTo(os);
-            } catch (IOException e) {
-                disconnect();
-            } finally {
-                try {
-                    os.close();
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
-            }
-        } else {
-            if (socket == null) {
-                trace("socket is null");
-            } else {
-                disconnect();
-            }
-        }
-    }
-
-    private void callback(Runnable runnable) {
-        try {
-            if (routerStatusListener != null)
-                runnable.run();
-        } catch (NullPointerException e) {
-        }
-    }
-
     private Messages.Callback pullCallback(final SSLSocket sslSocket) throws IOException, InvalidPreferencesFormatException {
         InputStream in = null;
         in = sslSocket.getInputStream();
@@ -372,21 +364,12 @@ class RouterClient implements Router.RouterContext {
     private int checkRouterStatus() {
         try {
             if (!isSNValid()) return -1;
-            if (!isPortValid()) {
-                if (!addPort()) {
-                    return ROUTER_ADD_PORT_DELAY;
-                }
-            }
-            if (!isConnected()) {
-                if (!connect()) {
-                    return ROUTER_RECONNECTION_DELAY;
-                }
-            }
-            if (!isAuthenticated()) {
-                if (!doAuth()) {
-                    return ROUTER_AUTH_DELAY;
-                }
-            }
+            if (!isPortValid())
+                if (!addPort()) return ROUTER_ADD_PORT_DELAY;
+            if (!isConnected())
+                if (!connect()) return ROUTER_RECONNECTION_DELAY;
+            if (!isAuthenticated())
+                if (!doAuth()) return ROUTER_AUTH_DELAY;
             keepAlive();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -396,8 +379,8 @@ class RouterClient implements Router.RouterContext {
         }
     }
 
-    public void setRouterStatusListener(RouterStatusListener listener) {
-        routerStatusListener = listener;
+    public Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
+        return subjectRouterStatusChanged.subscribe(callback);
     }
 
     private class RouterConnectionTask implements Runnable {
@@ -411,7 +394,7 @@ class RouterClient implements Router.RouterContext {
                     e.printStackTrace();
                 } finally {
                     try {
-                        if (delay < 0){
+                        if (delay < 0) {
                             destroy();
                             break;
                         }

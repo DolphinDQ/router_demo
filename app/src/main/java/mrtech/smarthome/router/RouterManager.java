@@ -17,16 +17,18 @@ import mrtech.router_demo.BuildConfig;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.Constants;
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.subjects.PublishSubject;
 
 /**
  * router connection manager
  * Created by sphynx on 2015/12/1.
  */
 public class RouterManager {
-    public static ExtensionRegistry registry = ExtensionRegistry.newInstance();
+    public final static ExtensionRegistry registry = ExtensionRegistry.newInstance();
     private Map<Messages.Response.ErrorCode, String> errorMessageMap;
-
-    private RouterStatusListener routerStatusListener;
+    private PublishSubject<Router> subjectRouterStatusChanged=PublishSubject.create();
 
     private static void trace(String msg) {
         Log.e(RouterManager.class.getName(), msg);
@@ -39,6 +41,7 @@ public class RouterManager {
     }
 
     private int mP2PHandle;
+
     private ArrayList<Router> mRouters;
 
     private RouterManager() {
@@ -157,7 +160,12 @@ public class RouterManager {
         if (router == null || getRouter(router.getSN()) != null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setContext(innerRouter);
-        setListener(innerRouter);
+        innerRouter.subscribeRouterStatusChanged(new Action1<Router>() {
+            @Override
+            public void call(Router router) {
+                subjectRouterStatusChanged.onNext(router);
+            }
+        });
         innerRouter.init();
         mRouters.add(router);
         trace("add router :" + router.getSN());
@@ -204,14 +212,7 @@ public class RouterManager {
         }
     }
 
-    public void setRouterStatusListener(RouterStatusListener listener) {
-        for (Router router : getRouterList()) {
-            routerStatusListener = listener;
-            setListener((RouterClient) router.getContext());
-        }
-    }
-
-    private void setListener(RouterClient router) {
-        router.setRouterStatusListener(routerStatusListener);
+    public Subscription subscribeRouterStatusChanged(Action1<Router> callback){
+        return subjectRouterStatusChanged.subscribe(callback);
     }
 }

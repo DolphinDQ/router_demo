@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import rx.functions.Action1;
+import rx.subjects.AsyncSubject;
 import rx.subjects.PublishSubject;
 
 public class MainActivity extends AppCompatActivity
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("d","publish");
+                Log.d("d", "publish");
+                Toast.makeText(MainActivity.this,"hasObservers:"+stringPublishSubject.hasObservers(),Toast.LENGTH_SHORT).show();
                 stringPublishSubject.onNext("123");
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -49,19 +51,19 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        stringPublishSubject.subscribe(new Action1<String>() {
-            @Override
-            public void call(final String s) {
-                Log.d("d","callback");
-                toolbar.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("d","toast");
-                        Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+//        stringPublishSubject.subscribe(new Action1<String>() {
+//            @Override
+//            public void call(final String s) {
+//                Log.d("d","callback");
+//                toolbar.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Log.d("d","toast");
+//                        Toast.makeText(MainActivity.this, "长度："+stringPublishSubject.count(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
         stringPublishSubject.first().subscribe(new Action1<String>() {
             @Override
             public void call(final String s) {
@@ -132,4 +134,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

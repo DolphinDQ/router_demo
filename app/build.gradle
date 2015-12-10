@@ -28,7 +28,6 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.squareup.okhttp:okhttp:2.6.0'
     compile 'com.google.code.gson:gson:2.5'
-    compile files('libs/protobuf-java-2.4.1.jar')
-    compile files('libs/NewLivePlayer.jar')
-    compile files('libs/rxjava-1.1.1-SNAPSHOT.jar')
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'com.google.protobuf:protobuf-java:2.6.1'
 }
