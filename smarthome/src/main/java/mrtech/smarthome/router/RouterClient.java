@@ -37,6 +37,7 @@ class RouterClient implements RouterSession {
     private static void trace(String msg) {
         Log.e(RouterClient.class.getName(), msg);
     }
+
     private final Router mRouter;
     private final RouterManager mManager;
     private final HashMap<Integer, Messages.Request> mSubscribeMap;
@@ -46,6 +47,7 @@ class RouterClient implements RouterSession {
     private SocketListeningTask readSocketTask;
     private String p2pSN;
     private String apiKey;
+    private RouterStatus routerStatus;
     private boolean invalidSN;
     private int port;
     private SSLSocket socket;
@@ -54,6 +56,9 @@ class RouterClient implements RouterSession {
     private PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
     private PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
     private rx.Observable<Messages.Response> subjectResponse;
+    private Messages.GetSystemConfigurationResponse systemConfigurationResponse;
+    private RouterCacheProvider routerCacheProvider;
+
     public RouterClient(Router router, int p2pHandle) {
         mManager = RouterManager.getInstance();
         mSN = router.getSN();
@@ -81,7 +86,7 @@ class RouterClient implements RouterSession {
             @Override
             public void call(Messages.Response response) {
                 int requestId = response.getRequestId();
-                if (mResponseMap.containsKey(requestId))
+                if (mSubscribeMap.containsKey(requestId))
                     mResponseMap.put(requestId, response);
             }
         });
@@ -95,6 +100,7 @@ class RouterClient implements RouterSession {
     private boolean decodeSN() {
         if (p2pSN == null && apiKey == null) {
             try {
+                setRouterStatus(RouterStatus.CHECKING_SN);
                 trace("decoding sn:" + mSN);
                 final String code = NumberUtil.decodeQRCode(mSN);
                 trace("decoded sn:" + mSN + " -> " + code);
@@ -107,6 +113,7 @@ class RouterClient implements RouterSession {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 invalidSN = true;
+                setRouterStatus(RouterStatus.INVALID_SN);
                 trace("decoded sn:" + this + "failed...");
             }
         }
@@ -114,8 +121,9 @@ class RouterClient implements RouterSession {
     }
 
     public void init() {
-        if (initialized)return;
-        initialized=true;
+        if (initialized) return;
+        initialized = true;
+        setRouterStatus(RouterStatus.INITIALIZED);
         decodeSN();
         subjectRouterStatusChanged = PublishSubject.create();
         new Thread(new Runnable() {
@@ -272,8 +280,42 @@ class RouterClient implements RouterSession {
     }
 
     @Override
+    public void postRequestAsync(Messages.Request request, Action2<Messages.Response, Throwable> callback, boolean cache) {
+
+    }
+
+    @Override
     public void postRequestAsync(final Messages.Request request, final Action2<Messages.Response, Throwable> callback, int timeout) {
+
+    }
+
+    @Override
+    public void postRequestAsync(final Messages.Request request, final Action2<Messages.Response, Throwable> callback, int timeout, boolean cache) {
         if (request != null) {
+            if (cache && routerCacheProvider != null) {
+                final Messages.Response response = routerCacheProvider.getResponseCache(request.getType());
+                if (response!=null){
+                }
+            }
+
+            if (callback != null)
+                subjectResponse.timeout(timeout, TimeUnit.MILLISECONDS).doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        callback.call(null, throwable);
+                    }
+                }).first(new Func1<Messages.Response, Boolean>() {
+                    @Override
+                    public Boolean call(Messages.Response resp) {
+                        return resp.getRequestId() == request.getRequestId();
+                    }
+                }).subscribe(new Action1<Messages.Response>() {
+                    @Override
+                    public void call(Messages.Response response) {
+                        callback.call(response, null);
+                    }
+                });
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -294,6 +336,8 @@ class RouterClient implements RouterSession {
                                     callback.call(null, e);
                                 }
                                 trace(RouterClient.this + " socket IO exception ,socket will be reset..");
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             } finally {
                                 try {
                                     os.close();
@@ -313,23 +357,6 @@ class RouterClient implements RouterSession {
                     }
                 }
             }).start();
-            if (callback != null)
-                subjectResponse.timeout(timeout, TimeUnit.MILLISECONDS).doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        callback.call(null, throwable);
-                    }
-                }).first(new Func1<Messages.Response, Boolean>() {
-                    @Override
-                    public Boolean call(Messages.Response resp) {
-                        return resp.getRequestId() == request.getRequestId();
-                    }
-                }).subscribe(new Action1<Messages.Response>() {
-                    @Override
-                    public void call(Messages.Response response) {
-                        callback.call(response, null);
-                    }
-                });
         }
     }
 
@@ -359,8 +386,30 @@ class RouterClient implements RouterSession {
     }
 
     @Override
+    public Messages.Response postRequest(Messages.Request request, int timeout, boolean cache) throws TimeoutException {
+        return null;
+    }
+
+    @Override
     public Messages.Response postRequest(Messages.Request request) throws TimeoutException {
         return postRequest(request, ROUTER_REQUEST_TIMEOUT);
+    }
+
+    @Override
+    public Messages.Response postRequest(Messages.Request request, boolean cache) throws TimeoutException {
+        return null;
+    }
+
+    @Override
+    public Messages.GetSystemConfigurationResponse getRouterConfiguration(boolean refreshCache) {
+        if (systemConfigurationResponse == null) {
+            try {
+                systemConfigurationResponse = postRequest(RequestUtil.getSysConfig()).getExtension(Messages.GetSystemConfigurationResponse.response);
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+        }
+        return systemConfigurationResponse;
     }
 
     @Override
@@ -381,6 +430,15 @@ class RouterClient implements RouterSession {
     @Override
     public boolean isAuthenticated() {
         return authenticated;
+    }
+
+    @Override
+    public RouterStatus getRouterStatus() {
+        return routerStatus;
+    }
+
+    private void setRouterStatus(RouterStatus routerStatus) {
+        this.routerStatus = routerStatus;
     }
 
     private Messages.Callback pullCallback(final SSLSocket sslSocket) throws IOException, InvalidPreferencesFormatException {

@@ -1,10 +1,10 @@
 package mrtech.router_demo;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,14 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import java.util.concurrent.TimeUnit;
-
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.subjects.AsyncSubject;
-import rx.subjects.PublishSubject;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (acceptToFinish) finish();
             acceptToFinish = true;
-            Toast.makeText(this,getText(R.string.acceptToFinish),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getText(R.string.accept_finish),Toast.LENGTH_SHORT).show();
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -103,6 +95,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id==R.id.action_router_settings){
+            startActivity(new Intent(this,RouterSettingsActivity.class));
             return true;
         }
 

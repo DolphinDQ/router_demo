@@ -65,51 +65,61 @@ public class IPCModels {
         /**
          * 初始化
          */
-        UNKNOWN,
+        UNKNOWN("未知状态"),
         /**
          * 正在连接
          */
-        CONNECTING,
+        CONNECTING("正在连接"),
         /**
          * 在线
          */
-        CONNECTED,
+        CONNECTED("设备在线"),
         /**
          * 连接失败
          */
-        CONNECT_ERROR,
+        CONNECT_ERROR("连接失败"),
         /**
          * 用户名密码错误
          */
-        ERROR_USER_PWD,
+        ERROR_USER_PWD("验证失败"),
         /**
          * 超过最大可连接用户数
          */
-        ERROR_MAX_USER,
+        ERROR_MAX_USER("连接数满"),
         /**
          * 视频丢失
          */
-        ERROR_VIDEO_LOST,
+        ERROR_VIDEO_LOST("视频丢失"),
         /**
          * 不可用的设备ID
          */
-        ERROR_INVALID_ID,
+        ERROR_INVALID_ID("ID不可用"),
         /**
          * 设备不在线。
          */
-        DEVICE_OFFLINE,
+        DEVICE_OFFLINE("设备离线"),
         /**
          * 连接超时
          */
-        CONNECT_TIMEOUT,
+        CONNECT_TIMEOUT("连接超时"),
         /**
          * 断开连接
          */
-        DISCONNECT,
+        DISCONNECT("断开连接"),
         /**
          * 校验用户账号
          */
-        CHECK_ACCOUNT,
+        CHECK_ACCOUNT("正在验证");
+
+        private final String description;
+        private  IPCStatus(String description){
+            this.description =description;
+        }
+
+        @Override
+        public String toString() {
+            return description;
+        }
     }
 
     public interface IPCEventData {

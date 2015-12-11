@@ -2,6 +2,8 @@ package mrtech.smarthome.router;
 
 
 import mrtech.smarthome.router.Models.*;
+import mrtech.smarthome.rpc.Messages;
+
 /**
  * router model object
  * Created by sphynx on 2015/12/1.
@@ -9,6 +11,7 @@ import mrtech.smarthome.router.Models.*;
 public class Router {
     private final String SN;
     private final Object Source;
+    private final String Name;
     private RouterSession routerSession;
 
     public RouterSession getRouterSession() {
@@ -26,9 +29,10 @@ public class Router {
      * @param source source data
      * @param sn     router serial number
      */
-    public Router(Object source, String sn) {
+    public Router(Object source, String name, String sn) {
         SN = sn;
         Source = source;
+        Name = name;
     }
 
     /**
@@ -38,6 +42,15 @@ public class Router {
      */
     public String getSN() {
         return SN;
+    }
+
+    public String getName() {
+        final RouterSession routerSession = getRouterSession();
+        if (routerSession != null) {
+            final Messages.GetSystemConfigurationResponse routerConfiguration = routerSession.getRouterConfiguration(false);
+            return routerConfiguration.getConfiguration().getDeviceName();
+        }
+        return Name;
     }
 
     /**

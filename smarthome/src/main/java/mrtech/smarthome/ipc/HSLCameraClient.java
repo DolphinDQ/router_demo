@@ -91,6 +91,7 @@ class HSLCameraClient implements IPCContext {
         if (mHandle > 0) {
             DeviceSDK.closeDevice(mHandle);
             DeviceSDK.destoryDevice(mHandle);
+            mHandle = 0;
         }
     }
 

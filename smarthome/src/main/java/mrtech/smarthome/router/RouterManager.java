@@ -48,12 +48,13 @@ public class RouterManager {
     }
 
     private void initExtensionRegistry() {
-        new Thread() {
-            public void run() {
-                Messages.registerAllExtensions(registry);
-                Models.registerAllExtensions(registry);
-            }
-        }.start();
+//        new Thread() {
+//            public void run() {
+//
+//            }
+//        }.start();
+        Messages.registerAllExtensions(registry);
+        Models.registerAllExtensions(registry);
     }
 
     private void initErrorMessageMap() {
