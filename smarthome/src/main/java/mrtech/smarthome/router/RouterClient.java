@@ -295,6 +295,7 @@ class RouterClient implements RouterSession {
             if (cache && routerCacheProvider != null) {
                 final Messages.Response response = routerCacheProvider.getResponseCache(request.getType());
                 if (response!=null){
+
                 }
             }
 
