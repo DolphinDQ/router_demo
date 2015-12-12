@@ -1,5 +1,6 @@
 package mrtech.smarthome.router;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.rpc.Messages;
@@ -66,9 +67,10 @@ public class Models {
 
         /**
          * 异步向路由器发送请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT
+         *
          * @param request  请求包
          * @param callback 请求回调
-         * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器。
+         * @param cache    是否启用缓存。true启用缓存，则首次发送会网络请求给服务器。
          */
         void postRequestAsync(Messages.Request request, Action2<Messages.Response, Throwable> callback, boolean cache);
 
@@ -83,10 +85,11 @@ public class Models {
 
         /**
          * 异步向路由器发送请求。
+         *
          * @param request  请求包
          * @param callback 请求回调
          * @param timeout  请求超时，毫秒
-         * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器。
+         * @param cache    是否启用缓存。true启用缓存，则首次发送会网络请求给服务器。
          */
         void postRequestAsync(Messages.Request request, Action2<Messages.Response, Throwable> callback, int timeout, boolean cache);
 
@@ -105,7 +108,7 @@ public class Models {
          *
          * @param request 用户请求。
          * @param timeout 超时时间。毫秒
-         * @param cache  是否启用缓存。true启用缓存，则首次发送会网络请求给服务器。
+         * @param cache   是否启用缓存。true启用缓存，则首次发送会网络请求给服务器。
          * @return
          * @throws TimeoutException
          */
@@ -140,19 +143,23 @@ public class Models {
     }
 
     public enum RouterStatus {
-        INITIALIZED("初始化"),
-        CHECKING_SN("验证序列码"),
-        INVALID_SN("序列码无效"),
+        CREATED("未初始化"),
+        INITIALIZED("初始化完毕"),
+        SN_DECODING( "序列码解析中"),
+        SN_INVALID("序列码无效"),
+        SN_DECODED("序列码解析成功"),
         P2P_CONNECTING("P2P连接中"),
-        P2P_CONNECTION_ERR("P2P连接失败"),
-        ROUTER_CONNECTING("路由器连接中"),
-        ROUTER_CONNECTION_ERR("路由器连接失败"),
-        AUTH_API_KEY("获取通讯授权"),
-        INVALID_API_KEY("获取通讯授权失败"),
-        ROUTER_CONNECT_COMPLETE("路由器连接完毕");
-        private final String description;
+        P2P_DISCONNECTED("P2P连接失败"),
+        P2P_CONNECTED("P2P连接成功"),
+        ROUTER_CONNECTING( "路由器连接中"),
+        ROUTER_DISCONNECTED( "路由器连接失败"),
+        ROUTER_CONNECTED("路由器已连接"),
+        API_AUTH( "通讯授权中"),
+        API_UNAUTHORIZED( "通讯未授权"),
+        API_AUTH_SUCCESS( "通讯授权成功");
 
-        RouterStatus(String description) {
+        private final String description;
+        RouterStatus( String description) {
             this.description = description;
         }
 

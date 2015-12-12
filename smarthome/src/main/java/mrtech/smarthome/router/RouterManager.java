@@ -55,10 +55,12 @@ public class RouterManager {
 //        }.start();
         Messages.registerAllExtensions(registry);
         Models.registerAllExtensions(registry);
+        trace("registry extensions...");
+
     }
 
     private void initErrorMessageMap() {
-        errorMessageMap = new HashMap<Messages.Response.ErrorCode, String>();
+        errorMessageMap = new HashMap<>();
         errorMessageMap.put(Messages.Response.ErrorCode.UNKNOWN_PROTOCOL, "未知协议。");
         errorMessageMap.put(Messages.Response.ErrorCode.UNSUPPORTED_VERSION, "版本不支持。");
         errorMessageMap.put(Messages.Response.ErrorCode.SERVER_BUSY, "服务器忙，请稍后再试。");

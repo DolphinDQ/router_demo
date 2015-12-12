@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.prefs.InvalidPreferencesFormatException;
 
 import javax.net.ssl.SSLSocket;
 
@@ -53,8 +52,8 @@ class RouterClient implements RouterSession {
     private SSLSocket socket;
     private boolean authenticated;
     private boolean initialized = false;
-    private PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
-    private PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
+    private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
+    private final PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
     private rx.Observable<Messages.Response> subjectResponse;
     private Messages.GetSystemConfigurationResponse systemConfigurationResponse;
     private RouterCacheProvider routerCacheProvider;
@@ -66,6 +65,7 @@ class RouterClient implements RouterSession {
         mRouter = router;
         mSubscribeMap = new HashMap<>();
         mResponseMap = new ConcurrentHashMap<>();
+        setRouterStatus(RouterStatus.CREATED);
         subjectResponse = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
             @Override
             public Boolean call(Messages.Callback callback) {
@@ -100,7 +100,7 @@ class RouterClient implements RouterSession {
     private boolean decodeSN() {
         if (p2pSN == null && apiKey == null) {
             try {
-                setRouterStatus(RouterStatus.CHECKING_SN);
+                setRouterStatus(RouterStatus.SN_DECODING);
                 trace("decoding sn:" + mSN);
                 final String code = NumberUtil.decodeQRCode(mSN);
                 trace("decoded sn:" + mSN + " -> " + code);
@@ -113,7 +113,7 @@ class RouterClient implements RouterSession {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 invalidSN = true;
-                setRouterStatus(RouterStatus.INVALID_SN);
+                setRouterStatus(RouterStatus.SN_INVALID);
                 trace("decoded sn:" + this + "failed...");
             }
         }
@@ -123,9 +123,8 @@ class RouterClient implements RouterSession {
     public void init() {
         if (initialized) return;
         initialized = true;
-        setRouterStatus(RouterStatus.INITIALIZED);
         decodeSN();
-        subjectRouterStatusChanged = PublishSubject.create();
+//        subjectRouterStatusChanged = PublishSubject.create();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -149,49 +148,7 @@ class RouterClient implements RouterSession {
                 } while (initialized);
             }
         }).start();
-    }
-
-    //====================================================================================
-    private void disconnect() {
-        if (socket != null) {
-            if (!socket.isClosed()) {
-                try {
-                    readSocketTask.cancel();
-                    socket.close();
-                    socket = null;
-                    authenticated = false;
-                    subjectRouterStatusChanged.onNext(mRouter);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    trace(this + "socket close failed..");
-                }
-            }
-            socket = null;
-        }
-    }
-
-    private boolean connect() {
-        disconnect();
-        trace(this + " creating ssl socket.");
-        try {
-            SSLSocket tempSocket = NetUtil.createSocket("localhost", port);
-            if (tempSocket == null || !tempSocket.getSession().isValid())
-                return false;
-            socket = tempSocket;
-            readSocketTask = new SocketListeningTask();
-            new Thread(readSocketTask).start();
-            subjectRouterStatusChanged.onNext(mRouter);
-            trace(this + " created ssl socket." + isConnected());
-        } catch (SocketException e) {
-            trace(this + "SocketException.!!!!removePort" + e.getMessage());
-            removePort();
-        } catch (Exception e) {
-            e.printStackTrace();
-            trace(this + "create ssl socket error." + e.getMessage());
-            disconnect();
-        }
-        return isConnected();
+        setRouterStatus(RouterStatus.INITIALIZED);
     }
 
     //====================================================================================
@@ -200,15 +157,16 @@ class RouterClient implements RouterSession {
             try {
                 removePort();
                 trace(this + " adding port...");
-                if (NewAllStreamParser.DNPCheckSrvConnState(mP2PHandle) != 2) return false;
+                setRouterStatus(RouterStatus.P2P_CONNECTING);
                 port = NewAllStreamParser.DNPAddPort(mP2PHandle, p2pSN);
-                subjectRouterStatusChanged.onNext(mRouter);
 
-                trace(this + " p2p port:" + port);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 port = 0;
                 trace(this + "add port failed..");
+            } finally {
+                setRouterStatus(isPortValid() ? RouterStatus.P2P_CONNECTED : RouterStatus.P2P_DISCONNECTED);
+                trace(this + " p2p port:" + port);
             }
             return port != 0;
         }
@@ -221,13 +179,52 @@ class RouterClient implements RouterSession {
             trace(this + " remove port...");
             NewAllStreamParser.DNPDelPort(mP2PHandle, port);
             port = 0;
-            subjectRouterStatusChanged.onNext(mRouter);
-
+            setRouterStatus(RouterStatus.P2P_DISCONNECTED);
         } catch (Exception e) {
             e.printStackTrace();
             trace(this + " remove port failed...");
         }
-        return;
+    }
+
+    //====================================================================================
+    private void disconnect() {
+        if (socket != null) {
+            if (!socket.isClosed()) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    trace(this + "socket close failed..");
+                }
+            }
+            readSocketTask.cancel();
+            socket = null;
+            authenticated = false;
+            setRouterStatus(RouterStatus.ROUTER_DISCONNECTED);
+        }
+    }
+
+    private boolean connect() {
+        disconnect();
+        trace(this + " creating ssl socket.");
+        try {
+            setRouterStatus(RouterStatus.ROUTER_CONNECTING);
+            SSLSocket tempSocket = NetUtil.createSocket("localhost", port);
+            if (tempSocket == null || !tempSocket.getSession().isValid())
+                return false;
+            socket = tempSocket;
+            readSocketTask = new SocketListeningTask();
+            new Thread(readSocketTask).start();
+            setRouterStatus(isConnected() ? RouterStatus.ROUTER_CONNECTED : RouterStatus.ROUTER_DISCONNECTED);
+        } catch (SocketException e) {
+            trace(this + "SocketException.!!!!removePort" + e.getMessage());
+            removePort();
+        } catch (Exception e) {
+            trace(this + "create ssl socket error." + e.getMessage());
+            e.printStackTrace();
+            disconnect();
+        }
+        return isConnected();
     }
 
     //====================================================================================
@@ -240,12 +237,12 @@ class RouterClient implements RouterSession {
             authenticated =
                     code == Messages.Response.ErrorCode.SUCCESS ||
                             code == Messages.Response.ErrorCode.ALREADY_AUTHENTICATED;
-            subjectRouterStatusChanged.onNext(mRouter);
-
             trace(RouterClient.this + " authentication result :" + code);
         } catch (TimeoutException e) {
             e.printStackTrace();
             trace("auth time out");
+        }finally {
+            setRouterStatus(authenticated ? RouterStatus.API_AUTH_SUCCESS : RouterStatus.API_UNAUTHORIZED);
         }
         return authenticated;
     }
@@ -265,7 +262,8 @@ class RouterClient implements RouterSession {
     public void destroy() {
         if (!initialized) return;
         initialized = false;
-        subjectRouterStatusChanged.onCompleted();
+        setRouterStatus(RouterStatus.CREATED);
+//        subjectRouterStatusChanged.onCompleted();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -281,25 +279,25 @@ class RouterClient implements RouterSession {
 
     @Override
     public void postRequestAsync(Messages.Request request, Action2<Messages.Response, Throwable> callback, boolean cache) {
-
+        postRequestAsync(request, callback, ROUTER_REQUEST_TIMEOUT, cache);
     }
 
     @Override
     public void postRequestAsync(final Messages.Request request, final Action2<Messages.Response, Throwable> callback, int timeout) {
-
+        postRequestAsync(request, callback, timeout, false);
     }
 
     @Override
     public void postRequestAsync(final Messages.Request request, final Action2<Messages.Response, Throwable> callback, int timeout, boolean cache) {
-        if (request != null) {
-            if (cache && routerCacheProvider != null) {
-                final Messages.Response response = routerCacheProvider.getResponseCache(request.getType());
-                if (response!=null){
-
+        if (request != null && isConnected()) {
+            if (callback != null) {
+                if (cache && routerCacheProvider != null) {
+                    final Messages.Response response = routerCacheProvider.getResponseCache(request.getType());
+                    if (response != null) {
+                        callback.call(response, null);
+                        return;
+                    }
                 }
-            }
-
-            if (callback != null)
                 subjectResponse.timeout(timeout, TimeUnit.MILLISECONDS).doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
@@ -316,56 +314,62 @@ class RouterClient implements RouterSession {
                         callback.call(response, null);
                     }
                 });
-
+            }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if (request != null) {
-                        OutputStream os = null;
-                        if (isConnected()) {
-                            try {
-                                os = socket.getOutputStream();
-                                int requestLength = request.getSerializedSize();
-                                byte heightLevelBit = (byte) ((requestLength & 0xff00) >> 8);
-                                byte lowLevelBit = (byte) (requestLength & 0x00ff);
-                                os.write(heightLevelBit);
-                                os.write(lowLevelBit);
-                                request.writeTo(os);
-                            } catch (IOException e) {
-                                disconnect();
-                                if (callback != null) {
-                                    callback.call(null, e);
-                                }
-                                trace(RouterClient.this + " socket IO exception ,socket will be reset..");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                try {
-                                    os.close();
-                                } catch (Exception e2) {
-                                    e2.printStackTrace();
-                                }
-                            }
-                        } else {
-                            if (callback != null)
-                                callback.call(null, new InvalidObjectException("invalid connection..."));
-                            if (socket == null) {
-                                trace("socket is null");
-                            } else {
-                                disconnect();
-                            }
+                    OutputStream os = null;
+                    try {
+                        os = socket.getOutputStream();
+                        int requestLength = request.getSerializedSize();
+                        byte heightLevelBit = (byte) ((requestLength & 0xff00) >> 8);
+                        byte lowLevelBit = (byte) (requestLength & 0x00ff);
+                        os.write(heightLevelBit);
+                        os.write(lowLevelBit);
+                        request.writeTo(os);
+                    } catch (IOException e) {
+                        disconnect();
+                        if (callback != null) {
+                            callback.call(null, e);
+                        }
+                        trace(RouterClient.this + " socket IO exception ,socket will be reset..");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            os.close();
+                        } catch (Exception e2) {
+                            e2.printStackTrace();
                         }
                     }
                 }
             }).start();
+        } else {
+            if (callback != null)
+                callback.call(null, new InvalidObjectException("invalid connection..."));
+            if (socket == null) {
+                trace("socket is null");
+            } else {
+                disconnect();
+            }
         }
     }
 
     @Override
-    public Messages.Response postRequest(Messages.Request request, final int timeout) throws TimeoutException {
-        if (request == null && isConnected()) return null;
+    public Messages.Response postRequest(Messages.Request request, int timeout) throws TimeoutException {
+        return postRequest(request, timeout, false);
+    }
+
+    @Override
+    public Messages.Response postRequest(Messages.Request request, int timeout, boolean cache) throws TimeoutException {
+        if (request == null) return null;
+        if (cache && routerCacheProvider != null) {
+            final Messages.Response response = routerCacheProvider.getResponseCache(request.getType());
+            if (response != null) return response;
+        }
+        if (!isConnected()) return null;
         mSubscribeMap.put(request.getRequestId(), request);
-        postRequestAsync(request, null);
+        postRequestAsync(request, null, timeout, cache);
         try {
             int requestId = request.getRequestId();
             int delay = 100;
@@ -387,18 +391,13 @@ class RouterClient implements RouterSession {
     }
 
     @Override
-    public Messages.Response postRequest(Messages.Request request, int timeout, boolean cache) throws TimeoutException {
-        return null;
-    }
-
-    @Override
     public Messages.Response postRequest(Messages.Request request) throws TimeoutException {
         return postRequest(request, ROUTER_REQUEST_TIMEOUT);
     }
 
     @Override
     public Messages.Response postRequest(Messages.Request request, boolean cache) throws TimeoutException {
-        return null;
+        return postRequest(request, ROUTER_REQUEST_TIMEOUT, cache);
     }
 
     @Override
@@ -440,16 +439,17 @@ class RouterClient implements RouterSession {
 
     private void setRouterStatus(RouterStatus routerStatus) {
         this.routerStatus = routerStatus;
+        subjectRouterStatusChanged.onNext(mRouter);
     }
 
-    private Messages.Callback pullCallback(final SSLSocket sslSocket) throws IOException, InvalidPreferencesFormatException {
+    private Messages.Callback pullCallback(final SSLSocket sslSocket) throws IOException {
         InputStream in = null;
         in = sslSocket.getInputStream();
         byte[] prefix = new byte[2];
         int received = 0;
         in.read(prefix);
         if (prefix[0] == 0 && prefix[1] == 0)
-            throw new InvalidPreferencesFormatException("invalid package header..");
+            throw new IOException("invalid package header..");
         else {
             int length = ((prefix[0] & 0xff) << 8) + (prefix[1] & 0xff);
             received = 0;
@@ -509,9 +509,6 @@ class RouterClient implements RouterSession {
                         e.printStackTrace();
                         trace(RouterClient.this + " read stream error");
                         disconnect();
-                        continue;
-                    } catch (InvalidPreferencesFormatException e) {
-                        trace(RouterClient.this + e.getMessage());
                         continue;
                     }
                 } else {

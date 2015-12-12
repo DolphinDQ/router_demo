@@ -1,6 +1,8 @@
 package mrtech.smarthome.router;
 
 
+import java.util.concurrent.TimeoutException;
+
 import mrtech.smarthome.router.Models.*;
 import mrtech.smarthome.rpc.Messages;
 
@@ -46,9 +48,10 @@ public class Router {
 
     public String getName() {
         final RouterSession routerSession = getRouterSession();
-        if (routerSession != null) {
+        if (routerSession != null&&routerSession.isAuthenticated()) {
             final Messages.GetSystemConfigurationResponse routerConfiguration = routerSession.getRouterConfiguration(false);
-            return routerConfiguration.getConfiguration().getDeviceName();
+            if (routerConfiguration != null)
+                return routerConfiguration.getConfiguration().getDeviceName();
         }
         return Name;
     }
