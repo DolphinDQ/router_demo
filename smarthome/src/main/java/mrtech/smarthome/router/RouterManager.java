@@ -6,7 +6,9 @@ import com.google.protobuf.ExtensionRegistry;
 import com.stream.NewAllStreamParser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import mrtech.smarthome.rpc.Messages;
@@ -22,7 +24,7 @@ import rx.subjects.PublishSubject;
  */
 public class RouterManager {
     public final static ExtensionRegistry registry = ExtensionRegistry.newInstance();
-    private Map<Messages.Response.ErrorCode, String> errorMessageMap;
+    private static Map<Messages.Response.ErrorCode, String> errorMessageMap;
     private PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
 
     private static void trace(String msg) {
@@ -35,7 +37,7 @@ public class RouterManager {
         return ourInstance;
     }
 
-    private int mP2PHandle;
+    private static int mP2PHandle;
 
     private ArrayList<Router> mRouters;
 
@@ -43,11 +45,11 @@ public class RouterManager {
         mRouters = new ArrayList<>();
     }
 
-    private boolean isP2PInitialized() {
+    private static boolean isP2PInitialized() {
         return mP2PHandle != 0;
     }
 
-    private void initExtensionRegistry() {
+    private static void initExtensionRegistry() {
 //        new Thread() {
 //            public void run() {
 //
@@ -59,7 +61,7 @@ public class RouterManager {
 
     }
 
-    private void initErrorMessageMap() {
+    private static void initErrorMessageMap() {
         errorMessageMap = new HashMap<>();
         errorMessageMap.put(Messages.Response.ErrorCode.UNKNOWN_PROTOCOL, "未知协议。");
         errorMessageMap.put(Messages.Response.ErrorCode.UNSUPPORTED_VERSION, "版本不支持。");
@@ -123,7 +125,7 @@ public class RouterManager {
         errorMessageMap.put(Messages.Response.ErrorCode.INTERNAL_ERROR, "服务器内部错误。");
     }
 
-    public String getErrorMessage(Messages.Response.ErrorCode errorCode) {
+    public static String getErrorMessage(Messages.Response.ErrorCode errorCode) {
         String errorMessage = "";
         errorMessage = errorMessageMap.get(errorCode);
         if (errorMessage == null)
@@ -131,7 +133,7 @@ public class RouterManager {
         return errorMessage;
     }
 
-    public void init() {
+    public static void init() {
         if (isP2PInitialized()) return;
         initExtensionRegistry();
         initErrorMessageMap();
@@ -143,8 +145,7 @@ public class RouterManager {
         trace("inited....p2p handle :" + mP2PHandle);
     }
 
-    public void destroy() {
-        removeAll();
+    public static void destroy() {
         if (isP2PInitialized()) {
             NewAllStreamParser.DNPDestroyPortServer(mP2PHandle);
         }
@@ -179,8 +180,8 @@ public class RouterManager {
         return null;
     }
 
-    public Router[] getRouterList() {
-        return mRouters.toArray(new Router[mRouters.size()]);
+    public List<Router> getRouterList() {
+        return mRouters;
     }
 
     /**
@@ -189,18 +190,18 @@ public class RouterManager {
      * @param valid
      * @return
      */
-    public Router[] getRouterList(boolean valid) {
+    public List<Router> getRouterList(boolean valid) {
         ArrayList<Router> routers = new ArrayList<>();
         for (Router mRouter : mRouters) {
             if (mRouter.getRouterSession().isAuthenticated() == valid) {
                 routers.add(mRouter);
             }
         }
-        return mRouters.toArray(new Router[routers.size()]);
+        return routers;
     }
 
     public void removeAll() {
-        final Router[] routerList = getRouterList();
+        final Collection<Router> routerList = getRouterList();
         for (Router router : routerList) {
             removeRouter(router);
         }

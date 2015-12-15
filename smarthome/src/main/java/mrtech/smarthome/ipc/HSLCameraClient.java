@@ -53,29 +53,36 @@ class HSLCameraClient implements IPCContext {
             @Override
             public void call(IPCEventData ipcEventData) {
                 if (ipcEventData.equals(mIPCamera)) {
-                    final int time = getReconnectTime(getStatus());
-                    synchronized (HSLCameraClient.this) {
-                        if (time > 0) {
-                            setReconnecting(true);
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    disconnect();
-                                    try {
-                                        Thread.sleep(time);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                    }
-                                    connect();
-                                    setReconnecting(false);
-                                }
-                            }).start();
-                        }
-                    }
+                    reconnect(getReconnectTime(getStatus()));
                 }
             }
         });
+    }
+
+    public void reconnect(final int delay) {
+        synchronized (HSLCameraClient.this) {
+            if (delay > 0) {
+                setReconnecting(true);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        disconnect();
+                        try {
+                            Thread.sleep(delay);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } finally {
+                        }
+                        connect();
+                        setReconnecting(false);
+                    }
+                }).start();
+            }
+        }
+    }
+
+    public rx.Observable<IPCContext> getObservablePlayStatus() {
+        return subjectPlayStatus;
     }
 
     private int getReconnectTime(IPCStatus status) {
@@ -110,6 +117,10 @@ class HSLCameraClient implements IPCContext {
                 }
             }
         }).start();
+    }
+
+    public IPCamera getIPCamera() {
+        return mIPCamera;
     }
 
     @Override

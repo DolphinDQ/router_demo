@@ -49,7 +49,7 @@ class HSLPlayer implements IPCPlayer {
     private boolean talkSwitch;
     private boolean audioAlreadyOn;
     private PublishSubject<RenderContext> subjectRenderContext = PublishSubject.create();
-    private PublishSubject<IPCamera> subjectPlayingCameraChanged=PublishSubject.create();
+    private PublishSubject<IPCamera> subjectPlayingCameraChanged = PublishSubject.create();
     private PublishSubject<PictureData> subjectPicture = PublishSubject.create();
 
     public HSLPlayer(GLSurfaceView glSurfaceView, IPCManager manager) {
@@ -62,13 +62,43 @@ class HSLPlayer implements IPCPlayer {
         mCustomAudioRecorder = new CustomAudioRecorder(this.new InnerRecordListener());
         mRenderer.setListener(new RenderListener() {
             @Override
-            public void initComplete(int size, int width, int height) {
+            public void initComplete(final int size, final int width, final int height) {
+                subjectRenderContext.onNext(new RenderContext() {
+                    @Override
+                    public int getWidth() {
+                        return width;
+                    }
 
+                    @Override
+                    public int getHeight() {
+                        return height;
+                    }
+
+                    @Override
+                    public int getSize() {
+                        return size;
+                    }
+                });
             }
 
             @Override
-            public void takePicture(byte[] imageBuffer, int width, int height) {
+            public void takePicture(final byte[] imageBuffer, final int width, final int height) {
+                subjectPicture.onNext(new PictureData() {
+                    @Override
+                    public byte[] getImageBuffer() {
+                        return imageBuffer;
+                    }
 
+                    @Override
+                    public int getWidth() {
+                        return width;
+                    }
+
+                    @Override
+                    public int getHeight() {
+                        return height;
+                    }
+                });
             }
         });
         subscribeAudio();
@@ -104,35 +134,53 @@ class HSLPlayer implements IPCPlayer {
 
     @Override
     public void play(IPCamera cam) {
-        stop();
-        if (cam != null) {
-            playingCamera = cam;
-            ((HSLCameraClient) cam.getIpcContext()).setIsPlaying(true);
-            new AsyncTask<Long, Void, Void>() {
+        final HSLCameraClient cameraClient = (HSLCameraClient) cam.getIpcContext();
+        if (cam.getIpcContext().getStatus() == IPCStatus.DISCONNECT) {
+            cameraClient.reconnect(0);
+            cameraClient.getObservablePlayStatus().first(new Func1<IPCContext, Boolean>() {
                 @Override
-                protected Void doInBackground(Long... params) {
-                    long userid = params[0];
-                    DeviceSDK.setRender(userid, mRenderer);
-                    DeviceSDK.startPlayStream(userid, 10, 1);
-
-                    try {
-                        JSONObject obj = new JSONObject();
-                        obj.put("param", 13);
-                        obj.put("value", 1024);
-                        DeviceSDK.setDeviceParam(userid, 0x2026, obj.toString());
-
-                        JSONObject obj1 = new JSONObject();
-                        obj1.put("param", 6);
-                        obj1.put("value", 15);
-                        DeviceSDK.setDeviceParam(userid, 0x2026, obj1.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
+                public Boolean call(IPCContext context) {
+                    return context.getStatus() == IPCStatus.CONNECTED;
                 }
-            }.execute(cam.getIpcContext().getHandle());
+            }).subscribe(new Action1<IPCContext>() {
+                @Override
+                public void call(IPCContext context) {
+                    if (cameraClient.isPlaying()) {
+                        play(cameraClient.getIPCamera());
+                    }
+                }
+            });
         } else {
-            trace("Can't play NULL camera ...");
+            stop();
+            if (cam != null) {
+                playingCamera = cam;
+                cameraClient.setIsPlaying(true);
+                new AsyncTask<Long, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Long... params) {
+                        long userid = params[0];
+                        DeviceSDK.setRender(userid, mRenderer);
+                        DeviceSDK.startPlayStream(userid, 10, 1);
+
+                        try {
+                            JSONObject obj = new JSONObject();
+                            obj.put("param", 13);
+                            obj.put("value", 1024);
+                            DeviceSDK.setDeviceParam(userid, 0x2026, obj.toString());
+
+                            JSONObject obj1 = new JSONObject();
+                            obj1.put("param", 6);
+                            obj1.put("value", 15);
+                            DeviceSDK.setDeviceParam(userid, 0x2026, obj1.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                }.execute(cam.getIpcContext().getHandle());
+            } else {
+                trace("Can't play NULL camera ...");
+            }
         }
     }
 
@@ -193,7 +241,7 @@ class HSLPlayer implements IPCPlayer {
 
     @Override
     public Subscription subscribeRenderAction(Action1<RenderContext> callback) {
-        return  subjectRenderContext.subscribe(callback);
+        return subjectRenderContext.subscribe(callback);
     }
 
     @Override

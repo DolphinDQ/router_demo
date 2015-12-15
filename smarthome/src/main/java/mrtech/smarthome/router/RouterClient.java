@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.stream.NewAllStreamParser;
 
+import mrtech.smarthome.ipc.IPCManager;
+import mrtech.smarthome.ipc.IPCamera;
 import mrtech.smarthome.router.Models.*;
 
 import java.io.IOException;
@@ -11,7 +13,10 @@ import java.io.InputStream;
 import java.io.InvalidObjectException;
 import java.io.OutputStream;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -36,24 +41,24 @@ class RouterClient implements RouterSession {
     private static void trace(String msg) {
         Log.e(RouterClient.class.getName(), msg);
     }
-
+    private final IPCManager mIPCManager;
     private final Router mRouter;
     private final RouterManager mManager;
     private final HashMap<Integer, Messages.Request> mSubscribeMap;
     private final ConcurrentHashMap<Integer, Messages.Response> mResponseMap;
     private final String mSN;
+    private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
+    private final PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
+    private boolean invalidSN;
+    private boolean authenticated;
+    private boolean initialized;
     private int mP2PHandle;
+    private int port;
     private SocketListeningTask readSocketTask;
     private String p2pSN;
     private String apiKey;
     private RouterStatus routerStatus;
-    private boolean invalidSN;
-    private int port;
     private SSLSocket socket;
-    private boolean authenticated;
-    private boolean initialized = false;
-    private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
-    private final PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
     private rx.Observable<Messages.Response> subjectResponse;
     private Messages.GetSystemConfigurationResponse systemConfigurationResponse;
     private RouterCacheProvider routerCacheProvider;
@@ -65,6 +70,7 @@ class RouterClient implements RouterSession {
         mRouter = router;
         mSubscribeMap = new HashMap<>();
         mResponseMap = new ConcurrentHashMap<>();
+        mIPCManager = IPCManager.createNewManager();
         setRouterStatus(RouterStatus.CREATED);
         subjectResponse = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
             @Override
@@ -108,26 +114,29 @@ class RouterClient implements RouterSession {
                 if (strings.length == 2) {
                     apiKey = strings[0];
                     p2pSN = strings[1];
+                    invalidSN=false;
+                    setRouterStatus(RouterStatus.SN_DECODED);
                     return true;
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                invalidSN = true;
-                setRouterStatus(RouterStatus.SN_INVALID);
-                trace("decoded sn:" + this + "failed...");
             }
         }
+        trace("decoded sn:" + this + "failed...");
+        invalidSN = true;
+        setRouterStatus(RouterStatus.SN_INVALID);
         return false;
     }
 
     public void init() {
         if (initialized) return;
         initialized = true;
-        decodeSN();
-//        subjectRouterStatusChanged = PublishSubject.create();
+        mIPCManager.removeAll();
+        setRouterStatus(RouterStatus.INITIALIZED);
         new Thread(new Runnable() {
             @Override
             public void run() {
+                decodeSN();
                 do {
                     int delay = 0;
                     try {
@@ -148,7 +157,6 @@ class RouterClient implements RouterSession {
                 } while (initialized);
             }
         }).start();
-        setRouterStatus(RouterStatus.INITIALIZED);
     }
 
     //====================================================================================
@@ -241,7 +249,7 @@ class RouterClient implements RouterSession {
         } catch (TimeoutException e) {
             e.printStackTrace();
             trace("auth time out");
-        }finally {
+        } finally {
             setRouterStatus(authenticated ? RouterStatus.API_AUTH_SUCCESS : RouterStatus.API_UNAUTHORIZED);
         }
         return authenticated;
@@ -263,6 +271,7 @@ class RouterClient implements RouterSession {
         if (!initialized) return;
         initialized = false;
         setRouterStatus(RouterStatus.CREATED);
+        mIPCManager.removeAll();
 //        subjectRouterStatusChanged.onCompleted();
         new Thread(new Runnable() {
             @Override
@@ -437,6 +446,45 @@ class RouterClient implements RouterSession {
         return routerStatus;
     }
 
+    @Override
+    public IPCManager getIPCManager() {
+        return mIPCManager;
+    }
+
+    @Override
+    public void reloadIPCAsync(boolean cache, final Action1<Throwable> exception) {
+        try {
+            postRequestAsync(RequestUtil.getDevices(mrtech.smarthome.rpc.Models.DeviceQuery.newBuilder()
+                    .setType(mrtech.smarthome.rpc.Models.DeviceType.DEVICE_TYPE_CAMERA)
+                    .setPage(0)
+                    .setPageSize(100)
+                    .build()), new Action2<Messages.Response, Throwable>() {
+                @Override
+                public void call(Messages.Response response, Throwable throwable) {
+                    if (response != null) {
+                        final List<mrtech.smarthome.rpc.Models.Device> result = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
+                        if (result != null && result.size() > 0) {
+                            mIPCManager.removeAll();
+                            for (mrtech.smarthome.rpc.Models.Device device : result) {
+                                final mrtech.smarthome.rpc.Models.CameraDevice cameraDevice = device.getExtension(mrtech.smarthome.rpc.Models.CameraDevice.detail);
+                                mIPCManager.addCamera(new IPCamera(device, cameraDevice.getDeviceid(), cameraDevice.getUser(), cameraDevice.getPassword()));
+                            }
+                        } else {
+                            throwable = new NoSuchElementException("未添加摄像头");
+                        }
+                    }
+                    if (exception != null) exception.call(throwable);
+                }
+            }, cache);
+        } catch (Exception ex) {
+            if (exception != null) exception.call(ex);
+        }
+    }
+//    private  List< mrtech.smarthome.rpc.Models.NetworkDevice> getNetworkDevices(boolean cache) {
+//            final Messages.Response response = postRequest(RequestUtil.getNetWorkDevice(), cache);
+//            return response.getExtension(Messages.GetNetworkDeviceResponse.response).getDevListList();
+//    }
+
     private void setRouterStatus(RouterStatus routerStatus) {
         this.routerStatus = routerStatus;
         subjectRouterStatusChanged.onNext(mRouter);
@@ -523,6 +571,5 @@ class RouterClient implements RouterSession {
         }
 
     }
-
 
 }

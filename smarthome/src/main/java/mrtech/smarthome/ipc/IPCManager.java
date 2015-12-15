@@ -14,9 +14,9 @@ import mrtech.smarthome.ipc.IPCModels.*;
  */
 public class IPCManager {
     private static IPCManager ourInstance = new IPCManager();
-    private boolean isInit;
+    private static boolean isInit;
     private final ArrayList<IPCamera> mCameras = new ArrayList<>();
-    private final HSLEventController hslEventController;
+    private static final HSLEventController hslEventController = new HSLEventController(ourInstance);
 
     private static void trace(String msg) {
         Log.e(IPCManager.class.getName(), msg);
@@ -26,15 +26,25 @@ public class IPCManager {
         Log.d(IPCManager.class.getName(), msg, ex);
     }
 
+    /**
+     * 获取单例对象。
+     *
+     * @return
+     */
     public static IPCManager getInstance() {
         return ourInstance;
     }
 
-    private IPCManager() {
-        hslEventController = new HSLEventController(this);
+    /**
+     * 创建新IPC管理器。
+     *
+     * @return
+     */
+    public static IPCManager createNewManager() {
+        return new IPCManager();
     }
 
-    public void init() {
+    public static void init() {
         if (isInit) return;
         isInit = true;
         trace("DeviceSDK init...");
@@ -43,11 +53,10 @@ public class IPCManager {
         DeviceSDK.networkDetect();
     }
 
-    public void destroy() {
+    public static void destroy() {
         if (isInit) {
             isInit = false;
             trace("DeviceSDK destroy...");
-            removeAll();
             DeviceSDK.unInitSearchDevice();
         }
     }

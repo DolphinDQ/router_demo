@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_router_settings"
-        android:title="@string/router_setting"
-        android:icon="@drawable/ic_menu_manage"
+        android:id="@+id/action_add_router"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="添加路由器"
         app:showAsAction="ifRoom"
-        />
+        ></item>
 </menu>

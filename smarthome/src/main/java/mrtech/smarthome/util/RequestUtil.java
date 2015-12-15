@@ -576,7 +576,6 @@ public class RequestUtil {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_CAMERA_INFO);
         requestBuilder.setRequestId(RequestType.GET_CAMERA_INFO_VALUE+createId());
-
         requestBuilder.setExtension(GetCameraInfoRequest.request, GetCameraInfoRequest.newBuilder().setDeviceId(deviceId).build());
         return requestBuilder.build();
     }

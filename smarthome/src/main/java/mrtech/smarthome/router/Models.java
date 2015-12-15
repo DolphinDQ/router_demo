@@ -3,7 +3,9 @@ package mrtech.smarthome.router;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
+import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.rpc.Messages;
+import rx.functions.Action1;
 import rx.functions.Action2;
 
 /**
@@ -140,8 +142,24 @@ public class Models {
          * @return
          */
         Messages.GetSystemConfigurationResponse getRouterConfiguration(boolean cache);
+
+        /**
+         * 重新加载IPC列表。
+         * @param cache true 为使用缓存中的信息。
+         * @param exception 异常回调，如果回调值Throwable为null为刷新成功。其他均为刷新失败。
+         */
+        void reloadIPCAsync(boolean cache, final Action1<Throwable> exception);
+
+        /**
+         * 获取IPC管理器。
+         * @return
+         */
+        IPCManager getIPCManager();
     }
 
+    /**
+     * 路由器通讯状态。
+     */
     public enum RouterStatus {
         CREATED("未初始化"),
         INITIALIZED("初始化完毕"),
