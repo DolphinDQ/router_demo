@@ -20,7 +20,7 @@ public class Models {
         int ROUTER_REQUEST_TIMEOUT = 2000;
         int ROUTER_KEEP_ALIVE_DELAY = 20000;
         int ROUTER_RECONNECTION_DELAY = 5000;
-        int ROUTER_ADD_PORT_DELAY = 5000;
+        int ROUTER_ADD_PORT_DELAY = 2000;
         int ROUTER_AUTH_DELAY = 5000;
         int ROUTER_READ_INTERVAL = 1000;
 

@@ -19,24 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity
-            android:name=".LoadingActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:name=".RouterSettingsActivity"
+            android:label="@string/router_setting" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".RouterSettingsActivity"
-            android:label="@string/router_setting" />
         <activity android:name=".RouterCaptureActivity"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"

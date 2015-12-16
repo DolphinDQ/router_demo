@@ -44,7 +44,8 @@ public class RouterSettingsActivity extends AppCompatActivity {
             }
         });
         initView();
-//        addRouter("T8QCY8-S3HLCS-YSJK2G-RUR057-W1BR09-76T");
+        addRouter("S5K8B7-JIYYQR-Z2KKME-XEENI0-99NX42-MLE");
+        addRouter("T8QCY8-S3HLCS-YSJK2G-RUR057-W1BR09-76T");
     }
 
     private void initView() {

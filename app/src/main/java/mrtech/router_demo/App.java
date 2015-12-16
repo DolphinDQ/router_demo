@@ -23,6 +23,7 @@ public class App extends Application {
         if (instance != null)
             Log.e("Application", "!!!!!!!!!!!");
         instance = this;
+
         RouterManager.init();
         IPCManager.init();
     }

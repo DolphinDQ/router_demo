@@ -40,6 +40,7 @@ class RouterClient implements RouterSession {
     private static void trace(String msg) {
         Log.e(RouterClient.class.getName(), msg);
     }
+
     private final IPCManager mIPCManager;
     private final Router mRouter;
     private final RouterManager mManager;
@@ -113,7 +114,7 @@ class RouterClient implements RouterSession {
                 if (strings.length == 2) {
                     apiKey = strings[0];
                     p2pSN = strings[1];
-                    invalidSN=false;
+                    invalidSN = false;
                     setRouterStatus(RouterStatus.SN_DECODED);
                     return true;
                 }
@@ -165,8 +166,23 @@ class RouterClient implements RouterSession {
                 removePort();
                 trace(this + " adding port...");
                 setRouterStatus(RouterStatus.P2P_CONNECTING);
-                port = NewAllStreamParser.DNPAddPort(mP2PHandle, p2pSN);
-
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int tmp = NewAllStreamParser.DNPAddPort(mP2PHandle, p2pSN);
+                        trace(RouterClient.this+ "return port:"+tmp);
+                        if (tmp > 0) {
+                            if (port > 0) {
+                                //cancel result
+                                NewAllStreamParser.DNPDelPort(mP2PHandle, tmp);
+                            } else {
+                                port = tmp;
+                            }
+                        }
+                    }
+                });
+                thread.start();
+                thread.join(5000);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 port = 0;

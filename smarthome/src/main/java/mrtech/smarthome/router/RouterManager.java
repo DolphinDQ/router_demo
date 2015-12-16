@@ -146,7 +146,7 @@ public class RouterManager {
     }
 
     public void addRouter(Router router) {
-        if (router == null || router.getSN()==null || getRouter(router.getSN()) != null) return;
+        if (router == null || router.getSN()==null ) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
         innerRouter.subscribeRouterStatusChanged(new Action1<Router>() {
