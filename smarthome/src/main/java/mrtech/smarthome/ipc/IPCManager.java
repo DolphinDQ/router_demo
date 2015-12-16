@@ -15,7 +15,7 @@ import mrtech.smarthome.ipc.IPCModels.*;
 public class IPCManager {
     private static IPCManager ourInstance = new IPCManager();
     private static boolean isInit;
-    private final ArrayList<IPCamera> mCameras = new ArrayList<>();
+    private final ArrayList<IPCamera> mCameras = new ArrayList<IPCamera>();
     private static final HSLEventController hslEventController = new HSLEventController(ourInstance);
 
     private static void trace(String msg) {

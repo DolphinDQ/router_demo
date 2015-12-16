@@ -161,7 +161,7 @@ public class Models {
      * 路由器通讯状态。
      */
     public enum RouterStatus {
-        CREATED("未初始化"),
+        INITIAL("未初始化"),
         INITIALIZED("初始化完毕"),
         SN_DECODING( "序列码解析中"),
         SN_INVALID("序列码无效"),

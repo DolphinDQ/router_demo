@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.InvalidObjectException;
 import java.io.OutputStream;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -71,7 +70,7 @@ class RouterClient implements RouterSession {
         mSubscribeMap = new HashMap<>();
         mResponseMap = new ConcurrentHashMap<>();
         mIPCManager = IPCManager.createNewManager();
-        setRouterStatus(RouterStatus.CREATED);
+        setRouterStatus(RouterStatus.INITIAL);
         subjectResponse = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
             @Override
             public Boolean call(Messages.Callback callback) {
@@ -270,7 +269,6 @@ class RouterClient implements RouterSession {
     public void destroy() {
         if (!initialized) return;
         initialized = false;
-        setRouterStatus(RouterStatus.CREATED);
         mIPCManager.removeAll();
 //        subjectRouterStatusChanged.onCompleted();
         new Thread(new Runnable() {
@@ -279,6 +277,7 @@ class RouterClient implements RouterSession {
                 removePort();
             }
         }).start();
+        setRouterStatus(RouterStatus.INITIAL);
     }
 
     @Override
@@ -480,6 +479,8 @@ class RouterClient implements RouterSession {
             if (exception != null) exception.call(ex);
         }
     }
+
+
 //    private  List< mrtech.smarthome.rpc.Models.NetworkDevice> getNetworkDevices(boolean cache) {
 //            final Messages.Response response = postRequest(RequestUtil.getNetWorkDevice(), cache);
 //            return response.getExtension(Messages.GetNetworkDeviceResponse.response).getDevListList();

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
+import rx.subjects.PublishSubject;
 
 public class LoadingActivity extends Activity {
 
@@ -32,9 +33,7 @@ public class LoadingActivity extends Activity {
             @Override
             protected Void doInBackground(Void... params) {
                 publishProgress("加载路由组件....");
-                RouterManager.init();
                 publishProgress("加载摄像头组件...");
-                IPCManager.getInstance().init();
                 publishProgress("初始化完毕...");
                 return null;
             }

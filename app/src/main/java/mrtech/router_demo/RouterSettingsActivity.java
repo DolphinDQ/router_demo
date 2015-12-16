@@ -69,7 +69,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         routerManager.removeRouter(router);
-                        routerArrayAdapter.notifyDataSetChanged();
                     }
                 });
                 return convertView;
@@ -107,6 +106,5 @@ public class RouterSettingsActivity extends AppCompatActivity {
 
     private void addRouter(String sn) {
         routerManager.addRouter(new Router(null, "路由器", sn));
-        routerArrayAdapter.notifyDataSetChanged();
     }
 }

@@ -50,19 +50,13 @@ public class RouterManager {
     }
 
     private static void initExtensionRegistry() {
-//        new Thread() {
-//            public void run() {
-//
-//            }
-//        }.start();
         Messages.registerAllExtensions(registry);
         Models.registerAllExtensions(registry);
         trace("registry extensions...");
-
     }
 
     private static void initErrorMessageMap() {
-        errorMessageMap = new HashMap<>();
+        errorMessageMap = new HashMap<Messages.Response.ErrorCode, String>();
         errorMessageMap.put(Messages.Response.ErrorCode.UNKNOWN_PROTOCOL, "未知协议。");
         errorMessageMap.put(Messages.Response.ErrorCode.UNSUPPORTED_VERSION, "版本不支持。");
         errorMessageMap.put(Messages.Response.ErrorCode.SERVER_BUSY, "服务器忙，请稍后再试。");
@@ -152,7 +146,7 @@ public class RouterManager {
     }
 
     public void addRouter(Router router) {
-        if (router == null || getRouter(router.getSN()) != null) return;
+        if (router == null || router.getSN()==null || getRouter(router.getSN()) != null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
         innerRouter.subscribeRouterStatusChanged(new Action1<Router>() {
@@ -168,13 +162,14 @@ public class RouterManager {
 
     public void removeRouter(Router router) {
         if (router == null) return;
-        ((RouterClient) router.getRouterSession()).destroy();
-        mRouters.remove(router);
+        if(mRouters.remove(router)){
+            ((RouterClient) router.getRouterSession()).destroy();
+        };
     }
 
     public Router getRouter(String sn) {
         for (Router mRouter : mRouters) {
-            if (mRouter.getSN() == sn)
+            if (mRouter.getSN().equals(sn))
                 return mRouter;
         }
         return null;
@@ -191,7 +186,7 @@ public class RouterManager {
      * @return
      */
     public List<Router> getRouterList(boolean valid) {
-        ArrayList<Router> routers = new ArrayList<>();
+        ArrayList<Router> routers = new ArrayList<Router>();
         for (Router mRouter : mRouters) {
             if (mRouter.getRouterSession().isAuthenticated() == valid) {
                 routers.add(mRouter);

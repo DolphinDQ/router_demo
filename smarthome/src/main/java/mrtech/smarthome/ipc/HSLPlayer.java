@@ -192,7 +192,7 @@ class HSLPlayer implements IPCPlayer {
     @Override
     public IPCamera[] getPlayList() {
         IPCamera[] cameraList = mManager.getCameraList();
-        ArrayList<IPCamera> cameras = new ArrayList<>();
+        ArrayList<IPCamera> cameras = new ArrayList<IPCamera>();
         for (IPCamera cam : cameraList) {
             if (cam.getIpcContext().getStatus() == IPCStatus.CONNECTED) {
                 cameras.add(cam);

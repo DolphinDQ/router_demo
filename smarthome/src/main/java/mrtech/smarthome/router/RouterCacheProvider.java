@@ -8,8 +8,8 @@ import mrtech.smarthome.rpc.Messages;
  */
 class RouterCacheProvider {
 
-
     public Messages.Response getResponseCache(Messages.Request.RequestType type) {
         return  null;
     }
+
 }

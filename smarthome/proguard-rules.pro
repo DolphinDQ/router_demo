@@ -15,3 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+#-keepnames rx.internal.util.** { *;}
+#-keep public class rx.internal.util.** { public *;}
+
+-keep class rx.** { *; }
+-keep class mrtech.smarthome.** { *; }
