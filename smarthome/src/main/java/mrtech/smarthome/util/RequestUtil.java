@@ -393,20 +393,18 @@ public class RequestUtil {
         return requestBuilder.build();
     }
 
-    public static Request setEvent() {
+    public static Request setEvent(EventType... eventTypes) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_EVENTS);
-        requestBuilder.setRequestId(RequestType.SET_EVENTS_VALUE+createId());
-        requestBuilder.setExtension(SetEventsRequest.request, SetEventsRequest.newBuilder()
-                .addEvents(EventType.DISCONNECT)
-                .addEvents(EventType.SYS_CONFIG_CHANGED)
-                .addEvents(EventType.EZMODE_STATUS_CHANGED)
-                .addEvents(EventType.PERMIT_JOIN_STATUS_CHANGED)
-                .addEvents(EventType.NEW_TIMELINE)
-                .addEvents(EventType.ON_OFF_STATE_CHANGED)
-                .addEvents(EventType.SCENE_CHANGED)
-                .addEvents(EventType.PPPOE_STATE_CHANGED)
-                .build());
+        requestBuilder.setRequestId(RequestType.SET_EVENTS_VALUE + createId());
+        SetEventsRequest.Builder builder = SetEventsRequest.newBuilder();
+        if(eventTypes!=null){
+            for (EventType eventType : eventTypes) {
+                builder.addEvents(eventType);
+            }
+        }
+        builder.build();
+
 
         return requestBuilder.build();
     }

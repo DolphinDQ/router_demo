@@ -17,10 +17,10 @@ public class Models {
      * router running session context
      */
     public interface RouterSession {
-        int ROUTER_REQUEST_TIMEOUT = 2000;
+        int ROUTER_REQUEST_TIMEOUT = 5000;
         int ROUTER_KEEP_ALIVE_DELAY = 20000;
         int ROUTER_RECONNECTION_DELAY = 5000;
-        int ROUTER_ADD_PORT_DELAY = 2000;
+        int ROUTER_ADD_PORT_DELAY = 5000;
         int ROUTER_AUTH_DELAY = 5000;
         int ROUTER_READ_INTERVAL = 1000;
 
@@ -185,5 +185,14 @@ public class Models {
         public String toString() {
             return description;
         }
+    }
+
+    /**
+     * 路由器回调。
+     * @param <E> 回调数据结构
+     */
+    public interface RouterCallback<E> {
+        Router getRouter();
+        E getData();
     }
 }

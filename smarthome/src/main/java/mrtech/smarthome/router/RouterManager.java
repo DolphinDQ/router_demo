@@ -1,5 +1,6 @@
 package mrtech.smarthome.router;
 
+import android.app.usage.UsageEvents;
 import android.util.Log;
 
 import com.google.protobuf.ExtensionRegistry;
@@ -14,8 +15,10 @@ import java.util.Map;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.Constants;
+import mrtech.smarthome.router.Models.*;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -26,6 +29,7 @@ public class RouterManager {
     public final static ExtensionRegistry registry = ExtensionRegistry.newInstance();
     private static Map<Messages.Response.ErrorCode, String> errorMessageMap;
     private PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
+    private PublishSubject<RouterCallback<Messages.Event>> subjectRouterEvents = PublishSubject.create();
 
     private static void trace(String msg) {
         Log.e(RouterManager.class.getName(), msg);
@@ -146,7 +150,7 @@ public class RouterManager {
     }
 
     public void addRouter(Router router) {
-        if (router == null || router.getSN()==null ) return;
+        if (router == null || router.getSN() == null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
         innerRouter.subscribeRouterStatusChanged(new Action1<Router>() {
@@ -162,9 +166,10 @@ public class RouterManager {
 
     public void removeRouter(Router router) {
         if (router == null) return;
-        if(mRouters.remove(router)){
+        if (mRouters.remove(router)) {
             ((RouterClient) router.getRouterSession()).destroy();
-        };
+        }
+        ;
     }
 
     public Router getRouter(String sn) {
@@ -186,7 +191,7 @@ public class RouterManager {
      * @return
      */
     public List<Router> getRouterList(boolean valid) {
-        ArrayList<Router> routers = new ArrayList<Router>();
+        ArrayList<Router> routers = new ArrayList<>();
         for (Router mRouter : mRouters) {
             if (mRouter.getRouterSession().isAuthenticated() == valid) {
                 routers.add(mRouter);
@@ -204,5 +209,14 @@ public class RouterManager {
 
     public Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
         return subjectRouterStatusChanged.subscribe(callback);
+    }
+
+    public Subscription subscribeRouterEvent(final Messages.Event.EventType eventType, Action1<RouterCallback<Messages.Event>> callbackAction) {
+        return subjectRouterEvents.filter(new Func1<RouterCallback<Messages.Event>, Boolean>() {
+            @Override
+            public Boolean call(RouterCallback<Messages.Event> eventRouterCallback) {
+                return eventRouterCallback.getData().getType() == eventType;
+            }
+        }).subscribe(callbackAction);
     }
 }

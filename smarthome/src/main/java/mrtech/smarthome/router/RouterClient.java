@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InvalidObjectException;
 import java.io.OutputStream;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -49,6 +50,7 @@ class RouterClient implements RouterSession {
     private final String mSN;
     private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
     private final PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
+    private final ArrayList<Messages.Event.EventType> mEventTypes;
     private boolean invalidSN;
     private boolean authenticated;
     private boolean initialized;
@@ -60,7 +62,9 @@ class RouterClient implements RouterSession {
     private RouterStatus routerStatus;
     private SSLSocket socket;
     private rx.Observable<Messages.Response> subjectResponse;
+    private rx.Observable<Messages.Event> subjectEvent;
     private Messages.GetSystemConfigurationResponse systemConfigurationResponse;
+
     private RouterCacheProvider routerCacheProvider;
 
     public RouterClient(Router router, int p2pHandle) {
@@ -70,6 +74,7 @@ class RouterClient implements RouterSession {
         mRouter = router;
         mSubscribeMap = new HashMap<>();
         mResponseMap = new ConcurrentHashMap<>();
+        mEventTypes = new ArrayList<>();
         mIPCManager = IPCManager.createNewManager();
         setRouterStatus(RouterStatus.INITIAL);
         subjectResponse = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
@@ -85,6 +90,22 @@ class RouterClient implements RouterSession {
         }).onErrorResumeNext(new Func1<Throwable, Observable<? extends Messages.Response>>() {
             @Override
             public Observable<? extends Messages.Response> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        });
+        subjectEvent = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
+            @Override
+            public Boolean call(Messages.Callback callback) {
+                return callback.getType() == Messages.Callback.CallbackType.EVENT;
+            }
+        }).map(new Func1<Messages.Callback, Messages.Event>() {
+            @Override
+            public Messages.Event call(Messages.Callback callback) {
+                return callback.getExtension(Messages.Event.callback);
+            }
+        }).onErrorResumeNext(new Func1<Throwable, Observable<? extends Messages.Event>>() {
+            @Override
+            public Observable<? extends Messages.Event> call(Throwable throwable) {
                 return PublishSubject.create();
             }
         });
@@ -136,6 +157,7 @@ class RouterClient implements RouterSession {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Thread.currentThread().setName("checkRouterStatus:"+this);
                 decodeSN();
                 do {
                     int delay = 0;
@@ -160,7 +182,7 @@ class RouterClient implements RouterSession {
     }
 
     //====================================================================================
-    private boolean addPort() {
+    private boolean addPort(int delay) {
         synchronized (mManager) {
             try {
                 removePort();
@@ -170,7 +192,7 @@ class RouterClient implements RouterSession {
                     @Override
                     public void run() {
                         int tmp = NewAllStreamParser.DNPAddPort(mP2PHandle, p2pSN);
-                        trace(RouterClient.this+ "return port:"+tmp);
+                        trace(RouterClient.this + "return port:" + tmp);
                         if (tmp > 0) {
                             if (port > 0) {
                                 //cancel result
@@ -182,7 +204,7 @@ class RouterClient implements RouterSession {
                     }
                 });
                 thread.start();
-                thread.join(5000);
+                thread.join(delay);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 port = 0;
@@ -233,11 +255,12 @@ class RouterClient implements RouterSession {
         try {
             setRouterStatus(RouterStatus.ROUTER_CONNECTING);
             SSLSocket tempSocket = NetUtil.createSocket("localhost", port);
-            if (tempSocket == null || !tempSocket.getSession().isValid())
-                return false;
-            socket = tempSocket;
-            readSocketTask = new SocketListeningTask();
-            new Thread(readSocketTask).start();
+            if (tempSocket != null && tempSocket.getSession().isValid())
+            {
+                socket = tempSocket;
+                readSocketTask = new SocketListeningTask();
+                new Thread(readSocketTask).start();
+            }
             setRouterStatus(isConnected() ? RouterStatus.ROUTER_CONNECTED : RouterStatus.ROUTER_DISCONNECTED);
         } catch (SocketException e) {
             trace(this + "SocketException.!!!!removePort" + e.getMessage());
@@ -496,12 +519,6 @@ class RouterClient implements RouterSession {
         }
     }
 
-
-//    private  List< mrtech.smarthome.rpc.Models.NetworkDevice> getNetworkDevices(boolean cache) {
-//            final Messages.Response response = postRequest(RequestUtil.getNetWorkDevice(), cache);
-//            return response.getExtension(Messages.GetNetworkDeviceResponse.response).getDevListList();
-//    }
-
     private void setRouterStatus(RouterStatus routerStatus) {
         this.routerStatus = routerStatus;
         subjectRouterStatusChanged.onNext(mRouter);
@@ -530,7 +547,7 @@ class RouterClient implements RouterSession {
         try {
             if (!isSNValid()) return -1;
             if (!isPortValid())
-                if (!addPort()) return ROUTER_ADD_PORT_DELAY;
+                if (!addPort(5000)) return ROUTER_ADD_PORT_DELAY;
             if (!isConnected())
                 if (!connect()) return ROUTER_RECONNECTION_DELAY;
             if (!isAuthenticated())
@@ -539,9 +556,9 @@ class RouterClient implements RouterSession {
         } catch (Exception ex) {
             ex.printStackTrace();
             trace(this + " check status failed.." + ex.getMessage());
-        } finally {
-            return ROUTER_KEEP_ALIVE_DELAY;
         }
+        return ROUTER_KEEP_ALIVE_DELAY;
+
     }
 
     Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
@@ -589,4 +606,45 @@ class RouterClient implements RouterSession {
 
     }
 
+    public Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) throws TimeoutException {
+//        EventType.DISCONNECT
+//        EventType.SYS_CONFIG_CHANGED
+//        EventType.EZMODE_STATUS_CHANGED
+//        EventType.PERMIT_JOIN_STATUS_CHANGED
+//        EventType.NEW_TIMELINE
+//        EventType.ON_OFF_STATE_CHANGED
+//        EventType.SCENE_CHANGED
+//        EventType.PPPOE_STATE_CHANGED
+        addEvent(eventType);
+        return getEventObservable(eventType).subscribe(eventAction);
+    }
+
+    Observable<Messages.Event> getEventObservable(final Messages.Event.EventType eventType) {
+        return subjectEvent.filter(new Func1<Messages.Event, Boolean>() {
+            @Override
+            public Boolean call(Messages.Event event) {
+                return event.getType() == eventType;
+            }
+        });
+    }
+
+    Observable<Messages.Event> getEventObservable(){
+        return subjectEvent;
+    }
+
+    private void addEvent(Messages.Event.EventType eventType) throws TimeoutException {
+        if (mEventTypes.contains(eventType)) return;
+        mEventTypes.add(eventType);
+        postRequest(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])));
+    }
+
+    private void removeEvent(Messages.Event.EventType eventType) throws TimeoutException {
+        if (!mEventTypes.contains(eventType)) return;
+        mEventTypes.remove(eventType);
+        postRequest(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])));
+    }
+
+    public void unsubscribeEvent(Messages.Event.EventType eventType) throws TimeoutException {
+        removeEvent(eventType);
+    }
 }

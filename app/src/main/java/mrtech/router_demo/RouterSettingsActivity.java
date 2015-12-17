@@ -2,10 +2,12 @@ package mrtech.router_demo;
 
 import android.content.Intent;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -60,12 +63,12 @@ public class RouterSettingsActivity extends AppCompatActivity {
                 final Router router = getItem(position);
                 ((TextView) convertView.findViewById(R.id.router_name)).setText(router.getName());
                 ((TextView) convertView.findViewById(R.id.router_state)).setText(router.getRouterSession().getRouterStatus().toString());
-                convertView.findViewById(R.id.edit_btn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
+//                convertView.findViewById(R.id.edit_btn).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                    }
+//                });
                 convertView.findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -103,6 +106,34 @@ public class RouterSettingsActivity extends AppCompatActivity {
             addRouter(code.getContents());
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    boolean readyExit;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!readyExit) {
+                readyExit = true;
+                Toast.makeText(this, "再按一下退出", Toast.LENGTH_SHORT).show();
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                        }
+                        readyExit = false;
+                        return null;
+                    }
+                }.execute();
+                return true;
+            } else {
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void addRouter(String sn) {
