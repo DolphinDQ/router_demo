@@ -1,10 +1,12 @@
 package mrtech.smarthome.router;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.rpc.Messages;
+import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Action2;
 
@@ -155,6 +157,35 @@ public class Models {
          * @return
          */
         IPCManager getIPCManager();
+
+        /**
+         * 订阅路由器状态变更事件。
+         * @param callback 事件回调。
+         * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
+         */
+        Subscription subscribeRouterStatusChanged(Action1<Router> callback);
+
+        /**
+         * 取消路由器事件订阅 。
+         * @param eventType 指定事件。
+         * @throws TimeoutException 与服务器通讯超时。
+         */
+        void unsubscribeEvent(Messages.Event.EventType eventType) throws TimeoutException;
+
+        /**
+         * 订阅指定的路由器时间
+         * @param eventType 指定路由器事件
+         * @param eventAction 事件回调。
+         * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
+         * @throws TimeoutException
+         */
+        Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) throws TimeoutException;
+
+        /**
+         * 获取当前路由器所订阅的事件列表。
+         * @return
+         */
+        List<Messages.Event.EventType> getEventTypes();
     }
 
     /**

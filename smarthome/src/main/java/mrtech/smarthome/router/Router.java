@@ -21,8 +21,7 @@ public class Router {
     }
 
     void setRouterSession(RouterSession routerSession) {
-        if (routerSession != null)
-            this.routerSession = routerSession;
+        this.routerSession = routerSession;
     }
 
     /**
@@ -48,7 +47,7 @@ public class Router {
 
     public String getName() {
         final RouterSession routerSession = getRouterSession();
-        if (routerSession != null&&routerSession.isAuthenticated()) {
+        if (routerSession != null && routerSession.isAuthenticated()) {
             final Messages.GetSystemConfigurationResponse routerConfiguration = routerSession.getRouterConfiguration(false);
             if (routerConfiguration != null)
                 return routerConfiguration.getConfiguration().getDeviceName();

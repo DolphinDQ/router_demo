@@ -37,6 +37,10 @@ public class RouterManager {
 
     private static RouterManager ourInstance = new RouterManager();
 
+    /**
+     * 创建路由器管理单例对象。
+     * @return
+     */
     public static RouterManager getInstance() {
         return ourInstance;
     }
@@ -123,6 +127,11 @@ public class RouterManager {
         errorMessageMap.put(Messages.Response.ErrorCode.INTERNAL_ERROR, "服务器内部错误。");
     }
 
+    /**
+     * 获取路由器通讯错误码解释文本。
+     * @param errorCode
+     * @return
+     */
     public static String getErrorMessage(Messages.Response.ErrorCode errorCode) {
         String errorMessage = "";
         errorMessage = errorMessageMap.get(errorCode);
@@ -131,6 +140,9 @@ public class RouterManager {
         return errorMessage;
     }
 
+    /**
+     * 路由管理器初始化。
+     */
     public static void init() {
         if (isP2PInitialized()) return;
         initExtensionRegistry();
@@ -143,13 +155,20 @@ public class RouterManager {
         trace("inited....p2p handle :" + mP2PHandle);
     }
 
+    /**
+     * 销毁路由管理器。
+     */
     public static void destroy() {
         if (isP2PInitialized()) {
             NewAllStreamParser.DNPDestroyPortServer(mP2PHandle);
         }
     }
 
-    public void addRouter(Router router) {
+    /**
+     * 添加一台路由器
+     * @param router 路由器对象。
+     */
+    public void addRouter(final Router router) {
         if (router == null || router.getSN() == null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
@@ -159,11 +178,31 @@ public class RouterManager {
                 subjectRouterStatusChanged.onNext(router);
             }
         });
+        innerRouter.getEventObservable().map(new Func1<Messages.Event, RouterCallback<Messages.Event>>() {
+            @Override
+            public RouterCallback<Messages.Event> call(final Messages.Event event) {
+                return new RouterCallback<Messages.Event>() {
+                    @Override
+                    public Router getRouter() {
+                        return router;
+                    }
+
+                    @Override
+                    public Messages.Event getData() {
+                        return event;
+                    }
+                };
+            }
+        }).subscribe(subjectRouterEvents);
         innerRouter.init();
         mRouters.add(router);
         trace("add router :" + router.getSN());
     }
 
+    /**
+     * 删除一台路由器。
+     * @param router 路由器对象。
+     */
     public void removeRouter(Router router) {
         if (router == null) return;
         if (mRouters.remove(router)) {
@@ -172,6 +211,11 @@ public class RouterManager {
         ;
     }
 
+    /**
+     * 获取指定路由器。
+     * @param sn 路由器SN码。
+     * @return 路由器对象。
+     */
     public Router getRouter(String sn) {
         for (Router mRouter : mRouters) {
             if (mRouter.getSN().equals(sn))
@@ -180,14 +224,17 @@ public class RouterManager {
         return null;
     }
 
+    /**
+     * 获取当前路由器列表。
+     * @return  路由器列表。只读，请勿执行增删操作。
+     */
     public List<Router> getRouterList() {
         return mRouters;
     }
 
     /**
-     * get valid/invalid router list, ps:the valid router that is got authentication
-     *
-     * @param valid
+     * 获取指定类型的路由器列表。
+     * @param valid 路由器是否可以通讯。
      * @return
      */
     public List<Router> getRouterList(boolean valid) {
@@ -200,6 +247,9 @@ public class RouterManager {
         return routers;
     }
 
+    /**
+     * 清除当期添加的所有路由器。
+     */
     public void removeAll() {
         final Collection<Router> routerList = getRouterList();
         for (Router router : routerList) {
@@ -207,10 +257,21 @@ public class RouterManager {
         }
     }
 
+    /**
+     * 订阅所有路由器状态变更事件。
+     * @param callback 事件回调。
+     * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
+     */
     public Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
         return subjectRouterStatusChanged.subscribe(callback);
     }
 
+    /**
+     * 订阅所有路由器回调事件
+     * @param eventType
+     * @param callbackAction
+     * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
+     */
     public Subscription subscribeRouterEvent(final Messages.Event.EventType eventType, Action1<RouterCallback<Messages.Event>> callbackAction) {
         return subjectRouterEvents.filter(new Func1<RouterCallback<Messages.Event>, Boolean>() {
             @Override

@@ -157,7 +157,7 @@ class RouterClient implements RouterSession {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Thread.currentThread().setName("checkRouterStatus:"+this);
+                Thread.currentThread().setName("checkRouterStatus:" + this);
                 decodeSN();
                 do {
                     int delay = 0;
@@ -255,8 +255,7 @@ class RouterClient implements RouterSession {
         try {
             setRouterStatus(RouterStatus.ROUTER_CONNECTING);
             SSLSocket tempSocket = NetUtil.createSocket("localhost", port);
-            if (tempSocket != null && tempSocket.getSession().isValid())
-            {
+            if (tempSocket != null && tempSocket.getSession().isValid()) {
                 socket = tempSocket;
                 readSocketTask = new SocketListeningTask();
                 new Thread(readSocketTask).start();
@@ -519,6 +518,41 @@ class RouterClient implements RouterSession {
         }
     }
 
+    @Override
+    public Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) throws TimeoutException {
+//        EventType.DISCONNECT
+//        EventType.SYS_CONFIG_CHANGED
+//        EventType.EZMODE_STATUS_CHANGED
+//        EventType.PERMIT_JOIN_STATUS_CHANGED
+//        EventType.NEW_TIMELINE
+//        EventType.ON_OFF_STATE_CHANGED
+//        EventType.SCENE_CHANGED
+//        EventType.PPPOE_STATE_CHANGED
+        if (!mEventTypes.contains(eventType)) {
+            mEventTypes.add(eventType);
+            postRequest(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])));
+        }
+        return eventAction==null?null: getEventObservable(eventType).subscribe(eventAction);
+    }
+
+    @Override
+    public void unsubscribeEvent(Messages.Event.EventType eventType) throws TimeoutException {
+        if (mEventTypes.contains(eventType)) {
+            mEventTypes.remove(eventType);
+            postRequest(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])));
+        }
+    }
+
+    @Override
+    public List<Messages.Event.EventType> getEventTypes() {
+        return mEventTypes;
+    }
+
+    @Override
+    public Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
+        return subjectRouterStatusChanged.subscribe(callback);
+    }
+
     private void setRouterStatus(RouterStatus routerStatus) {
         this.routerStatus = routerStatus;
         subjectRouterStatusChanged.onNext(mRouter);
@@ -559,10 +593,6 @@ class RouterClient implements RouterSession {
         }
         return ROUTER_KEEP_ALIVE_DELAY;
 
-    }
-
-    Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
-        return subjectRouterStatusChanged.subscribe(callback);
     }
 
     private class SocketListeningTask implements Runnable {
@@ -606,19 +636,6 @@ class RouterClient implements RouterSession {
 
     }
 
-    public Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) throws TimeoutException {
-//        EventType.DISCONNECT
-//        EventType.SYS_CONFIG_CHANGED
-//        EventType.EZMODE_STATUS_CHANGED
-//        EventType.PERMIT_JOIN_STATUS_CHANGED
-//        EventType.NEW_TIMELINE
-//        EventType.ON_OFF_STATE_CHANGED
-//        EventType.SCENE_CHANGED
-//        EventType.PPPOE_STATE_CHANGED
-        addEvent(eventType);
-        return getEventObservable(eventType).subscribe(eventAction);
-    }
-
     Observable<Messages.Event> getEventObservable(final Messages.Event.EventType eventType) {
         return subjectEvent.filter(new Func1<Messages.Event, Boolean>() {
             @Override
@@ -628,23 +645,7 @@ class RouterClient implements RouterSession {
         });
     }
 
-    Observable<Messages.Event> getEventObservable(){
+    Observable<Messages.Event> getEventObservable() {
         return subjectEvent;
-    }
-
-    private void addEvent(Messages.Event.EventType eventType) throws TimeoutException {
-        if (mEventTypes.contains(eventType)) return;
-        mEventTypes.add(eventType);
-        postRequest(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])));
-    }
-
-    private void removeEvent(Messages.Event.EventType eventType) throws TimeoutException {
-        if (!mEventTypes.contains(eventType)) return;
-        mEventTypes.remove(eventType);
-        postRequest(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])));
-    }
-
-    public void unsubscribeEvent(Messages.Event.EventType eventType) throws TimeoutException {
-        removeEvent(eventType);
     }
 }
