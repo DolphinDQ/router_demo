@@ -14,6 +14,7 @@ import java.io.InvalidObjectException;
 import java.io.OutputStream;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeoutException;
 import javax.net.ssl.SSLSocket;
 
 import mrtech.smarthome.rpc.Messages;
+import mrtech.smarthome.rpc.Messages.Request.RequestType;
 import mrtech.smarthome.util.NetUtil;
 import mrtech.smarthome.util.NumberUtil;
 import mrtech.smarthome.util.RequestUtil;
@@ -51,6 +53,8 @@ class RouterClient implements RouterSession {
     private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
     private final PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
     private final ArrayList<Messages.Event.EventType> mEventTypes;
+    private final ConcurrentHashMap<Messages.Request, Action1<Messages.Response>> mPostQueue;
+    private Thread mPostTask;
     private boolean invalidSN;
     private boolean authenticated;
     private boolean initialized;
@@ -76,6 +80,7 @@ class RouterClient implements RouterSession {
         mResponseMap = new ConcurrentHashMap<>();
         mEventTypes = new ArrayList<>();
         mIPCManager = IPCManager.createNewManager();
+        mPostQueue = new ConcurrentHashMap<>();
         setRouterStatus(RouterStatus.INITIAL);
         subjectResponse = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
             @Override
@@ -154,6 +159,35 @@ class RouterClient implements RouterSession {
         initialized = true;
         mIPCManager.removeAll();
         setRouterStatus(RouterStatus.INITIALIZED);
+        mPostTask = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Thread.currentThread().setName(RouterClient.this + "RouterPostTask");
+                trace(RouterClient.this + " start post task...");
+                do {
+                    if (mPostQueue != null && mPostQueue.size() > 0 && isAuthenticated()) {
+                        for (final Messages.Request request : getRequestQueue()) {
+                            try {
+                                trace("post reg event request!!!");
+                                final Messages.Response response = postRequest(request);
+                                trace("post reg event success:" + response);
+                                mPostQueue.remove(request).call(response);
+                            } catch (TimeoutException e) {
+                                trace("request post failed:" + request);
+                                continue;
+                            }
+                        }
+                        continue;
+                    }
+                    try {
+                        Thread.sleep(1000 * 3600);
+                    } catch (InterruptedException e) {
+                        //线程醒来。进入下一轮循环。
+                    }
+                } while (initialized);
+            }
+        });
+        mPostTask.start();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -180,6 +214,7 @@ class RouterClient implements RouterSession {
             }
         }).start();
     }
+
 
     //====================================================================================
     private boolean addPort(int delay) {
@@ -262,7 +297,7 @@ class RouterClient implements RouterSession {
             }
             setRouterStatus(isConnected() ? RouterStatus.ROUTER_CONNECTED : RouterStatus.ROUTER_DISCONNECTED);
         } catch (SocketException e) {
-            trace(this + "SocketException.!!!!removePort" + e.getMessage());
+            trace(this + "SocketException.!!!!removePort " + e.getMessage());
             removePort();
         } catch (Exception e) {
             trace(this + "create ssl socket error." + e.getMessage());
@@ -307,6 +342,7 @@ class RouterClient implements RouterSession {
     public void destroy() {
         if (!initialized) return;
         initialized = false;
+        mPostTask.interrupt();
         mIPCManager.removeAll();
 //        subjectRouterStatusChanged.onCompleted();
         new Thread(new Runnable() {
@@ -484,6 +520,27 @@ class RouterClient implements RouterSession {
     }
 
     @Override
+    public Collection<Messages.Request> getRequestQueue() {
+        return mPostQueue.keySet();
+    }
+
+    @Override
+    public void cancelRequestFromQueue(Messages.Request request) {
+        if (mPostQueue.containsKey(request)) {
+            mPostQueue.remove(request);
+        }
+    }
+
+    @Override
+    public void postRequestToQueue(Messages.Request request, Action1<Messages.Response> callback) {
+        if (!mPostQueue.containsKey(request)) {
+            trace("put to queue:" + request);
+            mPostQueue.put(request, callback);
+        }
+        mPostTask.interrupt();
+    }
+
+    @Override
     public IPCManager getIPCManager() {
         return mIPCManager;
     }
@@ -519,7 +576,7 @@ class RouterClient implements RouterSession {
     }
 
     @Override
-    public Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) throws TimeoutException {
+    public Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) {
 //        EventType.DISCONNECT
 //        EventType.SYS_CONFIG_CHANGED
 //        EventType.EZMODE_STATUS_CHANGED
@@ -529,17 +586,34 @@ class RouterClient implements RouterSession {
 //        EventType.SCENE_CHANGED
 //        EventType.PPPOE_STATE_CHANGED
         if (!mEventTypes.contains(eventType)) {
+            trace("subscribe event:" + eventType);
             mEventTypes.add(eventType);
-            postRequest(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])));
+            postEvents();
         }
-        return eventAction==null?null: getEventObservable(eventType).subscribe(eventAction);
+        return eventAction == null ? null : getEventObservable(eventType).subscribe(eventAction);
+    }
+
+    private void postEvents() {
+        for (Messages.Request request : getRequestQueue()) {
+            if (request.getType() == Messages.Request.RequestType.SET_EVENTS) {
+                mPostTask.interrupt();
+                return;
+            }
+        }
+        postRequestToQueue(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[0])), new Action1<Messages.Response>() {
+            @Override
+            public void call(Messages.Response response) {
+                if (response.getErrorCode() != Messages.Response.ErrorCode.SUCCESS) postEvents();
+            }
+        });
     }
 
     @Override
-    public void unsubscribeEvent(Messages.Event.EventType eventType) throws TimeoutException {
+    public void unsubscribeEvent(Messages.Event.EventType eventType) {
         if (mEventTypes.contains(eventType)) {
+            trace("unsubscribe event:" + eventType);
             mEventTypes.remove(eventType);
-            postRequest(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])));
+            postEvents();
         }
     }
 
@@ -555,6 +629,9 @@ class RouterClient implements RouterSession {
 
     private void setRouterStatus(RouterStatus routerStatus) {
         this.routerStatus = routerStatus;
+        if (isAuthenticated()) {
+            postEvents();
+        }
         subjectRouterStatusChanged.onNext(mRouter);
     }
 
@@ -581,7 +658,7 @@ class RouterClient implements RouterSession {
         try {
             if (!isSNValid()) return -1;
             if (!isPortValid())
-                if (!addPort(5000)) return ROUTER_ADD_PORT_DELAY;
+                if (!addPort(ROUTER_ADD_PORT_DELAY)) return ROUTER_ADD_PORT_DELAY;
             if (!isConnected())
                 if (!connect()) return ROUTER_RECONNECTION_DELAY;
             if (!isAuthenticated())
@@ -592,7 +669,6 @@ class RouterClient implements RouterSession {
             trace(this + " check status failed.." + ex.getMessage());
         }
         return ROUTER_KEEP_ALIVE_DELAY;
-
     }
 
     private class SocketListeningTask implements Runnable {
@@ -647,5 +723,22 @@ class RouterClient implements RouterSession {
 
     Observable<Messages.Event> getEventObservable() {
         return subjectEvent;
+    }
+
+    @Override
+    public void alarmTest() {
+        subjectCallback.onNext(Messages.Callback.newBuilder()
+                .setType(Messages.Callback.CallbackType.EVENT)
+                .setExtension(Messages.Event.callback, Messages.Event.newBuilder()
+                        .setType(Messages.Event.EventType.NEW_TIMELINE)
+                        .setExtension(Messages.NewTimelineEvent.event, Messages.NewTimelineEvent.newBuilder()
+                                .setTimeline(mrtech.smarthome.rpc.Models.Timeline.newBuilder()
+                                        .setLevel(mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_ALARM)
+                                        .setTimestamp(123l)
+                                        .setParameter("{'name':'test alarm'}")
+                                        .build())
+                                .build())
+                        .build())
+                .build());
     }
 }

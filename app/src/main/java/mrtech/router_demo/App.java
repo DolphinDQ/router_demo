@@ -1,13 +1,26 @@
 package mrtech.router_demo;
 
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
+import android.widget.RemoteViews;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
+import rx.Subscription;
+import rx.functions.Action1;
 
 
 /**
@@ -15,6 +28,7 @@ import mrtech.smarthome.rpc.Models;
  */
 public class App extends Application {
     private static App instance;
+    private Subscription alarmHandle;
 
     public static App getInstance() {
         return instance;
@@ -29,12 +43,71 @@ public class App extends Application {
         IPCManager.init();
         addRouter("S5K8B7-JIYYQR-Z2KKME-XEENI0-99NX42-MLE");
         addRouter("T8QCY8-S3HLCS-YSJK2G-RUR057-W1BR09-76T");
+        if (alarmHandle == null)
+            alarmHandle = RouterManager.getInstance().subscribeRouterEvent(Messages.Event.EventType.NEW_TIMELINE, new Action1<mrtech.smarthome.router.Models.RouterCallback<Messages.Event>>() {
+                @Override
+                public void call(mrtech.smarthome.router.Models.RouterCallback<Messages.Event> eventRouterCallback) {
+                    final mrtech.smarthome.rpc.Models.Timeline timeline = eventRouterCallback.getData().getExtension(Messages.NewTimelineEvent.event).getTimeline();
+                    if (timeline.getLevel() == mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_ALARM
+                            || timeline.getLevel() == mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_WARNING) {
+                        try {
+                            JSONObject object = new JSONObject(timeline.getParameter());
+                            final Object name = object.get("name");
+                            statusNotification(name + "报警");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
     }
+
+
+    public void statusNotification(String mes) {
+        Notification mNotification = new Notification();
+        Intent mIntent = new Intent(this, RouterSettingsActivity.class);
+        //这里需要设置Intent.FLAG_ACTIVITY_NEW_TASK属性
+        mIntent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        PendingIntent mContentIntent = PendingIntent.getActivity(this, 0, mIntent, 0);
+
+        mNotification.tickerText = mes;
+        mNotification.icon = R.drawable.ic_notifications_black_24dp;
+        //1，使用setLatestEventInfo
+        //这里必需要用setLatestEventInfo(上下文,标题,内容,PendingIntent)不然会报错.
+//          mNotification.setLatestEventInfo(mContext, "新消息", "主人，您孙子给你来短息了", mContentIntent);
+
+        //2,使用远程视图
+        mNotification.contentView = new RemoteViews(this.getPackageName(), R.layout.layout_notification);
+        mNotification.contentView.setImageViewResource(R.id.status_icon, R.drawable.ic_notifications_black_24dp);
+        mNotification.contentView.setTextViewText(R.id.status_text, mes);
+//        使用默认的声音，闪屏，振动效果
+        mNotification.defaults = Notification.DEFAULT_ALL;
+//        mNotification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+
+        //添加震动
+        mNotification.vibrate = new long[]{500, 1000, 500, 1000};
+
+        //添加led
+        mNotification.ledARGB = Color.BLUE;
+        mNotification.ledOffMS = 0;
+        mNotification.ledOnMS = 1;
+        mNotification.flags = mNotification.flags | Notification.FLAG_SHOW_LIGHTS;
+
+        //手动设置contentView属于时，必须同时也设置contentIntent不然会报错
+        mNotification.contentIntent = mContentIntent;
+
+        //触发通知(消息ID,通知对象)
+        ((NotificationManager) this.getSystemService(NOTIFICATION_SERVICE)).notify(1, mNotification);
+    }
+
+
     private void addRouter(String sn) {
         RouterManager.getInstance().addRouter(new Router(null, "路由器", sn));
     }
+
     @Override
     public void onTerminate() {
+        alarmHandle.unsubscribe();
         IPCManager.destroy();
         RouterManager.destroy();
         super.onTerminate();

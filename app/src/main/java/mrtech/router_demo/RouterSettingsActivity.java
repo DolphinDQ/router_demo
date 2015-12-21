@@ -26,83 +26,53 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import mrtech.smarthome.router.Models;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
+import mrtech.smarthome.rpc.Messages;
+import mrtech.smarthome.util.RequestUtil;
 import rx.Subscription;
 import rx.functions.Action1;
 
 public class RouterSettingsActivity extends AppCompatActivity {
 
+    private boolean readyExit;
     private ArrayAdapter<Router> routerArrayAdapter;
     private RouterManager routerManager;
     private Subscription stateChangedHandle;
-    private boolean readyExit;
     private RouterSettingsActivity mContext;
     private NotificationManager mNotificationManager;
     private Notification mNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("create", "create" + hashCode());
+        Log.d("mrtechLOG", "onCreate" + hashCode());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_router_settings);
         routerManager = RouterManager.getInstance();
-//        mContext = this;
-//        mNotification = new Notification(R.drawable.ic_menu_manage,"弹窗弹窗弹窗弹窗弹窗.",System.currentTimeMillis());
-//        mNotificationManager = (NotificationManager)this.getSystemService(NOTIFICATION_SERVICE);
-//        statusNotification();
-        stateChangedHandle = routerManager.subscribeRouterStatusChanged(new Action1<Router>() {
-            @Override
-            public void call(final Router router) {
-                new Handler(getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (routerArrayAdapter != null)
-                            routerArrayAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
+        mContext = this;
+
+        mNotification = new Notification(); //new Notification(R.drawable.ic_menu_manage,"弹窗弹窗弹窗弹窗弹窗.",System.currentTimeMillis());
+        mNotificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        if (stateChangedHandle == null)
+            stateChangedHandle = routerManager.subscribeRouterStatusChanged(new Action1<Router>() {
+                @Override
+                public void call(final Router router) {
+                    new Handler(getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (routerArrayAdapter != null)
+                                routerArrayAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            });
+
         initView();
     }
-
-    public void statusNotification() {
-
-        Intent mIntent = new Intent(mContext, RouterSettingsActivity.class);
-        //这里需要设置Intent.FLAG_ACTIVITY_NEW_TASK属性
-        mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent mContentIntent = PendingIntent.getActivity(mContext, 0, mIntent, 0);
-        //1，使用setLatestEventInfo
-        //这里必需要用setLatestEventInfo(上下文,标题,内容,PendingIntent)不然会报错.
-        //  mNotification.setLatestEventInfo(mContext, "新消息", "主人，您孙子给你来短息了", mContentIntent);
-
-
-        //2,使用远程视图
-        mNotification.contentView = new RemoteViews(this.getPackageName(), R.layout.layout_notification);
-        mNotification.contentView.setImageViewResource(R.id.status_icon, R.drawable.ic_menu_manage);
-        mNotification.contentView.setTextViewText(R.id.status_text, "This is test content");
-
-        //使用默认的声音，闪屏，振动效果
-        //  mNotification.defaults = Notification.DEFAULT_ALL;
-        //  mNotification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
-
-        //添加震动
-        long[] vibreate = new long[]{1000, 1000, 1000, 1000};
-        mNotification.vibrate = vibreate;
-
-        //添加led
-        mNotification.ledARGB = Color.BLUE;
-        mNotification.ledOffMS = 0;
-        mNotification.ledOnMS = 1;
-        mNotification.flags = mNotification.flags | Notification.FLAG_SHOW_LIGHTS;
-
-        //手动设置contentView属于时，必须同时也设置contentIntent不然会报错
-        mNotification.contentIntent = mContentIntent;
-
-        //触发通知(消息ID,通知对象)
-        mNotificationManager.notify(1, mNotification);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,9 +102,9 @@ public class RouterSettingsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public boolean isDestroyed() {
         stateChangedHandle.unsubscribe();
-        super.onStop();
+        return super.isDestroyed();
     }
 
     @Override
@@ -163,9 +133,14 @@ public class RouterSettingsActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-
     private void initView() {
         final ListView routerList = (ListView) findViewById(R.id.router_list);
+        findViewById(R.id.post_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post();
+            }
+        });
         routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_list_item, routerManager.getRouterList()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -196,5 +171,21 @@ public class RouterSettingsActivity extends AppCompatActivity {
 
     private void addRouter(String sn) {
         routerManager.addRouter(new Router(null, "路由器", sn));
+    }
+
+    private void post(){
+//        routerManager.getRouterList().get(0).getRouterSession().postRequestToQueue(RequestUtil.getSysConfig(), new Action1<Messages.Response>() {
+//            @Override
+//            public void call(final Messages.Response response) {
+//                new Handler(getMainLooper()).post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final String deviceName = response.getExtension(Messages.GetSystemConfigurationResponse.response).getConfiguration().getDeviceName();
+//                        Toast.makeText(RouterSettingsActivity.this,deviceName, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
+      routerManager.getRouterList().get(0).getRouterSession().alarmTest();
     }
 }

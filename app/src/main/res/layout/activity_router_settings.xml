@@ -8,6 +8,15 @@
     tools:context="mrtech.router_demo.RouterSettingsActivity">
     <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
     <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+
+    <Button
+        android:id="@+id/post_btn"
+        android:text="POST"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </Button>
+
     <ListView
         android:id="@+id/router_list"
         android:layout_width="match_parent"

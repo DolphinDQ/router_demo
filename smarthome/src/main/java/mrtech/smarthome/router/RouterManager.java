@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
@@ -30,6 +32,7 @@ public class RouterManager {
     private static Map<Messages.Response.ErrorCode, String> errorMessageMap;
     private PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
     private PublishSubject<RouterCallback<Messages.Event>> subjectRouterEvents = PublishSubject.create();
+    private final ArrayList<Messages.Event.EventType> mEventTypes;
 
     private static void trace(String msg) {
         Log.e(RouterManager.class.getName(), msg);
@@ -39,6 +42,7 @@ public class RouterManager {
 
     /**
      * 创建路由器管理单例对象。
+     *
      * @return
      */
     public static RouterManager getInstance() {
@@ -51,6 +55,7 @@ public class RouterManager {
 
     private RouterManager() {
         mRouters = new ArrayList<>();
+        mEventTypes = new ArrayList<>();
     }
 
     private static boolean isP2PInitialized() {
@@ -129,6 +134,7 @@ public class RouterManager {
 
     /**
      * 获取路由器通讯错误码解释文本。
+     *
      * @param errorCode
      * @return
      */
@@ -166,6 +172,7 @@ public class RouterManager {
 
     /**
      * 添加一台路由器
+     *
      * @param router 路由器对象。
      */
     public void addRouter(final Router router) {
@@ -194,6 +201,7 @@ public class RouterManager {
                 };
             }
         }).subscribe(subjectRouterEvents);
+        subscribeEvents();
         innerRouter.init();
         mRouters.add(router);
         trace("add router :" + router.getSN());
@@ -201,6 +209,7 @@ public class RouterManager {
 
     /**
      * 删除一台路由器。
+     *
      * @param router 路由器对象。
      */
     public void removeRouter(Router router) {
@@ -213,6 +222,7 @@ public class RouterManager {
 
     /**
      * 获取指定路由器。
+     *
      * @param sn 路由器SN码。
      * @return 路由器对象。
      */
@@ -226,7 +236,8 @@ public class RouterManager {
 
     /**
      * 获取当前路由器列表。
-     * @return  路由器列表。只读，请勿执行增删操作。
+     *
+     * @return 路由器列表。只读，请勿执行增删操作。
      */
     public List<Router> getRouterList() {
         return mRouters;
@@ -234,6 +245,7 @@ public class RouterManager {
 
     /**
      * 获取指定类型的路由器列表。
+     *
      * @param valid 路由器是否可以通讯。
      * @return
      */
@@ -259,6 +271,7 @@ public class RouterManager {
 
     /**
      * 订阅所有路由器状态变更事件。
+     *
      * @param callback 事件回调。
      * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
      */
@@ -268,16 +281,29 @@ public class RouterManager {
 
     /**
      * 订阅所有路由器回调事件
+     *
      * @param eventType
      * @param callbackAction
      * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
      */
-    public Subscription subscribeRouterEvent(final Messages.Event.EventType eventType, Action1<RouterCallback<Messages.Event>> callbackAction) {
+    public Subscription subscribeRouterEvent(final Messages.Event.EventType eventType,
+                                             final Action1<RouterCallback<Messages.Event>> callbackAction) {
+        if (!mEventTypes.contains(eventType))
+            mEventTypes.add(eventType);
+        subscribeEvents();
         return subjectRouterEvents.filter(new Func1<RouterCallback<Messages.Event>, Boolean>() {
             @Override
             public Boolean call(RouterCallback<Messages.Event> eventRouterCallback) {
                 return eventRouterCallback.getData().getType() == eventType;
             }
         }).subscribe(callbackAction);
+    }
+
+    private void subscribeEvents() {
+        for (final Router router : getRouterList()) {
+            for (Messages.Event.EventType eventType : mEventTypes) {
+                router.getRouterSession().subscribeEvent(eventType, null);
+            }
+        }
     }
 }

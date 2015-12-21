@@ -1,7 +1,14 @@
 package mrtech.smarthome.router;
 
+import android.app.DownloadManager;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.ipc.IPCManager;
@@ -22,7 +29,7 @@ public class Models {
         int ROUTER_REQUEST_TIMEOUT = 5000;
         int ROUTER_KEEP_ALIVE_DELAY = 20000;
         int ROUTER_RECONNECTION_DELAY = 5000;
-        int ROUTER_ADD_PORT_DELAY = 5000;
+        int ROUTER_ADD_PORT_DELAY = 10000;
         int ROUTER_AUTH_DELAY = 5000;
         int ROUTER_READ_INTERVAL = 1000;
 
@@ -60,6 +67,25 @@ public class Models {
          * @return
          */
         RouterStatus getRouterStatus();
+
+        /**
+         * 获取队列
+         * @return
+         */
+        Collection<Messages.Request> getRequestQueue();
+
+        /**
+         * 从队列取消指定请求。
+         * @param request
+         */
+        void cancelRequestFromQueue(Messages.Request request);
+
+        /**
+         * 将指定请求添加进发送队列。发送队列，如果路由器尚未连接或推送不成功，将会等待只路由器连接后在次发送。
+         * @param request
+         * @param callback
+         */
+        void postRequestToQueue(Messages.Request request, Action1<Messages.Response> callback);
 
         /**
          * 异步向路由器发送请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT,不启用缓存。
@@ -170,7 +196,7 @@ public class Models {
          * @param eventType 指定事件。
          * @throws TimeoutException 与服务器通讯超时。
          */
-        void unsubscribeEvent(Messages.Event.EventType eventType) throws TimeoutException;
+        void unsubscribeEvent(Messages.Event.EventType eventType);
 
         /**
          * 订阅指定的路由器时间
@@ -179,13 +205,14 @@ public class Models {
          * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
          * @throws TimeoutException
          */
-        Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) throws TimeoutException;
+        Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) ;
 
         /**
          * 获取当前路由器所订阅的事件列表。
          * @return
          */
         List<Messages.Event.EventType> getEventTypes();
+        void alarmTest();
     }
 
     /**
