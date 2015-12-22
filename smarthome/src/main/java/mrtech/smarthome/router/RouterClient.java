@@ -25,7 +25,6 @@ import java.util.concurrent.TimeoutException;
 import javax.net.ssl.SSLSocket;
 
 import mrtech.smarthome.rpc.Messages;
-import mrtech.smarthome.rpc.Messages.Request.RequestType;
 import mrtech.smarthome.util.NetUtil;
 import mrtech.smarthome.util.NumberUtil;
 import mrtech.smarthome.util.RequestUtil;
@@ -40,6 +39,9 @@ import rx.subjects.PublishSubject;
  * Created by sphynx on 2015/12/2.
  */
 class RouterClient implements RouterSession {
+    private final RouterClient mContext;
+    private Thread mCheckStatusTask;
+
     private static void trace(String msg) {
         Log.e(RouterClient.class.getName(), msg);
     }
@@ -72,6 +74,7 @@ class RouterClient implements RouterSession {
     private RouterCacheProvider routerCacheProvider;
 
     public RouterClient(Router router, int p2pHandle) {
+        mContext = RouterClient.this;
         mManager = RouterManager.getInstance();
         mSN = router.getSN();
         mP2PHandle = p2pHandle;
@@ -129,6 +132,17 @@ class RouterClient implements RouterSession {
         return "RouterClient:" + mSN;
     }
 
+    public void init() {
+        if (initialized) return;
+        initialized = true;
+        mIPCManager.removeAll();
+        setRouterStatus(RouterStatus.INITIALIZED);
+        mPostTask = new Thread(new RequestQueuePostTask());
+        mPostTask.start();
+        mCheckStatusTask = new Thread(new CheckStatusTask());
+        mCheckStatusTask.start();
+    }
+
     private boolean decodeSN() {
         if (p2pSN == null && apiKey == null) {
             try {
@@ -148,86 +162,23 @@ class RouterClient implements RouterSession {
                 ex.printStackTrace();
             }
         }
-        trace("decoded sn:" + this + "failed...");
+        trace("decoded sn:" + mContext + "failed...");
         invalidSN = true;
         setRouterStatus(RouterStatus.SN_INVALID);
         return false;
     }
 
-    public void init() {
-        if (initialized) return;
-        initialized = true;
-        mIPCManager.removeAll();
-        setRouterStatus(RouterStatus.INITIALIZED);
-        mPostTask = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Thread.currentThread().setName(RouterClient.this + "RouterPostTask");
-                trace(RouterClient.this + " start post task...");
-                do {
-                    if (mPostQueue != null && mPostQueue.size() > 0 && isAuthenticated()) {
-                        for (final Messages.Request request : getRequestQueue()) {
-                            try {
-                                trace("post reg event request!!!");
-                                final Messages.Response response = postRequest(request);
-                                trace("post reg event success:" + response);
-                                mPostQueue.remove(request).call(response);
-                            } catch (TimeoutException e) {
-                                trace("request post failed:" + request);
-                                continue;
-                            }
-                        }
-                        continue;
-                    }
-                    try {
-                        Thread.sleep(1000 * 3600);
-                    } catch (InterruptedException e) {
-                        //线程醒来。进入下一轮循环。
-                    }
-                } while (initialized);
-            }
-        });
-        mPostTask.start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Thread.currentThread().setName("checkRouterStatus:" + this);
-                decodeSN();
-                do {
-                    int delay = 0;
-                    try {
-                        delay = checkRouterStatus();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            if (delay < 0) {
-                                destroy();
-                                break;
-                            }
-                            Thread.sleep(delay);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } while (initialized);
-            }
-        }).start();
-    }
-
-
-    //====================================================================================
-    private boolean addPort(int delay) {
+    private boolean createP2P(int delay) {
         synchronized (mManager) {
             try {
                 removePort();
-                trace(this + " adding port...");
+                trace(mContext + " adding port...");
                 setRouterStatus(RouterStatus.P2P_CONNECTING);
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         int tmp = NewAllStreamParser.DNPAddPort(mP2PHandle, p2pSN);
-                        trace(RouterClient.this + "return port:" + tmp);
+                        trace(mContext + "return port:" + tmp);
                         if (tmp > 0) {
                             if (port > 0) {
                                 //cancel result
@@ -243,10 +194,10 @@ class RouterClient implements RouterSession {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 port = 0;
-                trace(this + "add port failed..");
+                trace(mContext + "add port failed..");
             } finally {
                 setRouterStatus(isPortValid() ? RouterStatus.P2P_CONNECTED : RouterStatus.P2P_DISCONNECTED);
-                trace(this + " p2p port:" + port);
+                trace(mContext + " p2p port:" + port);
             }
             return port != 0;
         }
@@ -256,17 +207,16 @@ class RouterClient implements RouterSession {
         if (port == 0) return;
         disconnect();
         try {
-            trace(this + " remove port...");
+            trace(mContext + " remove port...");
             NewAllStreamParser.DNPDelPort(mP2PHandle, port);
             port = 0;
             setRouterStatus(RouterStatus.P2P_DISCONNECTED);
         } catch (Exception e) {
             e.printStackTrace();
-            trace(this + " remove port failed...");
+            trace(mContext + " remove port failed...");
         }
     }
 
-    //====================================================================================
     private void disconnect() {
         if (socket != null) {
             if (!socket.isClosed()) {
@@ -274,7 +224,7 @@ class RouterClient implements RouterSession {
                     socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    trace(this + "socket close failed..");
+                    trace(mContext + "socket close failed..");
                 }
             }
             readSocketTask.cancel();
@@ -286,7 +236,7 @@ class RouterClient implements RouterSession {
 
     private boolean connect() {
         disconnect();
-        trace(this + " creating ssl socket.");
+        trace(mContext + " creating ssl socket.");
         try {
             setRouterStatus(RouterStatus.ROUTER_CONNECTING);
             SSLSocket tempSocket = NetUtil.createSocket("localhost", port);
@@ -297,27 +247,26 @@ class RouterClient implements RouterSession {
             }
             setRouterStatus(isConnected() ? RouterStatus.ROUTER_CONNECTED : RouterStatus.ROUTER_DISCONNECTED);
         } catch (SocketException e) {
-            trace(this + "SocketException.!!!!removePort " + e.getMessage());
+            trace(mContext + "SocketException.!!!!removePort " + e.getMessage());
             removePort();
         } catch (Exception e) {
-            trace(this + "create ssl socket error." + e.getMessage());
+            trace(mContext + "create ssl socket error." + e.getMessage());
             e.printStackTrace();
             disconnect();
         }
         return isConnected();
     }
 
-    //====================================================================================
-    private boolean doAuth() {
+    private boolean authenticate() {
         if (!isConnected()) return false;
         try {
-            trace(RouterClient.this + " authentication!!!");
+            trace(mContext + " authentication!!!");
             Messages.Response resp = postRequest(RequestUtil.getAuthRequest(apiKey));
             final Messages.Response.ErrorCode code = resp.getErrorCode();
             authenticated =
                     code == Messages.Response.ErrorCode.SUCCESS ||
                             code == Messages.Response.ErrorCode.ALREADY_AUTHENTICATED;
-            trace(RouterClient.this + " authentication result :" + code);
+            trace(mContext + " authentication result :" + code);
         } catch (TimeoutException e) {
             e.printStackTrace();
             trace("auth time out");
@@ -327,22 +276,11 @@ class RouterClient implements RouterSession {
         return authenticated;
     }
 
-    private void keepAlive() {
-        if (!isAuthenticated()) return;
-        trace(RouterClient.this + " keep alive..");
-        try {
-            postRequest(RequestUtil.getKeepAliveRequest());
-        } catch (TimeoutException e) {
-//            e.printStackTrace();
-            trace("keep alive failed!!");
-            disconnect();
-        }
-    }
-
     public void destroy() {
         if (!initialized) return;
         initialized = false;
         mPostTask.interrupt();
+        mCheckStatusTask.interrupt();
         mIPCManager.removeAll();
 //        subjectRouterStatusChanged.onCompleted();
         new Thread(new Runnable() {
@@ -414,7 +352,7 @@ class RouterClient implements RouterSession {
                         if (callback != null) {
                             callback.call(null, e);
                         }
-                        trace(RouterClient.this + " socket IO exception ,socket will be reset..");
+                        trace(mContext + " socket IO exception ,socket will be reset..");
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
@@ -466,7 +404,7 @@ class RouterClient implements RouterSession {
                     e.printStackTrace();
                 }
             } while (retryTimes-- > 0);
-            throw new TimeoutException(this + "request " + requestId + " timeout...");
+            throw new TimeoutException(mContext + "request " + requestId + " timeout...");
         } finally {
             mSubscribeMap.remove(request.getRequestId());
         }
@@ -593,21 +531,6 @@ class RouterClient implements RouterSession {
         return eventAction == null ? null : getEventObservable(eventType).subscribe(eventAction);
     }
 
-    private void postEvents() {
-        for (Messages.Request request : getRequestQueue()) {
-            if (request.getType() == Messages.Request.RequestType.SET_EVENTS) {
-                mPostTask.interrupt();
-                return;
-            }
-        }
-        postRequestToQueue(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[0])), new Action1<Messages.Response>() {
-            @Override
-            public void call(Messages.Response response) {
-                if (response.getErrorCode() != Messages.Response.ErrorCode.SUCCESS) postEvents();
-            }
-        });
-    }
-
     @Override
     public void unsubscribeEvent(Messages.Event.EventType eventType) {
         if (mEventTypes.contains(eventType)) {
@@ -627,8 +550,23 @@ class RouterClient implements RouterSession {
         return subjectRouterStatusChanged.subscribe(callback);
     }
 
+    private void postEvents() {
+        for (Messages.Request request : getRequestQueue()) {
+            if (request.getType() == Messages.Request.RequestType.SET_EVENTS) {
+                mPostTask.interrupt();
+                return;
+            }
+        }
+        postRequestToQueue(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])), new Action1<Messages.Response>() {
+            @Override
+            public void call(Messages.Response response) {
+                if (response.getErrorCode() != Messages.Response.ErrorCode.SUCCESS) postEvents();
+            }
+        });
+    }
+
     private void setRouterStatus(RouterStatus routerStatus) {
-        this.routerStatus = routerStatus;
+        mContext.routerStatus = routerStatus;
         if (isAuthenticated()) {
             postEvents();
         }
@@ -636,8 +574,7 @@ class RouterClient implements RouterSession {
     }
 
     private Messages.Callback pullCallback(final SSLSocket sslSocket) throws IOException {
-        InputStream in = null;
-        in = sslSocket.getInputStream();
+        InputStream  in = sslSocket.getInputStream();
         byte[] prefix = new byte[2];
         int received = 0;
         in.read(prefix);
@@ -652,23 +589,6 @@ class RouterClient implements RouterSession {
             }
             return Messages.Callback.parseFrom(buffer, RouterManager.registry);
         }
-    }
-
-    private int checkRouterStatus() {
-        try {
-            if (!isSNValid()) return -1;
-            if (!isPortValid())
-                if (!addPort(ROUTER_ADD_PORT_DELAY)) return ROUTER_ADD_PORT_DELAY;
-            if (!isConnected())
-                if (!connect()) return ROUTER_RECONNECTION_DELAY;
-            if (!isAuthenticated())
-                if (!doAuth()) return ROUTER_AUTH_DELAY;
-            keepAlive();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            trace(this + " check status failed.." + ex.getMessage());
-        }
-        return ROUTER_KEEP_ALIVE_DELAY;
     }
 
     private class SocketListeningTask implements Runnable {
@@ -687,15 +607,14 @@ class RouterClient implements RouterSession {
             final SSLSocket sslSocket = socket;
             while (!isCancelled()) {
                 if (isConnected()) {
-                    Messages.Callback callback = null;
                     try {
-                        callback = pullCallback(sslSocket);
+                        Messages.Callback  callback = pullCallback(sslSocket);
                         if (callback == null) continue;
-                        trace(RouterClient.this + " callback packet :" + callback);
+                        trace(mContext + " callback packet :" + callback);
                         subjectCallback.onNext(callback);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        trace(RouterClient.this + " read stream error");
+                        trace(mContext + " read stream error");
                         disconnect();
                         continue;
                     }
@@ -712,7 +631,87 @@ class RouterClient implements RouterSession {
 
     }
 
-    Observable<Messages.Event> getEventObservable(final Messages.Event.EventType eventType) {
+    private class RequestQueuePostTask implements Runnable {
+        @Override
+        public void run() {
+            Thread.currentThread().setName(mContext + "RouterPostTask");
+            trace(mContext + " start post task...");
+            do {
+                if (mPostQueue != null && mPostQueue.size() > 0 && isAuthenticated()) {
+                    for (final Messages.Request request : getRequestQueue()) {
+                        try {
+                            final Messages.Response response = postRequest(request);
+                            mPostQueue.remove(request).call(response);
+                        } catch (TimeoutException e) {
+                            continue;
+                        }
+                    }
+                    continue;
+                }
+                try {
+                    Thread.sleep(1000 * 3600);
+                } catch (InterruptedException e) {
+                    //线程醒来。进入下一轮循环。
+                }
+            } while (initialized);
+        }
+    }
+
+    private class CheckStatusTask implements Runnable {
+
+        private void keepAlive() {
+            if (!isAuthenticated()) return;
+            trace(mContext + " keep alive..");
+            try {
+                postRequest(RequestUtil.getKeepAliveRequest());
+            } catch (TimeoutException e) {
+                trace("keep alive failed!!");
+                disconnect();
+            }
+        }
+
+        private int checkRouterStatus() {
+            try {
+                if (!isSNValid()) return -1;
+                if (!isPortValid())
+                    if (!createP2P(ROUTER_ADD_PORT_DELAY)) return ROUTER_ADD_PORT_DELAY;
+                if (!isConnected())
+                    if (!connect()) return ROUTER_RECONNECTION_DELAY;
+                if (!isAuthenticated())
+                    if (!authenticate()) return ROUTER_AUTH_DELAY;
+                keepAlive();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                trace(mContext + " check status failed.." + ex.getMessage());
+            }
+            return ROUTER_KEEP_ALIVE_DELAY;
+        }
+        @Override
+        public void run() {
+            Thread.currentThread().setName("checkRouterStatus:" + mContext);
+            decodeSN();
+            do {
+                int delay = 0;
+                try {
+                    delay = checkRouterStatus();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (delay < 0) {
+                            destroy();
+                            break;
+                        }
+                        Thread.sleep(delay);
+                    } catch (InterruptedException e) {
+                        trace(Thread.currentThread().getName()+" wakeup!");
+                    }
+                }
+            } while (initialized);
+        }
+    }
+
+    private Observable<Messages.Event> getEventObservable(final Messages.Event.EventType eventType) {
         return subjectEvent.filter(new Func1<Messages.Event, Boolean>() {
             @Override
             public Boolean call(Messages.Event event) {
@@ -721,24 +720,8 @@ class RouterClient implements RouterSession {
         });
     }
 
-    Observable<Messages.Event> getEventObservable() {
+    public Observable<Messages.Event> getEventObservable() {
         return subjectEvent;
     }
 
-    @Override
-    public void alarmTest() {
-        subjectCallback.onNext(Messages.Callback.newBuilder()
-                .setType(Messages.Callback.CallbackType.EVENT)
-                .setExtension(Messages.Event.callback, Messages.Event.newBuilder()
-                        .setType(Messages.Event.EventType.NEW_TIMELINE)
-                        .setExtension(Messages.NewTimelineEvent.event, Messages.NewTimelineEvent.newBuilder()
-                                .setTimeline(mrtech.smarthome.rpc.Models.Timeline.newBuilder()
-                                        .setLevel(mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_ALARM)
-                                        .setTimestamp(123l)
-                                        .setParameter("{'name':'test alarm'}")
-                                        .build())
-                                .build())
-                        .build())
-                .build());
-    }
 }

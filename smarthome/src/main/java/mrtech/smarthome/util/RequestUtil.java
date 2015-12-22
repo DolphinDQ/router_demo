@@ -3,8 +3,11 @@
  */
 package mrtech.smarthome.util;
 
+import android.app.DownloadManager;
+
 import java.util.List;
 
+import mrtech.smarthome.router.Models;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Messages.ActivateSceneRequest;
 import mrtech.smarthome.rpc.Messages.ArmRequest;
@@ -403,10 +406,7 @@ public class RequestUtil {
                 builder.addEvents(eventType);
             }
         }
-        builder.build();
-
-
-        return requestBuilder.build();
+        return requestBuilder.setExtension(SetEventsRequest.request, builder.build()).build();
     }
 
     public static Request activateScene(int sceneId) {

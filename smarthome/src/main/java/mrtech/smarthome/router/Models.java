@@ -27,7 +27,7 @@ public class Models {
      */
     public interface RouterSession {
         int ROUTER_REQUEST_TIMEOUT = 5000;
-        int ROUTER_KEEP_ALIVE_DELAY = 20000;
+        int ROUTER_KEEP_ALIVE_DELAY = 30000;
         int ROUTER_RECONNECTION_DELAY = 5000;
         int ROUTER_ADD_PORT_DELAY = 10000;
         int ROUTER_AUTH_DELAY = 5000;
@@ -212,7 +212,6 @@ public class Models {
          * @return
          */
         List<Messages.Event.EventType> getEventTypes();
-        void alarmTest();
     }
 
     /**
