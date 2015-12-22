@@ -185,7 +185,6 @@ public class RouterManager {
                 subjectRouterStatusChanged.onNext(router);
             }
         });
-        innerRouter.init();
         ((RouterDataChannel) innerRouter.getDataChannel()).getEventObservable().map(new Func1<Messages.Event, RouterCallback<Messages.Event>>() {
             @Override
             public RouterCallback<Messages.Event> call(final Messages.Event event) {
@@ -202,8 +201,9 @@ public class RouterManager {
                 };
             }
         }).subscribe(subjectRouterEvents);
-        subscribeEvents();
+        innerRouter.init();
         mRouters.add(router);
+        subscribeEvents();
         trace("add router :" + router.getSN());
     }
 

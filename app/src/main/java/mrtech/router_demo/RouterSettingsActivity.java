@@ -157,6 +157,14 @@ public class RouterSettingsActivity extends AppCompatActivity {
 //
 //                    }
 //                });
+
+                convertView.findViewById(R.id.event_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        router.getRouterSession().getDataChannel().test();
+                        Toast.makeText(RouterSettingsActivity.this, router.getRouterSession().getDataChannel().getEventTypes().size()+" 个报警", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 convertView.findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

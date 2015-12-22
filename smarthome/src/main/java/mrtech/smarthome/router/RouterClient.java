@@ -9,7 +9,6 @@ import mrtech.smarthome.ipc.IPCamera;
 import mrtech.smarthome.router.Models.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.SocketException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -40,12 +39,12 @@ class RouterClient implements RouterSession {
     private final RouterManager mManager;
     private final String mSN;
     private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
+    private final RouterDataChannel mDataChannel;
     private boolean invalidSN;
     private boolean authenticated;
     private boolean initialized;
     private int mP2PHandle;
     private int port;
-    private RouterDataChannel mDataChannel;
     private String p2pSN;
     private String apiKey;
     private RouterStatus routerStatus;
@@ -59,6 +58,7 @@ class RouterClient implements RouterSession {
         mP2PHandle = p2pHandle;
         mRouter = router;
         mIPCManager = IPCManager.createNewManager();
+        mDataChannel = new RouterDataChannel(this);
         setRouterStatus(RouterStatus.INITIAL);
     }
 
@@ -70,7 +70,6 @@ class RouterClient implements RouterSession {
     public void init() {
         if (initialized) return;
         initialized = true;
-        mDataChannel = new RouterDataChannel(this);
         mIPCManager.removeAll();
         setRouterStatus(RouterStatus.INITIALIZED);
         mCheckStatusTask = new Thread(new CheckStatusTask());
@@ -102,7 +101,7 @@ class RouterClient implements RouterSession {
         return false;
     }
 
-    public boolean createP2P(int delay) {
+    public boolean createPort(int delay) {
         synchronized (mManager) {
             try {
                 removePort();
@@ -332,7 +331,7 @@ class RouterClient implements RouterSession {
             try {
                 if (!isSNValid()) return -1;
                 if (!isPortValid())
-                    if (!createP2P(ROUTER_ADD_PORT_DELAY)) return ROUTER_ADD_PORT_DELAY;
+                    if (!createPort(ROUTER_ADD_PORT_DELAY)) return ROUTER_ADD_PORT_DELAY;
                 if (!isConnected())
                     if (!connect()) return ROUTER_RECONNECTION_DELAY;
                 if (!isAuthenticated())
@@ -369,6 +368,5 @@ class RouterClient implements RouterSession {
             } while (initialized);
         }
     }
-
 
 }

@@ -201,10 +201,6 @@ public class Models {
          */
         void postRequestToQueue(Messages.Request request, Action1<Messages.Response> callback);
 
-        /**
-         * 尝试推送请求队列所有数据。
-         */
-        void flushRequestQueue();
 
         /**
          * 取消路由器事件订阅 。
@@ -227,6 +223,8 @@ public class Models {
          * @return
          */
         Collection<Messages.Event.EventType> getEventTypes();
+
+        void test();
     }
 
     /**

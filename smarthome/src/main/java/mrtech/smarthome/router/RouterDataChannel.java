@@ -105,7 +105,7 @@ class RouterDataChannel implements Models.DataChannel {
         subscribeRouterStatusChanged = mClient.subscribeRouterStatusChanged(new Action1<Router>() {
             @Override
             public void call(Router router) {
-                if (router.getRouterSession().isAuthenticated()) postEvents();
+                if (mClient.isAuthenticated()) postEvents();
             }
         });
     }
@@ -267,7 +267,6 @@ class RouterDataChannel implements Models.DataChannel {
         flushRequestQueue();
     }
 
-    @Override
     public void flushRequestQueue() {
         if (mPostTask != null)
             mPostTask.interrupt();
@@ -303,6 +302,11 @@ class RouterDataChannel implements Models.DataChannel {
     @Override
     public List<Messages.Event.EventType> getEventTypes() {
         return mEventTypes;
+    }
+
+    @Override
+    public void test() {
+        postEvents();
     }
 
     private Observable<Messages.Event> getEventObservable(final Messages.Event.EventType eventType) {
@@ -398,7 +402,7 @@ class RouterDataChannel implements Models.DataChannel {
                     trace(mClient + " callback packet :" + callback);
                     subjectCallback.onNext(callback);
                 } catch (IOException e) {
-//                    e.printStackTrace();
+                    e.printStackTrace();
                     trace(mClient + " read stream error");
                     mClient.disconnect();
                     break;
