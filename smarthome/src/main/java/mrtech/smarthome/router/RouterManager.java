@@ -185,7 +185,8 @@ public class RouterManager {
                 subjectRouterStatusChanged.onNext(router);
             }
         });
-        innerRouter.getEventObservable().map(new Func1<Messages.Event, RouterCallback<Messages.Event>>() {
+        innerRouter.init();
+        ((RouterDataChannel) innerRouter.getDataChannel()).getEventObservable().map(new Func1<Messages.Event, RouterCallback<Messages.Event>>() {
             @Override
             public RouterCallback<Messages.Event> call(final Messages.Event event) {
                 return new RouterCallback<Messages.Event>() {
@@ -202,7 +203,6 @@ public class RouterManager {
             }
         }).subscribe(subjectRouterEvents);
         subscribeEvents();
-        innerRouter.init();
         mRouters.add(router);
         trace("add router :" + router.getSN());
     }
@@ -217,7 +217,6 @@ public class RouterManager {
         if (mRouters.remove(router)) {
             ((RouterClient) router.getRouterSession()).destroy();
         }
-        ;
     }
 
     /**
@@ -302,7 +301,7 @@ public class RouterManager {
     private void subscribeEvents() {
         for (final Router router : getRouterList()) {
             for (Messages.Event.EventType eventType : mEventTypes) {
-                router.getRouterSession().subscribeEvent(eventType, null);
+                router.getRouterSession().getDataChannel().subscribeEvent(eventType, null);
             }
         }
     }

@@ -1,14 +1,6 @@
 package mrtech.smarthome.router;
 
-import android.app.DownloadManager;
-
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.ipc.IPCManager;
@@ -23,15 +15,13 @@ import rx.functions.Action2;
 public class Models {
 
     /**
-     * router running session context
+     * 路由器连接会话。
      */
     public interface RouterSession {
-        int ROUTER_REQUEST_TIMEOUT = 5000;
         int ROUTER_KEEP_ALIVE_DELAY = 30000;
         int ROUTER_RECONNECTION_DELAY = 5000;
         int ROUTER_ADD_PORT_DELAY = 10000;
         int ROUTER_AUTH_DELAY = 5000;
-        int ROUTER_READ_INTERVAL = 1000;
 
         /**
          * get sn decode result
@@ -62,6 +52,12 @@ public class Models {
         boolean isAuthenticated();
 
         /**
+         * 会话是否初始化。
+         * @return
+         */
+        boolean isInitialized();
+
+        /**
          * 获取路由器状态。
          *
          * @return
@@ -69,23 +65,46 @@ public class Models {
         RouterStatus getRouterStatus();
 
         /**
-         * 获取队列
+         * 获取路由器基础配置信息。
+         *
+         * @param cache true 为使用缓存中的信息。
          * @return
          */
-        Collection<Messages.Request> getRequestQueue();
+        Messages.GetSystemConfigurationResponse getRouterConfiguration(boolean cache);
 
         /**
-         * 从队列取消指定请求。
-         * @param request
+         * 重新加载IPC列表。
+         * @param cache true 为使用缓存中的信息。
+         * @param exception 异常回调，如果回调值Throwable为null为刷新成功。其他均为刷新失败。
          */
-        void cancelRequestFromQueue(Messages.Request request);
+        void reloadIPCAsync(boolean cache, final Action1<Throwable> exception);
 
         /**
-         * 将指定请求添加进发送队列。发送队列，如果路由器尚未连接或推送不成功，将会等待只路由器连接后在次发送。
-         * @param request
-         * @param callback
+         * 获取IPC管理器。
+         * @return
          */
-        void postRequestToQueue(Messages.Request request, Action1<Messages.Response> callback);
+        IPCManager getIPCManager();
+
+        /**
+         * 获取数据通道。
+         * @return
+         */
+        DataChannel getDataChannel();
+
+        /**
+         * 订阅路由器状态变更事件。
+         * @param callback 事件回调。
+         * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
+         */
+        Subscription subscribeRouterStatusChanged(Action1<Router> callback);
+
+    }
+
+    /**
+     * 路由数据通道。实现用户与路由器的通讯功能。
+     */
+    public interface DataChannel {
+        int ROUTER_REQUEST_TIMEOUT = 5000;
 
         /**
          * 异步向路由器发送请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT,不启用缓存。
@@ -164,32 +183,28 @@ public class Models {
         Messages.Response postRequest(Messages.Request request, boolean cache) throws TimeoutException;
 
         /**
-         * 获取路由器基础配置信息。
-         *
-         * @param cache true 为使用缓存中的信息。
+         * 获取请求队列
          * @return
          */
-        Messages.GetSystemConfigurationResponse getRouterConfiguration(boolean cache);
+        Collection<Messages.Request> getRequestQueue();
 
         /**
-         * 重新加载IPC列表。
-         * @param cache true 为使用缓存中的信息。
-         * @param exception 异常回调，如果回调值Throwable为null为刷新成功。其他均为刷新失败。
+         * 从队列取消指定请求。
+         * @param request
          */
-        void reloadIPCAsync(boolean cache, final Action1<Throwable> exception);
+        void cancelRequestFromQueue(Messages.Request request);
 
         /**
-         * 获取IPC管理器。
-         * @return
+         * 将指定请求添加进发送队列。发送队列，如果路由器尚未连接或推送不成功，将会等待只路由器连接后在次发送。
+         * @param request
+         * @param callback
          */
-        IPCManager getIPCManager();
+        void postRequestToQueue(Messages.Request request, Action1<Messages.Response> callback);
 
         /**
-         * 订阅路由器状态变更事件。
-         * @param callback 事件回调。
-         * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
+         * 尝试推送请求队列所有数据。
          */
-        Subscription subscribeRouterStatusChanged(Action1<Router> callback);
+        void flushRequestQueue();
 
         /**
          * 取消路由器事件订阅 。
@@ -211,7 +226,7 @@ public class Models {
          * 获取当前路由器所订阅的事件列表。
          * @return
          */
-        List<Messages.Event.EventType> getEventTypes();
+        Collection<Messages.Event.EventType> getEventTypes();
     }
 
     /**

@@ -135,12 +135,12 @@ public class RouterSettingsActivity extends AppCompatActivity {
 
     private void initView() {
         final ListView routerList = (ListView) findViewById(R.id.router_list);
-        findViewById(R.id.post_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                post();
-            }
-        });
+//        findViewById(R.id.post_btn).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                post();
+//            }
+//        });
         routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_list_item, routerManager.getRouterList()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -186,6 +186,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
 //                });
 //            }
 //        });
-      routerManager.getRouterList().get(0).getRouterSession().alarmTest();
+//      routerManager.getRouterList().get(0).getRouterSession().alarmTest();
     }
 }
