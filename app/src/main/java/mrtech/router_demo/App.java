@@ -41,22 +41,21 @@ public class App extends Application {
 
         RouterManager.init();
         IPCManager.init();
+        addRouter("83JOMC-GZ3YTZ-2IKF7M-1YJRBJ-4QXYBN-5R0");
         addRouter("S5K8B7-JIYYQR-Z2KKME-XEENI0-99NX42-MLE");
-        addRouter("T8QCY8-S3HLCS-YSJK2G-RUR057-W1BR09-76T");
         if (alarmHandle == null)
-            alarmHandle = RouterManager.getInstance().subscribeRouterEvent(Messages.Event.EventType.NEW_TIMELINE, new Action1<mrtech.smarthome.router.Models.RouterCallback<Messages.Event>>() {
+            alarmHandle = RouterManager.getInstance().getEventManager().subscribeTimelineEvent(new Action1<mrtech.smarthome.router.Models.RouterCallback<Models.Timeline>>() {
                 @Override
-                public void call(mrtech.smarthome.router.Models.RouterCallback<Messages.Event> eventRouterCallback) {
-                    final mrtech.smarthome.rpc.Models.Timeline timeline = eventRouterCallback.getData().getExtension(Messages.NewTimelineEvent.event).getTimeline();
-                    if (timeline.getLevel() == mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_ALARM
-                            || timeline.getLevel() == mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_WARNING) {
-                        try {
-                            JSONObject object = new JSONObject(timeline.getParameter());
-                            final Object name = object.get("name");
-                            statusNotification(name + "报警");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                public void call(mrtech.smarthome.router.Models.RouterCallback<Models.Timeline> timelineRouterCallback) {
+                    try {
+                        final Models.Timeline timeline = timelineRouterCallback.getData();
+                        if (timeline.getLevel() != Models.TimelineLevel.TIMELINE_LEVEL_ALARM)
+                            return;
+                        JSONObject object = new JSONObject(timeline.getParameter());
+                        final Object name = object.get("name");
+                        statusNotification(name + "报警");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -67,7 +66,7 @@ public class App extends Application {
         Notification mNotification = new Notification();
         Intent mIntent = new Intent(this, RouterSettingsActivity.class);
         //这里需要设置Intent.FLAG_ACTIVITY_NEW_TASK属性
-        mIntent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        mIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         PendingIntent mContentIntent = PendingIntent.getActivity(this, 0, mIntent, 0);
 
         mNotification.tickerText = mes;

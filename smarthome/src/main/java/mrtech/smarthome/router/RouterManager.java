@@ -1,6 +1,5 @@
 package mrtech.smarthome.router;
 
-import android.app.usage.UsageEvents;
 import android.util.Log;
 
 import com.google.protobuf.ExtensionRegistry;
@@ -11,17 +10,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.Constants;
 import mrtech.smarthome.router.Models.*;
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
 
 /**
  * router connection manager
@@ -30,9 +23,7 @@ import rx.subjects.PublishSubject;
 public class RouterManager {
     public final static ExtensionRegistry registry = ExtensionRegistry.newInstance();
     private static Map<Messages.Response.ErrorCode, String> errorMessageMap;
-    private PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
-    private PublishSubject<RouterCallback<Messages.Event>> subjectRouterEvents = PublishSubject.create();
-    private final ArrayList<Messages.Event.EventType> mEventTypes;
+    private final RouterEventManager mEventManager;
 
     private static void trace(String msg) {
         Log.e(RouterManager.class.getName(), msg);
@@ -55,7 +46,7 @@ public class RouterManager {
 
     private RouterManager() {
         mRouters = new ArrayList<>();
-        mEventTypes = new ArrayList<>();
+        mEventManager = new RouterEventManager(this);
     }
 
     private static boolean isP2PInitialized() {
@@ -179,31 +170,9 @@ public class RouterManager {
         if (router == null || router.getSN() == null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
-        innerRouter.subscribeRouterStatusChanged(new Action1<Router>() {
-            @Override
-            public void call(Router router) {
-                subjectRouterStatusChanged.onNext(router);
-            }
-        });
-        ((RouterDataChannel) innerRouter.getDataChannel()).getEventObservable().map(new Func1<Messages.Event, RouterCallback<Messages.Event>>() {
-            @Override
-            public RouterCallback<Messages.Event> call(final Messages.Event event) {
-                return new RouterCallback<Messages.Event>() {
-                    @Override
-                    public Router getRouter() {
-                        return router;
-                    }
-
-                    @Override
-                    public Messages.Event getData() {
-                        return event;
-                    }
-                };
-            }
-        }).subscribe(subjectRouterEvents);
+        mEventManager.setRouter(innerRouter);
         innerRouter.init();
         mRouters.add(router);
-        subscribeEvents();
         trace("add router :" + router.getSN());
     }
 
@@ -269,40 +238,11 @@ public class RouterManager {
     }
 
     /**
-     * 订阅所有路由器状态变更事件。
-     *
-     * @param callback 事件回调。
-     * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
+     * 获取事件管理器。事件管理器为所有路由器全局事件。
+     * @return
      */
-    public Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
-        return subjectRouterStatusChanged.subscribe(callback);
+    public EventManager getEventManager() {
+        return mEventManager;
     }
 
-    /**
-     * 订阅所有路由器回调事件
-     *
-     * @param eventType
-     * @param callbackAction
-     * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
-     */
-    public Subscription subscribeRouterEvent(final Messages.Event.EventType eventType,
-                                             final Action1<RouterCallback<Messages.Event>> callbackAction) {
-        if (!mEventTypes.contains(eventType))
-            mEventTypes.add(eventType);
-        subscribeEvents();
-        return subjectRouterEvents.filter(new Func1<RouterCallback<Messages.Event>, Boolean>() {
-            @Override
-            public Boolean call(RouterCallback<Messages.Event> eventRouterCallback) {
-                return eventRouterCallback.getData().getType() == eventType;
-            }
-        }).subscribe(callbackAction);
-    }
-
-    private void subscribeEvents() {
-        for (final Router router : getRouterList()) {
-            for (Messages.Event.EventType eventType : mEventTypes) {
-                router.getRouterSession().getDataChannel().subscribeEvent(eventType, null);
-            }
-        }
-    }
 }

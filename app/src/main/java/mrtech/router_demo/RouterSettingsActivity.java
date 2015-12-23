@@ -58,7 +58,7 @@ public class RouterSettingsActivity extends AppCompatActivity {
         mNotification = new Notification(); //new Notification(R.drawable.ic_menu_manage,"弹窗弹窗弹窗弹窗弹窗.",System.currentTimeMillis());
         mNotificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
         if (stateChangedHandle == null)
-            stateChangedHandle = routerManager.subscribeRouterStatusChanged(new Action1<Router>() {
+            stateChangedHandle = routerManager.getEventManager().subscribeRouterStatusChangedEvent(new Action1<Router>() {
                 @Override
                 public void call(final Router router) {
                     new Handler(getMainLooper()).post(new Runnable() {
@@ -161,8 +161,8 @@ public class RouterSettingsActivity extends AppCompatActivity {
                 convertView.findViewById(R.id.event_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        router.getRouterSession().getDataChannel().test();
-                        Toast.makeText(RouterSettingsActivity.this, router.getRouterSession().getDataChannel().getEventTypes().size()+" 个报警", Toast.LENGTH_SHORT).show();
+//                        router.getRouterSession().getDataChannel().test();
+//                        Toast.makeText(RouterSettingsActivity.this, router.getRouterSession().getDataChannel().getEventTypes().size()+" 个报警", Toast.LENGTH_SHORT).show();
                     }
                 });
                 convertView.findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {

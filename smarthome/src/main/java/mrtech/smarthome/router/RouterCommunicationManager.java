@@ -28,7 +28,7 @@ import rx.subjects.PublishSubject;
 /**
  * Created by sphynx on 2015/12/22.
  */
-class RouterDataChannel implements Models.DataChannel {
+class RouterCommunicationManager implements CommunicationManager {
 
 
     private static void trace(String msg) {
@@ -55,7 +55,7 @@ class RouterDataChannel implements Models.DataChannel {
     private Thread mPostTask;
     private Thread mReadTask;
 
-    public RouterDataChannel(RouterClient client) {
+    public RouterCommunicationManager(RouterClient client) {
         mPostQueue = new ConcurrentHashMap<>();
         mClient = client;
         routerCacheProvider = null;

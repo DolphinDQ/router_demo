@@ -39,7 +39,7 @@ class RouterClient implements RouterSession {
     private final RouterManager mManager;
     private final String mSN;
     private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
-    private final RouterDataChannel mDataChannel;
+    private final RouterCommunicationManager mCommunicationManager;
     private boolean invalidSN;
     private boolean authenticated;
     private boolean initialized;
@@ -58,7 +58,7 @@ class RouterClient implements RouterSession {
         mP2PHandle = p2pHandle;
         mRouter = router;
         mIPCManager = IPCManager.createNewManager();
-        mDataChannel = new RouterDataChannel(this);
+        mCommunicationManager = new RouterCommunicationManager(this);
         setRouterStatus(RouterStatus.INITIAL);
     }
 
@@ -174,7 +174,7 @@ class RouterClient implements RouterSession {
             SSLSocket tempSocket = NetUtil.createSocket("localhost", port);
             if (tempSocket != null && tempSocket.getSession().isValid()) {
                 socket = tempSocket;
-                mDataChannel.init(socket);
+                mCommunicationManager.init(socket);
             }
             setRouterStatus(isConnected() ? RouterStatus.ROUTER_CONNECTED : RouterStatus.ROUTER_DISCONNECTED);
         } catch (SocketException e) {
@@ -192,7 +192,7 @@ class RouterClient implements RouterSession {
         if (!isConnected()) return false;
         try {
             trace(mContext + " authentication!!!");
-            Messages.Response resp = mDataChannel.postRequest(RequestUtil.getAuthRequest(apiKey));
+            Messages.Response resp = mCommunicationManager.postRequest(RequestUtil.getAuthRequest(apiKey));
             final Messages.Response.ErrorCode code = resp.getErrorCode();
             authenticated =
                     code == Messages.Response.ErrorCode.SUCCESS ||
@@ -210,7 +210,7 @@ class RouterClient implements RouterSession {
     public void destroy() {
         if (!initialized) return;
         initialized = false;
-        mDataChannel.destroy();
+        mCommunicationManager.destroy();
         mCheckStatusTask.interrupt();
         mIPCManager.removeAll();
         new Thread(new Runnable() {
@@ -226,7 +226,7 @@ class RouterClient implements RouterSession {
     public Messages.GetSystemConfigurationResponse getRouterConfiguration(boolean refreshCache) {
         if (systemConfigurationResponse == null) {
             try {
-                systemConfigurationResponse = mDataChannel.postRequest(RequestUtil.getSysConfig()).getExtension(Messages.GetSystemConfigurationResponse.response);
+                systemConfigurationResponse = mCommunicationManager.postRequest(RequestUtil.getSysConfig()).getExtension(Messages.GetSystemConfigurationResponse.response);
             } catch (TimeoutException e) {
                 e.printStackTrace();
             }
@@ -272,7 +272,7 @@ class RouterClient implements RouterSession {
     @Override
     public void reloadIPCAsync(boolean cache, final Action1<Throwable> exception) {
         try {
-            mDataChannel.postRequestAsync(RequestUtil.getDevices(mrtech.smarthome.rpc.Models.DeviceQuery.newBuilder()
+            mCommunicationManager.postRequestAsync(RequestUtil.getDevices(mrtech.smarthome.rpc.Models.DeviceQuery.newBuilder()
                     .setType(mrtech.smarthome.rpc.Models.DeviceType.DEVICE_TYPE_CAMERA)
                     .setPage(0)
                     .setPageSize(100)
@@ -300,8 +300,8 @@ class RouterClient implements RouterSession {
     }
 
     @Override
-    public Models.DataChannel getDataChannel() {
-        return mDataChannel;
+    public CommunicationManager getDataChannel() {
+        return mCommunicationManager;
     }
 
     @Override
@@ -320,7 +320,7 @@ class RouterClient implements RouterSession {
             if (!isAuthenticated()) return;
             trace(mContext + " keep alive..");
             try {
-                mDataChannel.postRequest(RequestUtil.getKeepAliveRequest());
+                mCommunicationManager.postRequest(RequestUtil.getKeepAliveRequest());
             } catch (TimeoutException e) {
                 trace("keep alive failed!!");
                 disconnect();
@@ -369,4 +369,7 @@ class RouterClient implements RouterSession {
         }
     }
 
+    public Router getRouter(){
+        return  mRouter;
+    }
 }

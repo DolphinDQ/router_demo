@@ -5,6 +5,7 @@ import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.rpc.Messages;
+import mrtech.smarthome.rpc.Models.TimelineType;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Action2;
@@ -53,6 +54,7 @@ public class Models {
 
         /**
          * 会话是否初始化。
+         *
          * @return
          */
         boolean isInitialized();
@@ -74,25 +76,30 @@ public class Models {
 
         /**
          * 重新加载IPC列表。
-         * @param cache true 为使用缓存中的信息。
+         *
+         * @param cache     true 为使用缓存中的信息。
          * @param exception 异常回调，如果回调值Throwable为null为刷新成功。其他均为刷新失败。
          */
         void reloadIPCAsync(boolean cache, final Action1<Throwable> exception);
 
         /**
          * 获取IPC管理器。
+         *
          * @return
          */
         IPCManager getIPCManager();
 
+
         /**
          * 获取数据通道。
+         *
          * @return
          */
-        DataChannel getDataChannel();
+        CommunicationManager getDataChannel();
 
         /**
          * 订阅路由器状态变更事件。
+         *
          * @param callback 事件回调。
          * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
          */
@@ -100,10 +107,23 @@ public class Models {
 
     }
 
+    public interface EventManager {
+        int QUERY_TIMELINE_INTERVAL = 5 * 1000;
+
+        Subscription subscribeRouterStatusChangedEvent(Action1<Router> callback);
+
+        Subscription subscribeRouterEvent(Messages.Event.EventType eventType, Action1<RouterCallback<Messages.Event>> callbackAction);
+
+        Subscription subscribeTimelineEvent(Action1<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> callback);
+
+
+
+    }
+
     /**
-     * 路由数据通道。实现用户与路由器的通讯功能。
+     * 路由通讯管理。实现用户与路由器的通讯功能。
      */
-    public interface DataChannel {
+    public interface CommunicationManager {
         int ROUTER_REQUEST_TIMEOUT = 5000;
 
         /**
@@ -184,26 +204,29 @@ public class Models {
 
         /**
          * 获取请求队列
+         *
          * @return
          */
         Collection<Messages.Request> getRequestQueue();
 
         /**
          * 从队列取消指定请求。
+         *
          * @param request
          */
         void cancelRequestFromQueue(Messages.Request request);
 
         /**
          * 将指定请求添加进发送队列。发送队列，如果路由器尚未连接或推送不成功，将会等待只路由器连接后在次发送。
+         *
          * @param request
          * @param callback
          */
         void postRequestToQueue(Messages.Request request, Action1<Messages.Response> callback);
 
-
         /**
          * 取消路由器事件订阅 。
+         *
          * @param eventType 指定事件。
          * @throws TimeoutException 与服务器通讯超时。
          */
@@ -211,15 +234,17 @@ public class Models {
 
         /**
          * 订阅指定的路由器时间
-         * @param eventType 指定路由器事件
+         *
+         * @param eventType   指定路由器事件
          * @param eventAction 事件回调。
          * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
          * @throws TimeoutException
          */
-        Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction) ;
+        Subscription subscribeEvent(Messages.Event.EventType eventType, Action1<Messages.Event> eventAction);
 
         /**
          * 获取当前路由器所订阅的事件列表。
+         *
          * @return
          */
         Collection<Messages.Event.EventType> getEventTypes();
@@ -233,21 +258,22 @@ public class Models {
     public enum RouterStatus {
         INITIAL("未初始化"),
         INITIALIZED("初始化完毕"),
-        SN_DECODING( "序列码解析中"),
+        SN_DECODING("序列码解析中"),
         SN_INVALID("序列码无效"),
         SN_DECODED("序列码解析成功"),
         P2P_CONNECTING("P2P连接中"),
         P2P_DISCONNECTED("P2P连接失败"),
         P2P_CONNECTED("P2P连接成功"),
-        ROUTER_CONNECTING( "路由器连接中"),
-        ROUTER_DISCONNECTED( "路由器连接失败"),
+        ROUTER_CONNECTING("路由器连接中"),
+        ROUTER_DISCONNECTED("路由器连接失败"),
         ROUTER_CONNECTED("路由器已连接"),
-        API_AUTH( "通讯授权中"),
-        API_UNAUTHORIZED( "通讯未授权"),
-        API_AUTH_SUCCESS( "通讯授权成功");
+        API_AUTH("通讯授权中"),
+        API_UNAUTHORIZED("通讯未授权"),
+        API_AUTH_SUCCESS("通讯授权成功");
 
         private final String description;
-        RouterStatus( String description) {
+
+        RouterStatus(String description) {
             this.description = description;
         }
 
@@ -259,10 +285,12 @@ public class Models {
 
     /**
      * 路由器回调。
+     *
      * @param <E> 回调数据结构
      */
     public interface RouterCallback<E> {
         Router getRouter();
+
         E getData();
     }
 }
