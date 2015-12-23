@@ -31,9 +31,11 @@ import rx.subjects.PublishSubject;
 class RouterClient implements RouterSession {
     private final RouterClient mContext;
     private Thread mCheckStatusTask;
+
     private static void trace(String msg) {
         Log.e(RouterClient.class.getName(), msg);
     }
+
     private final IPCManager mIPCManager;
     private final Router mRouter;
     private final RouterManager mManager;
@@ -210,16 +212,17 @@ class RouterClient implements RouterSession {
     public void destroy() {
         if (!initialized) return;
         initialized = false;
-        mCommunicationManager.destroy();
-        mCheckStatusTask.interrupt();
-        mIPCManager.removeAll();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 removePort();
+                mIPCManager.removeAll();
+                mCommunicationManager.destroy();
+                mCheckStatusTask.interrupt();
+                setRouterStatus(RouterStatus.INITIAL);
             }
         }).start();
-        setRouterStatus(RouterStatus.INITIAL);
     }
 
     @Override
@@ -310,6 +313,7 @@ class RouterClient implements RouterSession {
     }
 
     private void setRouterStatus(RouterStatus routerStatus) {
+        trace(mContext + " status changed to:" + routerStatus);
         mContext.routerStatus = routerStatus;
         subjectRouterStatusChanged.onNext(mRouter);
     }
@@ -369,7 +373,7 @@ class RouterClient implements RouterSession {
         }
     }
 
-    public Router getRouter(){
-        return  mRouter;
+    public Router getRouter() {
+        return mRouter;
     }
 }

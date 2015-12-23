@@ -184,7 +184,8 @@ class RouterCommunicationManager implements CommunicationManager {
                         e.printStackTrace();
                     } finally {
                         try {
-                            os.close();
+                            if (os != null)
+                                os.close();
                         } catch (Exception e2) {
                             e2.printStackTrace();
                         }

@@ -170,9 +170,9 @@ public class RouterManager {
         if (router == null || router.getSN() == null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
-        mEventManager.setRouter(innerRouter);
-        mRouters.add(router);
         innerRouter.init();
+        mRouters.add(router);
+        mEventManager.setRouter(innerRouter);
         trace("add router :" + router.getSN());
     }
 
