@@ -2,12 +2,9 @@ package mrtech.router_demo;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.Parcel;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,21 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import mrtech.smarthome.router.Models;
 import mrtech.smarthome.router.Router;
+import mrtech.smarthome.router.RouterConfig;
 import mrtech.smarthome.router.RouterManager;
-import mrtech.smarthome.rpc.Messages;
-import mrtech.smarthome.util.RequestUtil;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -54,7 +45,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_router_settings);
         routerManager = RouterManager.getInstance();
         mContext = this;
-
         mNotification = new Notification(); //new Notification(R.drawable.ic_menu_manage,"弹窗弹窗弹窗弹窗弹窗.",System.currentTimeMillis());
         mNotificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
         if (stateChangedHandle == null)
@@ -70,7 +60,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
                     });
                 }
             });
-
         initView();
     }
 
@@ -161,8 +150,8 @@ public class RouterSettingsActivity extends AppCompatActivity {
                 convertView.findViewById(R.id.event_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        router.getRouterSession().getDataChannel().test();
-//                        Toast.makeText(RouterSettingsActivity.this, router.getRouterSession().getDataChannel().getEventTypes().size()+" 个报警", Toast.LENGTH_SHORT).show();
+//                        router.getRouterSession().getCommunicationManager().test();
+//                        Toast.makeText(RouterSettingsActivity.this, router.getRouterSession().getCommunicationManager().getEventTypes().size()+" 个报警", Toast.LENGTH_SHORT).show();
                     }
                 });
                 convertView.findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {
@@ -181,7 +170,7 @@ public class RouterSettingsActivity extends AppCompatActivity {
         routerManager.addRouter(new Router(null, "路由器", sn));
     }
 
-    private void post(){
+    private void post() {
 //        routerManager.getRouterList().get(0).getRouterSession().postRequestToQueue(RequestUtil.getSysConfig(), new Action1<Messages.Response>() {
 //            @Override
 //            public void call(final Messages.Response response) {

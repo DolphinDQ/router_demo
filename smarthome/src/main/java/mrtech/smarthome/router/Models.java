@@ -1,11 +1,12 @@
 package mrtech.smarthome.router;
 
+import com.orm.dsl.Table;
+
 import java.util.Collection;
 import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.rpc.Messages;
-import mrtech.smarthome.rpc.Models.TimelineType;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Action2;
@@ -89,13 +90,12 @@ public class Models {
          */
         IPCManager getIPCManager();
 
-
         /**
          * 获取数据通道。
          *
          * @return
          */
-        CommunicationManager getDataChannel();
+        CommunicationManager getCommunicationManager();
 
         /**
          * 订阅路由器状态变更事件。
@@ -108,15 +108,12 @@ public class Models {
     }
 
     public interface EventManager {
-        int QUERY_TIMELINE_INTERVAL = 5 * 1000;
 
         Subscription subscribeRouterStatusChangedEvent(Action1<Router> callback);
 
         Subscription subscribeRouterEvent(Messages.Event.EventType eventType, Action1<RouterCallback<Messages.Event>> callbackAction);
 
         Subscription subscribeTimelineEvent(Action1<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> callback);
-
-
 
     }
 
@@ -292,5 +289,14 @@ public class Models {
         Router getRouter();
 
         E getData();
+    }
+
+
+    /**
+     * Created by sphynx on 2015/12/23.
+     */
+    @Table
+    public abstract static class DataEntityBase {
+
     }
 }

@@ -9,15 +9,14 @@ import android.graphics.Color;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.orm.SugarContext;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
-import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -38,27 +37,6 @@ public class App extends Application {
         if (instance != null)
             Log.e("Application", "!!!!!!!!!!!");
         instance = this;
-
-        RouterManager.init();
-        IPCManager.init();
-        addRouter("83JOMC-GZ3YTZ-2IKF7M-1YJRBJ-4QXYBN-5R0");
-        addRouter("S5K8B7-JIYYQR-Z2KKME-XEENI0-99NX42-MLE");
-        if (alarmHandle == null)
-            alarmHandle = RouterManager.getInstance().getEventManager().subscribeTimelineEvent(new Action1<mrtech.smarthome.router.Models.RouterCallback<Models.Timeline>>() {
-                @Override
-                public void call(mrtech.smarthome.router.Models.RouterCallback<Models.Timeline> timelineRouterCallback) {
-                    try {
-                        final Models.Timeline timeline = timelineRouterCallback.getData();
-                        if (timeline.getLevel() != Models.TimelineLevel.TIMELINE_LEVEL_ALARM)
-                            return;
-                        JSONObject object = new JSONObject(timeline.getParameter());
-                        final Object name = object.get("name");
-                        statusNotification(name + "报警");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
     }
 
 
@@ -105,10 +83,37 @@ public class App extends Application {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        SugarContext.init(this);
+        RouterManager.init();
+        IPCManager.init();
+        addRouter("83JOMC-GZ3YTZ-2IKF7M-1YJRBJ-4QXYBN-5R0");
+        addRouter("S5K8B7-JIYYQR-Z2KKME-XEENI0-99NX42-MLE");
+        if (alarmHandle == null)
+            alarmHandle = RouterManager.getInstance().getEventManager().subscribeTimelineEvent(new Action1<mrtech.smarthome.router.Models.RouterCallback<Models.Timeline>>() {
+                @Override
+                public void call(mrtech.smarthome.router.Models.RouterCallback<Models.Timeline> timelineRouterCallback) {
+                    try {
+                        final Models.Timeline timeline = timelineRouterCallback.getData();
+                        if (timeline.getLevel() != Models.TimelineLevel.TIMELINE_LEVEL_ALARM)
+                            return;
+                        JSONObject object = new JSONObject(timeline.getParameter());
+                        final Object name = object.get("name");
+                        statusNotification(name + "报警");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+    }
+
+    @Override
     public void onTerminate() {
         alarmHandle.unsubscribe();
         IPCManager.destroy();
         RouterManager.destroy();
+        SugarContext.terminate();
         super.onTerminate();
     }
 }

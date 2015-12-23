@@ -1,7 +1,9 @@
 package mrtech.smarthome.router;
 
 
-import java.util.concurrent.TimeoutException;
+import com.orm.SugarRecord;
+
+import java.util.List;
 
 import mrtech.smarthome.router.Models.*;
 import mrtech.smarthome.rpc.Messages;
@@ -14,6 +16,7 @@ public class Router {
     private final String SN;
     private final Object Source;
     private final String Name;
+    private RouterConfig config;
     private RouterSession routerSession;
 
     public RouterSession getRouterSession() {
@@ -34,6 +37,7 @@ public class Router {
         SN = sn;
         Source = source;
         Name = name;
+
     }
 
     /**
@@ -62,6 +66,27 @@ public class Router {
      */
     public Object getSource() {
         return Source;
+    }
+
+    public RouterConfig getConfig() {
+        if (config == null) loadConfig();
+        return config;
+    }
+
+    public void loadConfig() {
+        final List<RouterConfig> routerConfigs = SugarRecord.find(RouterConfig.class, "sn = ?", SN);
+        if (routerConfigs.size() == 0) {
+            saveConfig();
+        } else {
+            config = routerConfigs.get(0);
+        }
+    }
+
+    public void saveConfig() {
+        if (config == null) {
+            config = new RouterConfig(SN);
+        }
+        SugarRecord.save(config);
     }
 
     @Override

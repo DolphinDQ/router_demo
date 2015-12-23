@@ -1,11 +1,8 @@
 package mrtech.smarthome.router;
 
-import android.database.Observable;
 import android.util.Log;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
@@ -26,7 +23,7 @@ class RouterEventManager implements EventManager {
         Log.e(RouterEventManager.class.getName(), msg);
     }
 
-    private final Thread mQueryTimelineTask;
+//    private final Thread mQueryTimelineTask;
     private final RouterManager mManager;
     private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
     private final PublishSubject<RouterCallback<Messages.Event>> subjectRouterEvents = PublishSubject.create();
@@ -36,15 +33,33 @@ class RouterEventManager implements EventManager {
     public RouterEventManager(RouterManager routerManager) {
         mManager = routerManager;
         mEventTypes = new ArrayList<>();
-        subjectRouterEvents.filter(new Func1<RouterCallback<Messages.Event>, Boolean>() {
+//        mQueryTimelineTask = new Thread(new QueryTimeLineTask());
+//        mQueryTimelineTask.start();
+        subjectRouterStatusChanged.subscribe(new Action1<Router>() {
             @Override
-            public Boolean call(RouterCallback<Messages.Event> eventRouterCallback) {
-                return eventRouterCallback.getData().getType() == Messages.Event.EventType.NEW_TIMELINE;
+            public void call(Router router) {
+                if (router.getRouterSession().isAuthenticated()) {
+                    queryTimeline(router);
+                }
             }
-        }).map(new Func1<RouterCallback<Messages.Event>, RouterCallback<mrtech.smarthome.rpc.Models.Timeline>>() {
+        });
+        subjectTimeLine.subscribe(new Action1<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>>() {
             @Override
-            public RouterCallback<mrtech.smarthome.rpc.Models.Timeline> call(final RouterCallback<Messages.Event> eventRouterCallback) {
-                return new RouterCallback<mrtech.smarthome.rpc.Models.Timeline>() {
+            public void call(RouterCallback<mrtech.smarthome.rpc.Models.Timeline> timelineRouterCallback) {
+                final RouterConfig config = timelineRouterCallback.getRouter().getConfig();
+                final long timestamp = timelineRouterCallback.getData().getTimestamp();
+                if (timestamp >= config.getLastUpdateTime()) {
+                    config.setLastUpdateTime(timestamp + 1); // 最后更新时间为最后报警的时间+1秒
+                    trace("last update time update to :" + timestamp);
+                    timelineRouterCallback.getRouter().saveConfig();
+                    trace("last update time save completed!");
+                }
+            }
+        });
+        subscribeRouterEvent(Messages.Event.EventType.NEW_TIMELINE, new Action1<RouterCallback<Messages.Event>>() {
+            @Override
+            public void call(final RouterCallback<Messages.Event> eventRouterCallback) {
+                subjectTimeLine.onNext(new RouterCallback<mrtech.smarthome.rpc.Models.Timeline>() {
                     @Override
                     public Router getRouter() {
                         return eventRouterCallback.getRouter();
@@ -54,17 +69,7 @@ class RouterEventManager implements EventManager {
                     public mrtech.smarthome.rpc.Models.Timeline getData() {
                         return eventRouterCallback.getData().getExtension(Messages.NewTimelineEvent.event).getTimeline();
                     }
-                };
-            }
-        }).subscribe(subjectTimeLine);
-        mQueryTimelineTask = new Thread(new QueryTimeLineTask());
-        mQueryTimelineTask.start();
-        subjectRouterStatusChanged.subscribe(new Action1<Router>() {
-            @Override
-            public void call(Router router) {
-                if (router.getRouterSession().isAuthenticated()) {
-                    queryTimeline(router,System.currentTimeMillis()-getDefaultSince());
-                }
+                });
             }
         });
     }
@@ -106,9 +111,10 @@ class RouterEventManager implements EventManager {
     }
 
     private void subscribeEvents() {
+        trace("subscribe events!!");
         for (final Router router : mManager.getRouterList()) {
             for (Messages.Event.EventType eventType : mEventTypes) {
-                router.getRouterSession().getDataChannel().subscribeEvent(eventType, null);
+                router.getRouterSession().getCommunicationManager().subscribeEvent(eventType, null);
             }
         }
     }
@@ -120,7 +126,7 @@ class RouterEventManager implements EventManager {
                 subjectRouterStatusChanged.onNext(router);
             }
         });
-        ((RouterCommunicationManager) client.getDataChannel()).getEventObservable().map(new Func1<Messages.Event, RouterCallback<Messages.Event>>() {
+        ((RouterCommunicationManager) client.getCommunicationManager()).getEventObservable().map(new Func1<Messages.Event, RouterCallback<Messages.Event>>() {
             @Override
             public RouterCallback<Messages.Event> call(final Messages.Event event) {
                 return new RouterCallback<Messages.Event>() {
@@ -136,37 +142,34 @@ class RouterEventManager implements EventManager {
                 };
             }
         }).subscribe(subjectRouterEvents);
+        subscribeEvents();
     }
 
-    private class QueryTimeLineTask implements Runnable {
+//    private class QueryTimeLineTask implements Runnable {
+//        @Override
+//        public void run() {
+//            Thread.currentThread().setName("QueryTimelineTask");
+//            do {
+//                final List<Router> routerList = mManager.getRouterList(true);
+//                for (final Router router : routerList) {
+//                    queryTimeline(router);
+//                }
+//                try {
+//                    Thread.sleep(QUERY_TIMELINE_INTERVAL);
+//                } catch (InterruptedException e) {
+//                    trace(Thread.currentThread().getName() + " wakeup!");
+//                }
+//            } while (true);
+//        }
+//    }
 
-        @Override
-        public void run() {
-            Thread.currentThread().setName("QueryTimelineTask");
-            long since =getDefaultSince();
-            do {
-                final List<Router> routerList = mManager.getRouterList(true);
-                for (final Router router : routerList) {
-                    if (queryTimeline(router, since)) {
-                        since = System.currentTimeMillis();
-                    }
-                }
-                try {
-                    Thread.sleep(QUERY_TIMELINE_INTERVAL);
-                } catch (InterruptedException e) {
-                    trace(Thread.currentThread().getName() + " wakeup!");
-                }
-            } while (true);
-        }
-    }
-    private long getDefaultSince(){
-       return   System.currentTimeMillis() - 1000 * 3600 * 24;
-    }
-
-    private boolean queryTimeline(final Router router, long since) {
+    private void queryTimeline(final Router router) {
         try {
+            final RouterConfig config = router.getConfig();
+            long since = config.getLastUpdateTime();
+            trace("query time line since:" + since);
             final Messages.Response response = router.getRouterSession()
-                    .getDataChannel()
+                    .getCommunicationManager()
                     .postRequest(RequestUtil.getTimeline(mrtech.smarthome.rpc.Models.TimelineQuery
                             .newBuilder()
                             .setPageSize(100)
@@ -174,7 +177,7 @@ class RouterEventManager implements EventManager {
                             .setSince(since)
                             .setLevel(mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_ALARM)
                             .build()));
-            if (response.getErrorCode() == Messages.Response.ErrorCode.SUCCESS) {
+            if (response != null && response.getErrorCode() == Messages.Response.ErrorCode.SUCCESS) {
                 final List<mrtech.smarthome.rpc.Models.Timeline> resultsList = response.getExtension(Messages.QueryTimelineResponse.response).getResultsList();
                 for (final mrtech.smarthome.rpc.Models.Timeline timeline : resultsList) {
                     subjectTimeLine.onNext(new RouterCallback<mrtech.smarthome.rpc.Models.Timeline>() {
@@ -189,11 +192,8 @@ class RouterEventManager implements EventManager {
                         }
                     });
                 }
-                return true;
             }
-
         } catch (TimeoutException e) {
         }
-        return false;
     }
 }

@@ -35,5 +35,6 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.0.3@aar'
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'com.google.protobuf:protobuf-java:2.6.1'
+    compile 'com.github.satyan:sugar:1.4'
     compile project(':smarthome')
 }

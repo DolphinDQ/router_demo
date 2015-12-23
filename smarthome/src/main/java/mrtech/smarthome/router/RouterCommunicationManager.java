@@ -29,8 +29,6 @@ import rx.subjects.PublishSubject;
  * Created by sphynx on 2015/12/22.
  */
 class RouterCommunicationManager implements CommunicationManager {
-
-
     private static void trace(String msg) {
         Log.e(RouterClient.class.getName(), msg);
     }
@@ -40,6 +38,7 @@ class RouterCommunicationManager implements CommunicationManager {
         subscribeRouterStatusChanged.unsubscribe();
         super.finalize();
     }
+
     private final Subscription subscribeRouterStatusChanged;
     private final HashMap<Integer, Messages.Request> mSubscribeMap;
     private final ConcurrentHashMap<Messages.Request, Action1<Messages.Response>> mPostQueue;

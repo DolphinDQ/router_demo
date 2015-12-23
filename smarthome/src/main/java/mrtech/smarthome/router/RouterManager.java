@@ -171,8 +171,8 @@ public class RouterManager {
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
         mEventManager.setRouter(innerRouter);
-        innerRouter.init();
         mRouters.add(router);
+        innerRouter.init();
         trace("add router :" + router.getSN());
     }
 

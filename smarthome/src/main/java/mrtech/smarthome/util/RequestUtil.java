@@ -4,6 +4,7 @@
 package mrtech.smarthome.util;
 
 import android.app.DownloadManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -111,16 +112,16 @@ public class RequestUtil {
         }
     }
 
-    static int getRequestTypeValue(Messages.Response callback){
-        int requestId= callback.getRequestId();
-        requestId -=(requestId>>16);
+    static int getRequestTypeValue(Messages.Response callback) {
+        int requestId = callback.getRequestId();
+        requestId -= (requestId >> 16);
         return requestId;
     }
 
     public static Request getAuthRequest(String apiKey) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.AUTHENTICATE);
-        requestBuilder.setRequestId(RequestType.AUTHENTICATE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.AUTHENTICATE_VALUE + createId());
 
         AuthenticateRequest.Builder auBuilder = AuthenticateRequest.newBuilder();
         auBuilder.setApiKey(apiKey);
@@ -149,14 +150,14 @@ public class RequestUtil {
     public static Request getKeepAliveRequest() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.KEEP_ALIVE);
-        requestBuilder.setRequestId(RequestType.KEEP_ALIVE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.KEEP_ALIVE_VALUE + createId());
         return requestBuilder.build();
     }
 
     public static Request getSystemLogRequest(SystemLogQuery query) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.QUERY_SYSTEM_LOG);
-        requestBuilder.setRequestId(RequestType.QUERY_SYSTEM_LOG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.QUERY_SYSTEM_LOG_VALUE + createId());
 
         QuerySystemLogRequest.Builder builder = QuerySystemLogRequest.newBuilder();
         builder.setSystemLogQuery(query);
@@ -168,7 +169,7 @@ public class RequestUtil {
     public static Request getTimeline(TimelineQuery query) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.QUERY_TIMELINE);
-        requestBuilder.setRequestId(RequestType.QUERY_TIMELINE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.QUERY_TIMELINE_VALUE + createId());
 
         QueryTimelineRequest.Builder timelineBuilder = QueryTimelineRequest.newBuilder();
         timelineBuilder.setQuery(query);
@@ -180,7 +181,7 @@ public class RequestUtil {
     public static Request getDevices(DeviceQuery query) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.QUERY_DEVICE);
-        requestBuilder.setRequestId(RequestType.QUERY_DEVICE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.QUERY_DEVICE_VALUE + createId());
 
         QueryDeviceRequest.Builder queryDeviceRequestBuilder = QueryDeviceRequest.newBuilder();
         queryDeviceRequestBuilder.setQuery(query);
@@ -192,7 +193,7 @@ public class RequestUtil {
     public static Request getGroup(GroupQuery groupQuery) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.QUERY_GROUP);
-        requestBuilder.setRequestId(RequestType.QUERY_GROUP_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.QUERY_GROUP_VALUE + createId());
 
         QueryGroupRequest.Builder queryGroupRequestBuilder = QueryGroupRequest.newBuilder();
         queryGroupRequestBuilder.setQuery(groupQuery);
@@ -205,7 +206,7 @@ public class RequestUtil {
     public static Request getScene(SceneQuery query) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.QUERY_SCENE);
-        requestBuilder.setRequestId(RequestType.QUERY_SCENE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.QUERY_SCENE_VALUE + createId());
 
         QuerySceneRequest.Builder querySceneRequestBuilder = QuerySceneRequest.newBuilder();
         querySceneRequestBuilder.setQuery(query);
@@ -218,21 +219,21 @@ public class RequestUtil {
     public static Request searchCamera() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SEARCH_CAMERA);
-        requestBuilder.setRequestId(RequestType.SEARCH_CAMERA_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SEARCH_CAMERA_VALUE + createId());
         return requestBuilder.build();
     }
 
     public static Request getOneKeyMatch() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.TOGGLE_EZMODE);
-        requestBuilder.setRequestId(RequestType.TOGGLE_EZMODE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.TOGGLE_EZMODE_VALUE + createId());
         return requestBuilder.build();
     }
 
     public static Request createGroup(String groupName) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.CREATE_GROUP);
-        requestBuilder.setRequestId(RequestType.CREATE_GROUP_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.CREATE_GROUP_VALUE + createId());
 
         CreateGroupRequest.Builder createGroupRequestBuilder = CreateGroupRequest.newBuilder();
         createGroupRequestBuilder.setName(groupName);
@@ -244,7 +245,7 @@ public class RequestUtil {
     public static Request updateGroup(int groupId, String name) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.UPDATE_GROUP);
-        requestBuilder.setRequestId(RequestType.UPDATE_GROUP_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.UPDATE_GROUP_VALUE + createId());
 
         UpdateGroupRequest.Builder updateGroupRequestBuilder = UpdateGroupRequest.newBuilder();
         updateGroupRequestBuilder.setId(groupId);
@@ -257,7 +258,7 @@ public class RequestUtil {
     public static Request deleteGroup(int group) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_GROUP);
-        requestBuilder.setRequestId(RequestType.DELETE_GROUP_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_GROUP_VALUE + createId());
 
         DeleteGroupRequest.Builder deleteGroupRequestBuilder = DeleteGroupRequest.newBuilder();
         deleteGroupRequestBuilder.addGroupId(group);
@@ -270,7 +271,7 @@ public class RequestUtil {
     public static Request setDeviceAlias(int deviceId, String alias) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_DEVICE_ALIAS);
-        requestBuilder.setRequestId(RequestType.SET_DEVICE_ALIAS_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_DEVICE_ALIAS_VALUE + createId());
 
         SetDeviceAliasRequest setDeviceAliasRequest = SetDeviceAliasRequest.newBuilder().setDeviceId(deviceId).setAlias(alias).build();
         requestBuilder.setExtension(SetDeviceAliasRequest.request, setDeviceAliasRequest);
@@ -281,7 +282,7 @@ public class RequestUtil {
     public static Request deleteDevice(int deviceId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_DEVICES);
-        requestBuilder.setRequestId(RequestType.DELETE_DEVICES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_DEVICES_VALUE + createId());
 
         requestBuilder.setExtension(DeleteDevicesRequest.request, DeleteDevicesRequest.newBuilder().addDeviceIdList(deviceId).build());
         return requestBuilder.build();
@@ -290,7 +291,7 @@ public class RequestUtil {
     public static Request deleteDevice(List<Integer> deviceIds) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_DEVICES);
-        requestBuilder.setRequestId(RequestType.DELETE_DEVICES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_DEVICES_VALUE + createId());
 
         requestBuilder.setExtension(DeleteDevicesRequest.request, DeleteDevicesRequest.newBuilder().addAllDeviceIdList(deviceIds).build());
         return requestBuilder.build();
@@ -299,7 +300,7 @@ public class RequestUtil {
     public static Request saveCamera(Device device) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SAVE_CAMERA);
-        requestBuilder.setRequestId(RequestType.SAVE_CAMERA_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SAVE_CAMERA_VALUE + createId());
 
         requestBuilder.setExtension(SaveCameraRequest.request, SaveCameraRequest.newBuilder().setDevice(device).build());
 
@@ -309,7 +310,7 @@ public class RequestUtil {
     public static Request toggleOnOff(boolean onOff, TargetType targetType, int targetId, DeviceId deviceId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.TOGGLE_ON_OFF);
-        requestBuilder.setRequestId(RequestType.TOGGLE_ON_OFF_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.TOGGLE_ON_OFF_VALUE + createId());
 
         ToggleOnOffRequest.Builder toggleOnOffRequestBuilder = ToggleOnOffRequest.newBuilder();
 
@@ -328,7 +329,7 @@ public class RequestUtil {
     public static Request toggleOnOff(ToggleOnOffRequest toggleOnOffRequest) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.TOGGLE_ON_OFF);
-        requestBuilder.setRequestId(RequestType.TOGGLE_ON_OFF_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.TOGGLE_ON_OFF_VALUE + createId());
 
         requestBuilder.setExtension(ToggleOnOffRequest.request, toggleOnOffRequest);
 
@@ -338,7 +339,7 @@ public class RequestUtil {
     public static Request setGroup(int deviceId, int groupId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_GROUP);
-        requestBuilder.setRequestId(RequestType.SET_GROUP_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_GROUP_VALUE + createId());
 
         SetGroupRequest.Builder setGroupRequestBuilder = SetGroupRequest.newBuilder();
         setGroupRequestBuilder.addDeviceId(deviceId);
@@ -353,7 +354,7 @@ public class RequestUtil {
     public static Request setGroup(List<Integer> deviceIds, int groupId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_GROUP);
-        requestBuilder.setRequestId(RequestType.SET_GROUP_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_GROUP_VALUE + createId());
 
         SetGroupRequest.Builder setGroupRequestBuilder = SetGroupRequest.newBuilder();
         setGroupRequestBuilder.addAllDeviceId(deviceIds);
@@ -379,7 +380,7 @@ public class RequestUtil {
     public static Request deleteScene(int sceneId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_SCENE);
-        requestBuilder.setRequestId(RequestType.DELETE_SCENE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_SCENE_VALUE + createId());
 
         requestBuilder.setExtension(DeleteSceneRequest.request, DeleteSceneRequest.newBuilder().addScenes(sceneId).build());
 
@@ -389,7 +390,7 @@ public class RequestUtil {
     public static Request queryZone(ZoneQuery zoneQuery) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.QUERY_ZONE);
-        requestBuilder.setRequestId(RequestType.QUERY_ZONE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.QUERY_ZONE_VALUE + createId());
 
         requestBuilder.setExtension(QueryZoneRequest.request, QueryZoneRequest.newBuilder().setQuery(zoneQuery).build());
 
@@ -401,8 +402,9 @@ public class RequestUtil {
         requestBuilder.setType(RequestType.SET_EVENTS);
         requestBuilder.setRequestId(RequestType.SET_EVENTS_VALUE + createId());
         SetEventsRequest.Builder builder = SetEventsRequest.newBuilder();
-        if(eventTypes!=null){
+        if (eventTypes != null) {
             for (EventType eventType : eventTypes) {
+                Log.d("RequestUtil", "set event:" + eventType);
                 builder.addEvents(eventType);
             }
         }
@@ -412,7 +414,7 @@ public class RequestUtil {
     public static Request activateScene(int sceneId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.ACTIVATE_SCENE);
-        requestBuilder.setRequestId(RequestType.ACTIVATE_SCENE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.ACTIVATE_SCENE_VALUE + createId());
 
         requestBuilder.setExtension(ActivateSceneRequest.request, ActivateSceneRequest.newBuilder().setSceneId(sceneId).build());
         return requestBuilder.build();
@@ -421,7 +423,7 @@ public class RequestUtil {
     public static Request createScene(String sceneName, List<Action> actions) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.CREATE_SCENE);
-        requestBuilder.setRequestId(RequestType.CREATE_SCENE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.CREATE_SCENE_VALUE + createId());
         Scene.Builder sceneBuilder = Scene.newBuilder().setName(sceneName);
         if (actions.size() > 0) {
             for (Action action : actions)
@@ -435,7 +437,7 @@ public class RequestUtil {
     public static Request getWanConfig(WanPort wanPort) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_WAN_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_WAN_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_WAN_CONFIG_VALUE + createId());
         requestBuilder.setExtension(GetWanConfigRequest.request, GetWanConfigRequest.newBuilder().setPort(wanPort).build());
         return requestBuilder.build();
     }
@@ -443,7 +445,7 @@ public class RequestUtil {
     public static Request setWanConfig(WanPort wanPort, WanConfig wanConfig) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_WAN_CONFIG);
-        requestBuilder.setRequestId(RequestType.SET_WAN_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_WAN_CONFIG_VALUE + createId());
         requestBuilder.setExtension(SetWanConfigRequest.request, SetWanConfigRequest.newBuilder().setConfig(wanConfig).setPort(wanPort).build());
         return requestBuilder.build();
     }
@@ -451,7 +453,7 @@ public class RequestUtil {
     public static Request getWlanConfig(WlanPort wlanPort) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_WLAN_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_WLAN_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_WLAN_CONFIG_VALUE + createId());
         requestBuilder.setExtension(GetWlanConfigRequest.request, GetWlanConfigRequest.newBuilder().setPort(wlanPort).build());
         return requestBuilder.build();
     }
@@ -459,14 +461,14 @@ public class RequestUtil {
     public static Request getWlanAccessPoint() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_WLAN_ACCESS_POINTS);
-        requestBuilder.setRequestId(RequestType.GET_WLAN_ACCESS_POINTS_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_WLAN_ACCESS_POINTS_VALUE + createId());
         return requestBuilder.build();
     }
 
     public static Request setWlanConfig(WlanPort wlanPort, WlanConfig wlanConfig) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_WLAN_CONFIG);
-        requestBuilder.setRequestId(RequestType.SET_WLAN_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_WLAN_CONFIG_VALUE + createId());
         requestBuilder.setExtension(SetWlanConfigRequest.request, SetWlanConfigRequest.newBuilder().setPort(wlanPort).setConfig(wlanConfig).build());
         return requestBuilder.build();
     }
@@ -474,7 +476,7 @@ public class RequestUtil {
     public static Request getWlanAccessPoint(WlanPort wlanPort) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_WLAN_ACCESS_POINTS);
-        requestBuilder.setRequestId(RequestType.GET_WLAN_ACCESS_POINTS_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_WLAN_ACCESS_POINTS_VALUE + createId());
 
         requestBuilder.setExtension(GetWlanAccessPointsRequest.request, GetWlanAccessPointsRequest.newBuilder().setPort(wlanPort).build());
 
@@ -484,7 +486,7 @@ public class RequestUtil {
     public static Request arm(ArmMode armMode) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.ARM);
-        requestBuilder.setRequestId(RequestType.ARM_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.ARM_VALUE + createId());
 
         requestBuilder.setExtension(ArmRequest.request, ArmRequest.newBuilder().setMode(armMode).build());
         return requestBuilder.build();
@@ -493,7 +495,7 @@ public class RequestUtil {
     public static Request setArmGroup(List<Integer> zoneIds, ArmGroup armGroup) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_ARM_GROUP);
-        requestBuilder.setRequestId(RequestType.SET_ARM_GROUP_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_ARM_GROUP_VALUE + createId());
 
         requestBuilder.setExtension(SetArmGroupRequest.request, SetArmGroupRequest.newBuilder().setArmGroup(armGroup).addAllZoneId(zoneIds).build());
 
@@ -503,7 +505,7 @@ public class RequestUtil {
     public static Request getDevices(List<Integer> devices) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_DEVICE);
-        requestBuilder.setRequestId(RequestType.GET_DEVICE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_DEVICE_VALUE + createId());
 
         requestBuilder.setExtension(GetDeviceRequest.request, GetDeviceRequest.newBuilder().addAllId(devices).build());
 
@@ -513,7 +515,7 @@ public class RequestUtil {
     public static Request updateScene(Scene scene) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.UPDATE_SCENE);
-        requestBuilder.setRequestId(RequestType.UPDATE_SCENE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.UPDATE_SCENE_VALUE + createId());
 
         requestBuilder.setExtension(UpdateSceneRequest.request, UpdateSceneRequest.newBuilder().setScene(scene).build());
 
@@ -523,7 +525,7 @@ public class RequestUtil {
     public static Request getWanRate(WanPort wanPort) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_WAN_RATE);
-        requestBuilder.setRequestId(RequestType.GET_WAN_RATE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_WAN_RATE_VALUE + createId());
 
         requestBuilder.setExtension(GetWanRateRequest.request, GetWanRateRequest.newBuilder().setPort(wanPort).build());
 
@@ -533,7 +535,7 @@ public class RequestUtil {
     public static Request getNetWorkDevice() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_NETWORK_DEVICE);
-        requestBuilder.setRequestId(RequestType.GET_NETWORK_DEVICE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_NETWORK_DEVICE_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -541,7 +543,7 @@ public class RequestUtil {
     public static Request getAclRuleMode() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_ACL_RULE_MODE);
-        requestBuilder.setRequestId(RequestType.GET_ACL_RULE_MODE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_ACL_RULE_MODE_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -549,7 +551,7 @@ public class RequestUtil {
     public static Request getInternetAclRules() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_INTERNET_ACL_RULES);
-        requestBuilder.setRequestId(RequestType.GET_INTERNET_ACL_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_INTERNET_ACL_RULES_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -557,7 +559,7 @@ public class RequestUtil {
     public static Request getSambaAclRules() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_SAMBA_ACL_RULES);
-        requestBuilder.setRequestId(RequestType.GET_SAMBA_ACL_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_SAMBA_ACL_RULES_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -565,7 +567,7 @@ public class RequestUtil {
     public static Request getEthernetConfig() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_ETHERNET_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_ETHERNET_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_ETHERNET_CONFIG_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -573,7 +575,7 @@ public class RequestUtil {
     public static Request getCameraInfo(int deviceId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_CAMERA_INFO);
-        requestBuilder.setRequestId(RequestType.GET_CAMERA_INFO_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_CAMERA_INFO_VALUE + createId());
         requestBuilder.setExtension(GetCameraInfoRequest.request, GetCameraInfoRequest.newBuilder().setDeviceId(deviceId).build());
         return requestBuilder.build();
     }
@@ -581,7 +583,7 @@ public class RequestUtil {
     public static Request configureCameraRecord(int deviceId, CameraRecordConfiguration cameraRecordConfiguration) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.CONFIGURE_CAMERA_RECORD);
-        requestBuilder.setRequestId(RequestType.CONFIGURE_CAMERA_RECORD_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.CONFIGURE_CAMERA_RECORD_VALUE + createId());
 
         requestBuilder.setExtension(ConfigureCameraRecordRequest.request, ConfigureCameraRecordRequest.newBuilder().setDeviceId(deviceId).setRecord(cameraRecordConfiguration).build());
 
@@ -591,7 +593,7 @@ public class RequestUtil {
     public static Request getGuestWlanConfig(WlanPort wlanPort) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_GUEST_WLAN_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_GUEST_WLAN_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_GUEST_WLAN_CONFIG_VALUE + createId());
         requestBuilder.setExtension(GetGuestWlanConfigRequest.request, GetGuestWlanConfigRequest.newBuilder().setPort(wlanPort).build());
 
         return requestBuilder.build();
@@ -600,7 +602,7 @@ public class RequestUtil {
     public static Request setGuestWlanConfig(WlanPort wlanPort, GuestWlanConfig guestWlanConfig) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_GUEST_WLAN_CONFIG);
-        requestBuilder.setRequestId(RequestType.SET_GUEST_WLAN_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_GUEST_WLAN_CONFIG_VALUE + createId());
 
         requestBuilder.setExtension(SetGuestWlanConfigRequest.request, SetGuestWlanConfigRequest.newBuilder().setPort(wlanPort).setConfig(guestWlanConfig).build());
 
@@ -610,7 +612,7 @@ public class RequestUtil {
     public static Request getHDDInfo() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_HDD_INFO);
-        requestBuilder.setRequestId(RequestType.GET_HDD_INFO_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_HDD_INFO_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -618,7 +620,7 @@ public class RequestUtil {
     public static Request initializeHDD() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.INITIALIZE_HDD);
-        requestBuilder.setRequestId(RequestType.INITIALIZE_HDD_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.INITIALIZE_HDD_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -626,7 +628,7 @@ public class RequestUtil {
     public static Request removeHDD() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.REMOVE_HDD);
-        requestBuilder.setRequestId(RequestType.REMOVE_HDD_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.REMOVE_HDD_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -634,7 +636,7 @@ public class RequestUtil {
     public static Request reboot() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.REBOOT);
-        requestBuilder.setRequestId(RequestType.REBOOT_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.REBOOT_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -642,7 +644,7 @@ public class RequestUtil {
     public static Request getProductInfo() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_PRODUCT_INFO);
-        requestBuilder.setRequestId(RequestType.GET_PRODUCT_INFO_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_PRODUCT_INFO_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -650,7 +652,7 @@ public class RequestUtil {
     public static Request getSysConfig() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_SYS_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_SYS_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_SYS_CONFIG_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -658,7 +660,7 @@ public class RequestUtil {
     public static Request queryPlan(PlanQuery planQuery) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.QUERY_PLAN);
-        requestBuilder.setRequestId(RequestType.QUERY_PLAN_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.QUERY_PLAN_VALUE + createId());
 
         requestBuilder.setExtension(QueryPlanRequest.request, QueryPlanRequest.newBuilder().setQuery(planQuery).build());
 
@@ -668,7 +670,7 @@ public class RequestUtil {
     public static Request deletePlan(int planId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_PLAN);
-        requestBuilder.setRequestId(RequestType.DELETE_PLAN_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_PLAN_VALUE + createId());
 
         requestBuilder.setExtension(DeletePlanRequest.request, DeletePlanRequest.newBuilder().addPlans(planId).build());
 
@@ -678,7 +680,7 @@ public class RequestUtil {
     public static Request setPlanEnable(int planId, boolean enable) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_PLAN_ENABLED);
-        requestBuilder.setRequestId(RequestType.SET_PLAN_ENABLED_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_PLAN_ENABLED_VALUE + createId());
 
         requestBuilder.setExtension(SetPlanEnabledRequest.request, SetPlanEnabledRequest.newBuilder().setPlanId(planId).setEnabled(enable).build());
 
@@ -688,7 +690,7 @@ public class RequestUtil {
     public static Request setPlanAction(int planId, List<Action> actions) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_PLAN_ACTION);
-        requestBuilder.setRequestId(RequestType.SET_PLAN_ACTION_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_PLAN_ACTION_VALUE + createId());
 
         requestBuilder.setExtension(SetPlanActionRequest.request, SetPlanActionRequest.newBuilder().setPlanId(planId).addAllActions(actions).build());
 
@@ -698,7 +700,7 @@ public class RequestUtil {
     public static Request createPlan(Plan plan) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.CREATE_PLAN);
-        requestBuilder.setRequestId(RequestType.CREATE_PLAN_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.CREATE_PLAN_VALUE + createId());
 
         requestBuilder.setExtension(CreatePlanRequest.request, CreatePlanRequest.newBuilder().setPlan(plan).build());
 
@@ -708,7 +710,7 @@ public class RequestUtil {
     public static Request deletePlans(List<Integer> planIds) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_PLAN);
-        requestBuilder.setRequestId(RequestType.DELETE_PLAN_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_PLAN_VALUE + createId());
 
         requestBuilder.setExtension(DeletePlanRequest.request, DeletePlanRequest.newBuilder().addAllPlans(planIds).build());
 
@@ -718,7 +720,7 @@ public class RequestUtil {
     public static Request updatePlan(Plan plan) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.UPDATE_PLAN);
-        requestBuilder.setRequestId(RequestType.UPDATE_PLAN_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.UPDATE_PLAN_VALUE + createId());
 
         requestBuilder.setExtension(UpdatePlanRequest.request, UpdatePlanRequest.newBuilder().setPlan(plan).build());
 
@@ -728,7 +730,7 @@ public class RequestUtil {
     public static Request pppoeConnect(boolean isConnect) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.PPPOE_CONNECT);
-        requestBuilder.setRequestId(RequestType.PPPOE_CONNECT_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.PPPOE_CONNECT_VALUE + createId());
 
         requestBuilder.setExtension(PPPoEConnectRequest.request, PPPoEConnectRequest.newBuilder().setConnect(isConnect).build());
 
@@ -738,7 +740,7 @@ public class RequestUtil {
     public static Request getEzmodeCountDown() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_EZMODE_COUNTDOWN);
-        requestBuilder.setRequestId(RequestType.GET_EZMODE_COUNTDOWN_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_EZMODE_COUNTDOWN_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -746,7 +748,7 @@ public class RequestUtil {
     public static Request getQosMode() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_QOS_MODE);
-        requestBuilder.setRequestId(RequestType.GET_QOS_MODE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_QOS_MODE_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -754,7 +756,7 @@ public class RequestUtil {
     public static Request getQosExclusiveModeMac() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_QOS_EXCLUSIVE_MODE_MAC);
-        requestBuilder.setRequestId(RequestType.GET_QOS_EXCLUSIVE_MODE_MAC_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_QOS_EXCLUSIVE_MODE_MAC_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -762,7 +764,7 @@ public class RequestUtil {
     public static Request setQosExclusiveModeMac(String mac) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_QOS_EXCLUSIVE_MODE_MAC);
-        requestBuilder.setRequestId(RequestType.SET_QOS_EXCLUSIVE_MODE_MAC_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_QOS_EXCLUSIVE_MODE_MAC_VALUE + createId());
         requestBuilder.setExtension(SetQosExclusiveModeMacRequest.request, SetQosExclusiveModeMacRequest.newBuilder().setMac(mac).build());
 
         return requestBuilder.build();
@@ -771,7 +773,7 @@ public class RequestUtil {
     public static Request testBandwidth(boolean isStart) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.TEST_BANDWIDTH);
-        requestBuilder.setRequestId(RequestType.TEST_BANDWIDTH_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.TEST_BANDWIDTH_VALUE + createId());
         requestBuilder.setExtension(TestBandwidthRequest.request, TestBandwidthRequest.newBuilder().setStart(isStart).build());
 
         return requestBuilder.build();
@@ -780,7 +782,7 @@ public class RequestUtil {
     public static Request bandwidthTestResult() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.BANDWIDTH_TEST_RESULT);
-        requestBuilder.setRequestId(RequestType.BANDWIDTH_TEST_RESULT_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.BANDWIDTH_TEST_RESULT_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -788,7 +790,7 @@ public class RequestUtil {
     public static Request getSignalStrengthLevel() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_SIGNAL_STRENGTH_LEVEL);
-        requestBuilder.setRequestId(RequestType.GET_SIGNAL_STRENGTH_LEVEL_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_SIGNAL_STRENGTH_LEVEL_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -796,7 +798,7 @@ public class RequestUtil {
     public static Request setSignalStrengthLevel(SignalStrengthLevel signalStrengthLevel) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_SIGNAL_STRENGTH_LEVEL);
-        requestBuilder.setRequestId(RequestType.SET_SIGNAL_STRENGTH_LEVEL_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_SIGNAL_STRENGTH_LEVEL_VALUE + createId());
         requestBuilder.setExtension(SetSignalStrengthLevelRequest.request, SetSignalStrengthLevelRequest.newBuilder().setLevel(signalStrengthLevel).build());
 
         return requestBuilder.build();
@@ -805,7 +807,7 @@ public class RequestUtil {
     public static Request getQosVpnConfig() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_QOS_VPN_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_QOS_VPN_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_QOS_VPN_CONFIG_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -813,7 +815,7 @@ public class RequestUtil {
     public static Request setQosVpnConfig(SetQosVpnConfigRequest qosVpnConfigRequest) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_QOS_VPN_CONFIG);
-        requestBuilder.setRequestId(RequestType.SET_QOS_VPN_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_QOS_VPN_CONFIG_VALUE + createId());
 
         requestBuilder.setExtension(SetQosVpnConfigRequest.request, qosVpnConfigRequest);
 
@@ -823,7 +825,7 @@ public class RequestUtil {
     public static Request setInternetAclRules(List<String> macs) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_INTERNET_ACL_RULES);
-        requestBuilder.setRequestId(RequestType.SET_INTERNET_ACL_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_INTERNET_ACL_RULES_VALUE + createId());
 
         requestBuilder.setExtension(SetInternetAclRulesRequest.request, SetInternetAclRulesRequest.newBuilder().addAllRules(macs).build());
 
@@ -833,7 +835,7 @@ public class RequestUtil {
     public static Request deleteInternetAclRules(List<String> macs) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_INTERNET_ACL_RULES);
-        requestBuilder.setRequestId(RequestType.DELETE_INTERNET_ACL_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_INTERNET_ACL_RULES_VALUE + createId());
 
         requestBuilder.setExtension(DeleteInternetAclRulesRequest.request, DeleteInternetAclRulesRequest.newBuilder().addAllRules(macs).build());
 
@@ -843,7 +845,7 @@ public class RequestUtil {
     public static Request deleteInternetAclRules(String mac) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_INTERNET_ACL_RULES);
-        requestBuilder.setRequestId(RequestType.DELETE_INTERNET_ACL_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_INTERNET_ACL_RULES_VALUE + createId());
 
         requestBuilder.setExtension(DeleteInternetAclRulesRequest.request, DeleteInternetAclRulesRequest.newBuilder().addRules(mac).build());
 
@@ -853,7 +855,7 @@ public class RequestUtil {
     public static Request getCameraWifiAp(int deviceId) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_CAMERA_WIFI_AP);
-        requestBuilder.setRequestId(RequestType.GET_CAMERA_WIFI_AP_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_CAMERA_WIFI_AP_VALUE + createId());
 
         requestBuilder.setExtension(GetCameraWifiApRequest.request, GetCameraWifiApRequest.newBuilder().setDeviceId(deviceId).build());
 
@@ -863,7 +865,7 @@ public class RequestUtil {
     public static Request setQosMode(QosMode qosMode) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_QOS_MODE);
-        requestBuilder.setRequestId(RequestType.SET_QOS_MODE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_QOS_MODE_VALUE + createId());
 
         requestBuilder.setExtension(SetQosModeRequest.request, SetQosModeRequest.newBuilder().setMode(qosMode).build());
 
@@ -873,7 +875,7 @@ public class RequestUtil {
     public static Request setWlanAndGuestConfig(WlanPort wlanPort, WlanConfig wlanConfig, GuestWlanConfig guestWlanConfig) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_WLAN_AND_GUEST_CONFIG);
-        requestBuilder.setRequestId(RequestType.SET_WLAN_AND_GUEST_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_WLAN_AND_GUEST_CONFIG_VALUE + createId());
 
         requestBuilder.setExtension(SetWlanAndGuestConfigRequest.request, SetWlanAndGuestConfigRequest.newBuilder().setPort(wlanPort).setWlanConfig(wlanConfig).setGuestConfig(guestWlanConfig).build());
 
@@ -883,7 +885,7 @@ public class RequestUtil {
     public static Request getWlanAndGuestConfig(WlanPort wlanPort) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_WLAN_AND_GUEST_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_WLAN_AND_GUEST_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_WLAN_AND_GUEST_CONFIG_VALUE + createId());
 
         requestBuilder.setExtension(GetWlanAndGuestConfigRequest.request, GetWlanAndGuestConfigRequest.newBuilder().setPort(wlanPort).build());
 
@@ -893,7 +895,7 @@ public class RequestUtil {
     public static Request checkUpdate() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.CHECK_UPDATE);
-        requestBuilder.setRequestId(RequestType.CHECK_UPDATE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.CHECK_UPDATE_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -901,7 +903,7 @@ public class RequestUtil {
     public static Request installUpdate() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.INSTALL_UPDATE);
-        requestBuilder.setRequestId(RequestType.INSTALL_UPDATE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.INSTALL_UPDATE_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -909,7 +911,7 @@ public class RequestUtil {
     public static Request ready2Update() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.READY_TO_UPDATE);
-        requestBuilder.setRequestId(RequestType.READY_TO_UPDATE_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.READY_TO_UPDATE_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -917,7 +919,7 @@ public class RequestUtil {
     public static Request getOtaStatus() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_OTA_STATUS);
-        requestBuilder.setRequestId(RequestType.GET_OTA_STATUS_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_OTA_STATUS_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -925,7 +927,7 @@ public class RequestUtil {
     public static Request configureCameraWlan(int deviceId, CameraWlan cameraWlan) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.CONFIGURE_CAMERA_WLAN);
-        requestBuilder.setRequestId(RequestType.CONFIGURE_CAMERA_WLAN_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.CONFIGURE_CAMERA_WLAN_VALUE + createId());
 
         requestBuilder.setExtension(SetCameraWlanRequest.request, SetCameraWlanRequest.newBuilder().setDeviceId(deviceId).setWlan(cameraWlan).build());
 
@@ -935,7 +937,7 @@ public class RequestUtil {
     public static Request setSysConfig(SystemConfiguration systemConfiguration) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_SYS_CONFIG);
-        requestBuilder.setRequestId(RequestType.SET_SYS_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_SYS_CONFIG_VALUE + createId());
 
         requestBuilder.setExtension(SetSystemConfigurationRequest.request, SetSystemConfigurationRequest.newBuilder().setConfiguration(systemConfiguration).build());
 
@@ -945,7 +947,7 @@ public class RequestUtil {
     public static Request getCieConfig() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_CIE_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_CIE_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_CIE_CONFIG_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -953,7 +955,7 @@ public class RequestUtil {
     public static Request getMobileInfo() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_MOBILE_INFO);
-        requestBuilder.setRequestId(RequestType.GET_MOBILE_INFO_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_MOBILE_INFO_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -961,7 +963,7 @@ public class RequestUtil {
     public static Request setMobilePhoneConfig(MobilePhoneConfig mobilePhoneConfig) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_MOBILE_PHONE_CONFIG);
-        requestBuilder.setRequestId(RequestType.SET_MOBILE_PHONE_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_MOBILE_PHONE_CONFIG_VALUE + createId());
         requestBuilder.setExtension(SetMobilePhoneConfigRequest.request, SetMobilePhoneConfigRequest.newBuilder().setConfig(mobilePhoneConfig).build());
 
         return requestBuilder.build();
@@ -970,7 +972,7 @@ public class RequestUtil {
     public static Request getMobilePhoneConfig() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_MOBILE_PHONE_CONFIG);
-        requestBuilder.setRequestId(RequestType.GET_MOBILE_PHONE_CONFIG_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_MOBILE_PHONE_CONFIG_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -978,7 +980,7 @@ public class RequestUtil {
     public static Request getBatteryInfo() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_BATTERY_INFO);
-        requestBuilder.setRequestId(RequestType.GET_BATTERY_INFO_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_BATTERY_INFO_VALUE + createId());
 
         return requestBuilder.build();
     }
@@ -986,7 +988,7 @@ public class RequestUtil {
     public static Request bypass(List<Integer> ids, boolean isCancel) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.BYPASS);
-        requestBuilder.setRequestId(RequestType.BYPASS_CAMERA_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.BYPASS_CAMERA_VALUE + createId());
 
         requestBuilder.setExtension(BypassRequest.request, BypassRequest.newBuilder().addAllZoneId(ids).setCancel(isCancel).build());
 
@@ -996,7 +998,7 @@ public class RequestUtil {
     public static Request getWlanAccessRules(WlanPort port) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_WLAN_ACCESS_RULES);
-        requestBuilder.setRequestId(RequestType.GET_WLAN_ACCESS_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.GET_WLAN_ACCESS_RULES_VALUE + createId());
 
         requestBuilder.setExtension(GetWlanAccessRulesRequest.request, GetWlanAccessRulesRequest.newBuilder().setPort(port).build());
 
@@ -1006,7 +1008,7 @@ public class RequestUtil {
     public static Request setWlanAccessRules(WlanPort port, List<String> macs) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_WLAN_ACCESS_RULES);
-        requestBuilder.setRequestId(RequestType.SET_WLAN_ACCESS_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_WLAN_ACCESS_RULES_VALUE + createId());
 
         requestBuilder.setExtension(SetWlanAccessRulesRequest.request, SetWlanAccessRulesRequest.newBuilder().setPort(port).addAllRules(macs).build());
 
@@ -1016,7 +1018,7 @@ public class RequestUtil {
     public static Request setWlanAccessRules(WlanPort port, String macs) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_WLAN_ACCESS_RULES);
-        requestBuilder.setRequestId(RequestType.SET_WLAN_ACCESS_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_WLAN_ACCESS_RULES_VALUE + createId());
 
         requestBuilder.setExtension(SetWlanAccessRulesRequest.request, SetWlanAccessRulesRequest.newBuilder().setPort(port).addRules(macs).build());
 
@@ -1026,7 +1028,7 @@ public class RequestUtil {
     public static Request setSambaAclRules(List<String> macs) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SET_SAMBA_ACL_RULES);
-        requestBuilder.setRequestId(RequestType.SET_SAMBA_ACL_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.SET_SAMBA_ACL_RULES_VALUE + createId());
 
         requestBuilder.setExtension(SetSambaAclRulesRequest.request, SetSambaAclRulesRequest.newBuilder().addAllRules(macs).build());
 
@@ -1036,7 +1038,7 @@ public class RequestUtil {
     public static Request deleteSambaAclRules(List<String> macs) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_SAMBA_ACL_RULES);
-        requestBuilder.setRequestId(RequestType.DELETE_SAMBA_ACL_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_SAMBA_ACL_RULES_VALUE + createId());
 
         requestBuilder.setExtension(DeleteSambaAclRulesRequest.request, DeleteSambaAclRulesRequest.newBuilder().addAllRules(macs).build());
 
@@ -1046,7 +1048,7 @@ public class RequestUtil {
     public static Request deleteSambaAclRules(String macs) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.DELETE_SAMBA_ACL_RULES);
-        requestBuilder.setRequestId(RequestType.DELETE_SAMBA_ACL_RULES_VALUE+createId());
+        requestBuilder.setRequestId(RequestType.DELETE_SAMBA_ACL_RULES_VALUE + createId());
 
         requestBuilder.setExtension(DeleteSambaAclRulesRequest.request, DeleteSambaAclRulesRequest.newBuilder().addRules(macs).build());
 

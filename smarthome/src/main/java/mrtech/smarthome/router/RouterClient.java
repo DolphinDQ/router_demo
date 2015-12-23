@@ -300,7 +300,7 @@ class RouterClient implements RouterSession {
     }
 
     @Override
-    public CommunicationManager getDataChannel() {
+    public CommunicationManager getCommunicationManager() {
         return mCommunicationManager;
     }
 
