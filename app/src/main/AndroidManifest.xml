@@ -8,11 +8,13 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:name=".App"
+        android:persistent="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,18 +22,23 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".RouterSettingsActivity"
-            android:label="@string/router_setting" >
+            android:label="@string/router_setting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RouterCaptureActivity"
+        <activity
+            android:name=".RouterCaptureActivity"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            ></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <service
+            android:name=".RouterQueryTimelineService"
+            android:exported="false"
+            ></service>
     </application>
 
 </manifest>

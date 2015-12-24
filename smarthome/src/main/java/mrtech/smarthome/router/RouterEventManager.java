@@ -1,5 +1,6 @@
 package mrtech.smarthome.router;
 
+import android.os.Looper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ class RouterEventManager implements EventManager {
         Log.e(RouterEventManager.class.getName(), msg);
     }
 
-//    private final Thread mQueryTimelineTask;
+    //    private final Thread mQueryTimelineTask;
     private final RouterManager mManager;
     private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
     private final PublishSubject<RouterCallback<Messages.Event>> subjectRouterEvents = PublishSubject.create();
@@ -145,23 +146,24 @@ class RouterEventManager implements EventManager {
         subscribeEvents();
     }
 
-//    private class QueryTimeLineTask implements Runnable {
-//        @Override
-//        public void run() {
-//            Thread.currentThread().setName("QueryTimelineTask");
-//            do {
-//                final List<Router> routerList = mManager.getRouterList(true);
-//                for (final Router router : routerList) {
-//                    queryTimeline(router);
-//                }
-//                try {
-//                    Thread.sleep(QUERY_TIMELINE_INTERVAL);
-//                } catch (InterruptedException e) {
-//                    trace(Thread.currentThread().getName() + " wakeup!");
-//                }
-//            } while (true);
-//        }
-//    }
+    private class QueryTimeLineTask implements Runnable {
+        @Override
+        public void run() {
+            Thread.currentThread().setName("QueryTimelineTask");
+            do {
+                final List<Router> routerList = mManager.getRouterList(true);
+                for (final Router router : routerList) {
+                    queryTimeline(router);
+                }
+                try {
+                    Thread.sleep(60 * 1000);
+                } catch (InterruptedException e) {
+                    trace(Thread.currentThread().getName() + " wakeup!");
+                }
+            } while (true);
+        }
+    }
+
 
     private void queryTimeline(final Router router) {
         try {
@@ -196,4 +198,5 @@ class RouterEventManager implements EventManager {
         } catch (TimeoutException e) {
         }
     }
+
 }

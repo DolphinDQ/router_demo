@@ -14,8 +14,8 @@ import mrtech.smarthome.rpc.Messages;
  */
 public class Router {
     private final String SN;
-    private final Object Source;
     private final String Name;
+    private Object Source;
     private RouterConfig config;
     private RouterSession routerSession;
 
@@ -66,6 +66,10 @@ public class Router {
      */
     public Object getSource() {
         return Source;
+    }
+
+    public void setSource(Object source) {
+        Source = source;
     }
 
     public RouterConfig getConfig() {

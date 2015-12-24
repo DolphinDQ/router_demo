@@ -157,7 +157,7 @@ public class RouterSettingsActivity extends AppCompatActivity {
                 convertView.findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        routerManager.removeRouter(router);
+                        routerManager.removeRouter(router,true);
                     }
                 });
                 return convertView;

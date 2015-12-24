@@ -351,9 +351,13 @@ class RouterCommunicationManager implements CommunicationManager {
         byte[] prefix = new byte[2];
         int received = 0;
         in.read(prefix);
-        if (prefix[0] == 0 && prefix[1] == 0)
+        if (prefix[0] == 0 && prefix[1] == 0) {
+            if (sslSocket.getSession().isValid()) {
+                trace("invalid package header..");
+                return null;
+            }
             throw new IOException("invalid package header..");
-        else {
+        } else {
             int length = ((prefix[0] & 0xff) << 8) + (prefix[1] & 0xff);
             received = 0;
             byte[] buffer = new byte[length];

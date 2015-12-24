@@ -3,11 +3,13 @@ package mrtech.smarthome.router;
 import android.util.Log;
 
 import com.google.protobuf.ExtensionRegistry;
+import com.orm.SugarRecord;
 import com.stream.NewAllStreamParser;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -161,13 +163,23 @@ public class RouterManager {
         }
     }
 
+    public void loadRouters() {
+        final Iterator<RouterConfig> all = SugarRecord.findAll(RouterConfig.class);
+        if (all != null)
+            while (all.hasNext()) {
+                final RouterConfig next = all.next();
+                trace("加载");
+                addRouter(new Router(null, "路由器", next.getSn()));
+            }
+    }
+
     /**
      * 添加一台路由器
      *
      * @param router 路由器对象。
      */
     public void addRouter(final Router router) {
-        if (router == null || router.getSN() == null) return;
+        if (router == null || router.getSN() == null || getRouter(router.getSN()) != null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
         innerRouter.init();
@@ -182,9 +194,16 @@ public class RouterManager {
      * @param router 路由器对象。
      */
     public void removeRouter(Router router) {
+        removeRouter(router, false);
+    }
+
+    public void removeRouter(Router router, boolean removeCache) {
         if (router == null) return;
         if (mRouters.remove(router)) {
             ((RouterClient) router.getRouterSession()).destroy();
+            if (removeCache) {
+                SugarRecord.deleteAll(RouterConfig.class, "sn = ?", new String(router.getConfig().getSn()));
+            }
         }
     }
 
@@ -230,7 +249,7 @@ public class RouterManager {
     /**
      * 清除当期添加的所有路由器。
      */
-    public void removeAll() {
+    public void removeAll(boolean removeCache) {
         final Collection<Router> routerList = getRouterList();
         for (Router router : routerList) {
             removeRouter(router);
@@ -239,6 +258,7 @@ public class RouterManager {
 
     /**
      * 获取事件管理器。事件管理器为所有路由器全局事件。
+     *
      * @return
      */
     public EventManager getEventManager() {
