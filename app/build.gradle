@@ -24,9 +24,10 @@ repositories {
         dirs 'libs','../smarthome/build/outputs/aar'
     }
 }
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+//    compile(name: 'smarthome-debug', ext: 'aar')
+    compile project(':smarthome')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.google.zxing:core:3.2.0'
@@ -34,6 +35,4 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'com.google.protobuf:protobuf-java:2.6.1'
     compile 'com.github.satyan:sugar:1.4'
-//    compile(name: 'smarthome-debug', ext: 'aar')
-    compile project(':smarthome')
 }
