@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -64,12 +65,12 @@ public class App extends Application {
         mNotification.contentView.setTextViewText(R.id.status_text, mes);
         mNotification.contentView.setTextViewText(R.id.time_test, time);
 
-        if (notificationColdTime){
-            mNotification.defaults=Notification.DEFAULT_LIGHTS;
-        }else {
+        if (notificationColdTime) {
+            mNotification.defaults = Notification.DEFAULT_LIGHTS;
+        } else {
 
-            mNotification.defaults =  Notification.DEFAULT_ALL;
-            notificationColdTime=true;
+            mNotification.defaults = Notification.DEFAULT_ALL;
+            notificationColdTime = true;
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -78,7 +79,7 @@ public class App extends Application {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    notificationColdTime=false;
+                    notificationColdTime = false;
                     return null;
                 }
             }.execute();
@@ -96,7 +97,7 @@ public class App extends Application {
 //        mNotification.ledARGB = Color.BLUE;
 //        mNotification.ledOffMS = 0;
 //        mNotification.ledOnMS = 1;
-        mNotification.flags = mNotification.flags | Notification.FLAG_SHOW_LIGHTS|Notification.FLAG_AUTO_CANCEL;
+        mNotification.flags = mNotification.flags | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
         //手动设置contentView属于时，必须同时也设置contentIntent不然会报错
         mNotification.contentIntent = mContentIntent;
@@ -112,14 +113,13 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         SugarContext.init(this);
-        RouterManager.init();
         IPCManager.init();
-//        addRouter("83JOMC-GZ3YTZ-2IKF7M-1YJRBJ-4QXYBN-5R0");
-//        addRouter("S5K8B7-JIYYQR-Z2KKME-XEENI0-99NX42-MLE");
-//        startService( new Intent(RouterQueryTimelineService.ACT_START))
+        RouterManager.init();
         Intent intent = new Intent(getBaseContext(), RouterQueryTimelineService.class);
         startService(intent);
+
         if (alarmHandle != null) alarmHandle.unsubscribe();
         alarmHandle = RouterManager.getInstance().getEventManager().subscribeTimelineEvent(new Action1<mrtech.smarthome.router.Models.RouterCallback<Models.Timeline>>() {
             @Override
@@ -142,8 +142,8 @@ public class App extends Application {
     @Override
     public void onTerminate() {
         alarmHandle.unsubscribe();
-        IPCManager.destroy();
         RouterManager.destroy();
+        IPCManager.destroy();
         SugarContext.terminate();
         super.onTerminate();
     }

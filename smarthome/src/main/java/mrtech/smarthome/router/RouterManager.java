@@ -1,8 +1,11 @@
 package mrtech.smarthome.router;
 
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.google.protobuf.ExtensionRegistry;
+import com.orm.SugarContext;
 import com.orm.SugarRecord;
 import com.stream.NewAllStreamParser;
 
@@ -13,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.Constants;
@@ -143,6 +147,7 @@ public class RouterManager {
      * 路由管理器初始化。
      */
     public static void init() {
+
         if (isP2PInitialized()) return;
         initExtensionRegistry();
         initErrorMessageMap();
@@ -158,6 +163,7 @@ public class RouterManager {
      * 销毁路由管理器。
      */
     public static void destroy() {
+
         if (isP2PInitialized()) {
             NewAllStreamParser.DNPDestroyPortServer(mP2PHandle);
         }
