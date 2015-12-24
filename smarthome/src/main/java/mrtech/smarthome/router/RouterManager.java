@@ -1,7 +1,6 @@
 package mrtech.smarthome.router;
 
 import android.content.Context;
-import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.google.protobuf.ExtensionRegistry;
@@ -146,8 +145,9 @@ public class RouterManager {
     /**
      * 路由管理器初始化。
      */
-    public static void init() {
-
+    public static void init(Context context) {
+        IPCManager.init();
+        SugarContext.init(context);
         if (isP2PInitialized()) return;
         initExtensionRegistry();
         initErrorMessageMap();
@@ -163,7 +163,8 @@ public class RouterManager {
      * 销毁路由管理器。
      */
     public static void destroy() {
-
+        SugarContext.terminate();
+        IPCManager.destroy();
         if (isP2PInitialized()) {
             NewAllStreamParser.DNPDestroyPortServer(mP2PHandle);
         }
@@ -190,7 +191,7 @@ public class RouterManager {
         router.setRouterSession(innerRouter);
         innerRouter.init();
         mRouters.add(router);
-        mEventManager.setRouter(innerRouter);
+        mEventManager.setRouterEvent(innerRouter);
         trace("add router :" + router.getSN());
     }
 

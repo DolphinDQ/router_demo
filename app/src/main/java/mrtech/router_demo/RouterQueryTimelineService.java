@@ -27,12 +27,6 @@ import rx.functions.Action1;
  * helper methods.
  */
 public class RouterQueryTimelineService extends IntentService {
-    public static String ACT_START = "mrtech.queryTimeline.start";
-    public static String ACT_STOP = "mrtech.queryTimeline.stop";
-    private int id = 0;
-    private RouterManager routerManager;
-    private Subscription alarmHandle;
-
     private static void trace(String msg) {
         Log.e(RouterQueryTimelineService.class.getName(), msg);
     }
@@ -48,20 +42,14 @@ public class RouterQueryTimelineService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        trace("处理数据。");
+        trace("处理服务事物。");
         do {
             try {
-                trace("还活着：" + routerManager.getRouterList(true).size() + "个路由器");
-                Thread.sleep(10000);
+                trace("还活着：" + RouterManager.getInstance().getRouterList(true).size() + "个路由器");
+                Thread.sleep(30 * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         } while (true);
-    }
-
-    @Override
-    public void onCreate() {
-        trace("创建服务。");
-        super.onCreate();
     }
 }

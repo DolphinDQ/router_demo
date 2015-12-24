@@ -120,7 +120,7 @@ class RouterEventManager implements EventManager {
         }
     }
 
-    public void setRouter(final RouterClient client) {
+    public void setRouterEvent(final RouterClient client) {
         client.subscribeRouterStatusChanged(new Action1<Router>() {
             @Override
             public void call(Router router) {

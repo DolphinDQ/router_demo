@@ -4,22 +4,18 @@ import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.widget.RemoteViews;
-
-import com.orm.SugarContext;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
 
-import mrtech.smarthome.ipc.IPCManager;
-import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.rpc.Models;
 import rx.Subscription;
@@ -46,30 +42,22 @@ public class App extends Application {
 
     private boolean notificationColdTime = false;
 
-    public void statusNotification(String mes, String time) {
-        Notification mNotification = new Notification();
-        Intent mIntent = new Intent(this, RouterSettingsActivity.class);
-        //这里需要设置Intent.FLAG_ACTIVITY_NEW_TASK属性
-        mIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-        PendingIntent mContentIntent = PendingIntent.getActivity(this, 0, mIntent, 0);
-
-        mNotification.tickerText = mes;
-        mNotification.icon = R.drawable.ic_notifications_black_24dp;
-        //1，使用setLatestEventInfo
-        //这里必需要用setLatestEventInfo(上下文,标题,内容,PendingIntent)不然会报错.
-//          mNotification.setLatestEventInfo(mContext, "新消息", "主人，您孙子给你来短息了", mContentIntent);
-
-        //2,使用远程视图
-        mNotification.contentView = new RemoteViews(this.getPackageName(), R.layout.layout_notification);
-        mNotification.contentView.setImageViewResource(R.id.status_icon, R.drawable.ic_notifications_black_24dp);
-        mNotification.contentView.setTextViewText(R.id.status_text, mes);
-        mNotification.contentView.setTextViewText(R.id.time_test, time);
+    private void pushAlarmNotification(String mes, String time) {
+        Notification notification = new Notification();
+        notification.icon = R.drawable.ic_notifications_black_24dp;
+        notification.tickerText = mes;
+        Intent routerActivityIntent = new Intent(this, RouterSettingsActivity.class);
+        routerActivityIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        notification.contentIntent = PendingIntent.getActivity(this, 0, routerActivityIntent, 0);
+        notification.contentView = new RemoteViews(this.getPackageName(), R.layout.layout_notification);
+        notification.contentView.setImageViewResource(R.id.status_icon, R.drawable.ic_notifications_black_24dp);
+        notification.contentView.setTextViewText(R.id.status_text, mes);
+        notification.contentView.setTextViewText(R.id.time_test, time);
 
         if (notificationColdTime) {
-            mNotification.defaults = Notification.DEFAULT_LIGHTS;
+            notification.defaults = Notification.DEFAULT_LIGHTS;
         } else {
-
-            mNotification.defaults = Notification.DEFAULT_ALL;
+            notification.defaults = Notification.DEFAULT_ALL;
             notificationColdTime = true;
             new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -84,42 +72,21 @@ public class App extends Application {
                 }
             }.execute();
         }
-
-//        mNotification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
-
-        //添加震动
-//        if (!notificationColdTime) {
-//            mNotification.vibrate = new long[]{500, 1000, 500, 1000};
-//            //        使用默认的声音，闪屏，振动效果
-//        }
-
-//        //添加led
-//        mNotification.ledARGB = Color.BLUE;
-//        mNotification.ledOffMS = 0;
-//        mNotification.ledOnMS = 1;
-        mNotification.flags = mNotification.flags | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-
-        //手动设置contentView属于时，必须同时也设置contentIntent不然会报错
-        mNotification.contentIntent = mContentIntent;
-
-        //触发通知(消息ID,通知对象)
-        ((NotificationManager) this.getSystemService(NOTIFICATION_SERVICE)).notify(id++, mNotification);
+        notification.flags = notification.flags | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        ((NotificationManager) this.getSystemService(NOTIFICATION_SERVICE)).notify(id++, notification);
     }
 
-//    private void addRouter(String sn) {
-//        RouterManager.getInstance().addRouter(new Router(null, "路由器", sn));
-//    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        MultiDex.install(this);
-        SugarContext.init(this);
-        IPCManager.init();
-        RouterManager.init();
-        Intent intent = new Intent(getBaseContext(), RouterQueryTimelineService.class);
-        startService(intent);
-
+        RouterManager.init(this);
+        startService( new Intent(getBaseContext(), RouterQueryTimelineService.class));
         if (alarmHandle != null) alarmHandle.unsubscribe();
         alarmHandle = RouterManager.getInstance().getEventManager().subscribeTimelineEvent(new Action1<mrtech.smarthome.router.Models.RouterCallback<Models.Timeline>>() {
             @Override
@@ -130,7 +97,7 @@ public class App extends Application {
                         return;
                     JSONObject object = new JSONObject(timeline.getParameter());
                     final Object name = object.get("name");
-                    statusNotification(name + "报警", new Date(timeline.getTimestamp() * 1000).toString());
+                    pushAlarmNotification(name + "报警", new Date(timeline.getTimestamp() * 1000).toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -143,8 +110,6 @@ public class App extends Application {
     public void onTerminate() {
         alarmHandle.unsubscribe();
         RouterManager.destroy();
-        IPCManager.destroy();
-        SugarContext.terminate();
         super.onTerminate();
     }
 }
