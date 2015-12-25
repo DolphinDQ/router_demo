@@ -5,8 +5,10 @@ import android.util.Log;
 
 import mrtech.smarthome.ipc.IPCModels.*;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -250,32 +252,65 @@ class HSLEventController implements IPCEventController {
     //=============IPCEventController====================
     @Override
     public Subscription subscribeCameraStatus(Action1<IPCEventData> onNext) {
-        return subjectState.subscribe(onNext);
+        return subjectState.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCEventData>>() {
+            @Override
+            public Observable<? extends IPCEventData> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).subscribe(onNext);
     }
 
     @Override
     public Subscription subscribeIPCAudioFrame(Action1<IPCAudioFrame> callback) {
-        return subjectAudioFrame.subscribe(callback);
+        return subjectAudioFrame.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCAudioFrame>>() {
+            @Override
+            public Observable<? extends IPCAudioFrame> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).subscribe(callback);
     }
 
     @Override
     public Subscription subscribeIPCVideoFrame(Action1<IPCVideoFrame> callback) {
-        return subjectVideoFrame.subscribe(callback);
+        return subjectVideoFrame.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCVideoFrame>>() {
+            @Override
+            public Observable<? extends IPCVideoFrame> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).subscribe(callback);
     }
 
     @Override
     public Subscription subscribeGetParam(Action1<IPCGetParameter> callback) {
-        return subjectGetParam.subscribe(callback);
+        return subjectGetParam.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCGetParameter>>() {
+            @Override
+            public Observable<? extends IPCGetParameter> call(Throwable throwable) {
+                return PublishSubject.create();
+
+            }
+        }).subscribe(callback);
     }
 
     @Override
     public Subscription subscribeSetParam(Action1<IPCSetParameter> callback) {
-        return subjectSetParam.subscribe(callback);
+        return subjectSetParam.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCSetParameter>>() {
+            @Override
+            public Observable<? extends IPCSetParameter> call(Throwable throwable) {
+                return PublishSubject.create();
+
+            }
+        }).subscribe(callback);
     }
 
     @Override
     public Subscription subscribeAlarm(Action1<IPCAlarm> callback) {
-        return subjectAlarm.subscribe(callback);
+        return subjectAlarm.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCAlarm>>() {
+            @Override
+            public Observable<? extends IPCAlarm> call(Throwable throwable) {
+                return PublishSubject.create();
+
+            }
+        }).subscribe(callback);
     }
 
 

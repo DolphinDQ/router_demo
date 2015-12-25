@@ -24,6 +24,7 @@ import hsl.p2pipcam.util.CustomBuffer;
 import hsl.p2pipcam.util.CustomBufferData;
 import hsl.p2pipcam.util.CustomBufferHead;
 import mrtech.smarthome.ipc.IPCModels.*;
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -155,6 +156,7 @@ class HSLPlayer implements IPCPlayer {
             if (cam != null) {
                 playingCamera = cam;
                 cameraClient.setIsPlaying(true);
+                subjectPlayingCameraChanged.onNext(playingCamera);
                 new AsyncTask<Long, Void, Void>() {
                     @Override
                     protected Void doInBackground(Long... params) {
@@ -236,17 +238,32 @@ class HSLPlayer implements IPCPlayer {
 
     @Override
     public Subscription subscribePlayingCameraChanged(Action1<IPCamera> callback) {
-        return subjectPlayingCameraChanged.subscribe(callback);
+        return subjectPlayingCameraChanged.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCamera>>() {
+            @Override
+            public Observable<? extends IPCamera> call(Throwable throwable) {
+                return  PublishSubject.create();
+            }
+        }).subscribe(callback);
     }
 
     @Override
     public Subscription subscribeRenderAction(Action1<RenderContext> callback) {
-        return subjectRenderContext.subscribe(callback);
+        return subjectRenderContext.onErrorResumeNext(new Func1<Throwable, Observable<? extends RenderContext>>() {
+            @Override
+            public Observable<? extends RenderContext> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).subscribe(callback);
     }
 
     @Override
     public void takePicture(final Action1<PictureData> callback) {
-        subjectPicture.first().subscribe(new Action1<PictureData>() {
+        subjectPicture.onErrorResumeNext(new Func1<Throwable, Observable<? extends PictureData>>() {
+            @Override
+            public Observable<? extends PictureData> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).first().subscribe(new Action1<PictureData>() {
             @Override
             public void call(PictureData pictureData) {
                 callback.call(pictureData);

@@ -8,7 +8,7 @@ import com.orm.dsl.Table;
  * Created by sphynx on 2015/12/23.
  */
 @Table
-public class RouterConfig extends Models.DataEntityBase {
+public class RouterConfig extends  SugarRecord {
     private String sn;
     private long lastUpdateTime;
     public RouterConfig(){

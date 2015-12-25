@@ -4,8 +4,10 @@ import android.util.Log;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
 import mrtech.smarthome.ipc.IPCModels.*;
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -45,7 +47,6 @@ class HSLCameraClient implements IPCContext {
         mManager = manager;
         mIPCamera = camera;
         mEventController = mManager.createEventController();
-        init();
     }
 
     private void setAutoReconnect() {
@@ -108,11 +109,11 @@ class HSLCameraClient implements IPCContext {
             public void run() {
                 IPCamera cam = mIPCamera;
                 trace("linking camera :" + cam);
-                if (cam.getIpcContext().getHandle() == 0)
-                    ((HSLCameraClient) cam.getIpcContext()).mHandle = DeviceSDK.createDevice(cam.getUserName(), cam.getPassword(), "", 0, cam.getDeviceId(), 1);
-                trace("create camera " + cam + "->" + cam.getIpcContext().getHandle());
-                if (cam.getIpcContext().getHandle() > 0) {
-                    long open = DeviceSDK.openDevice(cam.getIpcContext().getHandle());
+                if (getHandle() == 0)
+                    mHandle = DeviceSDK.createDevice(cam.getUserName(), cam.getPassword(), "", 0, cam.getDeviceId(), 1);
+                trace("create camera " + cam + "->" + getHandle());
+                if (getHandle() > 0) {
+                    long open = DeviceSDK.openDevice(getHandle());
                     trace("open camera:" + open);
                 }
             }
@@ -198,12 +199,22 @@ class HSLCameraClient implements IPCContext {
 
     @Override
     public Subscription subscribePlayStatus(Action1<IPCContext> callback) {
-        return subjectPlayStatus.subscribe(callback);
+        return subjectPlayStatus.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCContext>>() {
+            @Override
+            public Observable<? extends IPCContext> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).subscribe(callback);
     }
 
     @Override
     public Subscription subscribeReconnectionStatus(Action1<IPCContext> callback) {
-        return subjectReconnectionStatus.subscribe(callback);
+        return subjectReconnectionStatus.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCContext>>() {
+            @Override
+            public Observable<? extends IPCContext> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).subscribe(callback);
     }
 
 }

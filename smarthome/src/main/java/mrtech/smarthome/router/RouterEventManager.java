@@ -10,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 import mrtech.smarthome.router.Models.*;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -26,9 +27,31 @@ class RouterEventManager implements EventManager {
 
     //    private final Thread mQueryTimelineTask;
     private final RouterManager mManager;
+
+    public rx.Observable<Router> getSubjectRouterStatusChanged() {
+        return subjectRouterStatusChanged.onErrorResumeNext(new Func1<Throwable, Observable<? extends Router>>() {
+            @Override
+            public Observable<? extends Router> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        });
+    }
+
+    public  rx.Observable<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> getSubjectTimeLine() {
+        return subjectTimeLine.onErrorResumeNext(new Func1<Throwable, Observable<? extends RouterCallback<mrtech.smarthome.rpc.Models.Timeline>>>() {
+            @Override
+            public Observable<? extends RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        });
+    }
+
     private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
+
     private final PublishSubject<RouterCallback<Messages.Event>> subjectRouterEvents = PublishSubject.create();
+
     private final PublishSubject<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> subjectTimeLine = PublishSubject.create();
+
     private final ArrayList<Messages.Event.EventType> mEventTypes;
 
     public RouterEventManager(RouterManager routerManager) {
@@ -36,7 +59,7 @@ class RouterEventManager implements EventManager {
         mEventTypes = new ArrayList<>();
 //        mQueryTimelineTask = new Thread(new QueryTimeLineTask());
 //        mQueryTimelineTask.start();
-        subjectRouterStatusChanged.subscribe(new Action1<Router>() {
+        getSubjectRouterStatusChanged().subscribe(new Action1<Router>() {
             @Override
             public void call(Router router) {
                 if (router.getRouterSession().isAuthenticated()) {
@@ -44,7 +67,7 @@ class RouterEventManager implements EventManager {
                 }
             }
         });
-        subjectTimeLine.subscribe(new Action1<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>>() {
+        getSubjectTimeLine().subscribe(new Action1<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>>() {
             @Override
             public void call(RouterCallback<mrtech.smarthome.rpc.Models.Timeline> timelineRouterCallback) {
                 final RouterConfig config = timelineRouterCallback.getRouter().getConfig();
@@ -83,7 +106,7 @@ class RouterEventManager implements EventManager {
      */
     @Override
     public Subscription subscribeRouterStatusChangedEvent(Action1<Router> callback) {
-        return subjectRouterStatusChanged.subscribe(callback);
+        return getSubjectRouterStatusChanged().subscribe(callback);
     }
 
     /**
@@ -98,7 +121,12 @@ class RouterEventManager implements EventManager {
         if (!mEventTypes.contains(eventType))
             mEventTypes.add(eventType);
         subscribeEvents();
-        return subjectRouterEvents.filter(new Func1<RouterCallback<Messages.Event>, Boolean>() {
+        return subjectRouterEvents.onErrorResumeNext(new Func1<Throwable, Observable<? extends RouterCallback<Messages.Event>>>() {
+            @Override
+            public Observable<? extends RouterCallback<Messages.Event>> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).filter(new Func1<RouterCallback<Messages.Event>, Boolean>() {
             @Override
             public Boolean call(RouterCallback<Messages.Event> eventRouterCallback) {
                 return eventRouterCallback.getData().getType() == eventType;
@@ -108,7 +136,7 @@ class RouterEventManager implements EventManager {
 
     @Override
     public Subscription subscribeTimelineEvent(Action1<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> callback) {
-        return subjectTimeLine.subscribe(callback);
+        return  getSubjectTimeLine().subscribe(callback);
     }
 
     private void subscribeEvents() {

@@ -106,7 +106,7 @@ class RouterCommunicationManager implements CommunicationManager {
                 if (mClient.isAuthenticated()) postEvents();
             }
         });
-        mRouterCacheProvider = new RouterCacheProvider(mClient.getRouter(),this);
+        mRouterCacheProvider = new RouterCacheProvider(mClient.getRouter(), this);
     }
 
     public void init(SSLSocket socket) {
@@ -168,6 +168,7 @@ class RouterCommunicationManager implements CommunicationManager {
                     OutputStream os = null;
                     try {
                         os = socket.getOutputStream();
+                        trace("ready post :" + request);
                         int requestLength = request.getSerializedSize();
                         byte heightLevelBit = (byte) ((requestLength & 0xff00) >> 8);
                         byte lowLevelBit = (byte) (requestLength & 0x00ff);
@@ -356,7 +357,7 @@ class RouterCommunicationManager implements CommunicationManager {
         InputStream in = sslSocket.getInputStream();
         byte[] prefix = new byte[2];
         int received = 0;
-        in.read(prefix);
+        int read = in.read(prefix);
         if (prefix[0] == 0 && prefix[1] == 0) {
             if (sslSocket.getSession().isValid()) {
                 trace("invalid package header..");
@@ -368,7 +369,11 @@ class RouterCommunicationManager implements CommunicationManager {
             received = 0;
             byte[] buffer = new byte[length];
             while (received < length) {
-                received += in.read(buffer, received, length - received);
+                read = in.read(buffer, received, length - received);
+                if (read == -1) {
+                    throw new IOException("stream read length -1..");
+                }
+                received += read;
             }
             return Messages.Callback.parseFrom(buffer, RouterManager.registry);
         }

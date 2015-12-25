@@ -14,10 +14,10 @@
 
     <application
         android:name=".App"
-        android:persistent="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:persistent="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -37,8 +37,13 @@
 
         <service
             android:name=".RouterQueryTimelineService"
-            android:exported="false"
-            ></service>
+            android:exported="false" />
+
+        <activity android:name=".IPCListActivity"
+            android:parentActivityName=".RouterSettingsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RouterSettingsActivity" /></activity>
     </application>
 
 </manifest>

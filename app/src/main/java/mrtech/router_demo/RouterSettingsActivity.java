@@ -1,7 +1,5 @@
 package mrtech.router_demo;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -23,10 +21,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import mrtech.smarthome.router.Router;
-import mrtech.smarthome.router.RouterConfig;
 import mrtech.smarthome.router.RouterManager;
-import mrtech.smarthome.rpc.Messages;
-import mrtech.smarthome.rpc.Models;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -36,9 +31,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
     private ArrayAdapter<Router> routerArrayAdapter;
     private RouterManager routerManager;
     private Subscription stateChangedHandle;
-    private RouterSettingsActivity mContext;
-    private NotificationManager mNotificationManager;
-    private Notification mNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +38,28 @@ public class RouterSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_router_settings);
         routerManager = RouterManager.getInstance();
-        mContext = this;
-        mNotification = new Notification(); //new Notification(R.drawable.ic_menu_manage,"弹窗弹窗弹窗弹窗弹窗.",System.currentTimeMillis());
-        mNotificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
         if (stateChangedHandle == null)
             stateChangedHandle = routerManager.getEventManager().subscribeRouterStatusChangedEvent(new Action1<Router>() {
                 @Override
                 public void call(final Router router) {
+                    if (router.getRouterSession().isAuthenticated()) {
+                        router.getRouterSession().getCameraManager().reloadIPCAsync(false, new Action1<Throwable>() {
+                            @Override
+                            public void call(final Throwable throwable) {
+                                new Handler(getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (throwable != null) {
+                                            throwable.printStackTrace();
+                                            Toast.makeText(RouterSettingsActivity.this, router.getName() + "加载摄像头失败。" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(RouterSettingsActivity.this, router.getName() + "加载摄像头完毕。", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
                     new Handler(getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
@@ -148,24 +155,25 @@ public class RouterSettingsActivity extends AppCompatActivity {
 //
 //                    }
 //                });
-
-                convertView.findViewById(R.id.event_btn).setOnClickListener(new View.OnClickListener() {
+                convertView.findViewById(R.id.camera_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new AsyncTask<Void, Void,Models.SystemConfiguration>() {
-
-                            @Override
-                            protected Models.SystemConfiguration doInBackground(Void... params) {
-                                return router.getRouterSession().getRouterConfiguration(true);
-                            }
-
-                            @Override
-                            protected void onPostExecute(Models.SystemConfiguration configuration) {
-                                if (configuration != null) {
-                                    Toast.makeText(RouterSettingsActivity.this, configuration.getDeviceName() + configuration.getTime(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }.execute();
+//                        new AsyncTask<Void, Void, Models.SystemConfiguration>() {
+//                            @Override
+//                            protected Models.SystemConfiguration doInBackground(Void... params) {
+//                                return router.getRouterSession().getRouterConfiguration(true);
+//                            }
+//
+//                            @Override
+//                            protected void onPostExecute(Models.SystemConfiguration configuration) {
+//                                if (configuration != null) {
+//                                    Toast.makeText(RouterSettingsActivity.this, configuration.getDeviceName() + configuration.getTime(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        }.execute();
+                        final Intent intent = new Intent(RouterSettingsActivity.this, IPCListActivity.class);
+                        intent.setAction(router.getSN());
+                        startActivity(intent);
                     }
                 });
                 convertView.findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {

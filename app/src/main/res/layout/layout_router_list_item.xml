@@ -3,8 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:stretchColumns="0"
-    >
+    android:stretchColumns="0">
     <TableRow>
         <LinearLayout
             android:orientation="vertical"
@@ -28,8 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
             <Button
-                android:id="@+id/event_btn"
-                android:text="事件"
+                android:id="@+id/camera_btn"
+                android:text="视频"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content" />
             <Button

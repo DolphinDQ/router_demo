@@ -5,13 +5,10 @@ import android.util.Log;
 import com.stream.NewAllStreamParser;
 
 import mrtech.smarthome.ipc.IPCManager;
-import mrtech.smarthome.ipc.IPCamera;
 import mrtech.smarthome.router.Models.*;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLSocket;
@@ -20,9 +17,10 @@ import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.NetUtil;
 import mrtech.smarthome.util.NumberUtil;
 import mrtech.smarthome.util.RequestUtil;
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
-import rx.functions.Action2;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -30,6 +28,7 @@ import rx.subjects.PublishSubject;
  */
 class RouterClient implements RouterSession {
     private final RouterClient mContext;
+    private final RouterCameraManager mCameraManager;
     private Thread mCheckStatusTask;
 
     private static void trace(String msg) {
@@ -61,6 +60,7 @@ class RouterClient implements RouterSession {
         mRouter = router;
         mIPCManager = IPCManager.createNewManager();
         mCommunicationManager = new RouterCommunicationManager(this);
+        mCameraManager=new RouterCameraManager(mRouter,mCommunicationManager);
         setRouterStatus(RouterStatus.INITIAL);
     }
 
@@ -226,15 +226,20 @@ class RouterClient implements RouterSession {
     }
 
     @Override
-    public mrtech.smarthome.rpc.Models.SystemConfiguration getRouterConfiguration(boolean refreshCache) {
+    public mrtech.smarthome.rpc.Models.SystemConfiguration getRouterConfiguration(boolean cache) {
         try {
-            final Messages.Response response = mCommunicationManager.postRequest(RequestUtil.getSysConfig(), refreshCache);
+            final Messages.Response response = mCommunicationManager.postRequest(RequestUtil.getSysConfig(), cache);
             if (response != null)
                 return   response.getExtension(Messages.GetSystemConfigurationResponse.response).getConfiguration();
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public CameraManager getCameraManager() {
+        return mCameraManager;
     }
 
     @Override
@@ -268,48 +273,18 @@ class RouterClient implements RouterSession {
     }
 
     @Override
-    public IPCManager getIPCManager() {
-        return mIPCManager;
-    }
-
-    @Override
-    public void reloadIPCAsync(boolean cache, final Action1<Throwable> exception) {
-        try {
-            mCommunicationManager.postRequestAsync(RequestUtil.getDevices(mrtech.smarthome.rpc.Models.DeviceQuery.newBuilder()
-                    .setType(mrtech.smarthome.rpc.Models.DeviceType.DEVICE_TYPE_CAMERA)
-                    .setPage(0)
-                    .setPageSize(100)
-                    .build()), new Action2<Messages.Response, Throwable>() {
-                @Override
-                public void call(Messages.Response response, Throwable throwable) {
-                    if (response != null) {
-                        final List<mrtech.smarthome.rpc.Models.Device> result = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
-                        if (result != null && result.size() > 0) {
-                            mIPCManager.removeAll();
-                            for (mrtech.smarthome.rpc.Models.Device device : result) {
-                                final mrtech.smarthome.rpc.Models.CameraDevice cameraDevice = device.getExtension(mrtech.smarthome.rpc.Models.CameraDevice.detail);
-                                mIPCManager.addCamera(new IPCamera(device, cameraDevice.getDeviceid(), cameraDevice.getUser(), cameraDevice.getPassword()));
-                            }
-                        } else {
-                            throwable = new NoSuchElementException("未添加摄像头");
-                        }
-                    }
-                    if (exception != null) exception.call(throwable);
-                }
-            }, cache);
-        } catch (Exception ex) {
-            if (exception != null) exception.call(ex);
-        }
-    }
-
-    @Override
     public CommunicationManager getCommunicationManager() {
         return mCommunicationManager;
     }
 
     @Override
     public Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
-        return subjectRouterStatusChanged.subscribe(callback);
+        return subjectRouterStatusChanged.onErrorResumeNext(new Func1<Throwable, Observable<? extends Router>>() {
+            @Override
+            public Observable<? extends Router> call(Throwable throwable) {
+                return PublishSubject.create();
+            }
+        }).subscribe(callback);
     }
 
     private void setRouterStatus(RouterStatus routerStatus) {

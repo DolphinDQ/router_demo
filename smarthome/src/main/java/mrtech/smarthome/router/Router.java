@@ -90,7 +90,7 @@ public class Router {
         if (config == null) {
             config = new RouterConfig(SN);
         }
-        SugarRecord.save(config);
+        config.save();
     }
 
     @Override

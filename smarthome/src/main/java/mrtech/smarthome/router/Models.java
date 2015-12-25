@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.ipc.IPCManager;
+import mrtech.smarthome.ipc.IPCamera;
 import mrtech.smarthome.rpc.Messages;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -76,19 +77,10 @@ public class Models {
         mrtech.smarthome.rpc.Models.SystemConfiguration getRouterConfiguration(boolean cache);
 
         /**
-         * 重新加载IPC列表。
-         *
-         * @param cache     true 为使用缓存中的信息。
-         * @param exception 异常回调，如果回调值Throwable为null为刷新成功。其他均为刷新失败。
-         */
-        void reloadIPCAsync(boolean cache, final Action1<Throwable> exception);
-
-        /**
-         * 获取IPC管理器。
-         *
+         * 获取 路由器视频管理器。
          * @return
          */
-        IPCManager getIPCManager();
+        CameraManager getCameraManager();
 
         /**
          * 获取数据通道。
@@ -107,6 +99,9 @@ public class Models {
 
     }
 
+    /**
+     * 事件管理器。
+     */
     public interface EventManager {
 
         Subscription subscribeRouterStatusChangedEvent(Action1<Router> callback);
@@ -298,21 +293,55 @@ public class Models {
         E getData();
     }
 
-
     /**
-     * Created by sphynx on 2015/12/23.
+     * IPC 配置管理器。
      */
-    @Table
-    public abstract static class DataEntityBase {
-        public long getId() {
-            return id;
-        }
+    public interface CameraManager {
 
-        public void setId(long id) {
-            this.id = id;
-        }
+        /**
+         * 获取IPC管理器。
+         *
+         * @return
+         */
+        IPCManager getIPCManager();
 
-        private long id ;
+        /**
+         * 重新加载IPC列表。
+         *
+         * @param cache     true 为使用缓存中的信息。
+         * @param exception 异常回调，如果回调值Throwable为null为刷新成功。其他均为刷新失败。
+         */
+        void reloadIPCAsync(boolean cache, final Action1<Throwable> exception);
+
+        /**
+         * 保存摄像头
+         * @param request
+         */
+        void saveCamera(mrtech.smarthome.rpc.Models.Device device,Action1<Throwable> exception );
+
+        /**
+         * 删除摄像头。
+         * @param camera
+         * @param result
+         */
+        void deleteCamera(IPCamera camera ,Action1<Throwable> result);
 
     }
+//
+//    /**
+//     * Created by sphynx on 2015/12/23.
+//     */
+//    @Table
+//    public abstract static class DataEntityBase {
+//        public long getId() {
+//            return id;
+//        }
+//
+//        public void setId(long id) {
+//            this.id = id;
+//        }
+//
+//        private long id ;
+//
+//    }
 }

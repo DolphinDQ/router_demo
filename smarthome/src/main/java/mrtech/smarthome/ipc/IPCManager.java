@@ -62,9 +62,12 @@ public class IPCManager {
     }
 
     public void addCamera(IPCamera cam) {
+        if (cam == null) return;
         if (getCamera(cam.getDeviceId()) == null) {
-            cam.setIpcContext(new HSLCameraClient(this, cam));
+            final HSLCameraClient ipcContext = new HSLCameraClient(this, cam);
+            cam.setIpcContext(ipcContext);
             mCameras.add(cam);
+            ipcContext.init();
         }
     }
 
@@ -73,6 +76,7 @@ public class IPCManager {
     }
 
     public void removeCamera(IPCamera cam) {
+        if (cam == null) return;
         cam.getIpcContext().destroy();
         mCameras.remove(cam);
     }
