@@ -43,7 +43,7 @@ class RouterCommunicationManager implements CommunicationManager {
     private final HashMap<Integer, Messages.Request> mSubscribeMap;
     private final ConcurrentHashMap<Messages.Request, Action1<Messages.Response>> mPostQueue;
     private final RouterClient mClient;
-    private final RouterCacheProvider routerCacheProvider;
+    private final RouterCacheProvider mRouterCacheProvider;
     private final PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
     private final rx.Observable<Messages.Response> subjectResponse;
     private final ArrayList<Messages.Event.EventType> mEventTypes;
@@ -57,7 +57,6 @@ class RouterCommunicationManager implements CommunicationManager {
     public RouterCommunicationManager(RouterClient client) {
         mPostQueue = new ConcurrentHashMap<>();
         mClient = client;
-        routerCacheProvider = null;
         mResponseMap = new ConcurrentHashMap<>();
         mEventTypes = new ArrayList<>();
         mSubscribeMap = new HashMap<>();
@@ -107,6 +106,7 @@ class RouterCommunicationManager implements CommunicationManager {
                 if (mClient.isAuthenticated()) postEvents();
             }
         });
+        mRouterCacheProvider = new RouterCacheProvider(mClient.getRouter(),this);
     }
 
     public void init(SSLSocket socket) {
@@ -138,8 +138,8 @@ class RouterCommunicationManager implements CommunicationManager {
     public void postRequestAsync(final Messages.Request request, final Action2<Messages.Response, Throwable> callback, int timeout, boolean cache) {
         if (request != null && mClient.isConnected()) {
             if (callback != null) {
-                if (cache && routerCacheProvider != null) {
-                    final Messages.Response response = routerCacheProvider.getResponseCache(request.getType());
+                if (cache && mRouterCacheProvider != null) {
+                    final Messages.Response response = mRouterCacheProvider.getResponseCache(request.getType());
                     if (response != null) {
                         callback.call(response, null);
                         return;
@@ -209,8 +209,8 @@ class RouterCommunicationManager implements CommunicationManager {
     @Override
     public Messages.Response postRequest(Messages.Request request, int timeout, boolean cache) throws TimeoutException {
         if (request == null) return null;
-        if (cache && routerCacheProvider != null) {
-            final Messages.Response response = routerCacheProvider.getResponseCache(request.getType());
+        if (cache && mRouterCacheProvider != null) {
+            final Messages.Response response = mRouterCacheProvider.getResponseCache(request.getType());
             if (response != null) return response;
         }
         if (!mClient.isConnected()) return null;
@@ -305,9 +305,15 @@ class RouterCommunicationManager implements CommunicationManager {
     }
 
     @Override
+    public Subscription subscribeResponse(Action1<Messages.Response> callback) {
+        return subjectResponse.subscribe(callback);
+    }
+
+    @Override
     public void test() {
         postEvents();
     }
+
 
     private Observable<Messages.Event> getEventObservable(final Messages.Event.EventType eventType) {
         return subjectEvent.filter(new Func1<Messages.Event, Boolean>() {

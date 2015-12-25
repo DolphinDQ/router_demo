@@ -25,6 +25,8 @@ import com.google.zxing.integration.android.IntentResult;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterConfig;
 import mrtech.smarthome.router.RouterManager;
+import mrtech.smarthome.rpc.Messages;
+import mrtech.smarthome.rpc.Models;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -150,14 +152,26 @@ public class RouterSettingsActivity extends AppCompatActivity {
                 convertView.findViewById(R.id.event_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        router.getRouterSession().getCommunicationManager().test();
-//                        Toast.makeText(RouterSettingsActivity.this, router.getRouterSession().getCommunicationManager().getEventTypes().size()+" 个报警", Toast.LENGTH_SHORT).show();
+                        new AsyncTask<Void, Void,Models.SystemConfiguration>() {
+
+                            @Override
+                            protected Models.SystemConfiguration doInBackground(Void... params) {
+                                return router.getRouterSession().getRouterConfiguration(true);
+                            }
+
+                            @Override
+                            protected void onPostExecute(Models.SystemConfiguration configuration) {
+                                if (configuration != null) {
+                                    Toast.makeText(RouterSettingsActivity.this, configuration.getDeviceName() + configuration.getTime(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.execute();
                     }
                 });
                 convertView.findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        routerManager.removeRouter(router,true);
+                        routerManager.removeRouter(router, true);
                     }
                 });
                 return convertView;

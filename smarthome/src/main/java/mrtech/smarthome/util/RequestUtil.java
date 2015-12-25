@@ -112,10 +112,9 @@ public class RequestUtil {
         }
     }
 
-    static int getRequestTypeValue(Messages.Response callback) {
+    public static int getRequestTypeValue(Messages.Response callback) {
         int requestId = callback.getRequestId();
-        requestId -= (requestId >> 16);
-        return requestId;
+        return requestId << 16 >> 16;
     }
 
     public static Request getAuthRequest(String apiKey) {

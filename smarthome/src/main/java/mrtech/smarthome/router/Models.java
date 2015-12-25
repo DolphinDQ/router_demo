@@ -73,7 +73,7 @@ public class Models {
          * @param cache true 为使用缓存中的信息。
          * @return
          */
-        Messages.GetSystemConfigurationResponse getRouterConfiguration(boolean cache);
+        mrtech.smarthome.rpc.Models.SystemConfiguration getRouterConfiguration(boolean cache);
 
         /**
          * 重新加载IPC列表。
@@ -246,6 +246,13 @@ public class Models {
          */
         Collection<Messages.Event.EventType> getEventTypes();
 
+        /**
+         * 订阅通讯模块的反馈数据。（所有请求）
+         * @param callback 回调数据。
+         * @return
+         */
+        Subscription subscribeResponse(Action1<Messages.Response> callback);
+
         void test();
     }
 
@@ -297,6 +304,15 @@ public class Models {
      */
     @Table
     public abstract static class DataEntityBase {
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        private long id ;
 
     }
 }

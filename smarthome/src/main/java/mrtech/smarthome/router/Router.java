@@ -52,9 +52,9 @@ public class Router {
     public String getName() {
         final RouterSession routerSession = getRouterSession();
         if (routerSession != null && routerSession.isAuthenticated()) {
-            final Messages.GetSystemConfigurationResponse routerConfiguration = routerSession.getRouterConfiguration(false);
+            final mrtech.smarthome.rpc.Models.SystemConfiguration routerConfiguration = routerSession.getRouterConfiguration(true);
             if (routerConfiguration != null)
-                return routerConfiguration.getConfiguration().getDeviceName();
+                return routerConfiguration.getDeviceName();
         }
         return Name;
     }

@@ -226,15 +226,15 @@ class RouterClient implements RouterSession {
     }
 
     @Override
-    public Messages.GetSystemConfigurationResponse getRouterConfiguration(boolean refreshCache) {
-        if (systemConfigurationResponse == null) {
-            try {
-                systemConfigurationResponse = mCommunicationManager.postRequest(RequestUtil.getSysConfig()).getExtension(Messages.GetSystemConfigurationResponse.response);
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-            }
+    public mrtech.smarthome.rpc.Models.SystemConfiguration getRouterConfiguration(boolean refreshCache) {
+        try {
+            final Messages.Response response = mCommunicationManager.postRequest(RequestUtil.getSysConfig(), refreshCache);
+            if (response != null)
+                return   response.getExtension(Messages.GetSystemConfigurationResponse.response).getConfiguration();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
         }
-        return systemConfigurationResponse;
+        return null;
     }
 
     @Override
