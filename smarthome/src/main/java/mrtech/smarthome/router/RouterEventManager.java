@@ -29,21 +29,11 @@ class RouterEventManager implements EventManager {
     private final RouterManager mManager;
 
     public rx.Observable<Router> getSubjectRouterStatusChanged() {
-        return subjectRouterStatusChanged.onErrorResumeNext(new Func1<Throwable, Observable<? extends Router>>() {
-            @Override
-            public Observable<? extends Router> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        });
+        return subjectRouterStatusChanged;
     }
 
-    public  rx.Observable<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> getSubjectTimeLine() {
-        return subjectTimeLine.onErrorResumeNext(new Func1<Throwable, Observable<? extends RouterCallback<mrtech.smarthome.rpc.Models.Timeline>>>() {
-            @Override
-            public Observable<? extends RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        });
+    public rx.Observable<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> getSubjectTimeLine() {
+        return subjectTimeLine;
     }
 
     private final PublishSubject<Router> subjectRouterStatusChanged = PublishSubject.create();
@@ -124,6 +114,7 @@ class RouterEventManager implements EventManager {
         return subjectRouterEvents.onErrorResumeNext(new Func1<Throwable, Observable<? extends RouterCallback<Messages.Event>>>() {
             @Override
             public Observable<? extends RouterCallback<Messages.Event>> call(Throwable throwable) {
+                throwable.printStackTrace();
                 return PublishSubject.create();
             }
         }).filter(new Func1<RouterCallback<Messages.Event>, Boolean>() {
@@ -136,7 +127,7 @@ class RouterEventManager implements EventManager {
 
     @Override
     public Subscription subscribeTimelineEvent(Action1<RouterCallback<mrtech.smarthome.rpc.Models.Timeline>> callback) {
-        return  getSubjectTimeLine().subscribe(callback);
+        return getSubjectTimeLine().subscribe(callback);
     }
 
     private void subscribeEvents() {

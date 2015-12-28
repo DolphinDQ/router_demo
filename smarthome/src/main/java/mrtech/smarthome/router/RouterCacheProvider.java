@@ -32,7 +32,7 @@ class RouterCacheProvider {
 
                 final List<ResponseCache> responseCaches = SugarRecord.find(ResponseCache.class,
                         " type = ? and ROUTER_ID = ?", "" + typeValue, mRouter.getConfig().getId() + "");
-                trace("request type :" + typeValue + "result :" + responseCaches.size());
+                trace("request type of " + Messages.Request.RequestType.valueOf(typeValue)  + " need to be cached ? " + responseCaches.size());
                 if (responseCaches.size() > 0) {
                     final ResponseCache cache = responseCaches.get(0);
                     if (cache != null) {

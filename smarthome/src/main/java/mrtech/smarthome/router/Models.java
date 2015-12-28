@@ -327,21 +327,20 @@ public class Models {
         void deleteCamera(IPCamera camera ,Action1<Throwable> result);
 
     }
-//
-//    /**
-//     * Created by sphynx on 2015/12/23.
-//     */
-//    @Table
-//    public abstract static class DataEntityBase {
-//        public long getId() {
-//            return id;
-//        }
-//
-//        public void setId(long id) {
-//            this.id = id;
-//        }
-//
-//        private long id ;
-//
-//    }
+
+    /**
+     * Created by sphynx on 2015/12/23.
+     */
+    @Table
+    public abstract static class DataEntityBase {
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        protected Long id ;
+    }
 }

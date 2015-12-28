@@ -18,30 +18,49 @@ class HSLEventController implements IPCEventController {
     private static void trace(String msg) {
         Log.e(IPCManager.class.getName(), msg);
     }
-
-    private final IPCManager mManager;
-//    private SettingsListener settingsListener;
-//    private RecorderListener recorderListener;
-//    private PlayListener playListener;
-//    private DeviceStatusListener deviceStatusListener;
-
-    private IPCamera getCamera(long userId) {
-        return mManager.getCamera(userId);
+    public static IPCStatus getStatus(int code) {
+        switch (code) {
+            case 0:
+                return IPCStatus.CONNECTING;
+            case 100:
+                return IPCStatus.CONNECTED;
+            case 102:
+                return IPCStatus.CONNECT_ERROR;
+            case 1:
+                return IPCStatus.ERROR_USER_PWD;
+            case 2:
+                return IPCStatus.ERROR_MAX_USER;
+            case 4:
+                return IPCStatus.ERROR_VIDEO_LOST;
+            case 5:
+                return IPCStatus.ERROR_INVALID_ID;
+            case 9:
+                return IPCStatus.DEVICE_OFFLINE;
+            case 10:
+                return IPCStatus.CONNECT_TIMEOUT;
+            case 11:
+                return IPCStatus.DISCONNECT;
+            case 12:
+                return IPCStatus.CHECK_ACCOUNT;
+            default:
+                return IPCStatus.UNKNOWN;
+        }
     }
 
-    private PublishSubject<IPCEventData> subjectState = PublishSubject.create();
+    private IPCamera getCamera(long userId) {
+        return IPCManager.getInstance().getCamera(userId);
+    }
+
+
+    private PublishSubject<IPCAlarm> subjectAlarm = PublishSubject.create();
+    private PublishSubject<IPCStateChanged> subjectState = PublishSubject.create();
     private PublishSubject<IPCAudioFrame> subjectAudioFrame = PublishSubject.create();
     private PublishSubject<IPCVideoFrame> subjectVideoFrame = PublishSubject.create();
-    private PublishSubject<IPCAlarm> subjectAlarm = PublishSubject.create();
     private PublishSubject<IPCGetParameter> subjectGetParam = PublishSubject.create();
     private PublishSubject<IPCSetParameter> subjectSetParam = PublishSubject.create();
 
     private void callback(Runnable runnable) {
         runnable.run();
-    }
-
-    public HSLEventController(IPCManager manager) {
-        mManager = manager;
     }
 
     public void CallBack_SnapShot(final long UserID, final byte[] buff, final int len) {
@@ -60,8 +79,8 @@ class HSLEventController implements IPCEventController {
             }
 
             @Override
-            public IPCamera getCamera() {
-                return HSLEventController.this.getCamera(UserID);
+            public long getCameraId() {
+                return UserID;
             }
         });
 //        callback(new Runnable() {
@@ -86,8 +105,8 @@ class HSLEventController implements IPCEventController {
             }
 
             @Override
-            public IPCamera getCamera() {
-                return HSLEventController.this.getCamera(UserID);
+            public long getCameraId() {
+                return UserID;
             }
         });
 //        callback(new Runnable() {
@@ -102,55 +121,17 @@ class HSLEventController implements IPCEventController {
     public void CallBack_Event(final long UserID, long nType) {
         final IPCamera cam;
         final int status = new Long(nType).intValue();
-        if ((cam = getCamera(UserID)) != null) {
-            final HSLCameraClient cameraStatus = (HSLCameraClient) cam.getIpcContext();
-            cameraStatus.setStatusCode(status);
-            subjectState.onNext(new IPCEventData() {
-                @Override
-                public IPCamera getCamera() {
-                    return HSLEventController.this.getCamera(UserID);
-                }
-            });
-        }
-//
-//        final int status = new Long(nType).intValue();
-//        final IPCamera cam;
-//        if ((cam = mManager.getCamera(UserID)) != null) {
-//            final HSLCameraClient cameraStatus = (HSLCameraClient) cam.getIpcContext();
-//            cameraStatus.setStatusCode(status);
-//            if (status != 100) {
-//                cameraStatus.isPlaying = false;
-//            }
-//            trace("camera " + cam.getDeviceId() + " state changed to " + status);
-//            if (status == 101 || status == 10 || status == 11 || status == 9 || status == 2) {
-//                synchronized (cameraStatus) {
-//                    if (cameraStatus.reconnecting) return;
-//                    cameraStatus.reconnecting = true;
-//                }
-//                new AsyncTask<IPCamera, Void, Void>() {
-//                    @Override
-//                    protected Void doInBackground(IPCamera... params) {
-//                        try {
-//                            Thread.sleep(5000);
-//                            mManager.removeCamera(params[0]);
-//                            mManager.addCamera(params[0]);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        } finally {
-//                            cameraStatus.reconnecting = false;
-//                        }
-//                        return null;
-//                    }
-//                }.execute(cam);
-//            }
-//        }
-//        callback(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (deviceStatusListener != null)
-//                    deviceStatusListener.receiveDeviceStatus(UserID, status);
-//            }
-//        });
+        trace("callback status id=" + UserID + " type=" + status);
+        subjectState.onNext(new IPCStateChanged() {
+            @Override
+            public IPCStatus getStatus() {
+                return HSLEventController.getStatus(status);
+            }
+            @Override
+            public long getCameraId() {
+                return UserID;
+            }
+        });
     }
 
     public void VideoData(long UserID, byte[] VideoBuf, int h264Data, int nLen, int Width, int Height, int time) {
@@ -170,8 +151,8 @@ class HSLEventController implements IPCEventController {
             }
 
             @Override
-            public IPCamera getCamera() {
-                return HSLEventController.this.getCamera(nUserID);
+            public long getCameraId() {
+                return nUserID;
             }
         });
     }
@@ -192,7 +173,7 @@ class HSLEventController implements IPCEventController {
     public void CallBack_RecordPlayPos(long userid, int pos) {
     }
 
-    public void CallBack_VideoData(final long UserID,final byte[] data,final int type,final int size) {
+    public void CallBack_VideoData(final long UserID, final byte[] data, final int type, final int size) {
         subjectVideoFrame.onNext(new IPCVideoFrame() {
             @Override
             public byte[] getFrameData() {
@@ -210,13 +191,13 @@ class HSLEventController implements IPCEventController {
             }
 
             @Override
-            public IPCamera getCamera() {
-                return HSLEventController.this.getCamera(UserID);
+            public long getCameraId() {
+                return UserID;
             }
         });
     }
 
-    public void CallBack_AlarmMessage(final long UserID,final int nType) {
+    public void CallBack_AlarmMessage(final long UserID, final int nType) {
         subjectAlarm.onNext(new IPCAlarm() {
             @Override
             public int getAlarmType() {
@@ -224,8 +205,8 @@ class HSLEventController implements IPCEventController {
             }
 
             @Override
-            public IPCamera getCamera() {
-                return HSLEventController.this.getCamera(UserID);
+            public long getCameraId() {
+                return UserID;
             }
         });
     }
@@ -251,66 +232,33 @@ class HSLEventController implements IPCEventController {
 
     //=============IPCEventController====================
     @Override
-    public Subscription subscribeCameraStatus(Action1<IPCEventData> onNext) {
-        return subjectState.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCEventData>>() {
-            @Override
-            public Observable<? extends IPCEventData> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        }).subscribe(onNext);
+    public Subscription subscribeCameraStatus(Action1<IPCStateChanged> onNext) {
+        return subjectState.subscribe(onNext);
     }
 
     @Override
     public Subscription subscribeIPCAudioFrame(Action1<IPCAudioFrame> callback) {
-        return subjectAudioFrame.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCAudioFrame>>() {
-            @Override
-            public Observable<? extends IPCAudioFrame> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        }).subscribe(callback);
+        return subjectAudioFrame.subscribe(callback);
     }
 
     @Override
     public Subscription subscribeIPCVideoFrame(Action1<IPCVideoFrame> callback) {
-        return subjectVideoFrame.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCVideoFrame>>() {
-            @Override
-            public Observable<? extends IPCVideoFrame> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        }).subscribe(callback);
+        return subjectVideoFrame.subscribe(callback);
     }
 
     @Override
     public Subscription subscribeGetParam(Action1<IPCGetParameter> callback) {
-        return subjectGetParam.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCGetParameter>>() {
-            @Override
-            public Observable<? extends IPCGetParameter> call(Throwable throwable) {
-                return PublishSubject.create();
-
-            }
-        }).subscribe(callback);
+        return subjectGetParam.subscribe(callback);
     }
 
     @Override
     public Subscription subscribeSetParam(Action1<IPCSetParameter> callback) {
-        return subjectSetParam.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCSetParameter>>() {
-            @Override
-            public Observable<? extends IPCSetParameter> call(Throwable throwable) {
-                return PublishSubject.create();
-
-            }
-        }).subscribe(callback);
+        return subjectSetParam.subscribe(callback);
     }
 
     @Override
     public Subscription subscribeAlarm(Action1<IPCAlarm> callback) {
-        return subjectAlarm.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCAlarm>>() {
-            @Override
-            public Observable<? extends IPCAlarm> call(Throwable throwable) {
-                return PublishSubject.create();
-
-            }
-        }).subscribe(callback);
+        return subjectAlarm.subscribe(callback);
     }
 
 

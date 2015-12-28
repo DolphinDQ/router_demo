@@ -59,13 +59,17 @@ public class IPCListActivity extends AppCompatActivity {
             finish();
         }
         cameraList = ipcManager.getCameraList();
-        ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCEventData>() {
+        ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
             @Override
-            public void call(IPCModels.IPCEventData ipcEventData) {
-                play(0);
+            public void call(IPCModels.IPCStateChanged ipcStateChanged) {
+                final IPCamera camera = ipcManager.getCamera(ipcStateChanged.getCameraId());
+                if (camera!=null){
+                    cameraPlayer.play();
+                }
             }
         });
         initView();
+        play(0);
     }
 
     private void initView() {
@@ -147,6 +151,7 @@ public class IPCListActivity extends AppCompatActivity {
     }
 
     private void addCamera(String deviceId) {
+        if (deviceId ==null||deviceId.equals("")) return;
         cameraManager.saveCamera(mrtech.smarthome.rpc.Models.Device
                 .newBuilder()
                 .setId(1)

@@ -123,7 +123,11 @@ public class IPCModels {
     }
 
     public interface IPCEventData {
-        IPCamera getCamera();
+        long getCameraId();
+    }
+
+    public interface IPCStateChanged extends IPCEventData{
+        IPCStatus getStatus();
     }
 
     public interface IPCVideoFrame extends IPCEventData {

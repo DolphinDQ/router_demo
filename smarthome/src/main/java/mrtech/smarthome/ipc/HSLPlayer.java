@@ -109,7 +109,8 @@ class HSLPlayer implements IPCPlayer {
         subscribeAudioHandler = mManager.createEventController().subscribeIPCAudioFrame(new Action1<IPCAudioFrame>() {
             @Override
             public void call(IPCAudioFrame ipcAudioFrame) {
-                if (playingCamera != null && ipcAudioFrame.getCamera().equals(playingCamera) && getAudioSwitch()) {
+                final IPCamera camera = mManager.getCamera(ipcAudioFrame.getCameraId());
+                if (playingCamera != null &&camera!=null&& camera.equals(playingCamera) && getAudioSwitch()) {
                     CustomBufferHead head = new CustomBufferHead();
                     CustomBufferData data = new CustomBufferData();
                     head.length = ipcAudioFrame.getPcmSize();
@@ -238,32 +239,17 @@ class HSLPlayer implements IPCPlayer {
 
     @Override
     public Subscription subscribePlayingCameraChanged(Action1<IPCamera> callback) {
-        return subjectPlayingCameraChanged.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCamera>>() {
-            @Override
-            public Observable<? extends IPCamera> call(Throwable throwable) {
-                return  PublishSubject.create();
-            }
-        }).subscribe(callback);
+        return subjectPlayingCameraChanged.subscribe(callback);
     }
 
     @Override
     public Subscription subscribeRenderAction(Action1<RenderContext> callback) {
-        return subjectRenderContext.onErrorResumeNext(new Func1<Throwable, Observable<? extends RenderContext>>() {
-            @Override
-            public Observable<? extends RenderContext> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        }).subscribe(callback);
+        return subjectRenderContext.subscribe(callback);
     }
 
     @Override
     public void takePicture(final Action1<PictureData> callback) {
-        subjectPicture.onErrorResumeNext(new Func1<Throwable, Observable<? extends PictureData>>() {
-            @Override
-            public Observable<? extends PictureData> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        }).first().subscribe(new Action1<PictureData>() {
+        subjectPicture.first().subscribe(new Action1<PictureData>() {
             @Override
             public void call(PictureData pictureData) {
                 callback.call(pictureData);

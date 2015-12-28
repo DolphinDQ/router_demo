@@ -175,7 +175,7 @@ public class RouterManager {
         if (all != null)
             while (all.hasNext()) {
                 final RouterConfig next = all.next();
-                trace("加载");
+                if (next != null)
                 addRouter(new Router(null, "路由器", next.getSn()));
             }
     }

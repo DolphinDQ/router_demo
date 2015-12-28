@@ -8,7 +8,7 @@ import mrtech.smarthome.ipc.IPCModels.*;
  * Created by sphynx on 2015/12/8.
  */
 public interface IPCEventController {
-    Subscription subscribeCameraStatus(Action1<IPCEventData> callback);
+    Subscription subscribeCameraStatus(Action1<IPCStateChanged> callback);
     Subscription subscribeIPCAudioFrame(Action1<IPCAudioFrame> callback);
     Subscription subscribeIPCVideoFrame(Action1<IPCVideoFrame> callback);
     Subscription subscribeGetParam(Action1<IPCGetParameter> callback);

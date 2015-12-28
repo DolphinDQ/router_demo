@@ -279,12 +279,7 @@ class RouterClient implements RouterSession {
 
     @Override
     public Subscription subscribeRouterStatusChanged(Action1<Router> callback) {
-        return subjectRouterStatusChanged.onErrorResumeNext(new Func1<Throwable, Observable<? extends Router>>() {
-            @Override
-            public Observable<? extends Router> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        }).subscribe(callback);
+        return subjectRouterStatusChanged.subscribe(callback);
     }
 
     private void setRouterStatus(RouterStatus routerStatus) {

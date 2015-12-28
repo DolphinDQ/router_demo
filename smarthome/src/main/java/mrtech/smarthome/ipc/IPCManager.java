@@ -16,7 +16,7 @@ public class IPCManager {
     private static IPCManager ourInstance = new IPCManager();
     private static boolean isInit;
     private final ArrayList<IPCamera> mCameras = new ArrayList<IPCamera>();
-    private static final HSLEventController hslEventController = new HSLEventController(ourInstance);
+    private static final HSLEventController hslEventController = new HSLEventController();
 
     private static void trace(String msg) {
         Log.e(IPCManager.class.getName(), msg);
@@ -107,10 +107,10 @@ public class IPCManager {
     }
 
     public IPCamera getCamera(long handle) {
-
         for (IPCamera cam : mCameras) {
-            if (cam.getIpcContext().getHandle() == handle)
+            if (cam.getIpcContext().getHandle() == handle) {
                 return cam;
+            }
         }
         return null;
     }

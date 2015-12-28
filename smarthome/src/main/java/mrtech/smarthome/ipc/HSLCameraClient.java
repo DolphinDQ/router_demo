@@ -4,10 +4,8 @@ import android.util.Log;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
 import mrtech.smarthome.ipc.IPCModels.*;
-import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -18,12 +16,15 @@ class HSLCameraClient implements IPCContext {
     private final IPCamera mIPCamera;
     private final IPCEventController mEventController;
     private Subscription mAlarmEventHandle;
+
+
     private PublishSubject<IPCContext> subjectReconnectionStatus = PublishSubject.create();
     private PublishSubject<IPCContext> subjectPlayStatus = PublishSubject.create();
     public long mHandle;
-    private int statusCode;
+    private IPCStatus statusCode;
     private boolean isPlaying;
     private boolean reconnecting;
+
 
     private static void trace(String msg) {
         Log.e(HSLCameraClient.class.getName(), msg);
@@ -50,43 +51,62 @@ class HSLCameraClient implements IPCContext {
     }
 
     private void setAutoReconnect() {
-        mAlarmEventHandle = mEventController.subscribeCameraStatus(new Action1<IPCEventData>() {
+        mAlarmEventHandle = mEventController.subscribeCameraStatus(new Action1<IPCStateChanged>() {
             @Override
-            public void call(IPCEventData ipcEventData) {
-                if (ipcEventData.equals(mIPCamera)) {
-                    reconnect(getReconnectTime(getStatus()));
+            public void call(IPCStateChanged ipcStateChanged) {
+                final IPCamera camera = mManager.getCamera(ipcStateChanged.getCameraId());
+                if (camera != null) {
+                    trace("camera " + mIPCamera + " state code changed to " + ipcStateChanged.getStatus());
+                    statusCode = ipcStateChanged.getStatus();
+                    if (statusCode != IPCStatus.CONNECTED) {
+                        setIsPlaying(false);
+                    }
+                    final int delay = getReconnectDelay(statusCode);
+                    if (delay > 0)
+                        reconnect(delay);
                 }
             }
         });
     }
 
-    public void reconnect(final int delay) {
-        synchronized (HSLCameraClient.this) {
-            if (delay > 0) {
-                setReconnecting(true);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        disconnect();
-                        try {
-                            Thread.sleep(delay);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } finally {
-                        }
-                        connect();
-                        setReconnecting(false);
+    /**
+     * 摄像头重连。
+     * @param delay delay 大于0则根据delay毫秒数设置重连时间，小于零则不重连。
+     */
+    public synchronized void reconnect(final int delay) {
+        if (delay > 0) {
+            setReconnecting(true);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    disconnect();
+                    try {
+                        Thread.sleep(delay);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
                     }
-                }).start();
-            }
+                    connect();
+                    setReconnecting(false);
+                }
+            }).start();
         }
+    }
+
+    public rx.Observable<IPCContext> getObservableReconnectionStatus() {
+        return subjectReconnectionStatus;
     }
 
     public rx.Observable<IPCContext> getObservablePlayStatus() {
         return subjectPlayStatus;
     }
 
-    private int getReconnectTime(IPCStatus status) {
+    /**
+     * 获取指定状态摄像头重连时间。
+     * @param status
+     * @return 不重连返回-1.
+     */
+    private int getReconnectDelay(IPCStatus status) {
         if (status == IPCStatus.DEVICE_OFFLINE) return 10000;
         if (status == IPCStatus.CONNECT_ERROR) return 10000;
         if (status == IPCStatus.CONNECT_TIMEOUT) return 3000;
@@ -104,6 +124,7 @@ class HSLCameraClient implements IPCContext {
     }
 
     private void connect() {
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -129,47 +150,9 @@ class HSLCameraClient implements IPCContext {
         return mHandle;
     }
 
-    public void setStatusCode(int statusCode) {
-        final IPCStatus status = getStatus(statusCode);
-        if (status != IPCStatus.CONNECTED) {
-            setIsPlaying(false);
-        }
-        trace("camera " + mIPCamera + " state code changed to " + statusCode);
-        this.statusCode = statusCode;
-    }
-
     @Override
     public IPCStatus getStatus() {
-        return getStatus(statusCode);
-    }
-
-    private IPCStatus getStatus(int code) {
-        switch (code) {
-            case 0:
-                return IPCStatus.CONNECTING;
-            case 100:
-                return IPCStatus.CONNECTED;
-            case 102:
-                return IPCStatus.CONNECT_ERROR;
-            case 1:
-                return IPCStatus.ERROR_USER_PWD;
-            case 2:
-                return IPCStatus.ERROR_MAX_USER;
-            case 4:
-                return IPCStatus.ERROR_VIDEO_LOST;
-            case 5:
-                return IPCStatus.ERROR_INVALID_ID;
-            case 9:
-                return IPCStatus.DEVICE_OFFLINE;
-            case 10:
-                return IPCStatus.CONNECT_TIMEOUT;
-            case 11:
-                return IPCStatus.DISCONNECT;
-            case 12:
-                return IPCStatus.CHECK_ACCOUNT;
-            default:
-                return IPCStatus.UNKNOWN;
-        }
+        return statusCode;
     }
 
     @Override
@@ -199,22 +182,12 @@ class HSLCameraClient implements IPCContext {
 
     @Override
     public Subscription subscribePlayStatus(Action1<IPCContext> callback) {
-        return subjectPlayStatus.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCContext>>() {
-            @Override
-            public Observable<? extends IPCContext> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        }).subscribe(callback);
+        return getObservablePlayStatus().subscribe(callback);
     }
 
     @Override
     public Subscription subscribeReconnectionStatus(Action1<IPCContext> callback) {
-        return subjectReconnectionStatus.onErrorResumeNext(new Func1<Throwable, Observable<? extends IPCContext>>() {
-            @Override
-            public Observable<? extends IPCContext> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        }).subscribe(callback);
+        return getObservableReconnectionStatus().subscribe(callback);
     }
 
 }

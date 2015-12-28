@@ -18,6 +18,7 @@ import javax.net.ssl.SSLSocket;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
 import rx.Observable;
+import rx.Observer;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Action2;
@@ -35,22 +36,22 @@ class RouterCommunicationManager implements CommunicationManager {
 
     @Override
     protected void finalize() throws Throwable {
-        subscribeRouterStatusChanged.unsubscribe();
+        routerStatusChangedHandler.unsubscribe();
         super.finalize();
     }
 
-    private final Subscription subscribeRouterStatusChanged;
+    private final Subscription routerStatusChangedHandler;
     private final HashMap<Integer, Messages.Request> mSubscribeMap;
     private final ConcurrentHashMap<Messages.Request, Action1<Messages.Response>> mPostQueue;
     private final RouterClient mClient;
     private final RouterCacheProvider mRouterCacheProvider;
     private final PublishSubject<Messages.Callback> subjectCallback = PublishSubject.create();
-    private final rx.Observable<Messages.Response> subjectResponse;
+    private final PublishSubject<Messages.Response> subjectResponse = PublishSubject.create();
+    private final PublishSubject<Messages.Event> subjectEvent = PublishSubject.create();
     private final ArrayList<Messages.Event.EventType> mEventTypes;
     private final ConcurrentHashMap<Integer, Messages.Response> mResponseMap;
     private boolean destroyed;
     private SSLSocket socket;
-    private rx.Observable<Messages.Event> subjectEvent;
     private Thread mPostTask;
     private Thread mReadTask;
 
@@ -60,7 +61,7 @@ class RouterCommunicationManager implements CommunicationManager {
         mResponseMap = new ConcurrentHashMap<>();
         mEventTypes = new ArrayList<>();
         mSubscribeMap = new HashMap<>();
-        subjectResponse = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
+        getSubjectCallback().filter(new Func1<Messages.Callback, Boolean>() {
             @Override
             public Boolean call(Messages.Callback callback) {
                 return callback.getType() == Messages.Callback.CallbackType.RESPONSE;
@@ -70,13 +71,8 @@ class RouterCommunicationManager implements CommunicationManager {
             public Messages.Response call(Messages.Callback callback) {
                 return callback.getExtension(Messages.Response.callback);
             }
-        }).onErrorResumeNext(new Func1<Throwable, Observable<? extends Messages.Response>>() {
-            @Override
-            public Observable<? extends Messages.Response> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        });
-        subjectEvent = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
+        }).subscribe(subjectResponse);
+        getSubjectCallback().filter(new Func1<Messages.Callback, Boolean>() {
             @Override
             public Boolean call(Messages.Callback callback) {
                 return callback.getType() == Messages.Callback.CallbackType.EVENT;
@@ -86,13 +82,8 @@ class RouterCommunicationManager implements CommunicationManager {
             public Messages.Event call(Messages.Callback callback) {
                 return callback.getExtension(Messages.Event.callback);
             }
-        }).onErrorResumeNext(new Func1<Throwable, Observable<? extends Messages.Event>>() {
-            @Override
-            public Observable<? extends Messages.Event> call(Throwable throwable) {
-                return PublishSubject.create();
-            }
-        });
-        subjectResponse.subscribe(new Action1<Messages.Response>() {
+        }).subscribe(subjectEvent);
+        getSubjectResponse().subscribe(new Action1<Messages.Response>() {
             @Override
             public void call(Messages.Response response) {
                 int requestId = response.getRequestId();
@@ -100,13 +91,34 @@ class RouterCommunicationManager implements CommunicationManager {
                     mResponseMap.put(requestId, response);
             }
         });
-        subscribeRouterStatusChanged = mClient.subscribeRouterStatusChanged(new Action1<Router>() {
+        routerStatusChangedHandler = mClient.subscribeRouterStatusChanged(new Action1<Router>() {
             @Override
             public void call(Router router) {
                 if (mClient.isAuthenticated()) postEvents();
             }
         });
         mRouterCacheProvider = new RouterCacheProvider(mClient.getRouter(), this);
+    }
+
+    public rx.Observable<Messages.Callback> getSubjectCallback() {
+        return subjectCallback;
+    }
+
+    public rx.Observable<Messages.Response> getSubjectResponse() {
+        return subjectResponse;
+    }
+
+    public rx.Observable<Messages.Event> getEventObservable(final Messages.Event.EventType eventType) {
+        return getEventObservable().filter(new Func1<Messages.Event, Boolean>() {
+            @Override
+            public Boolean call(Messages.Event event) {
+                return event.getType() == eventType;
+            }
+        });
+    }
+
+    public rx.Observable<Messages.Event> getEventObservable() {
+        return subjectEvent;
     }
 
     public void init(SSLSocket socket) {
@@ -145,19 +157,24 @@ class RouterCommunicationManager implements CommunicationManager {
                         return;
                     }
                 }
-                subjectResponse.timeout(timeout, TimeUnit.MILLISECONDS).doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        callback.call(null, throwable);
-                    }
-                }).first(new Func1<Messages.Response, Boolean>() {
+                getSubjectResponse().timeout(timeout, TimeUnit.MILLISECONDS).first(new Func1<Messages.Response, Boolean>() {
                     @Override
                     public Boolean call(Messages.Response resp) {
                         return resp.getRequestId() == request.getRequestId();
                     }
-                }).subscribe(new Action1<Messages.Response>() {
+                }).subscribe(new Observer<Messages.Response>() {
                     @Override
-                    public void call(Messages.Response response) {
+                    public void onCompleted() {
+                        // do nothing
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.call(null, e);
+                    }
+
+                    @Override
+                    public void onNext(Messages.Response response) {
                         callback.call(response, null);
                     }
                 });
@@ -168,7 +185,7 @@ class RouterCommunicationManager implements CommunicationManager {
                     OutputStream os = null;
                     try {
                         os = socket.getOutputStream();
-                        trace("ready post :" + request);
+                        trace(mClient + " post :" + request);
                         int requestLength = request.getSerializedSize();
                         byte heightLevelBit = (byte) ((requestLength & 0xff00) >> 8);
                         byte lowLevelBit = (byte) (requestLength & 0x00ff);
@@ -262,15 +279,9 @@ class RouterCommunicationManager implements CommunicationManager {
     @Override
     public void postRequestToQueue(Messages.Request request, Action1<Messages.Response> callback) {
         if (!mPostQueue.containsKey(request)) {
-            trace("put to queue:" + request);
             mPostQueue.put(request, callback);
         }
         flushRequestQueue();
-    }
-
-    public void flushRequestQueue() {
-        if (mPostTask != null)
-            mPostTask.interrupt();
     }
 
     @Override
@@ -307,7 +318,7 @@ class RouterCommunicationManager implements CommunicationManager {
 
     @Override
     public Subscription subscribeResponse(Action1<Messages.Response> callback) {
-        return subjectResponse.subscribe(callback);
+        return getSubjectResponse().subscribe(callback);
     }
 
     @Override
@@ -316,17 +327,9 @@ class RouterCommunicationManager implements CommunicationManager {
     }
 
 
-    private Observable<Messages.Event> getEventObservable(final Messages.Event.EventType eventType) {
-        return subjectEvent.filter(new Func1<Messages.Event, Boolean>() {
-            @Override
-            public Boolean call(Messages.Event event) {
-                return event.getType() == eventType;
-            }
-        });
-    }
-
-    public Observable<Messages.Event> getEventObservable() {
-        return subjectEvent;
+    public void flushRequestQueue() {
+        if (mPostTask != null)
+            mPostTask.interrupt();
     }
 
     public void destroy() {
@@ -359,11 +362,7 @@ class RouterCommunicationManager implements CommunicationManager {
         int received = 0;
         int read = in.read(prefix);
         if (prefix[0] == 0 && prefix[1] == 0) {
-            if (sslSocket.getSession().isValid()) {
-                trace("invalid package header..");
-                return null;
-            }
-            throw new IOException("invalid package header..");
+            throw new IOException("invalid package header.." + (read == -1 ? "the stream has been reached." : ""));
         } else {
             int length = ((prefix[0] & 0xff) << 8) + (prefix[1] & 0xff);
             received = 0;

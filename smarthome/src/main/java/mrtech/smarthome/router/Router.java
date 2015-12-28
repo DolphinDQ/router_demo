@@ -1,6 +1,8 @@
 package mrtech.smarthome.router;
 
 
+import android.util.Log;
+
 import com.orm.SugarRecord;
 
 import java.util.List;
@@ -90,7 +92,9 @@ public class Router {
         if (config == null) {
             config = new RouterConfig(SN);
         }
-        config.save();
+        long id = SugarRecord.save(config);
+        Log.d("idididi!!!!!","id:"+id);
+//        config.id = id;
     }
 
     @Override

@@ -15,11 +15,10 @@ class HSLCameraController implements IPCController {
     private static void trace(String msg, Throwable ex) {
         Log.d(IPCManager.class.getName(), msg, ex);
     }
+    private static final int PTZ_CMD_DELAY = 1000;
 
     private final IPCManager mManager;
-    private static final int PTZ_CMD_DELAY = 1000;
     private final IPCamera mCurrent;
-
     public HSLCameraController(IPCManager manager, IPCamera camera) {
         mCurrent = camera;
         mManager = manager;

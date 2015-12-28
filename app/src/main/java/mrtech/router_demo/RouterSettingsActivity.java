@@ -20,10 +20,17 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.IllegalFormatException;
+import java.util.concurrent.TimeUnit;
+
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
+import rx.Observable;
+import rx.Observer;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.subjects.PublishSubject;
 
 public class RouterSettingsActivity extends AppCompatActivity {
 
@@ -31,6 +38,7 @@ public class RouterSettingsActivity extends AppCompatActivity {
     private ArrayAdapter<Router> routerArrayAdapter;
     private RouterManager routerManager;
     private Subscription stateChangedHandle;
+    private PublishSubject<String> subject = PublishSubject.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

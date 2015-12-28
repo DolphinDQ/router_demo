@@ -44,7 +44,6 @@ public class IPCamera {
     }
 
     void setIpcContext(IPCContext ipcContext) {
-        if (ipcContext != null) return;
         this.ipcContext = ipcContext;
     }
 
