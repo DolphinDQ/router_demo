@@ -21,6 +21,6 @@
     </string>
     <string name="loading">加载中...</string>
     <string name="accept_finish">再按一下退出</string>
-    <string name="router_setting">路由器配置</string>
+    <string name="router_setting">路由器</string>
     <string name="router_status">路由器状态</string>
 </resources>

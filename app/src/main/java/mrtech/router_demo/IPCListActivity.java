@@ -3,7 +3,7 @@ package mrtech.router_demo;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Looper;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -12,9 +12,6 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import mrtech.smarthome.ipc.IPCController;
 import mrtech.smarthome.ipc.IPCManager;
@@ -26,15 +23,13 @@ import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 import rx.functions.Action1;
 
-public class IPCListActivity extends AppCompatActivity {
+public class IPCListActivity extends BaseActivity {
 
     private GLSurfaceView glSurfaceView;
     private IPCManager ipcManager;
     private int index;
-    private IPCamera[] cameraList;
     private IPCPlayer cameraPlayer;
     private TextView viewCamera;
-    private Router router;
     private Models.CameraManager cameraManager;
 
     private static void trace(String msg) {
@@ -45,26 +40,18 @@ public class IPCListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ipclist);
-        final Intent intent = getIntent();
-        final RouterManager routerManager = RouterManager.getInstance();
-        if (intent != null) {
-            router = routerManager.getRouter(intent.getAction());
-            if (router != null) {
-                cameraManager = router.getRouterSession().getCameraManager();
-                ipcManager = cameraManager.getIPCManager();
-            }
-        }
+        cameraManager = getDefaultData(Router.class).getRouterSession().getCameraManager();
+        ipcManager = cameraManager.getIPCManager();
         if (ipcManager == null) {
             Toast.makeText(IPCListActivity.this, "参数无效", Toast.LENGTH_SHORT).show();
             finish();
         }
-        cameraList = ipcManager.getCameraList();
         ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
             @Override
             public void call(IPCModels.IPCStateChanged ipcStateChanged) {
                 final IPCamera camera = ipcManager.getCamera(ipcStateChanged.getCameraId());
-                if (camera!=null){
-                    cameraPlayer.play();
+                if (camera != null) {
+                    play(0);
                 }
             }
         });
@@ -109,6 +96,22 @@ public class IPCListActivity extends AppCompatActivity {
                 cameraPlayer.stop();
             }
         });
+        ListeningClick(R.id.refresh_btn, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraManager.reloadIPCAsync(true, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        new Handler(getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(IPCListActivity.this, "刷新完毕..", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+            }
+        });
         viewCamera = (TextView) findViewById(R.id.cam_num_view);
         glSurfaceView = (GLSurfaceView) findViewById(R.id.view_gls);
         final GestureDetector gestureDetector = new GestureDetector(this, new PtzGestureListener());
@@ -142,72 +145,37 @@ public class IPCListActivity extends AppCompatActivity {
     }
 
     private void addCamera() {
-//        ipcManager.addCamera(new IPCamera(null, "HSL-118486-DLFHB", "admin", ""));
-//        cameraList = ipcManager.getCameraList();
-//        play(0);
-        IntentIntegrator integrator = new IntentIntegrator(IPCListActivity.this);
-        integrator.setCaptureActivity(RouterCaptureActivity.class);
-        integrator.initiateScan();
-    }
-
-    private void addCamera(String deviceId) {
-        if (deviceId ==null||deviceId.equals("")) return;
-        cameraManager.saveCamera(mrtech.smarthome.rpc.Models.Device
-                .newBuilder()
-                .setId(1)
-                .setAlias(deviceId)
-                .setType(mrtech.smarthome.rpc.Models.DeviceType.DEVICE_TYPE_CAMERA)
-                .setExtension(mrtech.smarthome.rpc.Models.CameraDevice.detail, mrtech.smarthome.rpc.Models.CameraDevice
-                        .newBuilder()
-                        .setId(1)
-                        .setDeviceid(deviceId)
-                        .setIpAddress("127.0.0.1")
-                        .setPort(0)
-                        .setDeviceName("cam")
-                        .setUser("admin")
-                        .setPassword("")
-                        .build())
-                .build(), new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-
-                if (throwable != null) {
-                    trace("添加摄像头出错！！" + throwable);
-                } else {
-                    new Handler(getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(IPCListActivity.this, "添加摄像头成功,正在刷新列表...", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    cameraManager.reloadIPCAsync(false, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            if (throwable != null) {
-                                trace("刷新摄像头列表出错！" + throwable);
-                            } else {
-                                Toast.makeText(IPCListActivity.this, "摄像头列表更新完毕！", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
-            }
-        });
+        startActivity(new Intent(this, SearchIPCActivity.class));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        final IntentResult code = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (code != null) {
-            addCamera(code.getContents());
-        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void deleteCamera() {
-        ipcManager.removeCamera("HSL-118486-DLFHB");
-        cameraList = ipcManager.getCameraList();
-        play(0);
+        final IPCamera playingCamera = cameraPlayer.getPlayingCamera();
+        if (playingCamera != null) {
+            cameraManager.deleteCamera(playingCamera, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    final String message;
+                    if (throwable != null) {
+                        throwable.printStackTrace();
+                        message = "删除摄像头失败." + throwable.getMessage();
+                    } else {
+                        message = "删除摄像头成功.";
+                        play(0);
+                    }
+                    new Handler(getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(IPCListActivity.this, message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private class PtzGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -247,23 +215,28 @@ public class IPCListActivity extends AppCompatActivity {
         findViewById(id).setOnClickListener(listener);
     }
 
-    private void play(int idx) {
-        IPCamera[] playingList = cameraPlayer.getPlayList();
-        int max = playingList.length;
-        if (max == 0) {
-            trace("play nothing!");
-            viewCamera.setText("nothing!");
-            return;
-        }
-        trace("play ...." + idx);
-        int i = index + idx;
-        if (i < 0) i = 0;
-        if (i >= max) i = max - 1;
-        index = i;
-        viewCamera.setText("playing :" + (i + 1) + "/" + max + "/" + cameraList.length);
-        if (playingList[i].equals(cameraPlayer.getPlayingCamera())) return;
-        cameraPlayer.play(playingList[i]);
-        ((Switch) findViewById(R.id.audio_switch)).setChecked(false);
+    private void play(final int idx) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                IPCamera[] playingList = cameraPlayer.getPlayList();
+                int max = playingList.length;
+                if (max == 0) {
+                    trace("play nothing!");
+                    viewCamera.setText("没有摄像头");
+                    return;
+                }
+                trace("play ...." + idx);
+                int i = index + idx;
+                if (i < 0) i = 0;
+                if (i >= max) i = max - 1;
+                index = i;
+                viewCamera.setText("已连接:"+ max+"/"+ipcManager.getCameraList().length +" 正在播放:" + (i + 1) + "/" + max);
+                if (playingList[i].equals(cameraPlayer.getPlayingCamera())) return;
+                cameraPlayer.play(playingList[i]);
+                ((Switch) findViewById(R.id.audio_switch)).setChecked(false);
+            }
+        });
     }
 
     @Override

@@ -31,7 +31,7 @@ import rx.subjects.PublishSubject;
  */
 class RouterCommunicationManager implements CommunicationManager {
     private static void trace(String msg) {
-        Log.e(RouterClient.class.getName(), msg);
+        Log.e(RouterCommunicationManager.class.getName(), msg);
     }
 
     @Override
@@ -325,7 +325,6 @@ class RouterCommunicationManager implements CommunicationManager {
     public void test() {
         postEvents();
     }
-
 
     public void flushRequestQueue() {
         if (mPostTask != null)

@@ -34,16 +34,22 @@
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <service
             android:name=".RouterQueryTimelineService"
             android:exported="false" />
-
-        <activity android:name=".IPCListActivity"
-            android:parentActivityName=".RouterSettingsActivity" >
+        <activity
+            android:name=".IPCListActivity"
+            android:parentActivityName=".RouterSettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RouterSettingsActivity" /></activity>
+                android:value=".RouterSettingsActivity" />
+        </activity>
+        <activity android:name=".SearchIPCActivity"
+            android:label="搜索摄像头"
+            android:parentActivityName=".IPCListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".IPCListActivity" /></activity>
     </application>
 
 </manifest>

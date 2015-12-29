@@ -32,8 +32,9 @@ class RouterCacheProvider {
 
                 final List<ResponseCache> responseCaches = SugarRecord.find(ResponseCache.class,
                         " type = ? and ROUTER_ID = ?", "" + typeValue, mRouter.getConfig().getId() + "");
-                trace("request type of " + Messages.Request.RequestType.valueOf(typeValue)  + " need to be cached ? " + responseCaches.size());
-                if (responseCaches.size() > 0) {
+                boolean isSave = responseCaches.size() > 0 && response.getErrorCode() == Messages.Response.ErrorCode.SUCCESS;
+                trace("request type of " + Messages.Request.RequestType.valueOf(typeValue) + " need to be cached ? " + isSave);
+                if (isSave) {
                     final ResponseCache cache = responseCaches.get(0);
                     if (cache != null) {
                         cache.data = response.toByteArray();
@@ -45,9 +46,9 @@ class RouterCacheProvider {
     }
 
     private ResponseCache getCache(Messages.Request.RequestType type) {
-        int typeValue=type.getNumber();
+        int typeValue = type.getNumber();
         final List<ResponseCache> caches = SugarRecord.find(ResponseCache.class,
-                "type = ? and ROUTER_ID = ?", typeValue+"", mRouter.getConfig().getId() + "");
+                "type = ? and ROUTER_ID = ?", typeValue + "", mRouter.getConfig().getId() + "");
         ResponseCache result = null;
         if (caches.size() > 0) {
             result = caches.get(0);
@@ -77,7 +78,7 @@ class RouterCacheProvider {
         public ResponseCache() {
         }
 
-        public ResponseCache(long routerId, int  type) {
+        public ResponseCache(long routerId, int type) {
             this.routerId = routerId;
             this.type = type;
         }

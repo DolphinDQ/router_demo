@@ -38,7 +38,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
     private ArrayAdapter<Router> routerArrayAdapter;
     private RouterManager routerManager;
     private Subscription stateChangedHandle;
-    private PublishSubject<String> subject = PublishSubject.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.router_settings, menu);
         return true;
     }
@@ -141,12 +139,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
 
     private void initView() {
         final ListView routerList = (ListView) findViewById(R.id.router_list);
-//        findViewById(R.id.post_btn).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                post();
-//            }
-//        });
         routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_list_item, routerManager.getRouterList()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -200,19 +192,4 @@ public class RouterSettingsActivity extends AppCompatActivity {
         routerManager.addRouter(new Router(null, "路由器", sn));
     }
 
-    private void post() {
-//        routerManager.getRouterList().get(0).getRouterSession().postRequestToQueue(RequestUtil.getSysConfig(), new Action1<Messages.Response>() {
-//            @Override
-//            public void call(final Messages.Response response) {
-//                new Handler(getMainLooper()).post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        final String deviceName = response.getExtension(Messages.GetSystemConfigurationResponse.response).getConfiguration().getDeviceName();
-//                        Toast.makeText(RouterSettingsActivity.this,deviceName, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        });
-//      routerManager.getRouterList().get(0).getRouterSession().alarmTest();
-    }
 }

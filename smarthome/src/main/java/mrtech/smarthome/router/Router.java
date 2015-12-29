@@ -92,9 +92,7 @@ public class Router {
         if (config == null) {
             config = new RouterConfig(SN);
         }
-        long id = SugarRecord.save(config);
-        Log.d("idididi!!!!!","id:"+id);
-//        config.id = id;
+        SugarRecord.save(config);
     }
 
     @Override

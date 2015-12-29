@@ -38,7 +38,7 @@ class HSLCameraClient implements IPCContext {
     }
 
     public void setIsPlaying(boolean isPlaying) {
-        if (isPlaying == this.isPlaying) {
+        if (isPlaying != this.isPlaying) {
             this.isPlaying = isPlaying;
             subjectPlayStatus.onNext(this);
         }
@@ -55,7 +55,7 @@ class HSLCameraClient implements IPCContext {
             @Override
             public void call(IPCStateChanged ipcStateChanged) {
                 final IPCamera camera = mManager.getCamera(ipcStateChanged.getCameraId());
-                if (camera != null) {
+                if (camera != null && camera.equals(mIPCamera)) {
                     trace("camera " + mIPCamera + " state code changed to " + ipcStateChanged.getStatus());
                     statusCode = ipcStateChanged.getStatus();
                     if (statusCode != IPCStatus.CONNECTED) {
@@ -71,6 +71,7 @@ class HSLCameraClient implements IPCContext {
 
     /**
      * 摄像头重连。
+     *
      * @param delay delay 大于0则根据delay毫秒数设置重连时间，小于零则不重连。
      */
     public synchronized void reconnect(final int delay) {
@@ -103,6 +104,7 @@ class HSLCameraClient implements IPCContext {
 
     /**
      * 获取指定状态摄像头重连时间。
+     *
      * @param status
      * @return 不重连返回-1.
      */
