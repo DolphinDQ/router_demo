@@ -38,6 +38,7 @@
             android:name=".RouterQueryTimelineService"
             android:exported="false" />
         <activity
+            android:label="摄像头列表"
             android:name=".IPCListActivity"
             android:parentActivityName=".RouterSettingsActivity">
             <meta-data

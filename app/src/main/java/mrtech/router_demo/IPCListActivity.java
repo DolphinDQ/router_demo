@@ -2,9 +2,9 @@ package mrtech.router_demo;
 
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -18,9 +18,8 @@ import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.ipc.IPCModels;
 import mrtech.smarthome.ipc.IPCPlayer;
 import mrtech.smarthome.ipc.IPCamera;
-import mrtech.smarthome.router.Models;
+import mrtech.smarthome.router.Models.CameraManager;
 import mrtech.smarthome.router.Router;
-import mrtech.smarthome.router.RouterManager;
 import rx.functions.Action1;
 
 public class IPCListActivity extends BaseActivity {
@@ -30,7 +29,7 @@ public class IPCListActivity extends BaseActivity {
     private int index;
     private IPCPlayer cameraPlayer;
     private TextView viewCamera;
-    private Models.CameraManager cameraManager;
+    private CameraManager cameraManager;
 
     private static void trace(String msg) {
         Log.e(IPCListActivity.class.getName(), msg);

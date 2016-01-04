@@ -36,4 +36,7 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'com.google.protobuf:protobuf-java:2.6.1'
     compile 'com.github.satyan:sugar:1.4'
+    compile 'com.squareup.okhttp:okhttp:2.6.0'
+    compile 'com.google.code.gson:gson:2.5'
+
 }

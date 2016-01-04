@@ -8,7 +8,6 @@ import android.util.Log;
 
 import java.util.List;
 
-import mrtech.smarthome.router.Models;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Messages.ActivateSceneRequest;
 import mrtech.smarthome.rpc.Messages.ArmRequest;

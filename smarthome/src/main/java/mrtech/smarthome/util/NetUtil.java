@@ -32,8 +32,7 @@ import javax.net.ssl.X509TrustManager;
  * @version 1.0
  * @date 2015年4月9日 下午10:22:26
  */
-public class NetUtil {
-
+public final class NetUtil {
 
     public static SSLSocket createSocket(String ip, int port) throws Exception {
         SSLSocket s = null;
@@ -51,48 +50,48 @@ public class NetUtil {
         return s;
     }
 
-}
+    static class SmartHomeX509TrustManager implements X509TrustManager {
+        private final Set<TrustAnchor> anchors;
+        private X509Certificate cert;
 
-class SmartHomeX509TrustManager implements X509TrustManager {
-    private final Set<TrustAnchor> anchors;
-    private X509Certificate cert;
-
-    public SmartHomeX509TrustManager(X509Certificate[] trusted, X509Certificate cert) {
-        anchors = new HashSet<TrustAnchor>();
-        this.cert = cert;
-        if (anchors != null) {
-            for (X509Certificate certTemp : trusted) {
-                anchors.add(new TrustAnchor(certTemp, null));
+        public SmartHomeX509TrustManager(X509Certificate[] trusted, X509Certificate cert) {
+            anchors = new HashSet<TrustAnchor>();
+            this.cert = cert;
+            if (anchors != null) {
+                for (X509Certificate certTemp : trusted) {
+                    anchors.add(new TrustAnchor(certTemp, null));
+                }
             }
         }
-    }
 
-    @Override
-    public void checkClientTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException {
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType)
+                throws CertificateException {
 
-    }
+        }
 
-    @Override
-    public void checkServerTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException {
-        CertPathValidator certPathValidator = null;
-        PKIXParameters parameters = null;
-        CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-        CertPath path = certFactory.generateCertPath(Arrays.asList(chain));
-        try {
-            certPathValidator = CertPathValidator.getInstance("PKIX");
-            parameters = new PKIXParameters(anchors);
-            parameters.setRevocationEnabled(false);
-            certPathValidator.validate(path, parameters);
-        } catch (Exception e) {
-            e.printStackTrace();
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType)
+                throws CertificateException {
+            CertPathValidator certPathValidator = null;
+            PKIXParameters parameters = null;
+            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+            CertPath path = certFactory.generateCertPath(Arrays.asList(chain));
+            try {
+                certPathValidator = CertPathValidator.getInstance("PKIX");
+                parameters = new PKIXParameters(anchors);
+                parameters.setRevocationEnabled(false);
+                certPathValidator.validate(path, parameters);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[]
+                    {cert};
         }
     }
-
-    @Override
-    public X509Certificate[] getAcceptedIssuers() {
-        return new X509Certificate[]
-                {cert};
-    }
 }
+

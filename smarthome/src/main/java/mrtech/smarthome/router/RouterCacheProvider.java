@@ -8,6 +8,8 @@ import com.orm.dsl.Table;
 
 import java.util.List;
 
+import mrtech.smarthome.BuildConfig;
+import mrtech.smarthome.router.Models.CommunicationManager;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
 import rx.functions.Action1;
@@ -23,7 +25,7 @@ class RouterCacheProvider {
 
     private final Router mRouter;
 
-    public RouterCacheProvider(Router router, Models.CommunicationManager communicationManager) {
+    public RouterCacheProvider(Router router, CommunicationManager communicationManager) {
         mRouter = router;
         communicationManager.subscribeResponse(new Action1<Messages.Response>() {
             @Override

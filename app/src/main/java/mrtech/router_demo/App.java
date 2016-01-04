@@ -11,11 +11,16 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import mrtech.smarthome.auth.UserManager;
 import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.rpc.Models;
 import rx.Subscription;
@@ -82,11 +87,26 @@ public class App extends Application {
         MultiDex.install(this);
     }
 
+    public static class A<T> {
+        public String W;
+        public T[] E;
+    }
+
+    public static class HH {
+        public String HH;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+//        String json = "{\"W\":\"123\",\"E\":[{\"HH\":\"3333\"}]}";
+//        final A<HH> a = new Gson().fromJson(json, new TypeToken<A<HH>>(){}.getType());
+//        Log.e("ddd",a.E[0].HH);
+
+
         RouterManager.init(this);
-        startService( new Intent(getBaseContext(), RouterQueryTimelineService.class));
+        UserManager.getInstance().init(this);
+        startService(new Intent(getBaseContext(), RouterQueryTimelineService.class));
         if (alarmHandle != null) alarmHandle.unsubscribe();
         alarmHandle = RouterManager.getInstance().getEventManager().subscribeTimelineEvent(new Action1<mrtech.smarthome.router.Models.RouterCallback<Models.Timeline>>() {
             @Override
@@ -103,7 +123,7 @@ public class App extends Application {
                 }
             }
         });
-        RouterManager.getInstance().loadRouters();
+        RouterManager.getInstance().refreshRouters();
     }
 
     @Override

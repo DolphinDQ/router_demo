@@ -15,12 +15,10 @@ import javax.net.ssl.SSLSocket;
 
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.NetUtil;
-import mrtech.smarthome.util.NumberUtil;
+import mrtech.smarthome.util.CharUtil;
 import mrtech.smarthome.util.RequestUtil;
-import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -83,7 +81,7 @@ class RouterClient implements RouterSession {
             try {
                 setRouterStatus(RouterStatus.SN_DECODING);
                 trace("decoding sn:" + mSN);
-                final String code = NumberUtil.decodeQRCode(mSN);
+                final String code = CharUtil.decodeQRCode(mSN);
                 trace("decoded sn:" + mSN + " -> " + code);
                 final String[] strings = code.split("@");
                 if (strings.length == 2) {
