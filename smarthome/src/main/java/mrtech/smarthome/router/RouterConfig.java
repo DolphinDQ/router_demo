@@ -4,11 +4,13 @@ package mrtech.smarthome.router;
 import com.orm.SugarRecord;
 import com.orm.dsl.Table;
 
+import mrtech.smarthome.router.Models.DataEntityBase;
+
 /**
  * Created by sphynx on 2015/12/23.
  */
 @Table
-public class RouterConfig  extends Models.DataEntityBase{
+public class RouterConfig  extends DataEntityBase {
     public  RouterConfig(){}
     private String sn;
     private long lastUpdateTime;

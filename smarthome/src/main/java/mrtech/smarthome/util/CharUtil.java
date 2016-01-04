@@ -3,19 +3,33 @@
  */
 package mrtech.smarthome.util;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * @author CJ
  * @date 2015年7月17日 下午4:59:19
  * @version 1.0
  */
-public class NumberUtil
+public final class CharUtil
 {
 	private static String[] zArray = {"0", "00", "000", "0000", "00000", "000000", "0000000", "00000000"};
-	
+	private static final SecretKey secret=new SecretKeySpec("mrtech2010mrtech".getBytes(), "AES");
+
 	/**
 	 * 解码二维码内容。
 	 * @param encodeString
@@ -76,8 +90,7 @@ public class NumberUtil
 		}
 		return decodeBuffer.toString();
 	}
-	
-	
+
 	/**
 	 * 返回10进制数
 	 * @param input	需要转换的数据
@@ -108,5 +121,23 @@ public class NumberUtil
 		else
 			num = ch - '0';
 		return num;
+	}
+
+	public static byte[] encryptMsg(String message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidParameterSpecException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
+		/* Encrypt the message. */
+		Cipher cipher = null;
+		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, secret);
+		byte[] cipherText = cipher.doFinal(message.getBytes("UTF-8"));
+		return cipherText;
+	}
+
+	public static String decryptMsg(byte[] cipherText) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidParameterSpecException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+    	/* Decrypt the message, given derived encContentValues and initialization vector. */
+		Cipher cipher = null;
+		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		cipher.init(Cipher.DECRYPT_MODE, secret);
+		String decryptString = new String(cipher.doFinal(cipherText), "UTF-8");
+		return decryptString;
 	}
 }

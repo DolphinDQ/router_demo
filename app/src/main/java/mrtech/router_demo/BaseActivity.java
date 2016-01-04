@@ -6,11 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Hashtable;
 
-import mrtech.smarthome.ipc.IPCManager;
-import mrtech.smarthome.router.Models;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 

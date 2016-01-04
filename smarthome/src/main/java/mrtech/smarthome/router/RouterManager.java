@@ -20,21 +20,26 @@ import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.Constants;
 import mrtech.smarthome.router.Models.*;
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.subjects.PublishSubject;
 
 /**
  * router connection manager
  * Created by sphynx on 2015/12/1.
  */
 public class RouterManager {
-    public final static ExtensionRegistry registry = ExtensionRegistry.newInstance();
-    private static Map<Messages.Response.ErrorCode, String> errorMessageMap;
-    private final RouterEventManager mEventManager;
 
     private static void trace(String msg) {
         Log.e(RouterManager.class.getName(), msg);
     }
 
+    public final static ExtensionRegistry registry = ExtensionRegistry.newInstance();
+    private static Map<Messages.Response.ErrorCode, String> errorMessageMap;
+    private final RouterEventManager mEventManager;
+
     private static RouterManager ourInstance = new RouterManager();
+
 
     /**
      * 创建路由器管理单例对象。
@@ -44,6 +49,8 @@ public class RouterManager {
     public static RouterManager getInstance() {
         return ourInstance;
     }
+
+    private final PublishSubject<RouterCallback<Boolean>> subjectRouterCreate = PublishSubject.create();
 
     private static int mP2PHandle;
 
@@ -170,13 +177,16 @@ public class RouterManager {
         }
     }
 
-    public void loadRouters() {
+    /**
+     * 刷新路由器列表，在本地缓存重新加载路由器列表。
+     */
+    public void refreshRouters() {
         final Iterator<RouterConfig> all = SugarRecord.findAll(RouterConfig.class);
         if (all != null)
             while (all.hasNext()) {
                 final RouterConfig next = all.next();
                 if (next != null)
-                addRouter(new Router(null, "路由器", next.getSn()));
+                    addRouter(new Router(null, "路由器", next.getSn()));
             }
     }
 
@@ -192,6 +202,18 @@ public class RouterManager {
         innerRouter.init();
         mRouters.add(router);
         mEventManager.setRouterEvent(innerRouter);
+        router.loadConfig();
+        subjectRouterCreate.onNext(new RouterCallback<Boolean>() {
+            @Override
+            public Router getRouter() {
+                return router;
+            }
+
+            @Override
+            public Boolean getData() {
+                return true;
+            }
+        });
         trace("add router :" + router.getSN());
     }
 
@@ -204,12 +226,23 @@ public class RouterManager {
         removeRouter(router, false);
     }
 
-    public void removeRouter(Router router, boolean removeCache) {
+    public void removeRouter(final Router router, boolean removeCache) {
         if (router == null) return;
         if (mRouters.remove(router)) {
             ((RouterClient) router.getRouterSession()).destroy();
             if (removeCache) {
                 SugarRecord.deleteAll(RouterConfig.class, "sn = ?", new String(router.getConfig().getSn()));
+                subjectRouterCreate.onNext(new RouterCallback<Boolean>() {
+                    @Override
+                    public Router getRouter() {
+                        return router;
+                    }
+
+                    @Override
+                    public Boolean getData() {
+                        return false;
+                    }
+                });
             }
         }
     }
@@ -272,4 +305,8 @@ public class RouterManager {
         return mEventManager;
     }
 
+
+    public Subscription subscribeRouterCreateEvent(Action1<RouterCallback<Boolean>> callback){
+        return subjectRouterCreate.subscribe(callback);
+    }
 }
