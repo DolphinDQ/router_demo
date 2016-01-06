@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 import android.util.Base64;
 import android.util.Log;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -27,6 +27,7 @@ import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.util.CharUtil;
 import mrtech.smarthome.util.Constants;
+import mrtech.smarthome.util.ReflectionUtil;
 import rx.functions.Action1;
 import rx.functions.Action2;
 
@@ -119,7 +120,7 @@ public class UserManager {
     private void removeRouter(int id, final Action1<Throwable> callback) {
         try {
             executeApiRequest(new TypeToken<ApiCallback<Integer>>() {
-                    }.getType(), createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_DELETE + id)
+                              }, createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_DELETE + id)
                             .delete().build(),
                     new Action1<ApiCallback<Integer>>() {
                         @Override
@@ -144,7 +145,7 @@ public class UserManager {
             final RouterCloudData data = new RouterCloudData(router.getName(), router.getSN());
             if (router.getSource() != null) {
                 executeApiRequest(new TypeToken<ApiCallback<Object>>() {
-                        }.getType(), createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_PUT + router.getSource())
+                                  }, createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_PUT + router.getSource())
                                 .put(RequestBody.create(MEDIA_TYPE_JSON, GSON.toJson(data))).build(),
                         new Action1<ApiCallback<Object>>() {
                             @Override
@@ -160,7 +161,7 @@ public class UserManager {
                         });
             } else {
                 executeApiRequest(new TypeToken<ApiCallback<Integer>>() {
-                        }.getType(), createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_POST)
+                                  }, createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_POST)
                                 .post(RequestBody.create(MEDIA_TYPE_JSON, GSON.toJson(data))).build(),
                         new Action1<ApiCallback<Integer>>() {
                             @Override
@@ -225,6 +226,7 @@ public class UserManager {
                     config.setToken(accessToken);
                     config.setLoginTime(System.currentTimeMillis());
                     saveConfig();
+                    syncRouterList(null);
                 }
                 if (callback != null) {
                     callback.call(throwable);
@@ -234,20 +236,24 @@ public class UserManager {
     }
 
     private void clearLoginData() {
-        config.setToken(null);
-        config.setPassword(null);
-        saveConfig();
+//        config.setToken(null);
+//        config.setPassword(null);
+//        saveConfig();
     }
 
     /**
      * 执行API请求方法。实现自动重新登录功能。（如果已经缓存账户密码：config.getAutoLogin()==true）
      *
-     * @param type
-     * @param request
-     * @param callback
-     * @param <T>
+     * @param callbackType 回调类型类。
+     * @param request      API请求，可以使用createApiRequestBuilder方法创建。
+     * @param callback     请求回调方法。
+     * @param <T>          回调数据类型。
      */
-    public <T> void executeApiRequest(final Type type, final Request request, final Action1<ApiCallback<T>> callback) {
+    public <T> void executeApiRequest(TypeToken<ApiCallback<T>> callbackType, Request request, Action1<ApiCallback<T>> callback) {
+        executeApiRequest(callbackType.getType(), request, callback);
+    }
+
+    private <T> void executeApiRequest(final Type type, final Request request, final Action1<ApiCallback<T>> callback) {
         executeRequest(type, request, new Action2<ApiCallback<T>, Throwable>() {
             @Override
             public void call(ApiCallback<T> httpCallback, final Throwable throwable) {
@@ -265,9 +271,25 @@ public class UserManager {
                             logon(user, password, new Action1<Throwable>() {
                                 @Override
                                 public void call(final Throwable throwable1) {
-                                    executeApiRequest(type, request, callback);
+                                    if (throwable1 != null) {
+                                        trace("重新登录失败...");
+                                        callback.call(new ApiCallback<T>() {
+                                            @Override
+                                            public boolean isError() {
+                                                return true;
+                                            }
+
+                                            @Override
+                                            public String getMessage() {
+                                                return throwable1.getMessage();
+                                            }
+                                        });
+                                    } else {
+                                        executeApiRequest(type, request, callback);
+                                    }
                                 }
                             });
+                            return;
                         } else {
                             message = "未登录";
                         }
@@ -289,7 +311,16 @@ public class UserManager {
         });
     }
 
-    public <T> void executeRequest(final Type type, final Request request, final Action2<T, Throwable> callback) {
+    /**
+     * 发送指定请求。并且回调指定结构的数据。
+     *
+     * @param callbackType 回调结构的类型。
+     * @param request      HTTP请求。
+     * @param callback
+     * @param <T>
+     */
+    @SuppressWarnings("unchecked")
+    public <T> void executeRequest(final Type callbackType, final Request request, final Action2<T, Throwable> callback) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -297,9 +328,9 @@ public class UserManager {
                     trace("http executing : " + request);
                     final Response response = httpclient.newCall(request).execute();
                     final String json = response.body().string();
-                    trace("http execute result : " + json);
+                    trace("http execute code : " + response.code() + " result : " + json);
                     if (callback != null) {
-                        callback.call((T) GSON.fromJson(json, type), null);
+                        callback.call((T) GSON.fromJson(json, callbackType), null);
                     }
                 } catch (final Exception e) {
                     e.printStackTrace();
@@ -311,24 +342,7 @@ public class UserManager {
     }
 
     public <T> void executeRequest(final Class<T> cls, final Request request, final Action2<T, Throwable> callback) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    trace("http executing : " + request);
-                    final Response response = httpclient.newCall(request).execute();
-                    final String json = response.body().string();
-                    trace("http execute result : " + json);
-                    if (callback != null) {
-                        callback.call(GSON.fromJson(json, cls), null);
-                    }
-                } catch (final Exception e) {
-                    e.printStackTrace();
-                    if (callback != null)
-                        callback.call(null, e);
-                }
-            }
-        }).start();
+        executeRequest((Type) cls, request, callback);
     }
 
     public void logoff(final Action1<Throwable> callback) {
@@ -358,7 +372,7 @@ public class UserManager {
      * 创建API访问构造器，注：需要登录后才能创建。
      *
      * @param url 接口url，参考Constants.ServerUrl类。
-     * @return
+     * @return API请求构造器。
      */
     public Request.Builder createApiRequestBuilder(String url) throws AuthenticatorException {
         final AccessToken token = config.getToken();
@@ -387,7 +401,7 @@ public class UserManager {
             final Request request = createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_QUERY_PAGING)
                     .post(RequestBody.create(MEDIA_TYPE_JSON, GSON.toJson(new PagingQuery(1, 100)))).build();
             executeApiRequest(new TypeToken<ApiCallback<PageResult<RouterCloudData>>>() {
-            }.getType(), request, new Action1<ApiCallback<PageResult<RouterCloudData>>>() {
+            }, request, new Action1<ApiCallback<PageResult<RouterCloudData>>>() {
                 @Override
                 public void call(ApiCallback<PageResult<RouterCloudData>> apiCallback) {
                     if (apiCallback.isError()) {

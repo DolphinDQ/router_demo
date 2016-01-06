@@ -22,35 +22,59 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".RouterSettingsActivity"
-            android:label="@string/router_setting">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/router_setting"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".RouterCaptureActivity"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
         <service
             android:name=".RouterQueryTimelineService"
             android:exported="false" />
+
         <activity
-            android:label="摄像头列表"
             android:name=".IPCListActivity"
+            android:label="摄像头列表"
             android:parentActivityName=".RouterSettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RouterSettingsActivity" />
         </activity>
-        <activity android:name=".SearchIPCActivity"
+
+        <activity
+            android:name=".SearchIPCActivity"
             android:label="搜索摄像头"
             android:parentActivityName=".IPCListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".IPCListActivity" /></activity>
+                android:value=".IPCListActivity" />
+        </activity>
+
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

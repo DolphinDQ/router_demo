@@ -23,4 +23,5 @@
     <string name="accept_finish">再按一下退出</string>
     <string name="router_setting">路由器</string>
     <string name="router_status">路由器状态</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

@@ -11,13 +11,9 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import mrtech.smarthome.auth.UserManager;
