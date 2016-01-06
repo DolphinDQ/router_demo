@@ -27,9 +27,10 @@ import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.util.CharUtil;
 import mrtech.smarthome.util.Constants;
-import mrtech.smarthome.util.ReflectionUtil;
+import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Action2;
+import rx.subjects.BehaviorSubject;
 
 /**
  * 用户管理器。管理用户登录信息。
@@ -49,6 +50,10 @@ public class UserManager {
     private static final String UNAUTHORIZED_MARK = "Unauthorized";
     private static final String CONFIG_FILE = "USER_CONFIG";
     private static final String AUTH_CONFIG = "auth_key";
+    private static final String ROUTER_SOURCE = " ROUTER_USER_MANAGER_SOURCE";
+
+    private BehaviorSubject<AuthConfig> subjectConfigChanged = BehaviorSubject.create();
+
     private static UserManager ourInstance = new UserManager();
 
     private static String getLogonUrl() {
@@ -81,10 +86,20 @@ public class UserManager {
         return ourInstance;
     }
 
+    /**
+     * 获取当期模块是否登录。
+     *
+     * @return
+     */
     public boolean isLogin() {
         return config.getToken() != null && System.currentTimeMillis() < (config.getLoginTime() + config.getToken().getExpiresIn() * 1000);
     }
 
+    /**
+     * 获取配置文件。
+     *
+     * @return 配置文件对象
+     */
     public AuthConfig getConfig() {
         return config;
     }
@@ -108,7 +123,7 @@ public class UserManager {
                 if (booleanRouterCallback.getData()) {
                     uploadRouter(booleanRouterCallback.getRouter(), null);
                 } else {
-                    final Object source = booleanRouterCallback.getRouter().getSource();
+                    final Object source = booleanRouterCallback.getRouter().getSource(ROUTER_SOURCE);
                     if (source != null) {
                         removeRouter((Integer) source, null);
                     }
@@ -142,10 +157,10 @@ public class UserManager {
 
     public void uploadRouter(final Router router, final Action1<Throwable> callback) {
         try {
-            final RouterCloudData data = new RouterCloudData(router.getName(), router.getSN());
-            if (router.getSource() != null) {
+            final RouterCloudData data = new RouterCloudData(router.getName(), router.getSn());
+            if (router.getSource(ROUTER_SOURCE) != null) {
                 executeApiRequest(new TypeToken<ApiCallback<Object>>() {
-                                  }, createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_PUT + router.getSource())
+                                  }, createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_PUT + router.getSource(ROUTER_SOURCE))
                                 .put(RequestBody.create(MEDIA_TYPE_JSON, GSON.toJson(data))).build(),
                         new Action1<ApiCallback<Object>>() {
                             @Override
@@ -171,7 +186,7 @@ public class UserManager {
                                     if (callback != null)
                                         callback.call(new Exception(apiCallback.getMessage()));
                                 } else {
-                                    router.setSource(apiCallback.getData());
+                                    router.setSource(ROUTER_SOURCE, apiCallback.getData());
                                     if (callback != null) callback.call(null);
                                 }
                             }
@@ -191,6 +206,7 @@ public class UserManager {
         } else {
             try {
                 config = GSON.fromJson(CharUtil.decryptMsg(Base64.decode(configString, Base64.DEFAULT)), AuthConfig.class);
+                subjectConfigChanged.onNext(config);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -210,6 +226,7 @@ public class UserManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        subjectConfigChanged.onNext(config);
     }
 
     public void logon(final String account, final String password, final Action1<Throwable> callback) {
@@ -226,7 +243,7 @@ public class UserManager {
                     config.setToken(accessToken);
                     config.setLoginTime(System.currentTimeMillis());
                     saveConfig();
-                    syncRouterList(null);
+//                    syncRouterList(null);
                 }
                 if (callback != null) {
                     callback.call(throwable);
@@ -236,9 +253,9 @@ public class UserManager {
     }
 
     private void clearLoginData() {
-//        config.setToken(null);
-//        config.setPassword(null);
-//        saveConfig();
+        config.setToken(null);
+        config.setPassword(null);
+        saveConfig();
     }
 
     /**
@@ -316,8 +333,8 @@ public class UserManager {
      *
      * @param callbackType 回调结构的类型。
      * @param request      HTTP请求。
-     * @param callback
-     * @param <T>
+     * @param callback     请求回调方法。
+     * @param <T>          回调结构类型。
      */
     @SuppressWarnings("unchecked")
     public <T> void executeRequest(final Type callbackType, final Request request, final Action2<T, Throwable> callback) {
@@ -341,10 +358,21 @@ public class UserManager {
         }).start();
     }
 
+    /**
+     * @param cls      回调结构的类型。
+     * @param request  HTTP请求。
+     * @param callback 请求回调方法。
+     * @param <T>      回调结构类型。
+     */
     public <T> void executeRequest(final Class<T> cls, final Request request, final Action2<T, Throwable> callback) {
         executeRequest((Type) cls, request, callback);
     }
 
+    /**
+     * 登出。
+     *
+     * @param callback 回调为null表示操作成功。
+     */
     public void logoff(final Action1<Throwable> callback) {
         final AccessToken token = config.getToken();
         if (token == null) {
@@ -412,12 +440,12 @@ public class UserManager {
                         final RouterCloudData[] result = apiCallback.getData().getResult();
                         if (result != null) {
                             for (RouterCloudData routerCloudData : result) {
-                                final Router router = mRouterManager.getRouter(routerCloudData.getConnectionKey());
-                                if (router != null) {
-                                    router.setSource(routerCloudData.getID());
-                                } else {
-                                    mRouterManager.addRouter(new Router(routerCloudData.getID(), routerCloudData.getName(), routerCloudData.getConnectionKey()));
+                                Router router = mRouterManager.getRouter(routerCloudData.getConnectionKey());
+                                if (router == null) {
+                                    router = new Router(routerCloudData.getName(), routerCloudData.getConnectionKey());
+                                    mRouterManager.addRouter(router);
                                 }
+                                router.setSource(ROUTER_SOURCE, routerCloudData.getID());
                             }
                         }
                         trace("开始上传...");
@@ -432,9 +460,14 @@ public class UserManager {
         }
     }
 
+    /**
+     * 尝试上传本地路由器信息。
+     *
+     * @param callback 回调null为成功。
+     */
     public void tryUploadRouterList(final Action1<Throwable> callback) {
         for (Router router : mRouterManager.getRouterList()) {
-            if (router.getSource() == null) {
+            if (router.getSource(ROUTER_SOURCE) == null) {
                 uploadRouter(router, callback);
             }
         }
@@ -443,4 +476,13 @@ public class UserManager {
         }
     }
 
+    /**
+     * 订阅配置文件变化事件。
+     *
+     * @param callback
+     * @return
+     */
+    public Subscription subscribeConfigChanged(Action1<AuthConfig> callback) {
+        return subjectConfigChanged.subscribe(callback);
+    }
 }

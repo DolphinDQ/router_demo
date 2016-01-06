@@ -40,29 +40,10 @@ public class RouterSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_router_settings);
         routerManager = RouterManager.getInstance();
-        userManager = UserManager.getInstance();
         if (stateChangedHandle == null)
             stateChangedHandle = routerManager.getEventManager().subscribeRouterStatusChangedEvent(new Action1<Router>() {
                 @Override
                 public void call(final Router router) {
-                    if (router.getRouterSession().isAuthenticated()) {
-                        router.getRouterSession().getCameraManager().reloadIPCAsync(false, new Action1<Throwable>() {
-                            @Override
-                            public void call(final Throwable throwable) {
-                                new Handler(getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (throwable != null) {
-                                            throwable.printStackTrace();
-                                            Toast.makeText(RouterSettingsActivity.this, router.getName() + "加载摄像头失败。" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(RouterSettingsActivity.this, router.getName() + "加载摄像头完毕。", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                    }
                     new Handler(getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
@@ -104,10 +85,9 @@ public class RouterSettingsActivity extends AppCompatActivity {
     @Override
     public boolean isDestroyed() {
         stateChangedHandle.unsubscribe();
+        stateChangedHandle = null;
         return super.isDestroyed();
     }
-
-
 
     private void initView() {
         final ListView routerList = (ListView) findViewById(R.id.router_list);
@@ -121,14 +101,7 @@ public class RouterSettingsActivity extends AppCompatActivity {
                 final Router router = getItem(position);
                 ((TextView) convertView.findViewById(R.id.router_name)).setText(router.getName());
                 ((TextView) convertView.findViewById(R.id.router_state)).setText(router.getRouterSession().getRouterStatus().toString());
-                convertView.findViewById(R.id.camera_btn).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final Intent intent = new Intent(RouterSettingsActivity.this, IPCListActivity.class);
-                        intent.setAction(router.getSN());
-                        startActivity(intent);
-                    }
-                });
+                convertView.findViewById(R.id.camera_btn).setVisibility(View.GONE);
                 convertView.findViewById(R.id.delete_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -139,64 +112,66 @@ public class RouterSettingsActivity extends AppCompatActivity {
             }
         };
         routerList.setAdapter(routerArrayAdapter);
-        findViewById(R.id.post_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!userManager.isLogin()) {
-                    userManager.logon("229860255@qq.com", "123456", new Action1<Throwable>() {
-                        @Override
-                        public void call(final Throwable throwable) {
-                            new Handler(getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(RouterSettingsActivity.this, ( throwable == null) ? "登陆成功！" : throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    userManager.logoff(new Action1<Throwable>() {
-                        @Override
-                        public void call(final Throwable throwable) {
-                            new Handler(getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(RouterSettingsActivity.this, ( throwable != null) ? throwable.getMessage() : "登出成功！", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                }
-
-            }
-        });
-        findViewById(R.id.get_data_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    final Request.Builder builder = userManager.createApiRequestBuilder(Constants.ServerUrl.USER_GET_SELF);
-                    userManager.executeApiRequest(new TypeToken<ApiCallback<Object>>() {
-                    }, builder.build(), new Action1<ApiCallback<Object>>() {
-                        @Override
-                        public void call(final ApiCallback<Object> apiCallback) {
-                            new Handler(getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(RouterSettingsActivity.this, apiCallback.getMessage() + apiCallback.getData(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                } catch (AuthenticatorException e) {
-                    Toast.makeText(RouterSettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        findViewById(R.id.post_btn).setVisibility(View.GONE);
+//        //.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!userManager.isLogin()) {
+//                    userManager.logon("229860255@qq.com", "123456", new Action1<Throwable>() {
+//                        @Override
+//                        public void call(final Throwable throwable) {
+//                            new Handler(getMainLooper()).post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    Toast.makeText(RouterSettingsActivity.this, ( throwable == null) ? "登陆成功！" : throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    });
+//                } else {
+//                    userManager.logoff(new Action1<Throwable>() {
+//                        @Override
+//                        public void call(final Throwable throwable) {
+//                            new Handler(getMainLooper()).post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    Toast.makeText(RouterSettingsActivity.this, ( throwable != null) ? throwable.getMessage() : "登出成功！", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    });
+//                }
+//
+//            }
+//        });
+        findViewById(R.id.get_data_btn).setVisibility(View.GONE);
+//                .setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    final Request.Builder builder = userManager.createApiRequestBuilder(Constants.ServerUrl.USER_GET_SELF);
+//                    userManager.executeApiRequest(new TypeToken<ApiCallback<Object>>() {
+//                    }, builder.build(), new Action1<ApiCallback<Object>>() {
+//                        @Override
+//                        public void call(final ApiCallback<Object> apiCallback) {
+//                            new Handler(getMainLooper()).post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    Toast.makeText(RouterSettingsActivity.this, apiCallback.getMessage() + apiCallback.getData(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    });
+//                } catch (AuthenticatorException e) {
+//                    Toast.makeText(RouterSettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
     }
 
     private void addRouter(String sn) {
-        routerManager.addRouter(new Router(null, "路由器", sn));
+        routerManager.addRouter(new Router("路由器", sn));
     }
 
 }

@@ -1,23 +1,21 @@
 package mrtech.smarthome.router;
 
 
-import android.util.Log;
-
 import com.orm.SugarRecord;
 
+import java.util.HashMap;
 import java.util.List;
 
 import mrtech.smarthome.router.Models.*;
-import mrtech.smarthome.rpc.Messages;
 
 /**
  * router model object
  * Created by sphynx on 2015/12/1.
  */
 public class Router {
-    private final String SN;
-    private final String Name;
-    private Object Source;
+    private final String sn;
+    private final String name;
+    private HashMap<String,Object> userData =new HashMap<>();
     private RouterConfig config;
     private RouterSession routerSession;
 
@@ -35,10 +33,9 @@ public class Router {
      * @param source source data
      * @param sn     router serial number
      */
-    public Router(Object source, String name, String sn) {
-        SN = sn;
-        Source = source;
-        Name = name;
+    public Router(String name, String sn) {
+        this.sn = sn;
+        this.name = name;
 
     }
 
@@ -47,8 +44,8 @@ public class Router {
      *
      * @return sn
      */
-    public String getSN() {
-        return SN;
+    public String getSn() {
+        return sn;
     }
 
     public String getName() {
@@ -58,7 +55,7 @@ public class Router {
             if (routerConfiguration != null)
                 return routerConfiguration.getDeviceName();
         }
-        return Name;
+        return name;
     }
 
     /**
@@ -66,12 +63,21 @@ public class Router {
      *
      * @return data
      */
-    public Object getSource() {
-        return Source;
+    public Object getSource(String key) {
+        return  userData.get(key);
     }
 
-    public void setSource(Object source) {
-        Source = source;
+    @SuppressWarnings("unchecked")
+    public <T> T getSource(Class<T> cls){
+        return (T)getSource(cls.getName());
+    }
+
+    public <T> void setSource(Class<T> cls,T source){
+        setSource(cls.getName(),source);
+    }
+
+    public void setSource(String key, Object source) {
+        userData.put(key,source);
     }
 
     public RouterConfig getConfig() {
@@ -80,7 +86,7 @@ public class Router {
     }
 
     public void loadConfig() {
-        final List<RouterConfig> routerConfigs = SugarRecord.find(RouterConfig.class, "sn = ?", SN);
+        final List<RouterConfig> routerConfigs = SugarRecord.find(RouterConfig.class, "sn = ?", sn);
         if (routerConfigs.size() == 0) {
             saveConfig();
         } else {
@@ -90,13 +96,13 @@ public class Router {
 
     public void saveConfig() {
         if (config == null) {
-            config = new RouterConfig(SN);
+            config = new RouterConfig(sn);
         }
         SugarRecord.save(config);
     }
 
     @Override
     public String toString() {
-        return "Router:" + SN;
+        return "Router:" + sn;
     }
 }

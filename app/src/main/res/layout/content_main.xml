@@ -12,4 +12,22 @@
     tools:context="mrtech.router_demo.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="视频"
+        android:id="@+id/camera_btn"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="配置"
+        android:id="@+id/button2"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/camera_btn"
+        android:layout_toEndOf="@+id/camera_btn" />
 </RelativeLayout>

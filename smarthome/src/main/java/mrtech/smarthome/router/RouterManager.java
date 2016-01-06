@@ -180,13 +180,13 @@ public class RouterManager {
     /**
      * 刷新路由器列表，在本地缓存重新加载路由器列表。
      */
-    public void refreshRouters() {
+    public void loadRouters() {
         final Iterator<RouterConfig> all = SugarRecord.findAll(RouterConfig.class);
         if (all != null)
             while (all.hasNext()) {
                 final RouterConfig next = all.next();
                 if (next != null)
-                    addRouter(new Router(null, "路由器", next.getSn()));
+                    addRouter(new Router( "路由器", next.getSn()));
             }
     }
 
@@ -196,7 +196,7 @@ public class RouterManager {
      * @param router 路由器对象。
      */
     public void addRouter(final Router router) {
-        if (router == null || router.getSN() == null || getRouter(router.getSN()) != null) return;
+        if (router == null || router.getSn() == null || getRouter(router.getSn()) != null) return;
         final RouterClient innerRouter = new RouterClient(router, mP2PHandle);
         router.setRouterSession(innerRouter);
         innerRouter.init();
@@ -214,7 +214,7 @@ public class RouterManager {
                 return true;
             }
         });
-        trace("add router :" + router.getSN());
+        trace("add router :" + router.getSn());
     }
 
     /**
@@ -255,7 +255,7 @@ public class RouterManager {
      */
     public Router getRouter(String sn) {
         for (Router mRouter : mRouters) {
-            if (mRouter.getSN().equals(sn))
+            if (mRouter.getSn().equals(sn))
                 return mRouter;
         }
         return null;
@@ -290,8 +290,8 @@ public class RouterManager {
      * 清除当期添加的所有路由器。
      */
     public void removeAll(boolean removeCache) {
-        final Collection<Router> routerList = getRouterList();
-        for (Router router : routerList) {
+        final Router[] routers = getRouterList().toArray(new Router[getRouterList().size()]);
+        for (Router router : routers) {
             removeRouter(router);
         }
     }

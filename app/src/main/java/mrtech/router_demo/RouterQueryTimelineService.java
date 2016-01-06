@@ -31,18 +31,28 @@ public class RouterQueryTimelineService extends IntentService {
         Log.e(RouterQueryTimelineService.class.getName(), msg);
     }
 
+    private static boolean terminate;
+
+    public static void setTerminate(boolean terminate) {
+        RouterQueryTimelineService.terminate = terminate;
+    }
+
     public RouterQueryTimelineService() {
         super("RouterQueryTimelineService");
     }
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
+        if (terminate) {
+            return super.onStartCommand(intent, flags, startId);
+        } else {
+            return START_STICKY;
+        }
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        trace("处理服务事物。");
         do {
             try {
                 trace("还活着：" + RouterManager.getInstance().getRouterList(true).size() + "个路由器");
@@ -50,6 +60,6 @@ public class RouterQueryTimelineService extends IntentService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } while (true);
+        } while (!terminate);
     }
 }

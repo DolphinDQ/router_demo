@@ -28,7 +28,7 @@ public interface CameraManager {
 
     /**
      * 保存摄像头
-     * @param request
+     * @param exception
      */
     void saveCamera(Models.Device device,Action1<Throwable> exception );
 

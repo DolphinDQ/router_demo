@@ -7,9 +7,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.multidex.MultiDex;
+import android.text.method.Touch;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +20,7 @@ import org.json.JSONObject;
 import java.util.Date;
 
 import mrtech.smarthome.auth.UserManager;
+import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.rpc.Models;
 import rx.Subscription;
@@ -28,7 +32,6 @@ import rx.functions.Action1;
  */
 public class App extends Application {
     private static App instance;
-    private Subscription alarmHandle;
     private int id;
 
     public static App getInstance() {
@@ -43,6 +46,11 @@ public class App extends Application {
 
     private boolean notificationColdTime = false;
 
+    /**
+     * 推送路由器报警信息。
+     * @param mes
+     * @param time
+     */
     private void pushAlarmNotification(String mes, String time) {
         Notification notification = new Notification();
         notification.icon = R.drawable.ic_notifications_black_24dp;
@@ -80,31 +88,19 @@ public class App extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        //安装编译兼容模块。
         MultiDex.install(this);
-    }
-
-    public static class A<T> {
-        public String W;
-        public T[] E;
-    }
-
-    public static class HH {
-        public String HH;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-//        String json = "{\"W\":\"123\",\"E\":[{\"HH\":\"3333\"}]}";
-//        final A<HH> a = new Gson().fromJson(json, new TypeToken<A<HH>>(){}.getType());
-//        Log.e("ddd",a.E[0].HH);
-
-
         RouterManager.init(this);
         UserManager.getInstance().init(this);
         startService(new Intent(getBaseContext(), RouterQueryTimelineService.class));
-        if (alarmHandle != null) alarmHandle.unsubscribe();
-        alarmHandle = RouterManager.getInstance().getEventManager().subscribeTimelineEvent(new Action1<mrtech.smarthome.router.Models.RouterCallback<Models.Timeline>>() {
+        final RouterManager routerManager = RouterManager.getInstance();
+        //订阅路由器报警事件。
+        routerManager.getEventManager().subscribeTimelineEvent(new Action1<mrtech.smarthome.router.Models.RouterCallback<Models.Timeline>>() {
             @Override
             public void call(mrtech.smarthome.router.Models.RouterCallback<Models.Timeline> timelineRouterCallback) {
                 try {
@@ -113,18 +109,42 @@ public class App extends Application {
                         return;
                     JSONObject object = new JSONObject(timeline.getParameter());
                     final Object name = object.get("name");
-                    pushAlarmNotification(name + "报警", new Date(timeline.getTimestamp() * 1000).toString());
+                    pushAlarmNotification(name + "报警", new Date(timeline.getTimestamp() * 1000).toLocaleString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
-        RouterManager.getInstance().refreshRouters();
+        //路由器验证成功后自动加载摄像头。
+        routerManager.getEventManager().subscribeRouterStatusChangedEvent(new Action1<Router>() {
+            @Override
+            public void call(final Router router) {
+                if (router.getRouterSession().isAuthenticated()) {
+                    router.getRouterSession().getCameraManager().reloadIPCAsync(false, new Action1<Throwable>() {
+                        @Override
+                        public void call(final Throwable throwable) {
+                            new Handler(getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (throwable != null) {
+                                        throwable.printStackTrace();
+                                        Toast.makeText(App.this, router.getName() + "加载摄像头失败。" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(App.this, router.getName() + "加载摄像头完毕。", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+        //加载本地路由器。
+        routerManager.loadRouters();
     }
 
     @Override
     public void onTerminate() {
-        alarmHandle.unsubscribe();
         RouterManager.destroy();
         super.onTerminate();
     }

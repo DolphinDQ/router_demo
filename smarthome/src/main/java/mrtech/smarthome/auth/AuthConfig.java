@@ -19,7 +19,7 @@ public class AuthConfig {
         return user;
     }
 
-    public void setUser(String user) {
+    void setUser(String user) {
         this.user = user;
     }
 
@@ -27,7 +27,7 @@ public class AuthConfig {
         return password;
     }
 
-    public void setPassword(String password) {
+    void setPassword(String password) {
         this.password = password;
     }
 
@@ -35,7 +35,7 @@ public class AuthConfig {
         return token;
     }
 
-    public void setToken(AccessToken token) {
+    void setToken(AccessToken token) {
         this.token = token;
     }
 
@@ -55,6 +55,7 @@ public class AuthConfig {
      * 登录密码。
      */
     private String password;
+
     /**
      * 登录令牌。
      */

@@ -53,7 +53,7 @@ class RouterClient implements RouterSession {
     public RouterClient(Router router, int p2pHandle) {
         mContext = RouterClient.this;
         mManager = RouterManager.getInstance();
-        mSN = router.getSN();
+        mSN = router.getSn();
         mP2PHandle = p2pHandle;
         mRouter = router;
         mIPCManager = IPCManager.createNewManager();

@@ -41,10 +41,10 @@
         <activity
             android:name=".IPCListActivity"
             android:label="摄像头列表"
-            android:parentActivityName=".RouterSettingsActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RouterSettingsActivity" />
+                android:value=".MainActivity" />
         </activity>
 
         <activity

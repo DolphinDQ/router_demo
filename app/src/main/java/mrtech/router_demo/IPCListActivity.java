@@ -20,6 +20,7 @@ import mrtech.smarthome.ipc.IPCPlayer;
 import mrtech.smarthome.ipc.IPCamera;
 import mrtech.smarthome.router.Models.CameraManager;
 import mrtech.smarthome.router.Router;
+import rx.Subscription;
 import rx.functions.Action1;
 
 public class IPCListActivity extends BaseActivity {
@@ -30,6 +31,7 @@ public class IPCListActivity extends BaseActivity {
     private IPCPlayer cameraPlayer;
     private TextView viewCamera;
     private CameraManager cameraManager;
+    private Subscription subscriptionCameraStatusChanged;
 
     private static void trace(String msg) {
         Log.e(IPCListActivity.class.getName(), msg);
@@ -45,7 +47,7 @@ public class IPCListActivity extends BaseActivity {
             Toast.makeText(IPCListActivity.this, "参数无效", Toast.LENGTH_SHORT).show();
             finish();
         }
-        ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
+         subscriptionCameraStatusChanged = ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
             @Override
             public void call(IPCModels.IPCStateChanged ipcStateChanged) {
                 final IPCamera camera = ipcManager.getCamera(ipcStateChanged.getCameraId());
@@ -248,5 +250,11 @@ public class IPCListActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         cameraPlayer.stop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        subscriptionCameraStatusChanged.unsubscribe();
+        super.onDestroy();
     }
 }
