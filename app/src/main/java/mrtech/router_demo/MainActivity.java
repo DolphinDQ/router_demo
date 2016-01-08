@@ -25,8 +25,10 @@ import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import mrtech.models.RouterListItemData;
 import mrtech.smarthome.auth.AuthConfig;
@@ -51,8 +53,8 @@ public class MainActivity extends BaseActivity {
     private final HashMap<String, Subscription> mSubscriptions = new HashMap<>();
     private RouterManager mRouterManager;
     private Subscription cameraStatusChanged;
+    private Models.Device mIFDev;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         mContext = this;
         mUserManager = UserManager.getInstance();
@@ -75,32 +77,62 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        final View routerConfigBtn = findViewById(R.id.router_config_btn);
+        final Button routerConfigBtn = (Button) findViewById(R.id.router_config_btn);
         routerConfigBtn.setEnabled(router != null);
+        routerConfigBtn.setText("测试红外设备");
         routerConfigBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Messages.Request request = RequestUtil.getDevices(Models.DeviceQuery
-                        .newBuilder()
-                        .setPage(0)
-                        .setPageSize(10)
-                        .setType(Models.DeviceType.DEVICE_TYPE_ZIGBEE)
-                        .build());
-                currentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
-                    @Override
-                    public void call(final Messages.Response response, Throwable throwable) {
-                        new Handler(getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
+                if ( mIFDev != null) {
+                    final Models.InfraredOpCode infraredOpCode = mIFDev.getExtension(Models.InfraredDevice.detail).getOpcodesList().get(0);
+                    final Messages.Request request = RequestUtil
+                            .sendIrCommand(infraredOpCode.getDeviceId(), Models.InfraredCommand.newBuilder()
+                                    .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(infraredOpCode.getId())).build());
+                    currentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
+                        @Override
+                        public void call(Messages.Response response, final Throwable throwable) {
+                            new Handler(getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (throwable != null) {
+                                        Toast.makeText(MainActivity.this, "发送失败" + throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
 
-                                Toast.makeText(MainActivity.this, "获取到设备:" + response.getExtension(Messages.QueryDeviceResponse.response).getResultsList().size(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
+                } else {
+                    Messages.Request request = RequestUtil.getDevices(Models.DeviceQuery
+                            .newBuilder()
+                            .setPage(0)
+                            .setPageSize(100)
+                            .setType(Models.DeviceType.DEVICE_TYPE_INFRARED)
+                            .build());
+                    currentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
+                        @Override
+                        public void call(final Messages.Response response, Throwable throwable) {
+                            new Handler(getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final List<Models.Device> resultsList = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
+                                    Toast.makeText(MainActivity.this, "获取到红外设备:" + resultsList.size(), Toast.LENGTH_SHORT).show();
+                                    for (Models.Device device : resultsList) {
+                                        if (device.getExtension(Models.InfraredDevice.detail).getOpcodesCount() > 0)
+                                            mIFDev = device;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
             }
+
         });
     }
+
 
     private void initToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -168,6 +200,8 @@ public class MainActivity extends BaseActivity {
 
                 ((TextView) convertView.findViewById(R.id.router_name)).setText(routerName + (source.isActive() ? "*" : ""));
                 ((TextView) convertView.findViewById(R.id.router_state)).setText(router.getRouterSession().getRouterStatus().toString());
+                convertView.findViewById(R.id.camera_btn).setVisibility(View.GONE);
+                convertView.findViewById(R.id.delete_btn).setVisibility(View.GONE);
                 return convertView;
             }
         };
@@ -288,6 +322,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void routerInactive(final Router router) {
+        mIFDev = null;
         if (router != null) {
             RouterListItemData src = router.getUserData(RouterListItemData.class);
             src.setActive(false);

@@ -70,6 +70,7 @@ import mrtech.smarthome.rpc.Messages.ToggleOnOffRequest;
 import mrtech.smarthome.rpc.Messages.UpdateGroupRequest;
 import mrtech.smarthome.rpc.Messages.UpdatePlanRequest;
 import mrtech.smarthome.rpc.Messages.UpdateSceneRequest;
+import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.rpc.Models.Action;
 import mrtech.smarthome.rpc.Models.ArmGroup;
 import mrtech.smarthome.rpc.Models.ArmMode;
@@ -1050,6 +1051,16 @@ public class RequestUtil {
         requestBuilder.setRequestId(RequestType.DELETE_SAMBA_ACL_RULES_VALUE + createId());
 
         requestBuilder.setExtension(DeleteSambaAclRulesRequest.request, DeleteSambaAclRulesRequest.newBuilder().addRules(macs).build());
+
+        return requestBuilder.build();
+    }
+
+    public static Request sendIrCommand(int id, Models.InfraredCommand command) {
+        Request.Builder requestBuilder = Request.newBuilder();
+        requestBuilder.setType(RequestType.SEND_IR_COMMAND);
+        requestBuilder.setRequestId(RequestType.SEND_IR_COMMAND_VALUE + createId());
+
+        requestBuilder.setExtension(Messages.SendIrCommandRequest.request, Messages.SendIrCommandRequest.newBuilder().setId(id).setCommand(command).build());
 
         return requestBuilder.build();
     }
