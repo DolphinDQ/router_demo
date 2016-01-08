@@ -13,6 +13,7 @@ public final class Models {
     registry.add(mrtech.smarthome.rpc.Models.SimpleMeteringCluster.detail);
     registry.add(mrtech.smarthome.rpc.Models.TemperatureMeasurementCluster.detail);
     registry.add(mrtech.smarthome.rpc.Models.CameraDevice.detail);
+    registry.add(mrtech.smarthome.rpc.Models.InfraredDevice.detail);
   }
   /**
    * Protobuf enum {@code mrtech.smarthome.rpc.SeverityLevel}
@@ -1434,6 +1435,88 @@ public final class Models {
   }
 
   /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.AccountGroup}
+   */
+  public enum AccountGroup
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>ACCOUNT_GROUP_ADMINISTRATOR = 0;</code>
+     */
+    ACCOUNT_GROUP_ADMINISTRATOR(0, 0),
+    /**
+     * <code>ACCOUNT_GROUP_MEMBER = 1;</code>
+     */
+    ACCOUNT_GROUP_MEMBER(1, 1),
+    ;
+
+    /**
+     * <code>ACCOUNT_GROUP_ADMINISTRATOR = 0;</code>
+     */
+    public static final int ACCOUNT_GROUP_ADMINISTRATOR_VALUE = 0;
+    /**
+     * <code>ACCOUNT_GROUP_MEMBER = 1;</code>
+     */
+    public static final int ACCOUNT_GROUP_MEMBER_VALUE = 1;
+
+
+    public final int getNumber() { return value; }
+
+    public static AccountGroup valueOf(int value) {
+      switch (value) {
+        case 0: return ACCOUNT_GROUP_ADMINISTRATOR;
+        case 1: return ACCOUNT_GROUP_MEMBER;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<AccountGroup>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<AccountGroup>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<AccountGroup>() {
+            public AccountGroup findValueByNumber(int number) {
+              return AccountGroup.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(11);
+    }
+
+    private static final AccountGroup[] VALUES = values();
+
+    public static AccountGroup valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private AccountGroup(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.AccountGroup)
+  }
+
+  /**
    * Protobuf enum {@code mrtech.smarthome.rpc.DeviceType}
    */
   public enum DeviceType
@@ -1454,6 +1537,14 @@ public final class Models {
      * </pre>
      */
     DEVICE_TYPE_CAMERA(1, 1),
+    /**
+     * <code>DEVICE_TYPE_INFRARED = 2;</code>
+     *
+     * <pre>
+     * A Infrared device.
+     * </pre>
+     */
+    DEVICE_TYPE_INFRARED(2, 2),
     ;
 
     /**
@@ -1472,6 +1563,14 @@ public final class Models {
      * </pre>
      */
     public static final int DEVICE_TYPE_CAMERA_VALUE = 1;
+    /**
+     * <code>DEVICE_TYPE_INFRARED = 2;</code>
+     *
+     * <pre>
+     * A Infrared device.
+     * </pre>
+     */
+    public static final int DEVICE_TYPE_INFRARED_VALUE = 2;
 
 
     public final int getNumber() { return value; }
@@ -1480,6 +1579,7 @@ public final class Models {
       switch (value) {
         case 0: return DEVICE_TYPE_ZIGBEE;
         case 1: return DEVICE_TYPE_CAMERA;
+        case 2: return DEVICE_TYPE_INFRARED;
         default: return null;
       }
     }
@@ -1506,7 +1606,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(11);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(12);
     }
 
     private static final DeviceType[] VALUES = values();
@@ -1633,7 +1733,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(12);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(13);
     }
 
     private static final PowerSource[] VALUES = values();
@@ -1736,13 +1836,17 @@ public final class Models {
      */
     DEVICE_ID_METER_INTERFACE(17, 83),
     /**
+     * <code>DEVICE_ID_INFRARED_CONTROLLER = 84;</code>
+     */
+    DEVICE_ID_INFRARED_CONTROLLER(18, 84),
+    /**
      * <code>DEVICE_ID_TEST_DEVICE = 255;</code>
      *
      * <pre>
      * This is a reserved value which could be used for test purposes
      * </pre>
      */
-    DEVICE_ID_TEST_DEVICE(18, 255),
+    DEVICE_ID_TEST_DEVICE(19, 255),
     /**
      * <code>DEVICE_ID_ON_OFF_LIGHT = 256;</code>
      *
@@ -1750,35 +1854,35 @@ public final class Models {
      * Lighting Device IDs
      * </pre>
      */
-    DEVICE_ID_ON_OFF_LIGHT(19, 256),
+    DEVICE_ID_ON_OFF_LIGHT(20, 256),
     /**
      * <code>DEVICE_ID_DIMMABLE_LIGHT = 257;</code>
      */
-    DEVICE_ID_DIMMABLE_LIGHT(20, 257),
+    DEVICE_ID_DIMMABLE_LIGHT(21, 257),
     /**
      * <code>DEVICE_ID_COLORED_DIMMABLE_LIGHT = 258;</code>
      */
-    DEVICE_ID_COLORED_DIMMABLE_LIGHT(21, 258),
+    DEVICE_ID_COLORED_DIMMABLE_LIGHT(22, 258),
     /**
      * <code>DEVICE_ID_ON_OFF_LIGHT_SWITCH = 259;</code>
      */
-    DEVICE_ID_ON_OFF_LIGHT_SWITCH(22, 259),
+    DEVICE_ID_ON_OFF_LIGHT_SWITCH(23, 259),
     /**
      * <code>DEVICE_ID_DIMMER_SWITCH = 260;</code>
      */
-    DEVICE_ID_DIMMER_SWITCH(23, 260),
+    DEVICE_ID_DIMMER_SWITCH(24, 260),
     /**
      * <code>DEVICE_ID_COLOR_DIMMER_SWITCH = 261;</code>
      */
-    DEVICE_ID_COLOR_DIMMER_SWITCH(24, 261),
+    DEVICE_ID_COLOR_DIMMER_SWITCH(25, 261),
     /**
      * <code>DEVICE_ID_LIGHT_SENSOR = 262;</code>
      */
-    DEVICE_ID_LIGHT_SENSOR(25, 262),
+    DEVICE_ID_LIGHT_SENSOR(26, 262),
     /**
      * <code>DEVICE_ID_OCCUPANCY_SENSOR = 263;</code>
      */
-    DEVICE_ID_OCCUPANCY_SENSOR(26, 263),
+    DEVICE_ID_OCCUPANCY_SENSOR(27, 263),
     /**
      * <code>DEVICE_ID_SHADE = 512;</code>
      *
@@ -1786,19 +1890,19 @@ public final class Models {
      * Closures Device IDs
      * </pre>
      */
-    DEVICE_ID_SHADE(27, 512),
+    DEVICE_ID_SHADE(28, 512),
     /**
      * <code>DEVICE_ID_SHADE_CONTROLLER = 513;</code>
      */
-    DEVICE_ID_SHADE_CONTROLLER(28, 513),
+    DEVICE_ID_SHADE_CONTROLLER(29, 513),
     /**
      * <code>DEVICE_ID_WINDOW_COVERING_DEVICE = 514;</code>
      */
-    DEVICE_ID_WINDOW_COVERING_DEVICE(29, 514),
+    DEVICE_ID_WINDOW_COVERING_DEVICE(30, 514),
     /**
      * <code>DEVICE_ID_WINDOW_COVERING_CONTROLLER = 515;</code>
      */
-    DEVICE_ID_WINDOW_COVERING_CONTROLLER(30, 515),
+    DEVICE_ID_WINDOW_COVERING_CONTROLLER(31, 515),
     /**
      * <code>DEVICE_ID_HEATING_COOLING_UNIT = 768;</code>
      *
@@ -1806,35 +1910,35 @@ public final class Models {
      * HVAC Device IDs
      * </pre>
      */
-    DEVICE_ID_HEATING_COOLING_UNIT(31, 768),
+    DEVICE_ID_HEATING_COOLING_UNIT(32, 768),
     /**
      * <code>DEVICE_ID_THERMOSTAT = 769;</code>
      */
-    DEVICE_ID_THERMOSTAT(32, 769),
+    DEVICE_ID_THERMOSTAT(33, 769),
     /**
      * <code>DEVICE_ID_TEMPERATURE_SENSOR = 770;</code>
      */
-    DEVICE_ID_TEMPERATURE_SENSOR(33, 770),
+    DEVICE_ID_TEMPERATURE_SENSOR(34, 770),
     /**
      * <code>DEVICE_ID_PUMP = 771;</code>
      */
-    DEVICE_ID_PUMP(34, 771),
+    DEVICE_ID_PUMP(35, 771),
     /**
      * <code>DEVICE_ID_PUMP_CONTROLLER = 772;</code>
      */
-    DEVICE_ID_PUMP_CONTROLLER(35, 772),
+    DEVICE_ID_PUMP_CONTROLLER(36, 772),
     /**
      * <code>DEVICE_ID_PRESSURE_SENSOR = 773;</code>
      */
-    DEVICE_ID_PRESSURE_SENSOR(36, 773),
+    DEVICE_ID_PRESSURE_SENSOR(37, 773),
     /**
      * <code>DEVICE_ID_FLOW_SENSOR = 774;</code>
      */
-    DEVICE_ID_FLOW_SENSOR(37, 774),
+    DEVICE_ID_FLOW_SENSOR(38, 774),
     /**
      * <code>DEVICE_ID_MINI_SPLIT_AC = 775;</code>
      */
-    DEVICE_ID_MINI_SPLIT_AC(38, 775),
+    DEVICE_ID_MINI_SPLIT_AC(39, 775),
     /**
      * <code>DEVICE_ID_IAS_CONTROL_INDICATING_EQUIPMENT = 1024;</code>
      *
@@ -1842,19 +1946,19 @@ public final class Models {
      * Intruder Alarm Systems (IAS) Device IDs
      * </pre>
      */
-    DEVICE_ID_IAS_CONTROL_INDICATING_EQUIPMENT(39, 1024),
+    DEVICE_ID_IAS_CONTROL_INDICATING_EQUIPMENT(40, 1024),
     /**
      * <code>DEVICE_ID_IAS_ANCILLARY_CONTROL_EQUIPMENT = 1025;</code>
      */
-    DEVICE_ID_IAS_ANCILLARY_CONTROL_EQUIPMENT(40, 1025),
+    DEVICE_ID_IAS_ANCILLARY_CONTROL_EQUIPMENT(41, 1025),
     /**
      * <code>DEVICE_ID_IAS_ZONE = 1026;</code>
      */
-    DEVICE_ID_IAS_ZONE(41, 1026),
+    DEVICE_ID_IAS_ZONE(42, 1026),
     /**
      * <code>DEVICE_ID_IAS_WARNING_DEVICE = 1027;</code>
      */
-    DEVICE_ID_IAS_WARNING_DEVICE(42, 1027),
+    DEVICE_ID_IAS_WARNING_DEVICE(43, 1027),
     ;
 
     /**
@@ -1929,6 +2033,10 @@ public final class Models {
      * <code>DEVICE_ID_METER_INTERFACE = 83;</code>
      */
     public static final int DEVICE_ID_METER_INTERFACE_VALUE = 83;
+    /**
+     * <code>DEVICE_ID_INFRARED_CONTROLLER = 84;</code>
+     */
+    public static final int DEVICE_ID_INFRARED_CONTROLLER_VALUE = 84;
     /**
      * <code>DEVICE_ID_TEST_DEVICE = 255;</code>
      *
@@ -2073,6 +2181,7 @@ public final class Models {
         case 81: return DEVICE_ID_SMART_PLUG;
         case 82: return DEVICE_ID_WHITE_GOODS;
         case 83: return DEVICE_ID_METER_INTERFACE;
+        case 84: return DEVICE_ID_INFRARED_CONTROLLER;
         case 255: return DEVICE_ID_TEST_DEVICE;
         case 256: return DEVICE_ID_ON_OFF_LIGHT;
         case 257: return DEVICE_ID_DIMMABLE_LIGHT;
@@ -2124,7 +2233,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(13);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(14);
     }
 
     private static final DeviceId[] VALUES = values();
@@ -2215,7 +2324,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(14);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(15);
     }
 
     private static final TargetType[] VALUES = values();
@@ -2369,7 +2478,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(15);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(16);
     }
 
     private static final MeasurementType[] VALUES = values();
@@ -2603,7 +2712,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(16);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(17);
     }
 
     private static final UnitOfMeasure[] VALUES = values();
@@ -2806,7 +2915,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(17);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(18);
     }
 
     private static final ZoneType[] VALUES = values();
@@ -2938,7 +3047,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(18);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(19);
     }
 
     private static final ArmGroup[] VALUES = values();
@@ -3070,7 +3179,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(19);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(20);
     }
 
     private static final ArmMode[] VALUES = values();
@@ -3276,7 +3385,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(20);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(21);
     }
 
     private static final PanelStatus[] VALUES = values();
@@ -3403,7 +3512,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(21);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(22);
     }
 
     private static final AlarmStatus[] VALUES = values();
@@ -3494,7 +3603,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(22);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(23);
     }
 
     private static final TimelineLevel[] VALUES = values();
@@ -3744,6 +3853,16 @@ public final class Models {
      * </pre>
      */
     TIMELINE_TYPE_SYSTEM_BATTERY_LOW(16, 16),
+    /**
+     * <code>TIMELINE_TYPE_MOBILE_DATA_CONNECTED = 17;</code>
+     *
+     * <pre>
+     * 3G Module data connected.
+     * Parameter None
+     *    &#64;param None
+     * </pre>
+     */
+    TIMELINE_TYPE_MOBILE_DATA_CONNECTED(17, 17),
     ;
 
     /**
@@ -3966,6 +4085,16 @@ public final class Models {
      * </pre>
      */
     public static final int TIMELINE_TYPE_SYSTEM_BATTERY_LOW_VALUE = 16;
+    /**
+     * <code>TIMELINE_TYPE_MOBILE_DATA_CONNECTED = 17;</code>
+     *
+     * <pre>
+     * 3G Module data connected.
+     * Parameter None
+     *    &#64;param None
+     * </pre>
+     */
+    public static final int TIMELINE_TYPE_MOBILE_DATA_CONNECTED_VALUE = 17;
 
 
     public final int getNumber() { return value; }
@@ -3989,6 +4118,7 @@ public final class Models {
         case 14: return TIMELINE_TYPE_OVERCURRENT_DETECTED;
         case 15: return TIMELINE_TYPE_POWER_SOURCE_CHANGED;
         case 16: return TIMELINE_TYPE_SYSTEM_BATTERY_LOW;
+        case 17: return TIMELINE_TYPE_MOBILE_DATA_CONNECTED;
         default: return null;
       }
     }
@@ -4015,7 +4145,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(23);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(24);
     }
 
     private static final TimelineType[] VALUES = values();
@@ -4124,7 +4254,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(24);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(25);
     }
 
     private static final CameraSdStatus[] VALUES = values();
@@ -4206,7 +4336,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(25);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(26);
     }
 
     private static final CameraWlanMode[] VALUES = values();
@@ -4288,7 +4418,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(26);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(27);
     }
 
     private static final CameraWlanEncrypt[] VALUES = values();
@@ -4406,7 +4536,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(27);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(28);
     }
 
     private static final CameraWlanAuthtype[] VALUES = values();
@@ -4488,7 +4618,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(28);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(29);
     }
 
     private static final CameraWlanKeyFormat[] VALUES = values();
@@ -4570,7 +4700,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(29);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(30);
     }
 
     private static final CameraWlanKeyLength[] VALUES = values();
@@ -4682,7 +4812,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(30);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(31);
     }
 
     private static final ActionType[] VALUES = values();
@@ -4780,7 +4910,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(31);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(32);
     }
 
     private static final PlanType[] VALUES = values();
@@ -4895,7 +5025,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(32);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(33);
     }
 
     private static final WanMode[] VALUES = values();
@@ -4977,7 +5107,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(33);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(34);
     }
 
     private static final WanPort[] VALUES = values();
@@ -5075,7 +5205,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(34);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(35);
     }
 
     private static final WanType[] VALUES = values();
@@ -5190,7 +5320,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(35);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(36);
     }
 
     private static final WanMacClone[] VALUES = values();
@@ -5288,7 +5418,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(36);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(37);
     }
 
     private static final WlanPort[] VALUES = values();
@@ -5379,7 +5509,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(37);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(38);
     }
 
     private static final AccessRuleMode[] VALUES = values();
@@ -5470,7 +5600,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(38);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(39);
     }
 
     private static final BandWidth[] VALUES = values();
@@ -5585,7 +5715,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(39);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(40);
     }
 
     private static final SambaMode[] VALUES = values();
@@ -5667,7 +5797,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(40);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(41);
     }
 
     private static final AccessType[] VALUES = values();
@@ -5749,7 +5879,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(41);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(42);
     }
 
     private static final QosMode[] VALUES = values();
@@ -5840,7 +5970,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(42);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(43);
     }
 
     private static final AclRuleMode[] VALUES = values();
@@ -5931,7 +6061,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(43);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(44);
     }
 
     private static final HddStatus[] VALUES = values();
@@ -6013,7 +6143,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(44);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(45);
     }
 
     private static final NetworkProtocol[] VALUES = values();
@@ -6104,7 +6234,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(45);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(46);
     }
 
     private static final SignalStrengthLevel[] VALUES = values();
@@ -6186,7 +6316,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(46);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(47);
     }
 
     private static final PPPoEState[] VALUES = values();
@@ -6295,7 +6425,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(47);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(48);
     }
 
     private static final QosPriority[] VALUES = values();
@@ -6377,7 +6507,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(48);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(49);
     }
 
     private static final CpuId[] VALUES = values();
@@ -6468,7 +6598,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(49);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(50);
     }
 
     private static final VpnType[] VALUES = values();
@@ -6491,6 +6621,2359 @@ public final class Models {
     }
 
     // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.VpnType)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.InfraredMatchLevel}
+   */
+  public enum InfraredMatchLevel
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>INFRARED_MATCH_LEVEL_LOW = 0;</code>
+     */
+    INFRARED_MATCH_LEVEL_LOW(0, 0),
+    /**
+     * <code>INFRARED_MATCH_LEVEL_MEDIUM = 1;</code>
+     */
+    INFRARED_MATCH_LEVEL_MEDIUM(1, 1),
+    /**
+     * <code>INFRARED_MATCH_LEVEL_HIGH = 2;</code>
+     */
+    INFRARED_MATCH_LEVEL_HIGH(2, 2),
+    ;
+
+    /**
+     * <code>INFRARED_MATCH_LEVEL_LOW = 0;</code>
+     */
+    public static final int INFRARED_MATCH_LEVEL_LOW_VALUE = 0;
+    /**
+     * <code>INFRARED_MATCH_LEVEL_MEDIUM = 1;</code>
+     */
+    public static final int INFRARED_MATCH_LEVEL_MEDIUM_VALUE = 1;
+    /**
+     * <code>INFRARED_MATCH_LEVEL_HIGH = 2;</code>
+     */
+    public static final int INFRARED_MATCH_LEVEL_HIGH_VALUE = 2;
+
+
+    public final int getNumber() { return value; }
+
+    public static InfraredMatchLevel valueOf(int value) {
+      switch (value) {
+        case 0: return INFRARED_MATCH_LEVEL_LOW;
+        case 1: return INFRARED_MATCH_LEVEL_MEDIUM;
+        case 2: return INFRARED_MATCH_LEVEL_HIGH;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<InfraredMatchLevel>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<InfraredMatchLevel>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<InfraredMatchLevel>() {
+            public InfraredMatchLevel findValueByNumber(int number) {
+              return InfraredMatchLevel.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(51);
+    }
+
+    private static final InfraredMatchLevel[] VALUES = values();
+
+    public static InfraredMatchLevel valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private InfraredMatchLevel(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.InfraredMatchLevel)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.InfraredDeviceType}
+   */
+  public enum InfraredDeviceType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>INFRARED_DEVICE_TYPE_AIR_CONDITIONER = 0;</code>
+     */
+    INFRARED_DEVICE_TYPE_AIR_CONDITIONER(0, 0),
+    /**
+     * <code>INFRARED_DEVICE_TYPE_DVD_PLAYER = 1;</code>
+     */
+    INFRARED_DEVICE_TYPE_DVD_PLAYER(1, 1),
+    /**
+     * <code>INFRARED_DEVICE_TYPE_IP_TELEVISION = 2;</code>
+     */
+    INFRARED_DEVICE_TYPE_IP_TELEVISION(2, 2),
+    /**
+     * <code>INFRARED_DEVICE_TYPE_SETTOP_BOX = 3;</code>
+     */
+    INFRARED_DEVICE_TYPE_SETTOP_BOX(3, 3),
+    /**
+     * <code>INFRARED_DEVICE_TYPE_TELEVISION = 4;</code>
+     */
+    INFRARED_DEVICE_TYPE_TELEVISION(4, 4),
+    /**
+     * <code>INFRARED_DEVICE_TYPE_ELECTRIC_FAN = 5;</code>
+     */
+    INFRARED_DEVICE_TYPE_ELECTRIC_FAN(5, 5),
+    /**
+     * <code>INFRARED_DEVICE_TYPE_PROJECTOR = 6;</code>
+     */
+    INFRARED_DEVICE_TYPE_PROJECTOR(6, 6),
+    /**
+     * <code>INFRARED_DEVICE_TYPE_CUSTOM = 7;</code>
+     */
+    INFRARED_DEVICE_TYPE_CUSTOM(7, 7),
+    ;
+
+    /**
+     * <code>INFRARED_DEVICE_TYPE_AIR_CONDITIONER = 0;</code>
+     */
+    public static final int INFRARED_DEVICE_TYPE_AIR_CONDITIONER_VALUE = 0;
+    /**
+     * <code>INFRARED_DEVICE_TYPE_DVD_PLAYER = 1;</code>
+     */
+    public static final int INFRARED_DEVICE_TYPE_DVD_PLAYER_VALUE = 1;
+    /**
+     * <code>INFRARED_DEVICE_TYPE_IP_TELEVISION = 2;</code>
+     */
+    public static final int INFRARED_DEVICE_TYPE_IP_TELEVISION_VALUE = 2;
+    /**
+     * <code>INFRARED_DEVICE_TYPE_SETTOP_BOX = 3;</code>
+     */
+    public static final int INFRARED_DEVICE_TYPE_SETTOP_BOX_VALUE = 3;
+    /**
+     * <code>INFRARED_DEVICE_TYPE_TELEVISION = 4;</code>
+     */
+    public static final int INFRARED_DEVICE_TYPE_TELEVISION_VALUE = 4;
+    /**
+     * <code>INFRARED_DEVICE_TYPE_ELECTRIC_FAN = 5;</code>
+     */
+    public static final int INFRARED_DEVICE_TYPE_ELECTRIC_FAN_VALUE = 5;
+    /**
+     * <code>INFRARED_DEVICE_TYPE_PROJECTOR = 6;</code>
+     */
+    public static final int INFRARED_DEVICE_TYPE_PROJECTOR_VALUE = 6;
+    /**
+     * <code>INFRARED_DEVICE_TYPE_CUSTOM = 7;</code>
+     */
+    public static final int INFRARED_DEVICE_TYPE_CUSTOM_VALUE = 7;
+
+
+    public final int getNumber() { return value; }
+
+    public static InfraredDeviceType valueOf(int value) {
+      switch (value) {
+        case 0: return INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+        case 1: return INFRARED_DEVICE_TYPE_DVD_PLAYER;
+        case 2: return INFRARED_DEVICE_TYPE_IP_TELEVISION;
+        case 3: return INFRARED_DEVICE_TYPE_SETTOP_BOX;
+        case 4: return INFRARED_DEVICE_TYPE_TELEVISION;
+        case 5: return INFRARED_DEVICE_TYPE_ELECTRIC_FAN;
+        case 6: return INFRARED_DEVICE_TYPE_PROJECTOR;
+        case 7: return INFRARED_DEVICE_TYPE_CUSTOM;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<InfraredDeviceType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<InfraredDeviceType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<InfraredDeviceType>() {
+            public InfraredDeviceType findValueByNumber(int number) {
+              return InfraredDeviceType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(52);
+    }
+
+    private static final InfraredDeviceType[] VALUES = values();
+
+    public static InfraredDeviceType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private InfraredDeviceType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.InfraredDeviceType)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.InfraredMatchError}
+   */
+  public enum InfraredMatchError
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>INFRARED_MATCH_ERROR_SUCCESS = 0;</code>
+     */
+    INFRARED_MATCH_ERROR_SUCCESS(0, 0),
+    /**
+     * <code>INFRARED_MATCH_ERROR_NO_MATCH = 1;</code>
+     */
+    INFRARED_MATCH_ERROR_NO_MATCH(1, 1),
+    /**
+     * <code>INFRARED_MATCH_ERROR_CANCELLED = 2;</code>
+     */
+    INFRARED_MATCH_ERROR_CANCELLED(2, 2),
+    /**
+     * <code>INFRARED_MATCH_ERROR_TIMED_OUT = 3;</code>
+     */
+    INFRARED_MATCH_ERROR_TIMED_OUT(3, 3),
+    /**
+     * <code>INFRARED_MATCH_ERROR_FAILURE = 4;</code>
+     */
+    INFRARED_MATCH_ERROR_FAILURE(4, 4),
+    ;
+
+    /**
+     * <code>INFRARED_MATCH_ERROR_SUCCESS = 0;</code>
+     */
+    public static final int INFRARED_MATCH_ERROR_SUCCESS_VALUE = 0;
+    /**
+     * <code>INFRARED_MATCH_ERROR_NO_MATCH = 1;</code>
+     */
+    public static final int INFRARED_MATCH_ERROR_NO_MATCH_VALUE = 1;
+    /**
+     * <code>INFRARED_MATCH_ERROR_CANCELLED = 2;</code>
+     */
+    public static final int INFRARED_MATCH_ERROR_CANCELLED_VALUE = 2;
+    /**
+     * <code>INFRARED_MATCH_ERROR_TIMED_OUT = 3;</code>
+     */
+    public static final int INFRARED_MATCH_ERROR_TIMED_OUT_VALUE = 3;
+    /**
+     * <code>INFRARED_MATCH_ERROR_FAILURE = 4;</code>
+     */
+    public static final int INFRARED_MATCH_ERROR_FAILURE_VALUE = 4;
+
+
+    public final int getNumber() { return value; }
+
+    public static InfraredMatchError valueOf(int value) {
+      switch (value) {
+        case 0: return INFRARED_MATCH_ERROR_SUCCESS;
+        case 1: return INFRARED_MATCH_ERROR_NO_MATCH;
+        case 2: return INFRARED_MATCH_ERROR_CANCELLED;
+        case 3: return INFRARED_MATCH_ERROR_TIMED_OUT;
+        case 4: return INFRARED_MATCH_ERROR_FAILURE;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<InfraredMatchError>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<InfraredMatchError>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<InfraredMatchError>() {
+            public InfraredMatchError findValueByNumber(int number) {
+              return InfraredMatchError.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(53);
+    }
+
+    private static final InfraredMatchError[] VALUES = values();
+
+    public static InfraredMatchError valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private InfraredMatchError(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.InfraredMatchError)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.AirConditionerBlowingRate}
+   */
+  public enum AirConditionerBlowingRate
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>AIR_CONDITIONER_BLOWING_RATE_AUTO = 0;</code>
+     */
+    AIR_CONDITIONER_BLOWING_RATE_AUTO(0, 0),
+    /**
+     * <code>AIR_CONDITIONER_BLOWING_RATE_LOW = 1;</code>
+     */
+    AIR_CONDITIONER_BLOWING_RATE_LOW(1, 1),
+    /**
+     * <code>AIR_CONDITIONER_BLOWING_RATE_MEDIUM = 2;</code>
+     */
+    AIR_CONDITIONER_BLOWING_RATE_MEDIUM(2, 2),
+    /**
+     * <code>AIR_CONDITIONER_BLOWING_RATE_HIGH = 3;</code>
+     */
+    AIR_CONDITIONER_BLOWING_RATE_HIGH(3, 3),
+    ;
+
+    /**
+     * <code>AIR_CONDITIONER_BLOWING_RATE_AUTO = 0;</code>
+     */
+    public static final int AIR_CONDITIONER_BLOWING_RATE_AUTO_VALUE = 0;
+    /**
+     * <code>AIR_CONDITIONER_BLOWING_RATE_LOW = 1;</code>
+     */
+    public static final int AIR_CONDITIONER_BLOWING_RATE_LOW_VALUE = 1;
+    /**
+     * <code>AIR_CONDITIONER_BLOWING_RATE_MEDIUM = 2;</code>
+     */
+    public static final int AIR_CONDITIONER_BLOWING_RATE_MEDIUM_VALUE = 2;
+    /**
+     * <code>AIR_CONDITIONER_BLOWING_RATE_HIGH = 3;</code>
+     */
+    public static final int AIR_CONDITIONER_BLOWING_RATE_HIGH_VALUE = 3;
+
+
+    public final int getNumber() { return value; }
+
+    public static AirConditionerBlowingRate valueOf(int value) {
+      switch (value) {
+        case 0: return AIR_CONDITIONER_BLOWING_RATE_AUTO;
+        case 1: return AIR_CONDITIONER_BLOWING_RATE_LOW;
+        case 2: return AIR_CONDITIONER_BLOWING_RATE_MEDIUM;
+        case 3: return AIR_CONDITIONER_BLOWING_RATE_HIGH;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<AirConditionerBlowingRate>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<AirConditionerBlowingRate>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<AirConditionerBlowingRate>() {
+            public AirConditionerBlowingRate findValueByNumber(int number) {
+              return AirConditionerBlowingRate.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(54);
+    }
+
+    private static final AirConditionerBlowingRate[] VALUES = values();
+
+    public static AirConditionerBlowingRate valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private AirConditionerBlowingRate(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.AirConditionerBlowingRate)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.AirConditionerWindDir}
+   */
+  public enum AirConditionerWindDir
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>AIR_CONDITIONER_WIND_DIR_UP = 0;</code>
+     */
+    AIR_CONDITIONER_WIND_DIR_UP(0, 0),
+    /**
+     * <code>AIR_CONDITIONER_WIND_DIR_MIDDLE = 1;</code>
+     */
+    AIR_CONDITIONER_WIND_DIR_MIDDLE(1, 1),
+    /**
+     * <code>AIR_CONDITIONER_WIND_DIR_DOWN = 2;</code>
+     */
+    AIR_CONDITIONER_WIND_DIR_DOWN(2, 2),
+    ;
+
+    /**
+     * <code>AIR_CONDITIONER_WIND_DIR_UP = 0;</code>
+     */
+    public static final int AIR_CONDITIONER_WIND_DIR_UP_VALUE = 0;
+    /**
+     * <code>AIR_CONDITIONER_WIND_DIR_MIDDLE = 1;</code>
+     */
+    public static final int AIR_CONDITIONER_WIND_DIR_MIDDLE_VALUE = 1;
+    /**
+     * <code>AIR_CONDITIONER_WIND_DIR_DOWN = 2;</code>
+     */
+    public static final int AIR_CONDITIONER_WIND_DIR_DOWN_VALUE = 2;
+
+
+    public final int getNumber() { return value; }
+
+    public static AirConditionerWindDir valueOf(int value) {
+      switch (value) {
+        case 0: return AIR_CONDITIONER_WIND_DIR_UP;
+        case 1: return AIR_CONDITIONER_WIND_DIR_MIDDLE;
+        case 2: return AIR_CONDITIONER_WIND_DIR_DOWN;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<AirConditionerWindDir>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<AirConditionerWindDir>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<AirConditionerWindDir>() {
+            public AirConditionerWindDir findValueByNumber(int number) {
+              return AirConditionerWindDir.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(55);
+    }
+
+    private static final AirConditionerWindDir[] VALUES = values();
+
+    public static AirConditionerWindDir valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private AirConditionerWindDir(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.AirConditionerWindDir)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.AirConditionerKey}
+   */
+  public enum AirConditionerKey
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>AIR_CONDITIONER_KEY_POWER = 0;</code>
+     */
+    AIR_CONDITIONER_KEY_POWER(0, 0),
+    /**
+     * <code>AIR_CONDITIONER_KEY_MODE = 1;</code>
+     */
+    AIR_CONDITIONER_KEY_MODE(1, 1),
+    /**
+     * <code>AIR_CONDITIONER_KEY_BLOWING_RATE = 2;</code>
+     */
+    AIR_CONDITIONER_KEY_BLOWING_RATE(2, 2),
+    /**
+     * <code>AIR_CONDITIONER_KEY_MANUAL_WIND_DIR = 3;</code>
+     */
+    AIR_CONDITIONER_KEY_MANUAL_WIND_DIR(3, 3),
+    /**
+     * <code>AIR_CONDITIONER_KEY_AUTO_WIND_DIR = 4;</code>
+     */
+    AIR_CONDITIONER_KEY_AUTO_WIND_DIR(4, 4),
+    /**
+     * <code>AIR_CONDITIONER_KEY_TEMPUP = 5;</code>
+     */
+    AIR_CONDITIONER_KEY_TEMPUP(5, 5),
+    /**
+     * <code>AIR_CONDITIONER_KEY_TEMPDOWN = 6;</code>
+     */
+    AIR_CONDITIONER_KEY_TEMPDOWN(6, 6),
+    ;
+
+    /**
+     * <code>AIR_CONDITIONER_KEY_POWER = 0;</code>
+     */
+    public static final int AIR_CONDITIONER_KEY_POWER_VALUE = 0;
+    /**
+     * <code>AIR_CONDITIONER_KEY_MODE = 1;</code>
+     */
+    public static final int AIR_CONDITIONER_KEY_MODE_VALUE = 1;
+    /**
+     * <code>AIR_CONDITIONER_KEY_BLOWING_RATE = 2;</code>
+     */
+    public static final int AIR_CONDITIONER_KEY_BLOWING_RATE_VALUE = 2;
+    /**
+     * <code>AIR_CONDITIONER_KEY_MANUAL_WIND_DIR = 3;</code>
+     */
+    public static final int AIR_CONDITIONER_KEY_MANUAL_WIND_DIR_VALUE = 3;
+    /**
+     * <code>AIR_CONDITIONER_KEY_AUTO_WIND_DIR = 4;</code>
+     */
+    public static final int AIR_CONDITIONER_KEY_AUTO_WIND_DIR_VALUE = 4;
+    /**
+     * <code>AIR_CONDITIONER_KEY_TEMPUP = 5;</code>
+     */
+    public static final int AIR_CONDITIONER_KEY_TEMPUP_VALUE = 5;
+    /**
+     * <code>AIR_CONDITIONER_KEY_TEMPDOWN = 6;</code>
+     */
+    public static final int AIR_CONDITIONER_KEY_TEMPDOWN_VALUE = 6;
+
+
+    public final int getNumber() { return value; }
+
+    public static AirConditionerKey valueOf(int value) {
+      switch (value) {
+        case 0: return AIR_CONDITIONER_KEY_POWER;
+        case 1: return AIR_CONDITIONER_KEY_MODE;
+        case 2: return AIR_CONDITIONER_KEY_BLOWING_RATE;
+        case 3: return AIR_CONDITIONER_KEY_MANUAL_WIND_DIR;
+        case 4: return AIR_CONDITIONER_KEY_AUTO_WIND_DIR;
+        case 5: return AIR_CONDITIONER_KEY_TEMPUP;
+        case 6: return AIR_CONDITIONER_KEY_TEMPDOWN;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<AirConditionerKey>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<AirConditionerKey>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<AirConditionerKey>() {
+            public AirConditionerKey findValueByNumber(int number) {
+              return AirConditionerKey.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(56);
+    }
+
+    private static final AirConditionerKey[] VALUES = values();
+
+    public static AirConditionerKey valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private AirConditionerKey(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.AirConditionerKey)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.AirConditionerMode}
+   */
+  public enum AirConditionerMode
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>AIR_CONDITIONER_MODE_AUTO = 0;</code>
+     */
+    AIR_CONDITIONER_MODE_AUTO(0, 0),
+    /**
+     * <code>AIR_CONDITIONER_MODE_FREEZE = 1;</code>
+     */
+    AIR_CONDITIONER_MODE_FREEZE(1, 1),
+    /**
+     * <code>AIR_CONDITIONER_MODE_DRY = 2;</code>
+     */
+    AIR_CONDITIONER_MODE_DRY(2, 2),
+    /**
+     * <code>AIR_CONDITIONER_MODE_FAN = 3;</code>
+     */
+    AIR_CONDITIONER_MODE_FAN(3, 3),
+    /**
+     * <code>AIR_CONDITIONER_MODE_HEAT = 4;</code>
+     */
+    AIR_CONDITIONER_MODE_HEAT(4, 4),
+    ;
+
+    /**
+     * <code>AIR_CONDITIONER_MODE_AUTO = 0;</code>
+     */
+    public static final int AIR_CONDITIONER_MODE_AUTO_VALUE = 0;
+    /**
+     * <code>AIR_CONDITIONER_MODE_FREEZE = 1;</code>
+     */
+    public static final int AIR_CONDITIONER_MODE_FREEZE_VALUE = 1;
+    /**
+     * <code>AIR_CONDITIONER_MODE_DRY = 2;</code>
+     */
+    public static final int AIR_CONDITIONER_MODE_DRY_VALUE = 2;
+    /**
+     * <code>AIR_CONDITIONER_MODE_FAN = 3;</code>
+     */
+    public static final int AIR_CONDITIONER_MODE_FAN_VALUE = 3;
+    /**
+     * <code>AIR_CONDITIONER_MODE_HEAT = 4;</code>
+     */
+    public static final int AIR_CONDITIONER_MODE_HEAT_VALUE = 4;
+
+
+    public final int getNumber() { return value; }
+
+    public static AirConditionerMode valueOf(int value) {
+      switch (value) {
+        case 0: return AIR_CONDITIONER_MODE_AUTO;
+        case 1: return AIR_CONDITIONER_MODE_FREEZE;
+        case 2: return AIR_CONDITIONER_MODE_DRY;
+        case 3: return AIR_CONDITIONER_MODE_FAN;
+        case 4: return AIR_CONDITIONER_MODE_HEAT;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<AirConditionerMode>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<AirConditionerMode>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<AirConditionerMode>() {
+            public AirConditionerMode findValueByNumber(int number) {
+              return AirConditionerMode.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(57);
+    }
+
+    private static final AirConditionerMode[] VALUES = values();
+
+    public static AirConditionerMode valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private AirConditionerMode(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.AirConditionerMode)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.DvdPlayerCommand}
+   */
+  public enum DvdPlayerCommand
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>DVD_PLAYER_LEFT = 0;</code>
+     */
+    DVD_PLAYER_LEFT(0, 0),
+    /**
+     * <code>DVD_PLAYER_UP = 1;</code>
+     */
+    DVD_PLAYER_UP(1, 1),
+    /**
+     * <code>DVD_PLAYER_OK = 2;</code>
+     */
+    DVD_PLAYER_OK(2, 2),
+    /**
+     * <code>DVD_PLAYER_DOWN = 3;</code>
+     */
+    DVD_PLAYER_DOWN(3, 3),
+    /**
+     * <code>DVD_PLAYER_RIGHT = 4;</code>
+     */
+    DVD_PLAYER_RIGHT(4, 4),
+    /**
+     * <code>DVD_PLAYER_POWER = 5;</code>
+     */
+    DVD_PLAYER_POWER(5, 5),
+    /**
+     * <code>DVD_PLAYER_MUTE = 6;</code>
+     */
+    DVD_PLAYER_MUTE(6, 6),
+    /**
+     * <code>DVD_PLAYER_FAST_REVERSE = 7;</code>
+     */
+    DVD_PLAYER_FAST_REVERSE(7, 7),
+    /**
+     * <code>DVD_PLAYER_PLAY = 8;</code>
+     */
+    DVD_PLAYER_PLAY(8, 8),
+    /**
+     * <code>DVD_PLAYER_FAST_FORWARDED = 9;</code>
+     */
+    DVD_PLAYER_FAST_FORWARDED(9, 9),
+    /**
+     * <code>DVD_PLAYER_LAST_PIECE = 10;</code>
+     */
+    DVD_PLAYER_LAST_PIECE(10, 10),
+    /**
+     * <code>DVD_PLAYER_STOP = 11;</code>
+     */
+    DVD_PLAYER_STOP(11, 11),
+    /**
+     * <code>DVD_PLAYER_NEXT_PIECE = 12;</code>
+     */
+    DVD_PLAYER_NEXT_PIECE(12, 12),
+    /**
+     * <code>DVD_PLAYER_STANDARD = 13;</code>
+     */
+    DVD_PLAYER_STANDARD(13, 13),
+    /**
+     * <code>DVD_PLAYER_PAUSE = 14;</code>
+     */
+    DVD_PLAYER_PAUSE(14, 14),
+    /**
+     * <code>DVD_PLAYER_TITLE = 15;</code>
+     */
+    DVD_PLAYER_TITLE(15, 15),
+    /**
+     * <code>DVD_PLAYER_SWITCH_POSITION = 16;</code>
+     */
+    DVD_PLAYER_SWITCH_POSITION(16, 16),
+    /**
+     * <code>DVD_PLAYER_MENU = 17;</code>
+     */
+    DVD_PLAYER_MENU(17, 17),
+    /**
+     * <code>DVD_PLAYER_RETURN = 18;</code>
+     */
+    DVD_PLAYER_RETURN(18, 18),
+    ;
+
+    /**
+     * <code>DVD_PLAYER_LEFT = 0;</code>
+     */
+    public static final int DVD_PLAYER_LEFT_VALUE = 0;
+    /**
+     * <code>DVD_PLAYER_UP = 1;</code>
+     */
+    public static final int DVD_PLAYER_UP_VALUE = 1;
+    /**
+     * <code>DVD_PLAYER_OK = 2;</code>
+     */
+    public static final int DVD_PLAYER_OK_VALUE = 2;
+    /**
+     * <code>DVD_PLAYER_DOWN = 3;</code>
+     */
+    public static final int DVD_PLAYER_DOWN_VALUE = 3;
+    /**
+     * <code>DVD_PLAYER_RIGHT = 4;</code>
+     */
+    public static final int DVD_PLAYER_RIGHT_VALUE = 4;
+    /**
+     * <code>DVD_PLAYER_POWER = 5;</code>
+     */
+    public static final int DVD_PLAYER_POWER_VALUE = 5;
+    /**
+     * <code>DVD_PLAYER_MUTE = 6;</code>
+     */
+    public static final int DVD_PLAYER_MUTE_VALUE = 6;
+    /**
+     * <code>DVD_PLAYER_FAST_REVERSE = 7;</code>
+     */
+    public static final int DVD_PLAYER_FAST_REVERSE_VALUE = 7;
+    /**
+     * <code>DVD_PLAYER_PLAY = 8;</code>
+     */
+    public static final int DVD_PLAYER_PLAY_VALUE = 8;
+    /**
+     * <code>DVD_PLAYER_FAST_FORWARDED = 9;</code>
+     */
+    public static final int DVD_PLAYER_FAST_FORWARDED_VALUE = 9;
+    /**
+     * <code>DVD_PLAYER_LAST_PIECE = 10;</code>
+     */
+    public static final int DVD_PLAYER_LAST_PIECE_VALUE = 10;
+    /**
+     * <code>DVD_PLAYER_STOP = 11;</code>
+     */
+    public static final int DVD_PLAYER_STOP_VALUE = 11;
+    /**
+     * <code>DVD_PLAYER_NEXT_PIECE = 12;</code>
+     */
+    public static final int DVD_PLAYER_NEXT_PIECE_VALUE = 12;
+    /**
+     * <code>DVD_PLAYER_STANDARD = 13;</code>
+     */
+    public static final int DVD_PLAYER_STANDARD_VALUE = 13;
+    /**
+     * <code>DVD_PLAYER_PAUSE = 14;</code>
+     */
+    public static final int DVD_PLAYER_PAUSE_VALUE = 14;
+    /**
+     * <code>DVD_PLAYER_TITLE = 15;</code>
+     */
+    public static final int DVD_PLAYER_TITLE_VALUE = 15;
+    /**
+     * <code>DVD_PLAYER_SWITCH_POSITION = 16;</code>
+     */
+    public static final int DVD_PLAYER_SWITCH_POSITION_VALUE = 16;
+    /**
+     * <code>DVD_PLAYER_MENU = 17;</code>
+     */
+    public static final int DVD_PLAYER_MENU_VALUE = 17;
+    /**
+     * <code>DVD_PLAYER_RETURN = 18;</code>
+     */
+    public static final int DVD_PLAYER_RETURN_VALUE = 18;
+
+
+    public final int getNumber() { return value; }
+
+    public static DvdPlayerCommand valueOf(int value) {
+      switch (value) {
+        case 0: return DVD_PLAYER_LEFT;
+        case 1: return DVD_PLAYER_UP;
+        case 2: return DVD_PLAYER_OK;
+        case 3: return DVD_PLAYER_DOWN;
+        case 4: return DVD_PLAYER_RIGHT;
+        case 5: return DVD_PLAYER_POWER;
+        case 6: return DVD_PLAYER_MUTE;
+        case 7: return DVD_PLAYER_FAST_REVERSE;
+        case 8: return DVD_PLAYER_PLAY;
+        case 9: return DVD_PLAYER_FAST_FORWARDED;
+        case 10: return DVD_PLAYER_LAST_PIECE;
+        case 11: return DVD_PLAYER_STOP;
+        case 12: return DVD_PLAYER_NEXT_PIECE;
+        case 13: return DVD_PLAYER_STANDARD;
+        case 14: return DVD_PLAYER_PAUSE;
+        case 15: return DVD_PLAYER_TITLE;
+        case 16: return DVD_PLAYER_SWITCH_POSITION;
+        case 17: return DVD_PLAYER_MENU;
+        case 18: return DVD_PLAYER_RETURN;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<DvdPlayerCommand>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<DvdPlayerCommand>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<DvdPlayerCommand>() {
+            public DvdPlayerCommand findValueByNumber(int number) {
+              return DvdPlayerCommand.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(58);
+    }
+
+    private static final DvdPlayerCommand[] VALUES = values();
+
+    public static DvdPlayerCommand valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private DvdPlayerCommand(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.DvdPlayerCommand)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.IpTelevisionCommand}
+   */
+  public enum IpTelevisionCommand
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>IP_TELEVISION_POWER = 0;</code>
+     */
+    IP_TELEVISION_POWER(0, 0),
+    /**
+     * <code>IP_TELEVISION_MUTE = 1;</code>
+     */
+    IP_TELEVISION_MUTE(1, 1),
+    /**
+     * <code>IP_TELEVISION_VOLUME = 2;</code>
+     */
+    IP_TELEVISION_VOLUME(2, 2),
+    /**
+     * <code>IP_TELEVISION_VOLUME_REDUCTION = 3;</code>
+     */
+    IP_TELEVISION_VOLUME_REDUCTION(3, 3),
+    /**
+     * <code>IP_TELEVISION_CHANNEL_PLUS_OR_HOME = 4;</code>
+     */
+    IP_TELEVISION_CHANNEL_PLUS_OR_HOME(4, 4),
+    /**
+     * <code>IP_TELEVISION_CHANNEL_REDUCTION_OR_MENU = 5;</code>
+     */
+    IP_TELEVISION_CHANNEL_REDUCTION_OR_MENU(5, 5),
+    /**
+     * <code>IP_TELEVISION_UP = 6;</code>
+     */
+    IP_TELEVISION_UP(6, 6),
+    /**
+     * <code>IP_TELEVISION_LEFT = 7;</code>
+     */
+    IP_TELEVISION_LEFT(7, 7),
+    /**
+     * <code>IP_TELEVISION_OK = 8;</code>
+     */
+    IP_TELEVISION_OK(8, 8),
+    /**
+     * <code>IP_TELEVISION_RIGHT = 9;</code>
+     */
+    IP_TELEVISION_RIGHT(9, 9),
+    /**
+     * <code>IP_TELEVISION_DOWN = 10;</code>
+     */
+    IP_TELEVISION_DOWN(10, 10),
+    /**
+     * <code>IP_TELEVISION_PLAY_OR_PAUSE = 11;</code>
+     */
+    IP_TELEVISION_PLAY_OR_PAUSE(11, 11),
+    /**
+     * <code>IP_TELEVISION_1 = 12;</code>
+     */
+    IP_TELEVISION_1(12, 12),
+    /**
+     * <code>IP_TELEVISION_2 = 13;</code>
+     */
+    IP_TELEVISION_2(13, 13),
+    /**
+     * <code>IP_TELEVISION_3 = 14;</code>
+     */
+    IP_TELEVISION_3(14, 14),
+    /**
+     * <code>IP_TELEVISION_4 = 15;</code>
+     */
+    IP_TELEVISION_4(15, 15),
+    /**
+     * <code>IP_TELEVISION_5 = 16;</code>
+     */
+    IP_TELEVISION_5(16, 16),
+    /**
+     * <code>IP_TELEVISION_6 = 17;</code>
+     */
+    IP_TELEVISION_6(17, 17),
+    /**
+     * <code>IP_TELEVISION_7 = 18;</code>
+     */
+    IP_TELEVISION_7(18, 18),
+    /**
+     * <code>IP_TELEVISION_8 = 19;</code>
+     */
+    IP_TELEVISION_8(19, 19),
+    /**
+     * <code>IP_TELEVISION_9 = 20;</code>
+     */
+    IP_TELEVISION_9(20, 20),
+    /**
+     * <code>IP_TELEVISION_0 = 21;</code>
+     */
+    IP_TELEVISION_0(21, 21),
+    /**
+     * <code>IP_TELEVISION_RETURN = 22;</code>
+     */
+    IP_TELEVISION_RETURN(22, 22),
+    ;
+
+    /**
+     * <code>IP_TELEVISION_POWER = 0;</code>
+     */
+    public static final int IP_TELEVISION_POWER_VALUE = 0;
+    /**
+     * <code>IP_TELEVISION_MUTE = 1;</code>
+     */
+    public static final int IP_TELEVISION_MUTE_VALUE = 1;
+    /**
+     * <code>IP_TELEVISION_VOLUME = 2;</code>
+     */
+    public static final int IP_TELEVISION_VOLUME_VALUE = 2;
+    /**
+     * <code>IP_TELEVISION_VOLUME_REDUCTION = 3;</code>
+     */
+    public static final int IP_TELEVISION_VOLUME_REDUCTION_VALUE = 3;
+    /**
+     * <code>IP_TELEVISION_CHANNEL_PLUS_OR_HOME = 4;</code>
+     */
+    public static final int IP_TELEVISION_CHANNEL_PLUS_OR_HOME_VALUE = 4;
+    /**
+     * <code>IP_TELEVISION_CHANNEL_REDUCTION_OR_MENU = 5;</code>
+     */
+    public static final int IP_TELEVISION_CHANNEL_REDUCTION_OR_MENU_VALUE = 5;
+    /**
+     * <code>IP_TELEVISION_UP = 6;</code>
+     */
+    public static final int IP_TELEVISION_UP_VALUE = 6;
+    /**
+     * <code>IP_TELEVISION_LEFT = 7;</code>
+     */
+    public static final int IP_TELEVISION_LEFT_VALUE = 7;
+    /**
+     * <code>IP_TELEVISION_OK = 8;</code>
+     */
+    public static final int IP_TELEVISION_OK_VALUE = 8;
+    /**
+     * <code>IP_TELEVISION_RIGHT = 9;</code>
+     */
+    public static final int IP_TELEVISION_RIGHT_VALUE = 9;
+    /**
+     * <code>IP_TELEVISION_DOWN = 10;</code>
+     */
+    public static final int IP_TELEVISION_DOWN_VALUE = 10;
+    /**
+     * <code>IP_TELEVISION_PLAY_OR_PAUSE = 11;</code>
+     */
+    public static final int IP_TELEVISION_PLAY_OR_PAUSE_VALUE = 11;
+    /**
+     * <code>IP_TELEVISION_1 = 12;</code>
+     */
+    public static final int IP_TELEVISION_1_VALUE = 12;
+    /**
+     * <code>IP_TELEVISION_2 = 13;</code>
+     */
+    public static final int IP_TELEVISION_2_VALUE = 13;
+    /**
+     * <code>IP_TELEVISION_3 = 14;</code>
+     */
+    public static final int IP_TELEVISION_3_VALUE = 14;
+    /**
+     * <code>IP_TELEVISION_4 = 15;</code>
+     */
+    public static final int IP_TELEVISION_4_VALUE = 15;
+    /**
+     * <code>IP_TELEVISION_5 = 16;</code>
+     */
+    public static final int IP_TELEVISION_5_VALUE = 16;
+    /**
+     * <code>IP_TELEVISION_6 = 17;</code>
+     */
+    public static final int IP_TELEVISION_6_VALUE = 17;
+    /**
+     * <code>IP_TELEVISION_7 = 18;</code>
+     */
+    public static final int IP_TELEVISION_7_VALUE = 18;
+    /**
+     * <code>IP_TELEVISION_8 = 19;</code>
+     */
+    public static final int IP_TELEVISION_8_VALUE = 19;
+    /**
+     * <code>IP_TELEVISION_9 = 20;</code>
+     */
+    public static final int IP_TELEVISION_9_VALUE = 20;
+    /**
+     * <code>IP_TELEVISION_0 = 21;</code>
+     */
+    public static final int IP_TELEVISION_0_VALUE = 21;
+    /**
+     * <code>IP_TELEVISION_RETURN = 22;</code>
+     */
+    public static final int IP_TELEVISION_RETURN_VALUE = 22;
+
+
+    public final int getNumber() { return value; }
+
+    public static IpTelevisionCommand valueOf(int value) {
+      switch (value) {
+        case 0: return IP_TELEVISION_POWER;
+        case 1: return IP_TELEVISION_MUTE;
+        case 2: return IP_TELEVISION_VOLUME;
+        case 3: return IP_TELEVISION_VOLUME_REDUCTION;
+        case 4: return IP_TELEVISION_CHANNEL_PLUS_OR_HOME;
+        case 5: return IP_TELEVISION_CHANNEL_REDUCTION_OR_MENU;
+        case 6: return IP_TELEVISION_UP;
+        case 7: return IP_TELEVISION_LEFT;
+        case 8: return IP_TELEVISION_OK;
+        case 9: return IP_TELEVISION_RIGHT;
+        case 10: return IP_TELEVISION_DOWN;
+        case 11: return IP_TELEVISION_PLAY_OR_PAUSE;
+        case 12: return IP_TELEVISION_1;
+        case 13: return IP_TELEVISION_2;
+        case 14: return IP_TELEVISION_3;
+        case 15: return IP_TELEVISION_4;
+        case 16: return IP_TELEVISION_5;
+        case 17: return IP_TELEVISION_6;
+        case 18: return IP_TELEVISION_7;
+        case 19: return IP_TELEVISION_8;
+        case 20: return IP_TELEVISION_9;
+        case 21: return IP_TELEVISION_0;
+        case 22: return IP_TELEVISION_RETURN;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<IpTelevisionCommand>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<IpTelevisionCommand>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<IpTelevisionCommand>() {
+            public IpTelevisionCommand findValueByNumber(int number) {
+              return IpTelevisionCommand.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(59);
+    }
+
+    private static final IpTelevisionCommand[] VALUES = values();
+
+    public static IpTelevisionCommand valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private IpTelevisionCommand(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.IpTelevisionCommand)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.SettopBoxCommand}
+   */
+  public enum SettopBoxCommand
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>SETTOP_BOX_STANDBY = 0;</code>
+     */
+    SETTOP_BOX_STANDBY(0, 0),
+    /**
+     * <code>SETTOP_BOX_1 = 1;</code>
+     */
+    SETTOP_BOX_1(1, 1),
+    /**
+     * <code>SETTOP_BOX_2 = 2;</code>
+     */
+    SETTOP_BOX_2(2, 2),
+    /**
+     * <code>SETTOP_BOX_3 = 3;</code>
+     */
+    SETTOP_BOX_3(3, 3),
+    /**
+     * <code>SETTOP_BOX_4 = 4;</code>
+     */
+    SETTOP_BOX_4(4, 4),
+    /**
+     * <code>SETTOP_BOX_5 = 5;</code>
+     */
+    SETTOP_BOX_5(5, 5),
+    /**
+     * <code>SETTOP_BOX_6 = 6;</code>
+     */
+    SETTOP_BOX_6(6, 6),
+    /**
+     * <code>SETTOP_BOX_7 = 7;</code>
+     */
+    SETTOP_BOX_7(7, 7),
+    /**
+     * <code>SETTOP_BOX_8 = 8;</code>
+     */
+    SETTOP_BOX_8(8, 8),
+    /**
+     * <code>SETTOP_BOX_9 = 9;</code>
+     */
+    SETTOP_BOX_9(9, 9),
+    /**
+     * <code>SETTOP_BOX_GUIDE = 10;</code>
+     */
+    SETTOP_BOX_GUIDE(10, 10),
+    /**
+     * <code>SETTOP_BOX_0 = 11;</code>
+     */
+    SETTOP_BOX_0(11, 11),
+    /**
+     * <code>SETTOP_BOX_RETURN = 12;</code>
+     */
+    SETTOP_BOX_RETURN(12, 12),
+    /**
+     * <code>SETTOP_BOX_UP = 13;</code>
+     */
+    SETTOP_BOX_UP(13, 13),
+    /**
+     * <code>SETTOP_BOX_LEFT = 14;</code>
+     */
+    SETTOP_BOX_LEFT(14, 14),
+    /**
+     * <code>SETTOP_BOX_CONFIRM = 15;</code>
+     */
+    SETTOP_BOX_CONFIRM(15, 15),
+    /**
+     * <code>SETTOP_BOX_RIGHT = 16;</code>
+     */
+    SETTOP_BOX_RIGHT(16, 16),
+    /**
+     * <code>SETTOP_BOX_DOWN = 17;</code>
+     */
+    SETTOP_BOX_DOWN(17, 17),
+    /**
+     * <code>SETTOP_BOX_VOLUME = 18;</code>
+     */
+    SETTOP_BOX_VOLUME(18, 18),
+    /**
+     * <code>SETTOP_BOX_VOLUME_REDUCTION = 19;</code>
+     */
+    SETTOP_BOX_VOLUME_REDUCTION(19, 19),
+    /**
+     * <code>SETTOP_BOX_CHANNEL_PLUS = 20;</code>
+     */
+    SETTOP_BOX_CHANNEL_PLUS(20, 20),
+    /**
+     * <code>SETTOP_BOX_CHANNEL_REDUCTION = 21;</code>
+     */
+    SETTOP_BOX_CHANNEL_REDUCTION(21, 21),
+    /**
+     * <code>SETTOP_BOX_MENU = 22;</code>
+     */
+    SETTOP_BOX_MENU(22, 22),
+    ;
+
+    /**
+     * <code>SETTOP_BOX_STANDBY = 0;</code>
+     */
+    public static final int SETTOP_BOX_STANDBY_VALUE = 0;
+    /**
+     * <code>SETTOP_BOX_1 = 1;</code>
+     */
+    public static final int SETTOP_BOX_1_VALUE = 1;
+    /**
+     * <code>SETTOP_BOX_2 = 2;</code>
+     */
+    public static final int SETTOP_BOX_2_VALUE = 2;
+    /**
+     * <code>SETTOP_BOX_3 = 3;</code>
+     */
+    public static final int SETTOP_BOX_3_VALUE = 3;
+    /**
+     * <code>SETTOP_BOX_4 = 4;</code>
+     */
+    public static final int SETTOP_BOX_4_VALUE = 4;
+    /**
+     * <code>SETTOP_BOX_5 = 5;</code>
+     */
+    public static final int SETTOP_BOX_5_VALUE = 5;
+    /**
+     * <code>SETTOP_BOX_6 = 6;</code>
+     */
+    public static final int SETTOP_BOX_6_VALUE = 6;
+    /**
+     * <code>SETTOP_BOX_7 = 7;</code>
+     */
+    public static final int SETTOP_BOX_7_VALUE = 7;
+    /**
+     * <code>SETTOP_BOX_8 = 8;</code>
+     */
+    public static final int SETTOP_BOX_8_VALUE = 8;
+    /**
+     * <code>SETTOP_BOX_9 = 9;</code>
+     */
+    public static final int SETTOP_BOX_9_VALUE = 9;
+    /**
+     * <code>SETTOP_BOX_GUIDE = 10;</code>
+     */
+    public static final int SETTOP_BOX_GUIDE_VALUE = 10;
+    /**
+     * <code>SETTOP_BOX_0 = 11;</code>
+     */
+    public static final int SETTOP_BOX_0_VALUE = 11;
+    /**
+     * <code>SETTOP_BOX_RETURN = 12;</code>
+     */
+    public static final int SETTOP_BOX_RETURN_VALUE = 12;
+    /**
+     * <code>SETTOP_BOX_UP = 13;</code>
+     */
+    public static final int SETTOP_BOX_UP_VALUE = 13;
+    /**
+     * <code>SETTOP_BOX_LEFT = 14;</code>
+     */
+    public static final int SETTOP_BOX_LEFT_VALUE = 14;
+    /**
+     * <code>SETTOP_BOX_CONFIRM = 15;</code>
+     */
+    public static final int SETTOP_BOX_CONFIRM_VALUE = 15;
+    /**
+     * <code>SETTOP_BOX_RIGHT = 16;</code>
+     */
+    public static final int SETTOP_BOX_RIGHT_VALUE = 16;
+    /**
+     * <code>SETTOP_BOX_DOWN = 17;</code>
+     */
+    public static final int SETTOP_BOX_DOWN_VALUE = 17;
+    /**
+     * <code>SETTOP_BOX_VOLUME = 18;</code>
+     */
+    public static final int SETTOP_BOX_VOLUME_VALUE = 18;
+    /**
+     * <code>SETTOP_BOX_VOLUME_REDUCTION = 19;</code>
+     */
+    public static final int SETTOP_BOX_VOLUME_REDUCTION_VALUE = 19;
+    /**
+     * <code>SETTOP_BOX_CHANNEL_PLUS = 20;</code>
+     */
+    public static final int SETTOP_BOX_CHANNEL_PLUS_VALUE = 20;
+    /**
+     * <code>SETTOP_BOX_CHANNEL_REDUCTION = 21;</code>
+     */
+    public static final int SETTOP_BOX_CHANNEL_REDUCTION_VALUE = 21;
+    /**
+     * <code>SETTOP_BOX_MENU = 22;</code>
+     */
+    public static final int SETTOP_BOX_MENU_VALUE = 22;
+
+
+    public final int getNumber() { return value; }
+
+    public static SettopBoxCommand valueOf(int value) {
+      switch (value) {
+        case 0: return SETTOP_BOX_STANDBY;
+        case 1: return SETTOP_BOX_1;
+        case 2: return SETTOP_BOX_2;
+        case 3: return SETTOP_BOX_3;
+        case 4: return SETTOP_BOX_4;
+        case 5: return SETTOP_BOX_5;
+        case 6: return SETTOP_BOX_6;
+        case 7: return SETTOP_BOX_7;
+        case 8: return SETTOP_BOX_8;
+        case 9: return SETTOP_BOX_9;
+        case 10: return SETTOP_BOX_GUIDE;
+        case 11: return SETTOP_BOX_0;
+        case 12: return SETTOP_BOX_RETURN;
+        case 13: return SETTOP_BOX_UP;
+        case 14: return SETTOP_BOX_LEFT;
+        case 15: return SETTOP_BOX_CONFIRM;
+        case 16: return SETTOP_BOX_RIGHT;
+        case 17: return SETTOP_BOX_DOWN;
+        case 18: return SETTOP_BOX_VOLUME;
+        case 19: return SETTOP_BOX_VOLUME_REDUCTION;
+        case 20: return SETTOP_BOX_CHANNEL_PLUS;
+        case 21: return SETTOP_BOX_CHANNEL_REDUCTION;
+        case 22: return SETTOP_BOX_MENU;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<SettopBoxCommand>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<SettopBoxCommand>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<SettopBoxCommand>() {
+            public SettopBoxCommand findValueByNumber(int number) {
+              return SettopBoxCommand.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(60);
+    }
+
+    private static final SettopBoxCommand[] VALUES = values();
+
+    public static SettopBoxCommand valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private SettopBoxCommand(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.SettopBoxCommand)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.TelevisionCommand}
+   */
+  public enum TelevisionCommand
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>TELEVISION_VOLUME_REDUCTION = 0;</code>
+     */
+    TELEVISION_VOLUME_REDUCTION(0, 0),
+    /**
+     * <code>TELEVISION_CHANNEL_PLUS = 1;</code>
+     */
+    TELEVISION_CHANNEL_PLUS(1, 1),
+    /**
+     * <code>TELEVISION_MENU = 2;</code>
+     */
+    TELEVISION_MENU(2, 2),
+    /**
+     * <code>TELEVISION_CHANNEL_REDUCTION = 3;</code>
+     */
+    TELEVISION_CHANNEL_REDUCTION(3, 3),
+    /**
+     * <code>TELEVISION_VOLUME = 4;</code>
+     */
+    TELEVISION_VOLUME(4, 4),
+    /**
+     * <code>TELEVISION_POWER = 5;</code>
+     */
+    TELEVISION_POWER(5, 5),
+    /**
+     * <code>TELEVISION_MUTE = 6;</code>
+     */
+    TELEVISION_MUTE(6, 6),
+    /**
+     * <code>TELEVISION_1 = 7;</code>
+     */
+    TELEVISION_1(7, 7),
+    /**
+     * <code>TELEVISION_2 = 8;</code>
+     */
+    TELEVISION_2(8, 8),
+    /**
+     * <code>TELEVISION_3 = 9;</code>
+     */
+    TELEVISION_3(9, 9),
+    /**
+     * <code>TELEVISION_4 = 10;</code>
+     */
+    TELEVISION_4(10, 10),
+    /**
+     * <code>TELEVISION_5 = 11;</code>
+     */
+    TELEVISION_5(11, 11),
+    /**
+     * <code>TELEVISION_6 = 12;</code>
+     */
+    TELEVISION_6(12, 12),
+    /**
+     * <code>TELEVISION_7 = 13;</code>
+     */
+    TELEVISION_7(13, 13),
+    /**
+     * <code>TELEVISION_8 = 14;</code>
+     */
+    TELEVISION_8(14, 14),
+    /**
+     * <code>TELEVISION_9 = 15;</code>
+     */
+    TELEVISION_9(15, 15),
+    /**
+     * <code>TELEVISION_COMBINATION = 16;</code>
+     */
+    TELEVISION_COMBINATION(16, 16),
+    /**
+     * <code>TELEVISION_0 = 17;</code>
+     */
+    TELEVISION_0(17, 17),
+    /**
+     * <code>TELEVISION_AV_TV = 18;</code>
+     */
+    TELEVISION_AV_TV(18, 18),
+    /**
+     * <code>TELEVISION_RETURN = 19;</code>
+     */
+    TELEVISION_RETURN(19, 19),
+    /**
+     * <code>TELEVISION_CONFIRM = 20;</code>
+     */
+    TELEVISION_CONFIRM(20, 20),
+    /**
+     * <code>TELEVISION_UP = 21;</code>
+     */
+    TELEVISION_UP(21, 21),
+    /**
+     * <code>TELEVISION_LEFT = 22;</code>
+     */
+    TELEVISION_LEFT(22, 22),
+    /**
+     * <code>TELEVISION_RIGHT = 23;</code>
+     */
+    TELEVISION_RIGHT(23, 23),
+    /**
+     * <code>TELEVISION_DOWN = 24;</code>
+     */
+    TELEVISION_DOWN(24, 24),
+    ;
+
+    /**
+     * <code>TELEVISION_VOLUME_REDUCTION = 0;</code>
+     */
+    public static final int TELEVISION_VOLUME_REDUCTION_VALUE = 0;
+    /**
+     * <code>TELEVISION_CHANNEL_PLUS = 1;</code>
+     */
+    public static final int TELEVISION_CHANNEL_PLUS_VALUE = 1;
+    /**
+     * <code>TELEVISION_MENU = 2;</code>
+     */
+    public static final int TELEVISION_MENU_VALUE = 2;
+    /**
+     * <code>TELEVISION_CHANNEL_REDUCTION = 3;</code>
+     */
+    public static final int TELEVISION_CHANNEL_REDUCTION_VALUE = 3;
+    /**
+     * <code>TELEVISION_VOLUME = 4;</code>
+     */
+    public static final int TELEVISION_VOLUME_VALUE = 4;
+    /**
+     * <code>TELEVISION_POWER = 5;</code>
+     */
+    public static final int TELEVISION_POWER_VALUE = 5;
+    /**
+     * <code>TELEVISION_MUTE = 6;</code>
+     */
+    public static final int TELEVISION_MUTE_VALUE = 6;
+    /**
+     * <code>TELEVISION_1 = 7;</code>
+     */
+    public static final int TELEVISION_1_VALUE = 7;
+    /**
+     * <code>TELEVISION_2 = 8;</code>
+     */
+    public static final int TELEVISION_2_VALUE = 8;
+    /**
+     * <code>TELEVISION_3 = 9;</code>
+     */
+    public static final int TELEVISION_3_VALUE = 9;
+    /**
+     * <code>TELEVISION_4 = 10;</code>
+     */
+    public static final int TELEVISION_4_VALUE = 10;
+    /**
+     * <code>TELEVISION_5 = 11;</code>
+     */
+    public static final int TELEVISION_5_VALUE = 11;
+    /**
+     * <code>TELEVISION_6 = 12;</code>
+     */
+    public static final int TELEVISION_6_VALUE = 12;
+    /**
+     * <code>TELEVISION_7 = 13;</code>
+     */
+    public static final int TELEVISION_7_VALUE = 13;
+    /**
+     * <code>TELEVISION_8 = 14;</code>
+     */
+    public static final int TELEVISION_8_VALUE = 14;
+    /**
+     * <code>TELEVISION_9 = 15;</code>
+     */
+    public static final int TELEVISION_9_VALUE = 15;
+    /**
+     * <code>TELEVISION_COMBINATION = 16;</code>
+     */
+    public static final int TELEVISION_COMBINATION_VALUE = 16;
+    /**
+     * <code>TELEVISION_0 = 17;</code>
+     */
+    public static final int TELEVISION_0_VALUE = 17;
+    /**
+     * <code>TELEVISION_AV_TV = 18;</code>
+     */
+    public static final int TELEVISION_AV_TV_VALUE = 18;
+    /**
+     * <code>TELEVISION_RETURN = 19;</code>
+     */
+    public static final int TELEVISION_RETURN_VALUE = 19;
+    /**
+     * <code>TELEVISION_CONFIRM = 20;</code>
+     */
+    public static final int TELEVISION_CONFIRM_VALUE = 20;
+    /**
+     * <code>TELEVISION_UP = 21;</code>
+     */
+    public static final int TELEVISION_UP_VALUE = 21;
+    /**
+     * <code>TELEVISION_LEFT = 22;</code>
+     */
+    public static final int TELEVISION_LEFT_VALUE = 22;
+    /**
+     * <code>TELEVISION_RIGHT = 23;</code>
+     */
+    public static final int TELEVISION_RIGHT_VALUE = 23;
+    /**
+     * <code>TELEVISION_DOWN = 24;</code>
+     */
+    public static final int TELEVISION_DOWN_VALUE = 24;
+
+
+    public final int getNumber() { return value; }
+
+    public static TelevisionCommand valueOf(int value) {
+      switch (value) {
+        case 0: return TELEVISION_VOLUME_REDUCTION;
+        case 1: return TELEVISION_CHANNEL_PLUS;
+        case 2: return TELEVISION_MENU;
+        case 3: return TELEVISION_CHANNEL_REDUCTION;
+        case 4: return TELEVISION_VOLUME;
+        case 5: return TELEVISION_POWER;
+        case 6: return TELEVISION_MUTE;
+        case 7: return TELEVISION_1;
+        case 8: return TELEVISION_2;
+        case 9: return TELEVISION_3;
+        case 10: return TELEVISION_4;
+        case 11: return TELEVISION_5;
+        case 12: return TELEVISION_6;
+        case 13: return TELEVISION_7;
+        case 14: return TELEVISION_8;
+        case 15: return TELEVISION_9;
+        case 16: return TELEVISION_COMBINATION;
+        case 17: return TELEVISION_0;
+        case 18: return TELEVISION_AV_TV;
+        case 19: return TELEVISION_RETURN;
+        case 20: return TELEVISION_CONFIRM;
+        case 21: return TELEVISION_UP;
+        case 22: return TELEVISION_LEFT;
+        case 23: return TELEVISION_RIGHT;
+        case 24: return TELEVISION_DOWN;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<TelevisionCommand>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<TelevisionCommand>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<TelevisionCommand>() {
+            public TelevisionCommand findValueByNumber(int number) {
+              return TelevisionCommand.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(61);
+    }
+
+    private static final TelevisionCommand[] VALUES = values();
+
+    public static TelevisionCommand valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private TelevisionCommand(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.TelevisionCommand)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.ElectricFanCommand}
+   */
+  public enum ElectricFanCommand
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>ELECTRIC_FAN_ON_OFF = 0;</code>
+     */
+    ELECTRIC_FAN_ON_OFF(0, 0),
+    /**
+     * <code>ELECTRIC_FAN_WIND_VELOCITY = 1;</code>
+     */
+    ELECTRIC_FAN_WIND_VELOCITY(1, 1),
+    /**
+     * <code>ELECTRIC_FAN_SWING = 2;</code>
+     */
+    ELECTRIC_FAN_SWING(2, 2),
+    /**
+     * <code>ELECTRIC_FAN_MODE = 3;</code>
+     */
+    ELECTRIC_FAN_MODE(3, 3),
+    /**
+     * <code>ELECTRIC_FAN_FIXED_TIME = 4;</code>
+     */
+    ELECTRIC_FAN_FIXED_TIME(4, 4),
+    /**
+     * <code>ELECTRIC_FAN_LIGHT = 5;</code>
+     */
+    ELECTRIC_FAN_LIGHT(5, 5),
+    /**
+     * <code>ELECTRIC_FAN_ANION = 6;</code>
+     */
+    ELECTRIC_FAN_ANION(6, 6),
+    /**
+     * <code>ELECTRIC_FAN_1 = 7;</code>
+     */
+    ELECTRIC_FAN_1(7, 7),
+    /**
+     * <code>ELECTRIC_FAN_2 = 8;</code>
+     */
+    ELECTRIC_FAN_2(8, 8),
+    /**
+     * <code>ELECTRIC_FAN_3 = 9;</code>
+     */
+    ELECTRIC_FAN_3(9, 9),
+    /**
+     * <code>ELECTRIC_FAN_4 = 10;</code>
+     */
+    ELECTRIC_FAN_4(10, 10),
+    /**
+     * <code>ELECTRIC_FAN_5 = 11;</code>
+     */
+    ELECTRIC_FAN_5(11, 11),
+    /**
+     * <code>ELECTRIC_FAN_6 = 12;</code>
+     */
+    ELECTRIC_FAN_6(12, 12),
+    /**
+     * <code>ELECTRIC_FAN_7 = 13;</code>
+     */
+    ELECTRIC_FAN_7(13, 13),
+    /**
+     * <code>ELECTRIC_FAN_8 = 14;</code>
+     */
+    ELECTRIC_FAN_8(14, 14),
+    /**
+     * <code>ELECTRIC_FAN_9 = 15;</code>
+     */
+    ELECTRIC_FAN_9(15, 15),
+    /**
+     * <code>ELECTRIC_FAN_SLEEP = 16;</code>
+     */
+    ELECTRIC_FAN_SLEEP(16, 16),
+    /**
+     * <code>ELECTRIC_FAN_FREEZE = 17;</code>
+     */
+    ELECTRIC_FAN_FREEZE(17, 17),
+    /**
+     * <code>ELECTRIC_FAN_BLOWING_RATE = 18;</code>
+     */
+    ELECTRIC_FAN_BLOWING_RATE(18, 18),
+    /**
+     * <code>ELECTRIC_FAN_BLOWING_LOW = 19;</code>
+     */
+    ELECTRIC_FAN_BLOWING_LOW(19, 19),
+    /**
+     * <code>ELECTRIC_FAN_BLOWING_MEDIUM = 20;</code>
+     */
+    ELECTRIC_FAN_BLOWING_MEDIUM(20, 20),
+    /**
+     * <code>ELECTRIC_FAN_BLOWING_HIGH = 21;</code>
+     */
+    ELECTRIC_FAN_BLOWING_HIGH(21, 21),
+    ;
+
+    /**
+     * <code>ELECTRIC_FAN_ON_OFF = 0;</code>
+     */
+    public static final int ELECTRIC_FAN_ON_OFF_VALUE = 0;
+    /**
+     * <code>ELECTRIC_FAN_WIND_VELOCITY = 1;</code>
+     */
+    public static final int ELECTRIC_FAN_WIND_VELOCITY_VALUE = 1;
+    /**
+     * <code>ELECTRIC_FAN_SWING = 2;</code>
+     */
+    public static final int ELECTRIC_FAN_SWING_VALUE = 2;
+    /**
+     * <code>ELECTRIC_FAN_MODE = 3;</code>
+     */
+    public static final int ELECTRIC_FAN_MODE_VALUE = 3;
+    /**
+     * <code>ELECTRIC_FAN_FIXED_TIME = 4;</code>
+     */
+    public static final int ELECTRIC_FAN_FIXED_TIME_VALUE = 4;
+    /**
+     * <code>ELECTRIC_FAN_LIGHT = 5;</code>
+     */
+    public static final int ELECTRIC_FAN_LIGHT_VALUE = 5;
+    /**
+     * <code>ELECTRIC_FAN_ANION = 6;</code>
+     */
+    public static final int ELECTRIC_FAN_ANION_VALUE = 6;
+    /**
+     * <code>ELECTRIC_FAN_1 = 7;</code>
+     */
+    public static final int ELECTRIC_FAN_1_VALUE = 7;
+    /**
+     * <code>ELECTRIC_FAN_2 = 8;</code>
+     */
+    public static final int ELECTRIC_FAN_2_VALUE = 8;
+    /**
+     * <code>ELECTRIC_FAN_3 = 9;</code>
+     */
+    public static final int ELECTRIC_FAN_3_VALUE = 9;
+    /**
+     * <code>ELECTRIC_FAN_4 = 10;</code>
+     */
+    public static final int ELECTRIC_FAN_4_VALUE = 10;
+    /**
+     * <code>ELECTRIC_FAN_5 = 11;</code>
+     */
+    public static final int ELECTRIC_FAN_5_VALUE = 11;
+    /**
+     * <code>ELECTRIC_FAN_6 = 12;</code>
+     */
+    public static final int ELECTRIC_FAN_6_VALUE = 12;
+    /**
+     * <code>ELECTRIC_FAN_7 = 13;</code>
+     */
+    public static final int ELECTRIC_FAN_7_VALUE = 13;
+    /**
+     * <code>ELECTRIC_FAN_8 = 14;</code>
+     */
+    public static final int ELECTRIC_FAN_8_VALUE = 14;
+    /**
+     * <code>ELECTRIC_FAN_9 = 15;</code>
+     */
+    public static final int ELECTRIC_FAN_9_VALUE = 15;
+    /**
+     * <code>ELECTRIC_FAN_SLEEP = 16;</code>
+     */
+    public static final int ELECTRIC_FAN_SLEEP_VALUE = 16;
+    /**
+     * <code>ELECTRIC_FAN_FREEZE = 17;</code>
+     */
+    public static final int ELECTRIC_FAN_FREEZE_VALUE = 17;
+    /**
+     * <code>ELECTRIC_FAN_BLOWING_RATE = 18;</code>
+     */
+    public static final int ELECTRIC_FAN_BLOWING_RATE_VALUE = 18;
+    /**
+     * <code>ELECTRIC_FAN_BLOWING_LOW = 19;</code>
+     */
+    public static final int ELECTRIC_FAN_BLOWING_LOW_VALUE = 19;
+    /**
+     * <code>ELECTRIC_FAN_BLOWING_MEDIUM = 20;</code>
+     */
+    public static final int ELECTRIC_FAN_BLOWING_MEDIUM_VALUE = 20;
+    /**
+     * <code>ELECTRIC_FAN_BLOWING_HIGH = 21;</code>
+     */
+    public static final int ELECTRIC_FAN_BLOWING_HIGH_VALUE = 21;
+
+
+    public final int getNumber() { return value; }
+
+    public static ElectricFanCommand valueOf(int value) {
+      switch (value) {
+        case 0: return ELECTRIC_FAN_ON_OFF;
+        case 1: return ELECTRIC_FAN_WIND_VELOCITY;
+        case 2: return ELECTRIC_FAN_SWING;
+        case 3: return ELECTRIC_FAN_MODE;
+        case 4: return ELECTRIC_FAN_FIXED_TIME;
+        case 5: return ELECTRIC_FAN_LIGHT;
+        case 6: return ELECTRIC_FAN_ANION;
+        case 7: return ELECTRIC_FAN_1;
+        case 8: return ELECTRIC_FAN_2;
+        case 9: return ELECTRIC_FAN_3;
+        case 10: return ELECTRIC_FAN_4;
+        case 11: return ELECTRIC_FAN_5;
+        case 12: return ELECTRIC_FAN_6;
+        case 13: return ELECTRIC_FAN_7;
+        case 14: return ELECTRIC_FAN_8;
+        case 15: return ELECTRIC_FAN_9;
+        case 16: return ELECTRIC_FAN_SLEEP;
+        case 17: return ELECTRIC_FAN_FREEZE;
+        case 18: return ELECTRIC_FAN_BLOWING_RATE;
+        case 19: return ELECTRIC_FAN_BLOWING_LOW;
+        case 20: return ELECTRIC_FAN_BLOWING_MEDIUM;
+        case 21: return ELECTRIC_FAN_BLOWING_HIGH;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ElectricFanCommand>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<ElectricFanCommand>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ElectricFanCommand>() {
+            public ElectricFanCommand findValueByNumber(int number) {
+              return ElectricFanCommand.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(62);
+    }
+
+    private static final ElectricFanCommand[] VALUES = values();
+
+    public static ElectricFanCommand valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private ElectricFanCommand(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.ElectricFanCommand)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.ProjectorCommand}
+   */
+  public enum ProjectorCommand
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>PROJECTOR_POWER_ON = 0;</code>
+     */
+    PROJECTOR_POWER_ON(0, 0),
+    /**
+     * <code>PROJECTOR_POWER_OFF = 1;</code>
+     */
+    PROJECTOR_POWER_OFF(1, 1),
+    /**
+     * <code>PROJECTOR_COMPUTER = 2;</code>
+     */
+    PROJECTOR_COMPUTER(2, 2),
+    /**
+     * <code>PROJECTOR_VIDEO = 3;</code>
+     */
+    PROJECTOR_VIDEO(3, 3),
+    /**
+     * <code>PROJECTOR_SIGNAL_SOURCE = 4;</code>
+     */
+    PROJECTOR_SIGNAL_SOURCE(4, 4),
+    /**
+     * <code>PROJECTOR_ZOOM_PLUS = 5;</code>
+     */
+    PROJECTOR_ZOOM_PLUS(5, 5),
+    /**
+     * <code>PROJECTOR_ZOOM_REDUCTION = 6;</code>
+     */
+    PROJECTOR_ZOOM_REDUCTION(6, 6),
+    /**
+     * <code>PROJECTOR_IMAGE_PLUS = 7;</code>
+     */
+    PROJECTOR_IMAGE_PLUS(7, 7),
+    /**
+     * <code>PROJECTOR_IMAGE_REDUCTION = 8;</code>
+     */
+    PROJECTOR_IMAGE_REDUCTION(8, 8),
+    /**
+     * <code>PROJECTOR_MENU = 9;</code>
+     */
+    PROJECTOR_MENU(9, 9),
+    /**
+     * <code>PROJECTOR_CONFIRM = 10;</code>
+     */
+    PROJECTOR_CONFIRM(10, 10),
+    /**
+     * <code>PROJECTOR_UP = 11;</code>
+     */
+    PROJECTOR_UP(11, 11),
+    /**
+     * <code>PROJECTOR_LEFT = 12;</code>
+     */
+    PROJECTOR_LEFT(12, 12),
+    /**
+     * <code>PROJECTOR_RIGHT = 13;</code>
+     */
+    PROJECTOR_RIGHT(13, 13),
+    /**
+     * <code>PROJECTOR_DOWN = 14;</code>
+     */
+    PROJECTOR_DOWN(14, 14),
+    /**
+     * <code>PROJECTOR_QUIT = 15;</code>
+     */
+    PROJECTOR_QUIT(15, 15),
+    /**
+     * <code>PROJECTOR_VOLUME = 16;</code>
+     */
+    PROJECTOR_VOLUME(16, 16),
+    /**
+     * <code>PROJECTOR_VOLUME_REDUCTION = 17;</code>
+     */
+    PROJECTOR_VOLUME_REDUCTION(17, 17),
+    /**
+     * <code>PROJECTOR_MUTE = 18;</code>
+     */
+    PROJECTOR_MUTE(18, 18),
+    /**
+     * <code>PROJECTOR_AUTO = 19;</code>
+     */
+    PROJECTOR_AUTO(19, 19),
+    /**
+     * <code>PROJECTOR_PAUSE = 20;</code>
+     */
+    PROJECTOR_PAUSE(20, 20),
+    /**
+     * <code>PROJECTOR_BRIGHTNESS = 21;</code>
+     */
+    PROJECTOR_BRIGHTNESS(21, 21),
+    ;
+
+    /**
+     * <code>PROJECTOR_POWER_ON = 0;</code>
+     */
+    public static final int PROJECTOR_POWER_ON_VALUE = 0;
+    /**
+     * <code>PROJECTOR_POWER_OFF = 1;</code>
+     */
+    public static final int PROJECTOR_POWER_OFF_VALUE = 1;
+    /**
+     * <code>PROJECTOR_COMPUTER = 2;</code>
+     */
+    public static final int PROJECTOR_COMPUTER_VALUE = 2;
+    /**
+     * <code>PROJECTOR_VIDEO = 3;</code>
+     */
+    public static final int PROJECTOR_VIDEO_VALUE = 3;
+    /**
+     * <code>PROJECTOR_SIGNAL_SOURCE = 4;</code>
+     */
+    public static final int PROJECTOR_SIGNAL_SOURCE_VALUE = 4;
+    /**
+     * <code>PROJECTOR_ZOOM_PLUS = 5;</code>
+     */
+    public static final int PROJECTOR_ZOOM_PLUS_VALUE = 5;
+    /**
+     * <code>PROJECTOR_ZOOM_REDUCTION = 6;</code>
+     */
+    public static final int PROJECTOR_ZOOM_REDUCTION_VALUE = 6;
+    /**
+     * <code>PROJECTOR_IMAGE_PLUS = 7;</code>
+     */
+    public static final int PROJECTOR_IMAGE_PLUS_VALUE = 7;
+    /**
+     * <code>PROJECTOR_IMAGE_REDUCTION = 8;</code>
+     */
+    public static final int PROJECTOR_IMAGE_REDUCTION_VALUE = 8;
+    /**
+     * <code>PROJECTOR_MENU = 9;</code>
+     */
+    public static final int PROJECTOR_MENU_VALUE = 9;
+    /**
+     * <code>PROJECTOR_CONFIRM = 10;</code>
+     */
+    public static final int PROJECTOR_CONFIRM_VALUE = 10;
+    /**
+     * <code>PROJECTOR_UP = 11;</code>
+     */
+    public static final int PROJECTOR_UP_VALUE = 11;
+    /**
+     * <code>PROJECTOR_LEFT = 12;</code>
+     */
+    public static final int PROJECTOR_LEFT_VALUE = 12;
+    /**
+     * <code>PROJECTOR_RIGHT = 13;</code>
+     */
+    public static final int PROJECTOR_RIGHT_VALUE = 13;
+    /**
+     * <code>PROJECTOR_DOWN = 14;</code>
+     */
+    public static final int PROJECTOR_DOWN_VALUE = 14;
+    /**
+     * <code>PROJECTOR_QUIT = 15;</code>
+     */
+    public static final int PROJECTOR_QUIT_VALUE = 15;
+    /**
+     * <code>PROJECTOR_VOLUME = 16;</code>
+     */
+    public static final int PROJECTOR_VOLUME_VALUE = 16;
+    /**
+     * <code>PROJECTOR_VOLUME_REDUCTION = 17;</code>
+     */
+    public static final int PROJECTOR_VOLUME_REDUCTION_VALUE = 17;
+    /**
+     * <code>PROJECTOR_MUTE = 18;</code>
+     */
+    public static final int PROJECTOR_MUTE_VALUE = 18;
+    /**
+     * <code>PROJECTOR_AUTO = 19;</code>
+     */
+    public static final int PROJECTOR_AUTO_VALUE = 19;
+    /**
+     * <code>PROJECTOR_PAUSE = 20;</code>
+     */
+    public static final int PROJECTOR_PAUSE_VALUE = 20;
+    /**
+     * <code>PROJECTOR_BRIGHTNESS = 21;</code>
+     */
+    public static final int PROJECTOR_BRIGHTNESS_VALUE = 21;
+
+
+    public final int getNumber() { return value; }
+
+    public static ProjectorCommand valueOf(int value) {
+      switch (value) {
+        case 0: return PROJECTOR_POWER_ON;
+        case 1: return PROJECTOR_POWER_OFF;
+        case 2: return PROJECTOR_COMPUTER;
+        case 3: return PROJECTOR_VIDEO;
+        case 4: return PROJECTOR_SIGNAL_SOURCE;
+        case 5: return PROJECTOR_ZOOM_PLUS;
+        case 6: return PROJECTOR_ZOOM_REDUCTION;
+        case 7: return PROJECTOR_IMAGE_PLUS;
+        case 8: return PROJECTOR_IMAGE_REDUCTION;
+        case 9: return PROJECTOR_MENU;
+        case 10: return PROJECTOR_CONFIRM;
+        case 11: return PROJECTOR_UP;
+        case 12: return PROJECTOR_LEFT;
+        case 13: return PROJECTOR_RIGHT;
+        case 14: return PROJECTOR_DOWN;
+        case 15: return PROJECTOR_QUIT;
+        case 16: return PROJECTOR_VOLUME;
+        case 17: return PROJECTOR_VOLUME_REDUCTION;
+        case 18: return PROJECTOR_MUTE;
+        case 19: return PROJECTOR_AUTO;
+        case 20: return PROJECTOR_PAUSE;
+        case 21: return PROJECTOR_BRIGHTNESS;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ProjectorCommand>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<ProjectorCommand>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ProjectorCommand>() {
+            public ProjectorCommand findValueByNumber(int number) {
+              return ProjectorCommand.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(63);
+    }
+
+    private static final ProjectorCommand[] VALUES = values();
+
+    public static ProjectorCommand valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private ProjectorCommand(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.ProjectorCommand)
   }
 
   public interface SystemConfigurationOrBuilder extends
@@ -26021,6 +28504,15 @@ public final class Models {
      * </pre>
      */
     boolean getPassphraseNotSet();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
+     */
+    boolean hasAccountGroup();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
+     */
+    mrtech.smarthome.rpc.Models.AccountGroup getAccountGroup();
   }
   /**
    * Protobuf type {@code mrtech.smarthome.rpc.Account}
@@ -26105,6 +28597,17 @@ public final class Models {
             case 48: {
               bitField0_ |= 0x00000020;
               passphraseNotSet_ = input.readBool();
+              break;
+            }
+            case 56: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.AccountGroup value = mrtech.smarthome.rpc.Models.AccountGroup.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(7, rawValue);
+              } else {
+                bitField0_ |= 0x00000040;
+                accountGroup_ = value;
+              }
               break;
             }
           }
@@ -26334,6 +28837,21 @@ public final class Models {
       return passphraseNotSet_;
     }
 
+    public static final int ACCOUNT_GROUP_FIELD_NUMBER = 7;
+    private mrtech.smarthome.rpc.Models.AccountGroup accountGroup_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
+     */
+    public boolean hasAccountGroup() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
+     */
+    public mrtech.smarthome.rpc.Models.AccountGroup getAccountGroup() {
+      return accountGroup_;
+    }
+
     private void initFields() {
       id_ = 0;
       name_ = "";
@@ -26341,6 +28859,7 @@ public final class Models {
       lastActivity_ = 0;
       passphrase_ = "";
       passphraseNotSet_ = false;
+      accountGroup_ = mrtech.smarthome.rpc.Models.AccountGroup.ACCOUNT_GROUP_ADMINISTRATOR;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26372,6 +28891,9 @@ public final class Models {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeBool(6, passphraseNotSet_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeEnum(7, accountGroup_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -26405,6 +28927,10 @@ public final class Models {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(6, passphraseNotSet_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(7, accountGroup_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -26535,6 +29061,8 @@ public final class Models {
         bitField0_ = (bitField0_ & ~0x00000010);
         passphraseNotSet_ = false;
         bitField0_ = (bitField0_ & ~0x00000020);
+        accountGroup_ = mrtech.smarthome.rpc.Models.AccountGroup.ACCOUNT_GROUP_ADMINISTRATOR;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -26587,6 +29115,10 @@ public final class Models {
           to_bitField0_ |= 0x00000020;
         }
         result.passphraseNotSet_ = passphraseNotSet_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.accountGroup_ = accountGroup_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -26626,6 +29158,9 @@ public final class Models {
         }
         if (other.hasPassphraseNotSet()) {
           setPassphraseNotSet(other.getPassphraseNotSet());
+        }
+        if (other.hasAccountGroup()) {
+          setAccountGroup(other.getAccountGroup());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -27006,6 +29541,41 @@ public final class Models {
       public Builder clearPassphraseNotSet() {
         bitField0_ = (bitField0_ & ~0x00000020);
         passphraseNotSet_ = false;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.AccountGroup accountGroup_ = mrtech.smarthome.rpc.Models.AccountGroup.ACCOUNT_GROUP_ADMINISTRATOR;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
+       */
+      public boolean hasAccountGroup() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AccountGroup getAccountGroup() {
+        return accountGroup_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
+       */
+      public Builder setAccountGroup(mrtech.smarthome.rpc.Models.AccountGroup value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000040;
+        accountGroup_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
+       */
+      public Builder clearAccountGroup() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        accountGroup_ = mrtech.smarthome.rpc.Models.AccountGroup.ACCOUNT_GROUP_ADMINISTRATOR;
         onChanged();
         return this;
       }
@@ -64640,6 +67210,15 @@ public final class Models {
      */
     com.google.protobuf.ByteString
         getFileChecksumBytes();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Component.FileStatus file_status = 6;</code>
+     */
+    boolean hasFileStatus();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Component.FileStatus file_status = 6;</code>
+     */
+    mrtech.smarthome.rpc.Models.Component.FileStatus getFileStatus();
   }
   /**
    * Protobuf type {@code mrtech.smarthome.rpc.Component}
@@ -64722,6 +67301,17 @@ public final class Models {
               fileChecksum_ = bs;
               break;
             }
+            case 48: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.Component.FileStatus value = mrtech.smarthome.rpc.Models.Component.FileStatus.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(6, rawValue);
+              } else {
+                bitField0_ |= 0x00000020;
+                fileStatus_ = value;
+              }
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -64759,6 +67349,97 @@ public final class Models {
     @java.lang.Override
     public com.google.protobuf.Parser<Component> getParserForType() {
       return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code mrtech.smarthome.rpc.Component.FileStatus}
+     */
+    public enum FileStatus
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>NOT_DOWNLOAD = 0;</code>
+       */
+      NOT_DOWNLOAD(0, 0),
+      /**
+       * <code>DOWNLOADED = 1;</code>
+       */
+      DOWNLOADED(1, 1),
+      /**
+       * <code>RE_DOWNLOAD = 2;</code>
+       */
+      RE_DOWNLOAD(2, 2),
+      ;
+
+      /**
+       * <code>NOT_DOWNLOAD = 0;</code>
+       */
+      public static final int NOT_DOWNLOAD_VALUE = 0;
+      /**
+       * <code>DOWNLOADED = 1;</code>
+       */
+      public static final int DOWNLOADED_VALUE = 1;
+      /**
+       * <code>RE_DOWNLOAD = 2;</code>
+       */
+      public static final int RE_DOWNLOAD_VALUE = 2;
+
+
+      public final int getNumber() { return value; }
+
+      public static FileStatus valueOf(int value) {
+        switch (value) {
+          case 0: return NOT_DOWNLOAD;
+          case 1: return DOWNLOADED;
+          case 2: return RE_DOWNLOAD;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<FileStatus>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<FileStatus>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<FileStatus>() {
+              public FileStatus findValueByNumber(int number) {
+                return FileStatus.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.Component.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final FileStatus[] VALUES = values();
+
+      public static FileStatus valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private FileStatus(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.Component.FileStatus)
     }
 
     private int bitField0_;
@@ -64945,12 +67626,28 @@ public final class Models {
       }
     }
 
+    public static final int FILE_STATUS_FIELD_NUMBER = 6;
+    private mrtech.smarthome.rpc.Models.Component.FileStatus fileStatus_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Component.FileStatus file_status = 6;</code>
+     */
+    public boolean hasFileStatus() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Component.FileStatus file_status = 6;</code>
+     */
+    public mrtech.smarthome.rpc.Models.Component.FileStatus getFileStatus() {
+      return fileStatus_;
+    }
+
     private void initFields() {
       name_ = "";
       currentVersion_ = "";
       latestVersion_ = "";
       timePublished_ = 0;
       fileChecksum_ = "";
+      fileStatus_ = mrtech.smarthome.rpc.Models.Component.FileStatus.NOT_DOWNLOAD;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -64980,6 +67677,9 @@ public final class Models {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(5, getFileChecksumBytes());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeEnum(6, fileStatus_.getNumber());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -65008,6 +67708,10 @@ public final class Models {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(5, getFileChecksumBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(6, fileStatus_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -65136,6 +67840,8 @@ public final class Models {
         bitField0_ = (bitField0_ & ~0x00000008);
         fileChecksum_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
+        fileStatus_ = mrtech.smarthome.rpc.Models.Component.FileStatus.NOT_DOWNLOAD;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -65184,6 +67890,10 @@ public final class Models {
           to_bitField0_ |= 0x00000010;
         }
         result.fileChecksum_ = fileChecksum_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.fileStatus_ = fileStatus_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -65222,6 +67932,9 @@ public final class Models {
           bitField0_ |= 0x00000010;
           fileChecksum_ = other.fileChecksum_;
           onChanged();
+        }
+        if (other.hasFileStatus()) {
+          setFileStatus(other.getFileStatus());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -65586,6 +68299,41 @@ public final class Models {
         return this;
       }
 
+      private mrtech.smarthome.rpc.Models.Component.FileStatus fileStatus_ = mrtech.smarthome.rpc.Models.Component.FileStatus.NOT_DOWNLOAD;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Component.FileStatus file_status = 6;</code>
+       */
+      public boolean hasFileStatus() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Component.FileStatus file_status = 6;</code>
+       */
+      public mrtech.smarthome.rpc.Models.Component.FileStatus getFileStatus() {
+        return fileStatus_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Component.FileStatus file_status = 6;</code>
+       */
+      public Builder setFileStatus(mrtech.smarthome.rpc.Models.Component.FileStatus value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000020;
+        fileStatus_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Component.FileStatus file_status = 6;</code>
+       */
+      public Builder clearFileStatus() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        fileStatus_ = mrtech.smarthome.rpc.Models.Component.FileStatus.NOT_DOWNLOAD;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.Component)
     }
 
@@ -65782,6 +68530,10 @@ public final class Models {
        * <code>FAILED = 3;</code>
        */
       FAILED(3, 3),
+      /**
+       * <code>DOWNLOAD_FAILED = 4;</code>
+       */
+      DOWNLOAD_FAILED(4, 4),
       ;
 
       /**
@@ -65800,6 +68552,10 @@ public final class Models {
        * <code>FAILED = 3;</code>
        */
       public static final int FAILED_VALUE = 3;
+      /**
+       * <code>DOWNLOAD_FAILED = 4;</code>
+       */
+      public static final int DOWNLOAD_FAILED_VALUE = 4;
 
 
       public final int getNumber() { return value; }
@@ -65810,6 +68566,7 @@ public final class Models {
           case 1: return DOWNLOADING;
           case 2: return READY_TO_INSTALL;
           case 3: return FAILED;
+          case 4: return DOWNLOAD_FAILED;
           default: return null;
         }
       }
@@ -73409,7 +76166,7 @@ public final class Models {
      * <code>optional bool static_dns = 7;</code>
      *
      * <pre>
-     * Enable auto obtain DNS.
+     * Enable static DNS.
      * </pre>
      */
     boolean hasStaticDns();
@@ -73417,7 +76174,7 @@ public final class Models {
      * <code>optional bool static_dns = 7;</code>
      *
      * <pre>
-     * Enable auto obtain DNS.
+     * Enable static DNS.
      * </pre>
      */
     boolean getStaticDns();
@@ -74239,7 +76996,7 @@ public final class Models {
      * <code>optional bool static_dns = 7;</code>
      *
      * <pre>
-     * Enable auto obtain DNS.
+     * Enable static DNS.
      * </pre>
      */
     public boolean hasStaticDns() {
@@ -74249,7 +77006,7 @@ public final class Models {
      * <code>optional bool static_dns = 7;</code>
      *
      * <pre>
-     * Enable auto obtain DNS.
+     * Enable static DNS.
      * </pre>
      */
     public boolean getStaticDns() {
@@ -75911,7 +78668,7 @@ public final class Models {
        * <code>optional bool static_dns = 7;</code>
        *
        * <pre>
-       * Enable auto obtain DNS.
+       * Enable static DNS.
        * </pre>
        */
       public boolean hasStaticDns() {
@@ -75921,7 +78678,7 @@ public final class Models {
        * <code>optional bool static_dns = 7;</code>
        *
        * <pre>
-       * Enable auto obtain DNS.
+       * Enable static DNS.
        * </pre>
        */
       public boolean getStaticDns() {
@@ -75931,7 +78688,7 @@ public final class Models {
        * <code>optional bool static_dns = 7;</code>
        *
        * <pre>
-       * Enable auto obtain DNS.
+       * Enable static DNS.
        * </pre>
        */
       public Builder setStaticDns(boolean value) {
@@ -75944,7 +78701,7 @@ public final class Models {
        * <code>optional bool static_dns = 7;</code>
        *
        * <pre>
-       * Enable auto obtain DNS.
+       * Enable static DNS.
        * </pre>
        */
       public Builder clearStaticDns() {
@@ -77175,6 +79932,23 @@ public final class Models {
      * </pre>
      */
     mrtech.smarthome.rpc.Models.BandWidth getBandWidth();
+
+    /**
+     * <code>optional bool wps_enabled = 10;</code>
+     *
+     * <pre>
+     *WPS enable option, only for 2.4G primary network.
+     * </pre>
+     */
+    boolean hasWpsEnabled();
+    /**
+     * <code>optional bool wps_enabled = 10;</code>
+     *
+     * <pre>
+     *WPS enable option, only for 2.4G primary network.
+     * </pre>
+     */
+    boolean getWpsEnabled();
   }
   /**
    * Protobuf type {@code mrtech.smarthome.rpc.WlanConfig}
@@ -77294,6 +80068,11 @@ public final class Models {
                 bitField0_ |= 0x00000080;
                 bandWidth_ = value;
               }
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000100;
+              wpsEnabled_ = input.readBool();
               break;
             }
           }
@@ -77659,6 +80438,29 @@ public final class Models {
       return bandWidth_;
     }
 
+    public static final int WPS_ENABLED_FIELD_NUMBER = 10;
+    private boolean wpsEnabled_;
+    /**
+     * <code>optional bool wps_enabled = 10;</code>
+     *
+     * <pre>
+     *WPS enable option, only for 2.4G primary network.
+     * </pre>
+     */
+    public boolean hasWpsEnabled() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional bool wps_enabled = 10;</code>
+     *
+     * <pre>
+     *WPS enable option, only for 2.4G primary network.
+     * </pre>
+     */
+    public boolean getWpsEnabled() {
+      return wpsEnabled_;
+    }
+
     private void initFields() {
       ssid_ = "";
       ssidBroadcast_ = false;
@@ -77669,6 +80471,7 @@ public final class Models {
       accessRule_ = mrtech.smarthome.rpc.Models.AccessRuleMode.ACCESS_RULE_DISABLE;
       enabled_ = false;
       bandWidth_ = mrtech.smarthome.rpc.Models.BandWidth.BAND_WIDTH_20M;
+      wpsEnabled_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -77709,6 +80512,9 @@ public final class Models {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeEnum(9, bandWidth_.getNumber());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBool(10, wpsEnabled_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -77754,6 +80560,10 @@ public final class Models {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(9, bandWidth_.getNumber());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(10, wpsEnabled_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -77895,6 +80705,8 @@ public final class Models {
         bitField0_ = (bitField0_ & ~0x00000080);
         bandWidth_ = mrtech.smarthome.rpc.Models.BandWidth.BAND_WIDTH_20M;
         bitField0_ = (bitField0_ & ~0x00000100);
+        wpsEnabled_ = false;
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -77964,6 +80776,10 @@ public final class Models {
           to_bitField0_ |= 0x00000080;
         }
         result.bandWidth_ = bandWidth_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.wpsEnabled_ = wpsEnabled_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -78033,6 +80849,9 @@ public final class Models {
         }
         if (other.hasBandWidth()) {
           setBandWidth(other.getBandWidth());
+        }
+        if (other.hasWpsEnabled()) {
+          setWpsEnabled(other.getWpsEnabled());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -78928,6 +81747,54 @@ public final class Models {
       public Builder clearBandWidth() {
         bitField0_ = (bitField0_ & ~0x00000100);
         bandWidth_ = mrtech.smarthome.rpc.Models.BandWidth.BAND_WIDTH_20M;
+        onChanged();
+        return this;
+      }
+
+      private boolean wpsEnabled_ ;
+      /**
+       * <code>optional bool wps_enabled = 10;</code>
+       *
+       * <pre>
+       *WPS enable option, only for 2.4G primary network.
+       * </pre>
+       */
+      public boolean hasWpsEnabled() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional bool wps_enabled = 10;</code>
+       *
+       * <pre>
+       *WPS enable option, only for 2.4G primary network.
+       * </pre>
+       */
+      public boolean getWpsEnabled() {
+        return wpsEnabled_;
+      }
+      /**
+       * <code>optional bool wps_enabled = 10;</code>
+       *
+       * <pre>
+       *WPS enable option, only for 2.4G primary network.
+       * </pre>
+       */
+      public Builder setWpsEnabled(boolean value) {
+        bitField0_ |= 0x00000200;
+        wpsEnabled_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool wps_enabled = 10;</code>
+       *
+       * <pre>
+       *WPS enable option, only for 2.4G primary network.
+       * </pre>
+       */
+      public Builder clearWpsEnabled() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        wpsEnabled_ = false;
         onChanged();
         return this;
       }
@@ -98925,6 +101792,11454 @@ public final class Models {
     // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.L2tpConfig)
   }
 
+  public interface InfraredOpCodeOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.InfraredOpCode)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    int getId();
+
+    /**
+     * <code>optional int32 device_id = 2;</code>
+     */
+    boolean hasDeviceId();
+    /**
+     * <code>optional int32 device_id = 2;</code>
+     */
+    int getDeviceId();
+
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    boolean hasName();
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
+    /**
+     * <code>optional bytes opcode = 4;</code>
+     */
+    boolean hasOpcode();
+    /**
+     * <code>optional bytes opcode = 4;</code>
+     */
+    com.google.protobuf.ByteString getOpcode();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.InfraredOpCode}
+   */
+  public static final class InfraredOpCode extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.InfraredOpCode)
+      InfraredOpCodeOrBuilder {
+    // Use InfraredOpCode.newBuilder() to construct.
+    private InfraredOpCode(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private InfraredOpCode(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final InfraredOpCode defaultInstance;
+    public static InfraredOpCode getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public InfraredOpCode getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private InfraredOpCode(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              deviceId_ = input.readInt32();
+              break;
+            }
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000004;
+              name_ = bs;
+              break;
+            }
+            case 34: {
+              bitField0_ |= 0x00000008;
+              opcode_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredOpCode_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredOpCode_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.InfraredOpCode.class, mrtech.smarthome.rpc.Models.InfraredOpCode.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<InfraredOpCode> PARSER =
+        new com.google.protobuf.AbstractParser<InfraredOpCode>() {
+      public InfraredOpCode parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new InfraredOpCode(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<InfraredOpCode> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    public static final int DEVICE_ID_FIELD_NUMBER = 2;
+    private int deviceId_;
+    /**
+     * <code>optional int32 device_id = 2;</code>
+     */
+    public boolean hasDeviceId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional int32 device_id = 2;</code>
+     */
+    public int getDeviceId() {
+      return deviceId_;
+    }
+
+    public static final int NAME_FIELD_NUMBER = 3;
+    private java.lang.Object name_;
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    public boolean hasName() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          name_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int OPCODE_FIELD_NUMBER = 4;
+    private com.google.protobuf.ByteString opcode_;
+    /**
+     * <code>optional bytes opcode = 4;</code>
+     */
+    public boolean hasOpcode() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional bytes opcode = 4;</code>
+     */
+    public com.google.protobuf.ByteString getOpcode() {
+      return opcode_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+      deviceId_ = 0;
+      name_ = "";
+      opcode_ = com.google.protobuf.ByteString.EMPTY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, deviceId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, opcode_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, deviceId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, opcode_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredOpCode parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.InfraredOpCode prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.InfraredOpCode}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.InfraredOpCode)
+        mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredOpCode_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredOpCode_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.InfraredOpCode.class, mrtech.smarthome.rpc.Models.InfraredOpCode.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.InfraredOpCode.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        deviceId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        name_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        opcode_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredOpCode_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredOpCode getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.InfraredOpCode.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredOpCode build() {
+        mrtech.smarthome.rpc.Models.InfraredOpCode result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredOpCode buildPartial() {
+        mrtech.smarthome.rpc.Models.InfraredOpCode result = new mrtech.smarthome.rpc.Models.InfraredOpCode(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.deviceId_ = deviceId_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.name_ = name_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.opcode_ = opcode_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.InfraredOpCode) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.InfraredOpCode)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.InfraredOpCode other) {
+        if (other == mrtech.smarthome.rpc.Models.InfraredOpCode.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasDeviceId()) {
+          setDeviceId(other.getDeviceId());
+        }
+        if (other.hasName()) {
+          bitField0_ |= 0x00000004;
+          name_ = other.name_;
+          onChanged();
+        }
+        if (other.hasOpcode()) {
+          setOpcode(other.getOpcode());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.InfraredOpCode parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.InfraredOpCode) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int id_ ;
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int deviceId_ ;
+      /**
+       * <code>optional int32 device_id = 2;</code>
+       */
+      public boolean hasDeviceId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional int32 device_id = 2;</code>
+       */
+      public int getDeviceId() {
+        return deviceId_;
+      }
+      /**
+       * <code>optional int32 device_id = 2;</code>
+       */
+      public Builder setDeviceId(int value) {
+        bitField0_ |= 0x00000002;
+        deviceId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 device_id = 2;</code>
+       */
+      public Builder clearDeviceId() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        deviceId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object name_ = "";
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public boolean hasName() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        name_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public Builder clearName() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        name_ = getDefaultInstance().getName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        name_ = value;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString opcode_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes opcode = 4;</code>
+       */
+      public boolean hasOpcode() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional bytes opcode = 4;</code>
+       */
+      public com.google.protobuf.ByteString getOpcode() {
+        return opcode_;
+      }
+      /**
+       * <code>optional bytes opcode = 4;</code>
+       */
+      public Builder setOpcode(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        opcode_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes opcode = 4;</code>
+       */
+      public Builder clearOpcode() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        opcode_ = getDefaultInstance().getOpcode();
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.InfraredOpCode)
+    }
+
+    static {
+      defaultInstance = new InfraredOpCode(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.InfraredOpCode)
+  }
+
+  public interface InfraredDeviceOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.InfraredDevice)
+      com.google.protobuf.GeneratedMessage.
+          ExtendableMessageOrBuilder<InfraredDevice> {
+
+    /**
+     * <code>optional int32 id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the device stored in database.
+     * </pre>
+     */
+    boolean hasId();
+    /**
+     * <code>optional int32 id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the device stored in database.
+     * </pre>
+     */
+    int getId();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+     *
+     * <pre>
+     * Infrared device type.
+     * </pre>
+     */
+    boolean hasType();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+     *
+     * <pre>
+     * Infrared device type.
+     * </pre>
+     */
+    mrtech.smarthome.rpc.Models.InfraredDeviceType getType();
+
+    /**
+     * <code>optional uint32 index_code = 3;</code>
+     *
+     * <pre>
+     * Infrared device index code. high 2byte is brand code, low 2byte is index code.
+     * </pre>
+     */
+    boolean hasIndexCode();
+    /**
+     * <code>optional uint32 index_code = 3;</code>
+     *
+     * <pre>
+     * Infrared device index code. high 2byte is brand code, low 2byte is index code.
+     * </pre>
+     */
+    int getIndexCode();
+
+    /**
+     * <code>optional int32 ir_controller_id = 4;</code>
+     *
+     * <pre>
+     * Unique identifier of the zigbee device stored in database.
+     * </pre>
+     */
+    boolean hasIrControllerId();
+    /**
+     * <code>optional int32 ir_controller_id = 4;</code>
+     *
+     * <pre>
+     * Unique identifier of the zigbee device stored in database.
+     * </pre>
+     */
+    int getIrControllerId();
+
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    java.util.List<mrtech.smarthome.rpc.Models.InfraredOpCode> 
+        getOpcodesList();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    mrtech.smarthome.rpc.Models.InfraredOpCode getOpcodes(int index);
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    int getOpcodesCount();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    java.util.List<? extends mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder> 
+        getOpcodesOrBuilderList();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder getOpcodesOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.InfraredDevice}
+   *
+   * <pre>
+   *---------------
+   * Infrared Device
+   *---------------
+   * </pre>
+   */
+  public static final class InfraredDevice extends
+      com.google.protobuf.GeneratedMessage.ExtendableMessage<
+        InfraredDevice> implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.InfraredDevice)
+      InfraredDeviceOrBuilder {
+    // Use InfraredDevice.newBuilder() to construct.
+    private InfraredDevice(com.google.protobuf.GeneratedMessage.ExtendableBuilder<mrtech.smarthome.rpc.Models.InfraredDevice, ?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private InfraredDevice(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final InfraredDevice defaultInstance;
+    public static InfraredDevice getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public InfraredDevice getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private InfraredDevice(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.InfraredDeviceType value = mrtech.smarthome.rpc.Models.InfraredDeviceType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                type_ = value;
+              }
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              indexCode_ = input.readUInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              irControllerId_ = input.readInt32();
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                opcodes_ = new java.util.ArrayList<mrtech.smarthome.rpc.Models.InfraredOpCode>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              opcodes_.add(input.readMessage(mrtech.smarthome.rpc.Models.InfraredOpCode.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          opcodes_ = java.util.Collections.unmodifiableList(opcodes_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredDevice_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredDevice_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.InfraredDevice.class, mrtech.smarthome.rpc.Models.InfraredDevice.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<InfraredDevice> PARSER =
+        new com.google.protobuf.AbstractParser<InfraredDevice>() {
+      public InfraredDevice parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new InfraredDevice(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<InfraredDevice> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>optional int32 id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the device stored in database.
+     * </pre>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int32 id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the device stored in database.
+     * </pre>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    public static final int TYPE_FIELD_NUMBER = 2;
+    private mrtech.smarthome.rpc.Models.InfraredDeviceType type_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+     *
+     * <pre>
+     * Infrared device type.
+     * </pre>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+     *
+     * <pre>
+     * Infrared device type.
+     * </pre>
+     */
+    public mrtech.smarthome.rpc.Models.InfraredDeviceType getType() {
+      return type_;
+    }
+
+    public static final int INDEX_CODE_FIELD_NUMBER = 3;
+    private int indexCode_;
+    /**
+     * <code>optional uint32 index_code = 3;</code>
+     *
+     * <pre>
+     * Infrared device index code. high 2byte is brand code, low 2byte is index code.
+     * </pre>
+     */
+    public boolean hasIndexCode() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional uint32 index_code = 3;</code>
+     *
+     * <pre>
+     * Infrared device index code. high 2byte is brand code, low 2byte is index code.
+     * </pre>
+     */
+    public int getIndexCode() {
+      return indexCode_;
+    }
+
+    public static final int IR_CONTROLLER_ID_FIELD_NUMBER = 4;
+    private int irControllerId_;
+    /**
+     * <code>optional int32 ir_controller_id = 4;</code>
+     *
+     * <pre>
+     * Unique identifier of the zigbee device stored in database.
+     * </pre>
+     */
+    public boolean hasIrControllerId() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int32 ir_controller_id = 4;</code>
+     *
+     * <pre>
+     * Unique identifier of the zigbee device stored in database.
+     * </pre>
+     */
+    public int getIrControllerId() {
+      return irControllerId_;
+    }
+
+    public static final int OPCODES_FIELD_NUMBER = 5;
+    private java.util.List<mrtech.smarthome.rpc.Models.InfraredOpCode> opcodes_;
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    public java.util.List<mrtech.smarthome.rpc.Models.InfraredOpCode> getOpcodesList() {
+      return opcodes_;
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    public java.util.List<? extends mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder> 
+        getOpcodesOrBuilderList() {
+      return opcodes_;
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    public int getOpcodesCount() {
+      return opcodes_.size();
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    public mrtech.smarthome.rpc.Models.InfraredOpCode getOpcodes(int index) {
+      return opcodes_.get(index);
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+     */
+    public mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder getOpcodesOrBuilder(
+        int index) {
+      return opcodes_.get(index);
+    }
+
+    private void initFields() {
+      id_ = 0;
+      type_ = mrtech.smarthome.rpc.Models.InfraredDeviceType.INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+      indexCode_ = 0;
+      irControllerId_ = 0;
+      opcodes_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!extensionsAreInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      com.google.protobuf.GeneratedMessage
+        .ExtendableMessage<mrtech.smarthome.rpc.Models.InfraredDevice>.ExtensionWriter extensionWriter =
+          newExtensionWriter();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeUInt32(3, indexCode_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, irControllerId_);
+      }
+      for (int i = 0; i < opcodes_.size(); i++) {
+        output.writeMessage(5, opcodes_.get(i));
+      }
+      extensionWriter.writeUntil(536870912, output);
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(3, indexCode_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, irControllerId_);
+      }
+      for (int i = 0; i < opcodes_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, opcodes_.get(i));
+      }
+      size += extensionsSerializedSize();
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredDevice parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.InfraredDevice prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.InfraredDevice}
+     *
+     * <pre>
+     *---------------
+     * Infrared Device
+     *---------------
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.ExtendableBuilder<
+          mrtech.smarthome.rpc.Models.InfraredDevice, Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.InfraredDevice)
+        mrtech.smarthome.rpc.Models.InfraredDeviceOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredDevice_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredDevice_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.InfraredDevice.class, mrtech.smarthome.rpc.Models.InfraredDevice.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.InfraredDevice.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getOpcodesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = mrtech.smarthome.rpc.Models.InfraredDeviceType.INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        indexCode_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        irControllerId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (opcodesBuilder_ == null) {
+          opcodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+        } else {
+          opcodesBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredDevice_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredDevice getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.InfraredDevice.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredDevice build() {
+        mrtech.smarthome.rpc.Models.InfraredDevice result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredDevice buildPartial() {
+        mrtech.smarthome.rpc.Models.InfraredDevice result = new mrtech.smarthome.rpc.Models.InfraredDevice(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.type_ = type_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.indexCode_ = indexCode_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.irControllerId_ = irControllerId_;
+        if (opcodesBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            opcodes_ = java.util.Collections.unmodifiableList(opcodes_);
+            bitField0_ = (bitField0_ & ~0x00000010);
+          }
+          result.opcodes_ = opcodes_;
+        } else {
+          result.opcodes_ = opcodesBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.InfraredDevice) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.InfraredDevice)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.InfraredDevice other) {
+        if (other == mrtech.smarthome.rpc.Models.InfraredDevice.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        if (other.hasIndexCode()) {
+          setIndexCode(other.getIndexCode());
+        }
+        if (other.hasIrControllerId()) {
+          setIrControllerId(other.getIrControllerId());
+        }
+        if (opcodesBuilder_ == null) {
+          if (!other.opcodes_.isEmpty()) {
+            if (opcodes_.isEmpty()) {
+              opcodes_ = other.opcodes_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+            } else {
+              ensureOpcodesIsMutable();
+              opcodes_.addAll(other.opcodes_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.opcodes_.isEmpty()) {
+            if (opcodesBuilder_.isEmpty()) {
+              opcodesBuilder_.dispose();
+              opcodesBuilder_ = null;
+              opcodes_ = other.opcodes_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+              opcodesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getOpcodesFieldBuilder() : null;
+            } else {
+              opcodesBuilder_.addAllMessages(other.opcodes_);
+            }
+          }
+        }
+        this.mergeExtensionFields(other);
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!extensionsAreInitialized()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.InfraredDevice parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.InfraredDevice) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int id_ ;
+      /**
+       * <code>optional int32 id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the device stored in database.
+       * </pre>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the device stored in database.
+       * </pre>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the device stored in database.
+       * </pre>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the device stored in database.
+       * </pre>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.InfraredDeviceType type_ = mrtech.smarthome.rpc.Models.InfraredDeviceType.INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+       *
+       * <pre>
+       * Infrared device type.
+       * </pre>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+       *
+       * <pre>
+       * Infrared device type.
+       * </pre>
+       */
+      public mrtech.smarthome.rpc.Models.InfraredDeviceType getType() {
+        return type_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+       *
+       * <pre>
+       * Infrared device type.
+       * </pre>
+       */
+      public Builder setType(mrtech.smarthome.rpc.Models.InfraredDeviceType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+       *
+       * <pre>
+       * Infrared device type.
+       * </pre>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = mrtech.smarthome.rpc.Models.InfraredDeviceType.INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+        onChanged();
+        return this;
+      }
+
+      private int indexCode_ ;
+      /**
+       * <code>optional uint32 index_code = 3;</code>
+       *
+       * <pre>
+       * Infrared device index code. high 2byte is brand code, low 2byte is index code.
+       * </pre>
+       */
+      public boolean hasIndexCode() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional uint32 index_code = 3;</code>
+       *
+       * <pre>
+       * Infrared device index code. high 2byte is brand code, low 2byte is index code.
+       * </pre>
+       */
+      public int getIndexCode() {
+        return indexCode_;
+      }
+      /**
+       * <code>optional uint32 index_code = 3;</code>
+       *
+       * <pre>
+       * Infrared device index code. high 2byte is brand code, low 2byte is index code.
+       * </pre>
+       */
+      public Builder setIndexCode(int value) {
+        bitField0_ |= 0x00000004;
+        indexCode_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint32 index_code = 3;</code>
+       *
+       * <pre>
+       * Infrared device index code. high 2byte is brand code, low 2byte is index code.
+       * </pre>
+       */
+      public Builder clearIndexCode() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        indexCode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int irControllerId_ ;
+      /**
+       * <code>optional int32 ir_controller_id = 4;</code>
+       *
+       * <pre>
+       * Unique identifier of the zigbee device stored in database.
+       * </pre>
+       */
+      public boolean hasIrControllerId() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional int32 ir_controller_id = 4;</code>
+       *
+       * <pre>
+       * Unique identifier of the zigbee device stored in database.
+       * </pre>
+       */
+      public int getIrControllerId() {
+        return irControllerId_;
+      }
+      /**
+       * <code>optional int32 ir_controller_id = 4;</code>
+       *
+       * <pre>
+       * Unique identifier of the zigbee device stored in database.
+       * </pre>
+       */
+      public Builder setIrControllerId(int value) {
+        bitField0_ |= 0x00000008;
+        irControllerId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 ir_controller_id = 4;</code>
+       *
+       * <pre>
+       * Unique identifier of the zigbee device stored in database.
+       * </pre>
+       */
+      public Builder clearIrControllerId() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        irControllerId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<mrtech.smarthome.rpc.Models.InfraredOpCode> opcodes_ =
+        java.util.Collections.emptyList();
+      private void ensureOpcodesIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          opcodes_ = new java.util.ArrayList<mrtech.smarthome.rpc.Models.InfraredOpCode>(opcodes_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          mrtech.smarthome.rpc.Models.InfraredOpCode, mrtech.smarthome.rpc.Models.InfraredOpCode.Builder, mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder> opcodesBuilder_;
+
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public java.util.List<mrtech.smarthome.rpc.Models.InfraredOpCode> getOpcodesList() {
+        if (opcodesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(opcodes_);
+        } else {
+          return opcodesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public int getOpcodesCount() {
+        if (opcodesBuilder_ == null) {
+          return opcodes_.size();
+        } else {
+          return opcodesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.InfraredOpCode getOpcodes(int index) {
+        if (opcodesBuilder_ == null) {
+          return opcodes_.get(index);
+        } else {
+          return opcodesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder setOpcodes(
+          int index, mrtech.smarthome.rpc.Models.InfraredOpCode value) {
+        if (opcodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOpcodesIsMutable();
+          opcodes_.set(index, value);
+          onChanged();
+        } else {
+          opcodesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder setOpcodes(
+          int index, mrtech.smarthome.rpc.Models.InfraredOpCode.Builder builderForValue) {
+        if (opcodesBuilder_ == null) {
+          ensureOpcodesIsMutable();
+          opcodes_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          opcodesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder addOpcodes(mrtech.smarthome.rpc.Models.InfraredOpCode value) {
+        if (opcodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOpcodesIsMutable();
+          opcodes_.add(value);
+          onChanged();
+        } else {
+          opcodesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder addOpcodes(
+          int index, mrtech.smarthome.rpc.Models.InfraredOpCode value) {
+        if (opcodesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOpcodesIsMutable();
+          opcodes_.add(index, value);
+          onChanged();
+        } else {
+          opcodesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder addOpcodes(
+          mrtech.smarthome.rpc.Models.InfraredOpCode.Builder builderForValue) {
+        if (opcodesBuilder_ == null) {
+          ensureOpcodesIsMutable();
+          opcodes_.add(builderForValue.build());
+          onChanged();
+        } else {
+          opcodesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder addOpcodes(
+          int index, mrtech.smarthome.rpc.Models.InfraredOpCode.Builder builderForValue) {
+        if (opcodesBuilder_ == null) {
+          ensureOpcodesIsMutable();
+          opcodes_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          opcodesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder addAllOpcodes(
+          java.lang.Iterable<? extends mrtech.smarthome.rpc.Models.InfraredOpCode> values) {
+        if (opcodesBuilder_ == null) {
+          ensureOpcodesIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, opcodes_);
+          onChanged();
+        } else {
+          opcodesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder clearOpcodes() {
+        if (opcodesBuilder_ == null) {
+          opcodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+          onChanged();
+        } else {
+          opcodesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public Builder removeOpcodes(int index) {
+        if (opcodesBuilder_ == null) {
+          ensureOpcodesIsMutable();
+          opcodes_.remove(index);
+          onChanged();
+        } else {
+          opcodesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.InfraredOpCode.Builder getOpcodesBuilder(
+          int index) {
+        return getOpcodesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder getOpcodesOrBuilder(
+          int index) {
+        if (opcodesBuilder_ == null) {
+          return opcodes_.get(index);  } else {
+          return opcodesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public java.util.List<? extends mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder> 
+           getOpcodesOrBuilderList() {
+        if (opcodesBuilder_ != null) {
+          return opcodesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(opcodes_);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.InfraredOpCode.Builder addOpcodesBuilder() {
+        return getOpcodesFieldBuilder().addBuilder(
+            mrtech.smarthome.rpc.Models.InfraredOpCode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.InfraredOpCode.Builder addOpcodesBuilder(
+          int index) {
+        return getOpcodesFieldBuilder().addBuilder(
+            index, mrtech.smarthome.rpc.Models.InfraredOpCode.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.InfraredOpCode opcodes = 5;</code>
+       */
+      public java.util.List<mrtech.smarthome.rpc.Models.InfraredOpCode.Builder> 
+           getOpcodesBuilderList() {
+        return getOpcodesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          mrtech.smarthome.rpc.Models.InfraredOpCode, mrtech.smarthome.rpc.Models.InfraredOpCode.Builder, mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder> 
+          getOpcodesFieldBuilder() {
+        if (opcodesBuilder_ == null) {
+          opcodesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              mrtech.smarthome.rpc.Models.InfraredOpCode, mrtech.smarthome.rpc.Models.InfraredOpCode.Builder, mrtech.smarthome.rpc.Models.InfraredOpCodeOrBuilder>(
+                  opcodes_,
+                  ((bitField0_ & 0x00000010) == 0x00000010),
+                  getParentForChildren(),
+                  isClean());
+          opcodes_ = null;
+        }
+        return opcodesBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.InfraredDevice)
+    }
+
+    static {
+      defaultInstance = new InfraredDevice(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.InfraredDevice)
+    public static final int DETAIL_FIELD_NUMBER = 258;
+    /**
+     * <code>extend .mrtech.smarthome.rpc.Device { ... }</code>
+     */
+    public static final
+      com.google.protobuf.GeneratedMessage.GeneratedExtension<
+        mrtech.smarthome.rpc.Models.Device,
+        mrtech.smarthome.rpc.Models.InfraredDevice> detail = com.google.protobuf.GeneratedMessage
+            .newMessageScopedGeneratedExtension(
+          mrtech.smarthome.rpc.Models.InfraredDevice.getDefaultInstance(),
+          0,
+          mrtech.smarthome.rpc.Models.InfraredDevice.class,
+          mrtech.smarthome.rpc.Models.InfraredDevice.getDefaultInstance());
+  }
+
+  public interface MatchSessionOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.MatchSession)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional int32 ir_controller_id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the zigbee device stored in database.
+     * </pre>
+     */
+    boolean hasIrControllerId();
+    /**
+     * <code>optional int32 ir_controller_id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the zigbee device stored in database.
+     * </pre>
+     */
+    int getIrControllerId();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+     *
+     * <pre>
+     * Infrared device type.
+     * </pre>
+     */
+    boolean hasType();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+     *
+     * <pre>
+     * Infrared device type.
+     * </pre>
+     */
+    mrtech.smarthome.rpc.Models.InfraredDeviceType getType();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredMatchLevel level = 3;</code>
+     *
+     * <pre>
+     * Infrared Match level.
+     * if this filed not set, it mean this session is opcode session. 
+     * otherwise it is match session.
+     * </pre>
+     */
+    boolean hasLevel();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredMatchLevel level = 3;</code>
+     *
+     * <pre>
+     * Infrared Match level.
+     * if this filed not set, it mean this session is opcode session. 
+     * otherwise it is match session.
+     * </pre>
+     */
+    mrtech.smarthome.rpc.Models.InfraredMatchLevel getLevel();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.MatchSession}
+   */
+  public static final class MatchSession extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.MatchSession)
+      MatchSessionOrBuilder {
+    // Use MatchSession.newBuilder() to construct.
+    private MatchSession(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private MatchSession(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final MatchSession defaultInstance;
+    public static MatchSession getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public MatchSession getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private MatchSession(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              irControllerId_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.InfraredDeviceType value = mrtech.smarthome.rpc.Models.InfraredDeviceType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                type_ = value;
+              }
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.InfraredMatchLevel value = mrtech.smarthome.rpc.Models.InfraredMatchLevel.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(3, rawValue);
+              } else {
+                bitField0_ |= 0x00000004;
+                level_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_MatchSession_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_MatchSession_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.MatchSession.class, mrtech.smarthome.rpc.Models.MatchSession.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<MatchSession> PARSER =
+        new com.google.protobuf.AbstractParser<MatchSession>() {
+      public MatchSession parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new MatchSession(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<MatchSession> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int IR_CONTROLLER_ID_FIELD_NUMBER = 1;
+    private int irControllerId_;
+    /**
+     * <code>optional int32 ir_controller_id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the zigbee device stored in database.
+     * </pre>
+     */
+    public boolean hasIrControllerId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int32 ir_controller_id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the zigbee device stored in database.
+     * </pre>
+     */
+    public int getIrControllerId() {
+      return irControllerId_;
+    }
+
+    public static final int TYPE_FIELD_NUMBER = 2;
+    private mrtech.smarthome.rpc.Models.InfraredDeviceType type_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+     *
+     * <pre>
+     * Infrared device type.
+     * </pre>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+     *
+     * <pre>
+     * Infrared device type.
+     * </pre>
+     */
+    public mrtech.smarthome.rpc.Models.InfraredDeviceType getType() {
+      return type_;
+    }
+
+    public static final int LEVEL_FIELD_NUMBER = 3;
+    private mrtech.smarthome.rpc.Models.InfraredMatchLevel level_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredMatchLevel level = 3;</code>
+     *
+     * <pre>
+     * Infrared Match level.
+     * if this filed not set, it mean this session is opcode session. 
+     * otherwise it is match session.
+     * </pre>
+     */
+    public boolean hasLevel() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.InfraredMatchLevel level = 3;</code>
+     *
+     * <pre>
+     * Infrared Match level.
+     * if this filed not set, it mean this session is opcode session. 
+     * otherwise it is match session.
+     * </pre>
+     */
+    public mrtech.smarthome.rpc.Models.InfraredMatchLevel getLevel() {
+      return level_;
+    }
+
+    private void initFields() {
+      irControllerId_ = 0;
+      type_ = mrtech.smarthome.rpc.Models.InfraredDeviceType.INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+      level_ = mrtech.smarthome.rpc.Models.InfraredMatchLevel.INFRARED_MATCH_LEVEL_LOW;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, irControllerId_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeEnum(3, level_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, irControllerId_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, level_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.MatchSession parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.MatchSession parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.MatchSession prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.MatchSession}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.MatchSession)
+        mrtech.smarthome.rpc.Models.MatchSessionOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_MatchSession_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_MatchSession_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.MatchSession.class, mrtech.smarthome.rpc.Models.MatchSession.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.MatchSession.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        irControllerId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = mrtech.smarthome.rpc.Models.InfraredDeviceType.INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        level_ = mrtech.smarthome.rpc.Models.InfraredMatchLevel.INFRARED_MATCH_LEVEL_LOW;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_MatchSession_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.MatchSession getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.MatchSession.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.MatchSession build() {
+        mrtech.smarthome.rpc.Models.MatchSession result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.MatchSession buildPartial() {
+        mrtech.smarthome.rpc.Models.MatchSession result = new mrtech.smarthome.rpc.Models.MatchSession(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.irControllerId_ = irControllerId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.type_ = type_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.level_ = level_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.MatchSession) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.MatchSession)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.MatchSession other) {
+        if (other == mrtech.smarthome.rpc.Models.MatchSession.getDefaultInstance()) return this;
+        if (other.hasIrControllerId()) {
+          setIrControllerId(other.getIrControllerId());
+        }
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        if (other.hasLevel()) {
+          setLevel(other.getLevel());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.MatchSession parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.MatchSession) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int irControllerId_ ;
+      /**
+       * <code>optional int32 ir_controller_id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the zigbee device stored in database.
+       * </pre>
+       */
+      public boolean hasIrControllerId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int32 ir_controller_id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the zigbee device stored in database.
+       * </pre>
+       */
+      public int getIrControllerId() {
+        return irControllerId_;
+      }
+      /**
+       * <code>optional int32 ir_controller_id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the zigbee device stored in database.
+       * </pre>
+       */
+      public Builder setIrControllerId(int value) {
+        bitField0_ |= 0x00000001;
+        irControllerId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 ir_controller_id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the zigbee device stored in database.
+       * </pre>
+       */
+      public Builder clearIrControllerId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        irControllerId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.InfraredDeviceType type_ = mrtech.smarthome.rpc.Models.InfraredDeviceType.INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+       *
+       * <pre>
+       * Infrared device type.
+       * </pre>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+       *
+       * <pre>
+       * Infrared device type.
+       * </pre>
+       */
+      public mrtech.smarthome.rpc.Models.InfraredDeviceType getType() {
+        return type_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+       *
+       * <pre>
+       * Infrared device type.
+       * </pre>
+       */
+      public Builder setType(mrtech.smarthome.rpc.Models.InfraredDeviceType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredDeviceType type = 2;</code>
+       *
+       * <pre>
+       * Infrared device type.
+       * </pre>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = mrtech.smarthome.rpc.Models.InfraredDeviceType.INFRARED_DEVICE_TYPE_AIR_CONDITIONER;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.InfraredMatchLevel level_ = mrtech.smarthome.rpc.Models.InfraredMatchLevel.INFRARED_MATCH_LEVEL_LOW;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredMatchLevel level = 3;</code>
+       *
+       * <pre>
+       * Infrared Match level.
+       * if this filed not set, it mean this session is opcode session. 
+       * otherwise it is match session.
+       * </pre>
+       */
+      public boolean hasLevel() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredMatchLevel level = 3;</code>
+       *
+       * <pre>
+       * Infrared Match level.
+       * if this filed not set, it mean this session is opcode session. 
+       * otherwise it is match session.
+       * </pre>
+       */
+      public mrtech.smarthome.rpc.Models.InfraredMatchLevel getLevel() {
+        return level_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredMatchLevel level = 3;</code>
+       *
+       * <pre>
+       * Infrared Match level.
+       * if this filed not set, it mean this session is opcode session. 
+       * otherwise it is match session.
+       * </pre>
+       */
+      public Builder setLevel(mrtech.smarthome.rpc.Models.InfraredMatchLevel value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000004;
+        level_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.InfraredMatchLevel level = 3;</code>
+       *
+       * <pre>
+       * Infrared Match level.
+       * if this filed not set, it mean this session is opcode session. 
+       * otherwise it is match session.
+       * </pre>
+       */
+      public Builder clearLevel() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        level_ = mrtech.smarthome.rpc.Models.InfraredMatchLevel.INFRARED_MATCH_LEVEL_LOW;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.MatchSession)
+    }
+
+    static {
+      defaultInstance = new MatchSession(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.MatchSession)
+  }
+
+  public interface InfraredCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.InfraredCommand)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+     */
+    boolean hasAirConditioner();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+     */
+    mrtech.smarthome.rpc.Models.AirConditionerCommand getAirConditioner();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+     */
+    mrtech.smarthome.rpc.Models.AirConditionerCommandOrBuilder getAirConditionerOrBuilder();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.DvdPlayerCommand dvd_player = 2;</code>
+     */
+    boolean hasDvdPlayer();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.DvdPlayerCommand dvd_player = 2;</code>
+     */
+    mrtech.smarthome.rpc.Models.DvdPlayerCommand getDvdPlayer();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.IpTelevisionCommand ip_television = 3;</code>
+     */
+    boolean hasIpTelevision();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.IpTelevisionCommand ip_television = 3;</code>
+     */
+    mrtech.smarthome.rpc.Models.IpTelevisionCommand getIpTelevision();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.SettopBoxCommand settop_box = 4;</code>
+     */
+    boolean hasSettopBox();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.SettopBoxCommand settop_box = 4;</code>
+     */
+    mrtech.smarthome.rpc.Models.SettopBoxCommand getSettopBox();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.TelevisionCommand television = 5;</code>
+     */
+    boolean hasTelevision();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.TelevisionCommand television = 5;</code>
+     */
+    mrtech.smarthome.rpc.Models.TelevisionCommand getTelevision();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ElectricFanCommand electric_fan = 6;</code>
+     */
+    boolean hasElectricFan();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ElectricFanCommand electric_fan = 6;</code>
+     */
+    mrtech.smarthome.rpc.Models.ElectricFanCommand getElectricFan();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ProjectorCommand projector = 7;</code>
+     */
+    boolean hasProjector();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ProjectorCommand projector = 7;</code>
+     */
+    mrtech.smarthome.rpc.Models.ProjectorCommand getProjector();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+     */
+    boolean hasExtension();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+     */
+    mrtech.smarthome.rpc.Models.ExtensionCommand getExtension();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+     */
+    mrtech.smarthome.rpc.Models.ExtensionCommandOrBuilder getExtensionOrBuilder();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.InfraredCommand}
+   */
+  public static final class InfraredCommand extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.InfraredCommand)
+      InfraredCommandOrBuilder {
+    // Use InfraredCommand.newBuilder() to construct.
+    private InfraredCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private InfraredCommand(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final InfraredCommand defaultInstance;
+    public static InfraredCommand getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public InfraredCommand getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private InfraredCommand(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              mrtech.smarthome.rpc.Models.AirConditionerCommand.Builder subBuilder = null;
+              if (commandCase_ == 1) {
+                subBuilder = ((mrtech.smarthome.rpc.Models.AirConditionerCommand) command_).toBuilder();
+              }
+              command_ = input.readMessage(mrtech.smarthome.rpc.Models.AirConditionerCommand.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((mrtech.smarthome.rpc.Models.AirConditionerCommand) command_);
+                command_ = subBuilder.buildPartial();
+              }
+              commandCase_ = 1;
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.DvdPlayerCommand value = mrtech.smarthome.rpc.Models.DvdPlayerCommand.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                commandCase_ = 2;
+                command_ = value;
+              }
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.IpTelevisionCommand value = mrtech.smarthome.rpc.Models.IpTelevisionCommand.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(3, rawValue);
+              } else {
+                commandCase_ = 3;
+                command_ = value;
+              }
+              break;
+            }
+            case 32: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.SettopBoxCommand value = mrtech.smarthome.rpc.Models.SettopBoxCommand.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(4, rawValue);
+              } else {
+                commandCase_ = 4;
+                command_ = value;
+              }
+              break;
+            }
+            case 40: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.TelevisionCommand value = mrtech.smarthome.rpc.Models.TelevisionCommand.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(5, rawValue);
+              } else {
+                commandCase_ = 5;
+                command_ = value;
+              }
+              break;
+            }
+            case 48: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.ElectricFanCommand value = mrtech.smarthome.rpc.Models.ElectricFanCommand.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(6, rawValue);
+              } else {
+                commandCase_ = 6;
+                command_ = value;
+              }
+              break;
+            }
+            case 56: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.ProjectorCommand value = mrtech.smarthome.rpc.Models.ProjectorCommand.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(7, rawValue);
+              } else {
+                commandCase_ = 7;
+                command_ = value;
+              }
+              break;
+            }
+            case 66: {
+              mrtech.smarthome.rpc.Models.ExtensionCommand.Builder subBuilder = null;
+              if (commandCase_ == 8) {
+                subBuilder = ((mrtech.smarthome.rpc.Models.ExtensionCommand) command_).toBuilder();
+              }
+              command_ = input.readMessage(mrtech.smarthome.rpc.Models.ExtensionCommand.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((mrtech.smarthome.rpc.Models.ExtensionCommand) command_);
+                command_ = subBuilder.buildPartial();
+              }
+              commandCase_ = 8;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredCommand_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredCommand_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.InfraredCommand.class, mrtech.smarthome.rpc.Models.InfraredCommand.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<InfraredCommand> PARSER =
+        new com.google.protobuf.AbstractParser<InfraredCommand>() {
+      public InfraredCommand parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new InfraredCommand(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<InfraredCommand> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    private int commandCase_ = 0;
+    private java.lang.Object command_;
+    public enum CommandCase
+        implements com.google.protobuf.Internal.EnumLite {
+      AIR_CONDITIONER(1),
+      DVD_PLAYER(2),
+      IP_TELEVISION(3),
+      SETTOP_BOX(4),
+      TELEVISION(5),
+      ELECTRIC_FAN(6),
+      PROJECTOR(7),
+      EXTENSION(8),
+      COMMAND_NOT_SET(0);
+      private int value = 0;
+      private CommandCase(int value) {
+        this.value = value;
+      }
+      public static CommandCase valueOf(int value) {
+        switch (value) {
+          case 1: return AIR_CONDITIONER;
+          case 2: return DVD_PLAYER;
+          case 3: return IP_TELEVISION;
+          case 4: return SETTOP_BOX;
+          case 5: return TELEVISION;
+          case 6: return ELECTRIC_FAN;
+          case 7: return PROJECTOR;
+          case 8: return EXTENSION;
+          case 0: return COMMAND_NOT_SET;
+          default: throw new java.lang.IllegalArgumentException(
+            "Value is undefined for this oneof enum.");
+        }
+      }
+      public int getNumber() {
+        return this.value;
+      }
+    };
+
+    public CommandCase
+    getCommandCase() {
+      return CommandCase.valueOf(
+          commandCase_);
+    }
+
+    public static final int AIR_CONDITIONER_FIELD_NUMBER = 1;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+     */
+    public boolean hasAirConditioner() {
+      return commandCase_ == 1;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+     */
+    public mrtech.smarthome.rpc.Models.AirConditionerCommand getAirConditioner() {
+      if (commandCase_ == 1) {
+         return (mrtech.smarthome.rpc.Models.AirConditionerCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance();
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+     */
+    public mrtech.smarthome.rpc.Models.AirConditionerCommandOrBuilder getAirConditionerOrBuilder() {
+      if (commandCase_ == 1) {
+         return (mrtech.smarthome.rpc.Models.AirConditionerCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance();
+    }
+
+    public static final int DVD_PLAYER_FIELD_NUMBER = 2;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.DvdPlayerCommand dvd_player = 2;</code>
+     */
+    public boolean hasDvdPlayer() {
+      return commandCase_ == 2;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.DvdPlayerCommand dvd_player = 2;</code>
+     */
+    public mrtech.smarthome.rpc.Models.DvdPlayerCommand getDvdPlayer() {
+      if (commandCase_ == 2) {
+        return (mrtech.smarthome.rpc.Models.DvdPlayerCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.DvdPlayerCommand.DVD_PLAYER_LEFT;
+    }
+
+    public static final int IP_TELEVISION_FIELD_NUMBER = 3;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.IpTelevisionCommand ip_television = 3;</code>
+     */
+    public boolean hasIpTelevision() {
+      return commandCase_ == 3;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.IpTelevisionCommand ip_television = 3;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IpTelevisionCommand getIpTelevision() {
+      if (commandCase_ == 3) {
+        return (mrtech.smarthome.rpc.Models.IpTelevisionCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.IpTelevisionCommand.IP_TELEVISION_POWER;
+    }
+
+    public static final int SETTOP_BOX_FIELD_NUMBER = 4;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.SettopBoxCommand settop_box = 4;</code>
+     */
+    public boolean hasSettopBox() {
+      return commandCase_ == 4;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.SettopBoxCommand settop_box = 4;</code>
+     */
+    public mrtech.smarthome.rpc.Models.SettopBoxCommand getSettopBox() {
+      if (commandCase_ == 4) {
+        return (mrtech.smarthome.rpc.Models.SettopBoxCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.SettopBoxCommand.SETTOP_BOX_STANDBY;
+    }
+
+    public static final int TELEVISION_FIELD_NUMBER = 5;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.TelevisionCommand television = 5;</code>
+     */
+    public boolean hasTelevision() {
+      return commandCase_ == 5;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.TelevisionCommand television = 5;</code>
+     */
+    public mrtech.smarthome.rpc.Models.TelevisionCommand getTelevision() {
+      if (commandCase_ == 5) {
+        return (mrtech.smarthome.rpc.Models.TelevisionCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.TelevisionCommand.TELEVISION_VOLUME_REDUCTION;
+    }
+
+    public static final int ELECTRIC_FAN_FIELD_NUMBER = 6;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ElectricFanCommand electric_fan = 6;</code>
+     */
+    public boolean hasElectricFan() {
+      return commandCase_ == 6;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ElectricFanCommand electric_fan = 6;</code>
+     */
+    public mrtech.smarthome.rpc.Models.ElectricFanCommand getElectricFan() {
+      if (commandCase_ == 6) {
+        return (mrtech.smarthome.rpc.Models.ElectricFanCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.ElectricFanCommand.ELECTRIC_FAN_ON_OFF;
+    }
+
+    public static final int PROJECTOR_FIELD_NUMBER = 7;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ProjectorCommand projector = 7;</code>
+     */
+    public boolean hasProjector() {
+      return commandCase_ == 7;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ProjectorCommand projector = 7;</code>
+     */
+    public mrtech.smarthome.rpc.Models.ProjectorCommand getProjector() {
+      if (commandCase_ == 7) {
+        return (mrtech.smarthome.rpc.Models.ProjectorCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.ProjectorCommand.PROJECTOR_POWER_ON;
+    }
+
+    public static final int EXTENSION_FIELD_NUMBER = 8;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+     */
+    public boolean hasExtension() {
+      return commandCase_ == 8;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+     */
+    public mrtech.smarthome.rpc.Models.ExtensionCommand getExtension() {
+      if (commandCase_ == 8) {
+         return (mrtech.smarthome.rpc.Models.ExtensionCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance();
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+     */
+    public mrtech.smarthome.rpc.Models.ExtensionCommandOrBuilder getExtensionOrBuilder() {
+      if (commandCase_ == 8) {
+         return (mrtech.smarthome.rpc.Models.ExtensionCommand) command_;
+      }
+      return mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance();
+    }
+
+    private void initFields() {
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (commandCase_ == 1) {
+        output.writeMessage(1, (mrtech.smarthome.rpc.Models.AirConditionerCommand) command_);
+      }
+      if (commandCase_ == 2) {
+        output.writeEnum(2, ((mrtech.smarthome.rpc.Models.DvdPlayerCommand) command_).getNumber());
+      }
+      if (commandCase_ == 3) {
+        output.writeEnum(3, ((mrtech.smarthome.rpc.Models.IpTelevisionCommand) command_).getNumber());
+      }
+      if (commandCase_ == 4) {
+        output.writeEnum(4, ((mrtech.smarthome.rpc.Models.SettopBoxCommand) command_).getNumber());
+      }
+      if (commandCase_ == 5) {
+        output.writeEnum(5, ((mrtech.smarthome.rpc.Models.TelevisionCommand) command_).getNumber());
+      }
+      if (commandCase_ == 6) {
+        output.writeEnum(6, ((mrtech.smarthome.rpc.Models.ElectricFanCommand) command_).getNumber());
+      }
+      if (commandCase_ == 7) {
+        output.writeEnum(7, ((mrtech.smarthome.rpc.Models.ProjectorCommand) command_).getNumber());
+      }
+      if (commandCase_ == 8) {
+        output.writeMessage(8, (mrtech.smarthome.rpc.Models.ExtensionCommand) command_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (commandCase_ == 1) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, (mrtech.smarthome.rpc.Models.AirConditionerCommand) command_);
+      }
+      if (commandCase_ == 2) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, ((mrtech.smarthome.rpc.Models.DvdPlayerCommand) command_).getNumber());
+      }
+      if (commandCase_ == 3) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, ((mrtech.smarthome.rpc.Models.IpTelevisionCommand) command_).getNumber());
+      }
+      if (commandCase_ == 4) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(4, ((mrtech.smarthome.rpc.Models.SettopBoxCommand) command_).getNumber());
+      }
+      if (commandCase_ == 5) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(5, ((mrtech.smarthome.rpc.Models.TelevisionCommand) command_).getNumber());
+      }
+      if (commandCase_ == 6) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(6, ((mrtech.smarthome.rpc.Models.ElectricFanCommand) command_).getNumber());
+      }
+      if (commandCase_ == 7) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(7, ((mrtech.smarthome.rpc.Models.ProjectorCommand) command_).getNumber());
+      }
+      if (commandCase_ == 8) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(8, (mrtech.smarthome.rpc.Models.ExtensionCommand) command_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.InfraredCommand parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.InfraredCommand prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.InfraredCommand}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.InfraredCommand)
+        mrtech.smarthome.rpc.Models.InfraredCommandOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredCommand_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredCommand_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.InfraredCommand.class, mrtech.smarthome.rpc.Models.InfraredCommand.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.InfraredCommand.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        commandCase_ = 0;
+        command_ = null;
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_InfraredCommand_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredCommand getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.InfraredCommand.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredCommand build() {
+        mrtech.smarthome.rpc.Models.InfraredCommand result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.InfraredCommand buildPartial() {
+        mrtech.smarthome.rpc.Models.InfraredCommand result = new mrtech.smarthome.rpc.Models.InfraredCommand(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (commandCase_ == 1) {
+          if (airConditionerBuilder_ == null) {
+            result.command_ = command_;
+          } else {
+            result.command_ = airConditionerBuilder_.build();
+          }
+        }
+        if (commandCase_ == 2) {
+          result.command_ = command_;
+        }
+        if (commandCase_ == 3) {
+          result.command_ = command_;
+        }
+        if (commandCase_ == 4) {
+          result.command_ = command_;
+        }
+        if (commandCase_ == 5) {
+          result.command_ = command_;
+        }
+        if (commandCase_ == 6) {
+          result.command_ = command_;
+        }
+        if (commandCase_ == 7) {
+          result.command_ = command_;
+        }
+        if (commandCase_ == 8) {
+          if (extensionBuilder_ == null) {
+            result.command_ = command_;
+          } else {
+            result.command_ = extensionBuilder_.build();
+          }
+        }
+        result.bitField0_ = to_bitField0_;
+        result.commandCase_ = commandCase_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.InfraredCommand) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.InfraredCommand)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.InfraredCommand other) {
+        if (other == mrtech.smarthome.rpc.Models.InfraredCommand.getDefaultInstance()) return this;
+        switch (other.getCommandCase()) {
+          case AIR_CONDITIONER: {
+            mergeAirConditioner(other.getAirConditioner());
+            break;
+          }
+          case DVD_PLAYER: {
+            setDvdPlayer(other.getDvdPlayer());
+            break;
+          }
+          case IP_TELEVISION: {
+            setIpTelevision(other.getIpTelevision());
+            break;
+          }
+          case SETTOP_BOX: {
+            setSettopBox(other.getSettopBox());
+            break;
+          }
+          case TELEVISION: {
+            setTelevision(other.getTelevision());
+            break;
+          }
+          case ELECTRIC_FAN: {
+            setElectricFan(other.getElectricFan());
+            break;
+          }
+          case PROJECTOR: {
+            setProjector(other.getProjector());
+            break;
+          }
+          case EXTENSION: {
+            mergeExtension(other.getExtension());
+            break;
+          }
+          case COMMAND_NOT_SET: {
+            break;
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.InfraredCommand parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.InfraredCommand) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int commandCase_ = 0;
+      private java.lang.Object command_;
+      public CommandCase
+          getCommandCase() {
+        return CommandCase.valueOf(
+            commandCase_);
+      }
+
+      public Builder clearCommand() {
+        commandCase_ = 0;
+        command_ = null;
+        onChanged();
+        return this;
+      }
+
+      private int bitField0_;
+
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.AirConditionerCommand, mrtech.smarthome.rpc.Models.AirConditionerCommand.Builder, mrtech.smarthome.rpc.Models.AirConditionerCommandOrBuilder> airConditionerBuilder_;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      public boolean hasAirConditioner() {
+        return commandCase_ == 1;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AirConditionerCommand getAirConditioner() {
+        if (airConditionerBuilder_ == null) {
+          if (commandCase_ == 1) {
+            return (mrtech.smarthome.rpc.Models.AirConditionerCommand) command_;
+          }
+          return mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance();
+        } else {
+          if (commandCase_ == 1) {
+            return airConditionerBuilder_.getMessage();
+          }
+          return mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      public Builder setAirConditioner(mrtech.smarthome.rpc.Models.AirConditionerCommand value) {
+        if (airConditionerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          command_ = value;
+          onChanged();
+        } else {
+          airConditionerBuilder_.setMessage(value);
+        }
+        commandCase_ = 1;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      public Builder setAirConditioner(
+          mrtech.smarthome.rpc.Models.AirConditionerCommand.Builder builderForValue) {
+        if (airConditionerBuilder_ == null) {
+          command_ = builderForValue.build();
+          onChanged();
+        } else {
+          airConditionerBuilder_.setMessage(builderForValue.build());
+        }
+        commandCase_ = 1;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      public Builder mergeAirConditioner(mrtech.smarthome.rpc.Models.AirConditionerCommand value) {
+        if (airConditionerBuilder_ == null) {
+          if (commandCase_ == 1 &&
+              command_ != mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance()) {
+            command_ = mrtech.smarthome.rpc.Models.AirConditionerCommand.newBuilder((mrtech.smarthome.rpc.Models.AirConditionerCommand) command_)
+                .mergeFrom(value).buildPartial();
+          } else {
+            command_ = value;
+          }
+          onChanged();
+        } else {
+          if (commandCase_ == 1) {
+            airConditionerBuilder_.mergeFrom(value);
+          }
+          airConditionerBuilder_.setMessage(value);
+        }
+        commandCase_ = 1;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      public Builder clearAirConditioner() {
+        if (airConditionerBuilder_ == null) {
+          if (commandCase_ == 1) {
+            commandCase_ = 0;
+            command_ = null;
+            onChanged();
+          }
+        } else {
+          if (commandCase_ == 1) {
+            commandCase_ = 0;
+            command_ = null;
+          }
+          airConditionerBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AirConditionerCommand.Builder getAirConditionerBuilder() {
+        return getAirConditionerFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AirConditionerCommandOrBuilder getAirConditionerOrBuilder() {
+        if ((commandCase_ == 1) && (airConditionerBuilder_ != null)) {
+          return airConditionerBuilder_.getMessageOrBuilder();
+        } else {
+          if (commandCase_ == 1) {
+            return (mrtech.smarthome.rpc.Models.AirConditionerCommand) command_;
+          }
+          return mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerCommand air_conditioner = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.AirConditionerCommand, mrtech.smarthome.rpc.Models.AirConditionerCommand.Builder, mrtech.smarthome.rpc.Models.AirConditionerCommandOrBuilder> 
+          getAirConditionerFieldBuilder() {
+        if (airConditionerBuilder_ == null) {
+          if (!(commandCase_ == 1)) {
+            command_ = mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance();
+          }
+          airConditionerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.AirConditionerCommand, mrtech.smarthome.rpc.Models.AirConditionerCommand.Builder, mrtech.smarthome.rpc.Models.AirConditionerCommandOrBuilder>(
+                  (mrtech.smarthome.rpc.Models.AirConditionerCommand) command_,
+                  getParentForChildren(),
+                  isClean());
+          command_ = null;
+        }
+        commandCase_ = 1;
+        return airConditionerBuilder_;
+      }
+
+      /**
+       * <code>optional .mrtech.smarthome.rpc.DvdPlayerCommand dvd_player = 2;</code>
+       */
+      public boolean hasDvdPlayer() {
+        return commandCase_ == 2;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.DvdPlayerCommand dvd_player = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.DvdPlayerCommand getDvdPlayer() {
+        if (commandCase_ == 2) {
+          return (mrtech.smarthome.rpc.Models.DvdPlayerCommand) command_;
+        }
+        return mrtech.smarthome.rpc.Models.DvdPlayerCommand.DVD_PLAYER_LEFT;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.DvdPlayerCommand dvd_player = 2;</code>
+       */
+      public Builder setDvdPlayer(mrtech.smarthome.rpc.Models.DvdPlayerCommand value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        commandCase_ = 2;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.DvdPlayerCommand dvd_player = 2;</code>
+       */
+      public Builder clearDvdPlayer() {
+        if (commandCase_ == 2) {
+          commandCase_ = 0;
+          command_ = null;
+          onChanged();
+        }
+        return this;
+      }
+
+      /**
+       * <code>optional .mrtech.smarthome.rpc.IpTelevisionCommand ip_television = 3;</code>
+       */
+      public boolean hasIpTelevision() {
+        return commandCase_ == 3;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.IpTelevisionCommand ip_television = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IpTelevisionCommand getIpTelevision() {
+        if (commandCase_ == 3) {
+          return (mrtech.smarthome.rpc.Models.IpTelevisionCommand) command_;
+        }
+        return mrtech.smarthome.rpc.Models.IpTelevisionCommand.IP_TELEVISION_POWER;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.IpTelevisionCommand ip_television = 3;</code>
+       */
+      public Builder setIpTelevision(mrtech.smarthome.rpc.Models.IpTelevisionCommand value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        commandCase_ = 3;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.IpTelevisionCommand ip_television = 3;</code>
+       */
+      public Builder clearIpTelevision() {
+        if (commandCase_ == 3) {
+          commandCase_ = 0;
+          command_ = null;
+          onChanged();
+        }
+        return this;
+      }
+
+      /**
+       * <code>optional .mrtech.smarthome.rpc.SettopBoxCommand settop_box = 4;</code>
+       */
+      public boolean hasSettopBox() {
+        return commandCase_ == 4;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.SettopBoxCommand settop_box = 4;</code>
+       */
+      public mrtech.smarthome.rpc.Models.SettopBoxCommand getSettopBox() {
+        if (commandCase_ == 4) {
+          return (mrtech.smarthome.rpc.Models.SettopBoxCommand) command_;
+        }
+        return mrtech.smarthome.rpc.Models.SettopBoxCommand.SETTOP_BOX_STANDBY;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.SettopBoxCommand settop_box = 4;</code>
+       */
+      public Builder setSettopBox(mrtech.smarthome.rpc.Models.SettopBoxCommand value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        commandCase_ = 4;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.SettopBoxCommand settop_box = 4;</code>
+       */
+      public Builder clearSettopBox() {
+        if (commandCase_ == 4) {
+          commandCase_ = 0;
+          command_ = null;
+          onChanged();
+        }
+        return this;
+      }
+
+      /**
+       * <code>optional .mrtech.smarthome.rpc.TelevisionCommand television = 5;</code>
+       */
+      public boolean hasTelevision() {
+        return commandCase_ == 5;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.TelevisionCommand television = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.TelevisionCommand getTelevision() {
+        if (commandCase_ == 5) {
+          return (mrtech.smarthome.rpc.Models.TelevisionCommand) command_;
+        }
+        return mrtech.smarthome.rpc.Models.TelevisionCommand.TELEVISION_VOLUME_REDUCTION;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.TelevisionCommand television = 5;</code>
+       */
+      public Builder setTelevision(mrtech.smarthome.rpc.Models.TelevisionCommand value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        commandCase_ = 5;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.TelevisionCommand television = 5;</code>
+       */
+      public Builder clearTelevision() {
+        if (commandCase_ == 5) {
+          commandCase_ = 0;
+          command_ = null;
+          onChanged();
+        }
+        return this;
+      }
+
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ElectricFanCommand electric_fan = 6;</code>
+       */
+      public boolean hasElectricFan() {
+        return commandCase_ == 6;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ElectricFanCommand electric_fan = 6;</code>
+       */
+      public mrtech.smarthome.rpc.Models.ElectricFanCommand getElectricFan() {
+        if (commandCase_ == 6) {
+          return (mrtech.smarthome.rpc.Models.ElectricFanCommand) command_;
+        }
+        return mrtech.smarthome.rpc.Models.ElectricFanCommand.ELECTRIC_FAN_ON_OFF;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ElectricFanCommand electric_fan = 6;</code>
+       */
+      public Builder setElectricFan(mrtech.smarthome.rpc.Models.ElectricFanCommand value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        commandCase_ = 6;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ElectricFanCommand electric_fan = 6;</code>
+       */
+      public Builder clearElectricFan() {
+        if (commandCase_ == 6) {
+          commandCase_ = 0;
+          command_ = null;
+          onChanged();
+        }
+        return this;
+      }
+
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ProjectorCommand projector = 7;</code>
+       */
+      public boolean hasProjector() {
+        return commandCase_ == 7;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ProjectorCommand projector = 7;</code>
+       */
+      public mrtech.smarthome.rpc.Models.ProjectorCommand getProjector() {
+        if (commandCase_ == 7) {
+          return (mrtech.smarthome.rpc.Models.ProjectorCommand) command_;
+        }
+        return mrtech.smarthome.rpc.Models.ProjectorCommand.PROJECTOR_POWER_ON;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ProjectorCommand projector = 7;</code>
+       */
+      public Builder setProjector(mrtech.smarthome.rpc.Models.ProjectorCommand value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        commandCase_ = 7;
+        command_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ProjectorCommand projector = 7;</code>
+       */
+      public Builder clearProjector() {
+        if (commandCase_ == 7) {
+          commandCase_ = 0;
+          command_ = null;
+          onChanged();
+        }
+        return this;
+      }
+
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.ExtensionCommand, mrtech.smarthome.rpc.Models.ExtensionCommand.Builder, mrtech.smarthome.rpc.Models.ExtensionCommandOrBuilder> extensionBuilder_;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      public boolean hasExtension() {
+        return commandCase_ == 8;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      public mrtech.smarthome.rpc.Models.ExtensionCommand getExtension() {
+        if (extensionBuilder_ == null) {
+          if (commandCase_ == 8) {
+            return (mrtech.smarthome.rpc.Models.ExtensionCommand) command_;
+          }
+          return mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance();
+        } else {
+          if (commandCase_ == 8) {
+            return extensionBuilder_.getMessage();
+          }
+          return mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      public Builder setExtension(mrtech.smarthome.rpc.Models.ExtensionCommand value) {
+        if (extensionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          command_ = value;
+          onChanged();
+        } else {
+          extensionBuilder_.setMessage(value);
+        }
+        commandCase_ = 8;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      public Builder setExtension(
+          mrtech.smarthome.rpc.Models.ExtensionCommand.Builder builderForValue) {
+        if (extensionBuilder_ == null) {
+          command_ = builderForValue.build();
+          onChanged();
+        } else {
+          extensionBuilder_.setMessage(builderForValue.build());
+        }
+        commandCase_ = 8;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      public Builder mergeExtension(mrtech.smarthome.rpc.Models.ExtensionCommand value) {
+        if (extensionBuilder_ == null) {
+          if (commandCase_ == 8 &&
+              command_ != mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance()) {
+            command_ = mrtech.smarthome.rpc.Models.ExtensionCommand.newBuilder((mrtech.smarthome.rpc.Models.ExtensionCommand) command_)
+                .mergeFrom(value).buildPartial();
+          } else {
+            command_ = value;
+          }
+          onChanged();
+        } else {
+          if (commandCase_ == 8) {
+            extensionBuilder_.mergeFrom(value);
+          }
+          extensionBuilder_.setMessage(value);
+        }
+        commandCase_ = 8;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      public Builder clearExtension() {
+        if (extensionBuilder_ == null) {
+          if (commandCase_ == 8) {
+            commandCase_ = 0;
+            command_ = null;
+            onChanged();
+          }
+        } else {
+          if (commandCase_ == 8) {
+            commandCase_ = 0;
+            command_ = null;
+          }
+          extensionBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      public mrtech.smarthome.rpc.Models.ExtensionCommand.Builder getExtensionBuilder() {
+        return getExtensionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      public mrtech.smarthome.rpc.Models.ExtensionCommandOrBuilder getExtensionOrBuilder() {
+        if ((commandCase_ == 8) && (extensionBuilder_ != null)) {
+          return extensionBuilder_.getMessageOrBuilder();
+        } else {
+          if (commandCase_ == 8) {
+            return (mrtech.smarthome.rpc.Models.ExtensionCommand) command_;
+          }
+          return mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.ExtensionCommand extension = 8;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.ExtensionCommand, mrtech.smarthome.rpc.Models.ExtensionCommand.Builder, mrtech.smarthome.rpc.Models.ExtensionCommandOrBuilder> 
+          getExtensionFieldBuilder() {
+        if (extensionBuilder_ == null) {
+          if (!(commandCase_ == 8)) {
+            command_ = mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance();
+          }
+          extensionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.ExtensionCommand, mrtech.smarthome.rpc.Models.ExtensionCommand.Builder, mrtech.smarthome.rpc.Models.ExtensionCommandOrBuilder>(
+                  (mrtech.smarthome.rpc.Models.ExtensionCommand) command_,
+                  getParentForChildren(),
+                  isClean());
+          command_ = null;
+        }
+        commandCase_ = 8;
+        return extensionBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.InfraredCommand)
+    }
+
+    static {
+      defaultInstance = new InfraredCommand(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.InfraredCommand)
+  }
+
+  public interface ExtensionCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.ExtensionCommand)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional int32 opcode_id = 1;</code>
+     *
+     * <pre>
+     *Access dbdata get opcode.
+     * </pre>
+     */
+    boolean hasOpcodeId();
+    /**
+     * <code>optional int32 opcode_id = 1;</code>
+     *
+     * <pre>
+     *Access dbdata get opcode.
+     * </pre>
+     */
+    int getOpcodeId();
+
+    /**
+     * <code>optional bytes opcode = 2;</code>
+     *
+     * <pre>
+     *Direct send opcode.
+     * </pre>
+     */
+    boolean hasOpcode();
+    /**
+     * <code>optional bytes opcode = 2;</code>
+     *
+     * <pre>
+     *Direct send opcode.
+     * </pre>
+     */
+    com.google.protobuf.ByteString getOpcode();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.ExtensionCommand}
+   */
+  public static final class ExtensionCommand extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.ExtensionCommand)
+      ExtensionCommandOrBuilder {
+    // Use ExtensionCommand.newBuilder() to construct.
+    private ExtensionCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private ExtensionCommand(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final ExtensionCommand defaultInstance;
+    public static ExtensionCommand getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public ExtensionCommand getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ExtensionCommand(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              dataCase_ = 1;
+              data_ = input.readInt32();
+              break;
+            }
+            case 18: {
+              dataCase_ = 2;
+              data_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_ExtensionCommand_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_ExtensionCommand_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.ExtensionCommand.class, mrtech.smarthome.rpc.Models.ExtensionCommand.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<ExtensionCommand> PARSER =
+        new com.google.protobuf.AbstractParser<ExtensionCommand>() {
+      public ExtensionCommand parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ExtensionCommand(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ExtensionCommand> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    private int dataCase_ = 0;
+    private java.lang.Object data_;
+    public enum DataCase
+        implements com.google.protobuf.Internal.EnumLite {
+      OPCODE_ID(1),
+      OPCODE(2),
+      DATA_NOT_SET(0);
+      private int value = 0;
+      private DataCase(int value) {
+        this.value = value;
+      }
+      public static DataCase valueOf(int value) {
+        switch (value) {
+          case 1: return OPCODE_ID;
+          case 2: return OPCODE;
+          case 0: return DATA_NOT_SET;
+          default: throw new java.lang.IllegalArgumentException(
+            "Value is undefined for this oneof enum.");
+        }
+      }
+      public int getNumber() {
+        return this.value;
+      }
+    };
+
+    public DataCase
+    getDataCase() {
+      return DataCase.valueOf(
+          dataCase_);
+    }
+
+    public static final int OPCODE_ID_FIELD_NUMBER = 1;
+    /**
+     * <code>optional int32 opcode_id = 1;</code>
+     *
+     * <pre>
+     *Access dbdata get opcode.
+     * </pre>
+     */
+    public boolean hasOpcodeId() {
+      return dataCase_ == 1;
+    }
+    /**
+     * <code>optional int32 opcode_id = 1;</code>
+     *
+     * <pre>
+     *Access dbdata get opcode.
+     * </pre>
+     */
+    public int getOpcodeId() {
+      if (dataCase_ == 1) {
+        return (java.lang.Integer) data_;
+      }
+      return 0;
+    }
+
+    public static final int OPCODE_FIELD_NUMBER = 2;
+    /**
+     * <code>optional bytes opcode = 2;</code>
+     *
+     * <pre>
+     *Direct send opcode.
+     * </pre>
+     */
+    public boolean hasOpcode() {
+      return dataCase_ == 2;
+    }
+    /**
+     * <code>optional bytes opcode = 2;</code>
+     *
+     * <pre>
+     *Direct send opcode.
+     * </pre>
+     */
+    public com.google.protobuf.ByteString getOpcode() {
+      if (dataCase_ == 2) {
+        return (com.google.protobuf.ByteString) data_;
+      }
+      return com.google.protobuf.ByteString.EMPTY;
+    }
+
+    private void initFields() {
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (dataCase_ == 1) {
+        output.writeInt32(
+            1, (int)((java.lang.Integer) data_));
+      }
+      if (dataCase_ == 2) {
+        output.writeBytes(
+            2, (com.google.protobuf.ByteString)((com.google.protobuf.ByteString) data_));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (dataCase_ == 1) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(
+              1, (int)((java.lang.Integer) data_));
+      }
+      if (dataCase_ == 2) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(
+              2, (com.google.protobuf.ByteString)((com.google.protobuf.ByteString) data_));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.ExtensionCommand parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.ExtensionCommand prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.ExtensionCommand}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.ExtensionCommand)
+        mrtech.smarthome.rpc.Models.ExtensionCommandOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_ExtensionCommand_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_ExtensionCommand_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.ExtensionCommand.class, mrtech.smarthome.rpc.Models.ExtensionCommand.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.ExtensionCommand.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        dataCase_ = 0;
+        data_ = null;
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_ExtensionCommand_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.ExtensionCommand getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.ExtensionCommand build() {
+        mrtech.smarthome.rpc.Models.ExtensionCommand result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.ExtensionCommand buildPartial() {
+        mrtech.smarthome.rpc.Models.ExtensionCommand result = new mrtech.smarthome.rpc.Models.ExtensionCommand(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (dataCase_ == 1) {
+          result.data_ = data_;
+        }
+        if (dataCase_ == 2) {
+          result.data_ = data_;
+        }
+        result.bitField0_ = to_bitField0_;
+        result.dataCase_ = dataCase_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.ExtensionCommand) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.ExtensionCommand)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.ExtensionCommand other) {
+        if (other == mrtech.smarthome.rpc.Models.ExtensionCommand.getDefaultInstance()) return this;
+        switch (other.getDataCase()) {
+          case OPCODE_ID: {
+            setOpcodeId(other.getOpcodeId());
+            break;
+          }
+          case OPCODE: {
+            setOpcode(other.getOpcode());
+            break;
+          }
+          case DATA_NOT_SET: {
+            break;
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.ExtensionCommand parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.ExtensionCommand) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int dataCase_ = 0;
+      private java.lang.Object data_;
+      public DataCase
+          getDataCase() {
+        return DataCase.valueOf(
+            dataCase_);
+      }
+
+      public Builder clearData() {
+        dataCase_ = 0;
+        data_ = null;
+        onChanged();
+        return this;
+      }
+
+      private int bitField0_;
+
+      /**
+       * <code>optional int32 opcode_id = 1;</code>
+       *
+       * <pre>
+       *Access dbdata get opcode.
+       * </pre>
+       */
+      public boolean hasOpcodeId() {
+        return dataCase_ == 1;
+      }
+      /**
+       * <code>optional int32 opcode_id = 1;</code>
+       *
+       * <pre>
+       *Access dbdata get opcode.
+       * </pre>
+       */
+      public int getOpcodeId() {
+        if (dataCase_ == 1) {
+          return (java.lang.Integer) data_;
+        }
+        return 0;
+      }
+      /**
+       * <code>optional int32 opcode_id = 1;</code>
+       *
+       * <pre>
+       *Access dbdata get opcode.
+       * </pre>
+       */
+      public Builder setOpcodeId(int value) {
+        dataCase_ = 1;
+        data_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 opcode_id = 1;</code>
+       *
+       * <pre>
+       *Access dbdata get opcode.
+       * </pre>
+       */
+      public Builder clearOpcodeId() {
+        if (dataCase_ == 1) {
+          dataCase_ = 0;
+          data_ = null;
+          onChanged();
+        }
+        return this;
+      }
+
+      /**
+       * <code>optional bytes opcode = 2;</code>
+       *
+       * <pre>
+       *Direct send opcode.
+       * </pre>
+       */
+      public boolean hasOpcode() {
+        return dataCase_ == 2;
+      }
+      /**
+       * <code>optional bytes opcode = 2;</code>
+       *
+       * <pre>
+       *Direct send opcode.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString getOpcode() {
+        if (dataCase_ == 2) {
+          return (com.google.protobuf.ByteString) data_;
+        }
+        return com.google.protobuf.ByteString.EMPTY;
+      }
+      /**
+       * <code>optional bytes opcode = 2;</code>
+       *
+       * <pre>
+       *Direct send opcode.
+       * </pre>
+       */
+      public Builder setOpcode(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  dataCase_ = 2;
+        data_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes opcode = 2;</code>
+       *
+       * <pre>
+       *Direct send opcode.
+       * </pre>
+       */
+      public Builder clearOpcode() {
+        if (dataCase_ == 2) {
+          dataCase_ = 0;
+          data_ = null;
+          onChanged();
+        }
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.ExtensionCommand)
+    }
+
+    static {
+      defaultInstance = new ExtensionCommand(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.ExtensionCommand)
+  }
+
+  public interface AirConditionerCommandOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.AirConditionerCommand)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional int32 temperature = 1;</code>
+     */
+    boolean hasTemperature();
+    /**
+     * <code>optional int32 temperature = 1;</code>
+     */
+    int getTemperature();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerBlowingRate blowing_rate = 2;</code>
+     */
+    boolean hasBlowingRate();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerBlowingRate blowing_rate = 2;</code>
+     */
+    mrtech.smarthome.rpc.Models.AirConditionerBlowingRate getBlowingRate();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerWindDir wind_dir = 3;</code>
+     */
+    boolean hasWindDir();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerWindDir wind_dir = 3;</code>
+     */
+    mrtech.smarthome.rpc.Models.AirConditionerWindDir getWindDir();
+
+    /**
+     * <code>optional bool auto_wind_dir = 4;</code>
+     *
+     * <pre>
+     *ture auto, false handle.
+     * </pre>
+     */
+    boolean hasAutoWindDir();
+    /**
+     * <code>optional bool auto_wind_dir = 4;</code>
+     *
+     * <pre>
+     *ture auto, false handle.
+     * </pre>
+     */
+    boolean getAutoWindDir();
+
+    /**
+     * <code>optional bool power = 5;</code>
+     *
+     * <pre>
+     *ture power on, false power off.
+     * </pre>
+     */
+    boolean hasPower();
+    /**
+     * <code>optional bool power = 5;</code>
+     *
+     * <pre>
+     *ture power on, false power off.
+     * </pre>
+     */
+    boolean getPower();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerKey key = 6;</code>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerKey key = 6;</code>
+     */
+    mrtech.smarthome.rpc.Models.AirConditionerKey getKey();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerMode mode = 7;</code>
+     */
+    boolean hasMode();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerMode mode = 7;</code>
+     */
+    mrtech.smarthome.rpc.Models.AirConditionerMode getMode();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.AirConditionerCommand}
+   */
+  public static final class AirConditionerCommand extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.AirConditionerCommand)
+      AirConditionerCommandOrBuilder {
+    // Use AirConditionerCommand.newBuilder() to construct.
+    private AirConditionerCommand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private AirConditionerCommand(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final AirConditionerCommand defaultInstance;
+    public static AirConditionerCommand getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public AirConditionerCommand getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private AirConditionerCommand(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              temperature_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.AirConditionerBlowingRate value = mrtech.smarthome.rpc.Models.AirConditionerBlowingRate.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                blowingRate_ = value;
+              }
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.AirConditionerWindDir value = mrtech.smarthome.rpc.Models.AirConditionerWindDir.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(3, rawValue);
+              } else {
+                bitField0_ |= 0x00000004;
+                windDir_ = value;
+              }
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              autoWindDir_ = input.readBool();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              power_ = input.readBool();
+              break;
+            }
+            case 48: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.AirConditionerKey value = mrtech.smarthome.rpc.Models.AirConditionerKey.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(6, rawValue);
+              } else {
+                bitField0_ |= 0x00000020;
+                key_ = value;
+              }
+              break;
+            }
+            case 56: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.AirConditionerMode value = mrtech.smarthome.rpc.Models.AirConditionerMode.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(7, rawValue);
+              } else {
+                bitField0_ |= 0x00000040;
+                mode_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AirConditionerCommand_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AirConditionerCommand_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.AirConditionerCommand.class, mrtech.smarthome.rpc.Models.AirConditionerCommand.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<AirConditionerCommand> PARSER =
+        new com.google.protobuf.AbstractParser<AirConditionerCommand>() {
+      public AirConditionerCommand parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AirConditionerCommand(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AirConditionerCommand> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int TEMPERATURE_FIELD_NUMBER = 1;
+    private int temperature_;
+    /**
+     * <code>optional int32 temperature = 1;</code>
+     */
+    public boolean hasTemperature() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int32 temperature = 1;</code>
+     */
+    public int getTemperature() {
+      return temperature_;
+    }
+
+    public static final int BLOWING_RATE_FIELD_NUMBER = 2;
+    private mrtech.smarthome.rpc.Models.AirConditionerBlowingRate blowingRate_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerBlowingRate blowing_rate = 2;</code>
+     */
+    public boolean hasBlowingRate() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerBlowingRate blowing_rate = 2;</code>
+     */
+    public mrtech.smarthome.rpc.Models.AirConditionerBlowingRate getBlowingRate() {
+      return blowingRate_;
+    }
+
+    public static final int WIND_DIR_FIELD_NUMBER = 3;
+    private mrtech.smarthome.rpc.Models.AirConditionerWindDir windDir_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerWindDir wind_dir = 3;</code>
+     */
+    public boolean hasWindDir() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerWindDir wind_dir = 3;</code>
+     */
+    public mrtech.smarthome.rpc.Models.AirConditionerWindDir getWindDir() {
+      return windDir_;
+    }
+
+    public static final int AUTO_WIND_DIR_FIELD_NUMBER = 4;
+    private boolean autoWindDir_;
+    /**
+     * <code>optional bool auto_wind_dir = 4;</code>
+     *
+     * <pre>
+     *ture auto, false handle.
+     * </pre>
+     */
+    public boolean hasAutoWindDir() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional bool auto_wind_dir = 4;</code>
+     *
+     * <pre>
+     *ture auto, false handle.
+     * </pre>
+     */
+    public boolean getAutoWindDir() {
+      return autoWindDir_;
+    }
+
+    public static final int POWER_FIELD_NUMBER = 5;
+    private boolean power_;
+    /**
+     * <code>optional bool power = 5;</code>
+     *
+     * <pre>
+     *ture power on, false power off.
+     * </pre>
+     */
+    public boolean hasPower() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional bool power = 5;</code>
+     *
+     * <pre>
+     *ture power on, false power off.
+     * </pre>
+     */
+    public boolean getPower() {
+      return power_;
+    }
+
+    public static final int KEY_FIELD_NUMBER = 6;
+    private mrtech.smarthome.rpc.Models.AirConditionerKey key_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerKey key = 6;</code>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerKey key = 6;</code>
+     */
+    public mrtech.smarthome.rpc.Models.AirConditionerKey getKey() {
+      return key_;
+    }
+
+    public static final int MODE_FIELD_NUMBER = 7;
+    private mrtech.smarthome.rpc.Models.AirConditionerMode mode_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerMode mode = 7;</code>
+     */
+    public boolean hasMode() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AirConditionerMode mode = 7;</code>
+     */
+    public mrtech.smarthome.rpc.Models.AirConditionerMode getMode() {
+      return mode_;
+    }
+
+    private void initFields() {
+      temperature_ = 0;
+      blowingRate_ = mrtech.smarthome.rpc.Models.AirConditionerBlowingRate.AIR_CONDITIONER_BLOWING_RATE_AUTO;
+      windDir_ = mrtech.smarthome.rpc.Models.AirConditionerWindDir.AIR_CONDITIONER_WIND_DIR_UP;
+      autoWindDir_ = false;
+      power_ = false;
+      key_ = mrtech.smarthome.rpc.Models.AirConditionerKey.AIR_CONDITIONER_KEY_POWER;
+      mode_ = mrtech.smarthome.rpc.Models.AirConditionerMode.AIR_CONDITIONER_MODE_AUTO;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, temperature_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, blowingRate_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeEnum(3, windDir_.getNumber());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBool(4, autoWindDir_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBool(5, power_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeEnum(6, key_.getNumber());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeEnum(7, mode_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, temperature_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, blowingRate_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, windDir_.getNumber());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, autoWindDir_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, power_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(6, key_.getNumber());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(7, mode_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.AirConditionerCommand parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.AirConditionerCommand prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.AirConditionerCommand}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.AirConditionerCommand)
+        mrtech.smarthome.rpc.Models.AirConditionerCommandOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AirConditionerCommand_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AirConditionerCommand_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.AirConditionerCommand.class, mrtech.smarthome.rpc.Models.AirConditionerCommand.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.AirConditionerCommand.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        temperature_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        blowingRate_ = mrtech.smarthome.rpc.Models.AirConditionerBlowingRate.AIR_CONDITIONER_BLOWING_RATE_AUTO;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        windDir_ = mrtech.smarthome.rpc.Models.AirConditionerWindDir.AIR_CONDITIONER_WIND_DIR_UP;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        autoWindDir_ = false;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        power_ = false;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        key_ = mrtech.smarthome.rpc.Models.AirConditionerKey.AIR_CONDITIONER_KEY_POWER;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        mode_ = mrtech.smarthome.rpc.Models.AirConditionerMode.AIR_CONDITIONER_MODE_AUTO;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AirConditionerCommand_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.AirConditionerCommand getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.AirConditionerCommand build() {
+        mrtech.smarthome.rpc.Models.AirConditionerCommand result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.AirConditionerCommand buildPartial() {
+        mrtech.smarthome.rpc.Models.AirConditionerCommand result = new mrtech.smarthome.rpc.Models.AirConditionerCommand(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.temperature_ = temperature_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.blowingRate_ = blowingRate_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.windDir_ = windDir_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.autoWindDir_ = autoWindDir_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.power_ = power_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.mode_ = mode_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.AirConditionerCommand) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.AirConditionerCommand)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.AirConditionerCommand other) {
+        if (other == mrtech.smarthome.rpc.Models.AirConditionerCommand.getDefaultInstance()) return this;
+        if (other.hasTemperature()) {
+          setTemperature(other.getTemperature());
+        }
+        if (other.hasBlowingRate()) {
+          setBlowingRate(other.getBlowingRate());
+        }
+        if (other.hasWindDir()) {
+          setWindDir(other.getWindDir());
+        }
+        if (other.hasAutoWindDir()) {
+          setAutoWindDir(other.getAutoWindDir());
+        }
+        if (other.hasPower()) {
+          setPower(other.getPower());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
+        if (other.hasMode()) {
+          setMode(other.getMode());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.AirConditionerCommand parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.AirConditionerCommand) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int temperature_ ;
+      /**
+       * <code>optional int32 temperature = 1;</code>
+       */
+      public boolean hasTemperature() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int32 temperature = 1;</code>
+       */
+      public int getTemperature() {
+        return temperature_;
+      }
+      /**
+       * <code>optional int32 temperature = 1;</code>
+       */
+      public Builder setTemperature(int value) {
+        bitField0_ |= 0x00000001;
+        temperature_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 temperature = 1;</code>
+       */
+      public Builder clearTemperature() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        temperature_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.AirConditionerBlowingRate blowingRate_ = mrtech.smarthome.rpc.Models.AirConditionerBlowingRate.AIR_CONDITIONER_BLOWING_RATE_AUTO;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerBlowingRate blowing_rate = 2;</code>
+       */
+      public boolean hasBlowingRate() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerBlowingRate blowing_rate = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AirConditionerBlowingRate getBlowingRate() {
+        return blowingRate_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerBlowingRate blowing_rate = 2;</code>
+       */
+      public Builder setBlowingRate(mrtech.smarthome.rpc.Models.AirConditionerBlowingRate value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        blowingRate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerBlowingRate blowing_rate = 2;</code>
+       */
+      public Builder clearBlowingRate() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        blowingRate_ = mrtech.smarthome.rpc.Models.AirConditionerBlowingRate.AIR_CONDITIONER_BLOWING_RATE_AUTO;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.AirConditionerWindDir windDir_ = mrtech.smarthome.rpc.Models.AirConditionerWindDir.AIR_CONDITIONER_WIND_DIR_UP;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerWindDir wind_dir = 3;</code>
+       */
+      public boolean hasWindDir() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerWindDir wind_dir = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AirConditionerWindDir getWindDir() {
+        return windDir_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerWindDir wind_dir = 3;</code>
+       */
+      public Builder setWindDir(mrtech.smarthome.rpc.Models.AirConditionerWindDir value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000004;
+        windDir_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerWindDir wind_dir = 3;</code>
+       */
+      public Builder clearWindDir() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        windDir_ = mrtech.smarthome.rpc.Models.AirConditionerWindDir.AIR_CONDITIONER_WIND_DIR_UP;
+        onChanged();
+        return this;
+      }
+
+      private boolean autoWindDir_ ;
+      /**
+       * <code>optional bool auto_wind_dir = 4;</code>
+       *
+       * <pre>
+       *ture auto, false handle.
+       * </pre>
+       */
+      public boolean hasAutoWindDir() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional bool auto_wind_dir = 4;</code>
+       *
+       * <pre>
+       *ture auto, false handle.
+       * </pre>
+       */
+      public boolean getAutoWindDir() {
+        return autoWindDir_;
+      }
+      /**
+       * <code>optional bool auto_wind_dir = 4;</code>
+       *
+       * <pre>
+       *ture auto, false handle.
+       * </pre>
+       */
+      public Builder setAutoWindDir(boolean value) {
+        bitField0_ |= 0x00000008;
+        autoWindDir_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool auto_wind_dir = 4;</code>
+       *
+       * <pre>
+       *ture auto, false handle.
+       * </pre>
+       */
+      public Builder clearAutoWindDir() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        autoWindDir_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean power_ ;
+      /**
+       * <code>optional bool power = 5;</code>
+       *
+       * <pre>
+       *ture power on, false power off.
+       * </pre>
+       */
+      public boolean hasPower() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bool power = 5;</code>
+       *
+       * <pre>
+       *ture power on, false power off.
+       * </pre>
+       */
+      public boolean getPower() {
+        return power_;
+      }
+      /**
+       * <code>optional bool power = 5;</code>
+       *
+       * <pre>
+       *ture power on, false power off.
+       * </pre>
+       */
+      public Builder setPower(boolean value) {
+        bitField0_ |= 0x00000010;
+        power_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool power = 5;</code>
+       *
+       * <pre>
+       *ture power on, false power off.
+       * </pre>
+       */
+      public Builder clearPower() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        power_ = false;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.AirConditionerKey key_ = mrtech.smarthome.rpc.Models.AirConditionerKey.AIR_CONDITIONER_KEY_POWER;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerKey key = 6;</code>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerKey key = 6;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AirConditionerKey getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerKey key = 6;</code>
+       */
+      public Builder setKey(mrtech.smarthome.rpc.Models.AirConditionerKey value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000020;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerKey key = 6;</code>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        key_ = mrtech.smarthome.rpc.Models.AirConditionerKey.AIR_CONDITIONER_KEY_POWER;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.AirConditionerMode mode_ = mrtech.smarthome.rpc.Models.AirConditionerMode.AIR_CONDITIONER_MODE_AUTO;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerMode mode = 7;</code>
+       */
+      public boolean hasMode() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerMode mode = 7;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AirConditionerMode getMode() {
+        return mode_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerMode mode = 7;</code>
+       */
+      public Builder setMode(mrtech.smarthome.rpc.Models.AirConditionerMode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000040;
+        mode_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AirConditionerMode mode = 7;</code>
+       */
+      public Builder clearMode() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        mode_ = mrtech.smarthome.rpc.Models.AirConditionerMode.AIR_CONDITIONER_MODE_AUTO;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.AirConditionerCommand)
+    }
+
+    static {
+      defaultInstance = new AirConditionerCommand(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.AirConditionerCommand)
+  }
+
+  public interface IrControllerCodeOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.IrControllerCode)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated bytes air_conditioner_data = 1;</code>
+     */
+    java.util.List<com.google.protobuf.ByteString> getAirConditionerDataList();
+    /**
+     * <code>repeated bytes air_conditioner_data = 1;</code>
+     */
+    int getAirConditionerDataCount();
+    /**
+     * <code>repeated bytes air_conditioner_data = 1;</code>
+     */
+    com.google.protobuf.ByteString getAirConditionerData(int index);
+
+    /**
+     * <code>repeated bytes dvd_player_data = 2;</code>
+     */
+    java.util.List<com.google.protobuf.ByteString> getDvdPlayerDataList();
+    /**
+     * <code>repeated bytes dvd_player_data = 2;</code>
+     */
+    int getDvdPlayerDataCount();
+    /**
+     * <code>repeated bytes dvd_player_data = 2;</code>
+     */
+    com.google.protobuf.ByteString getDvdPlayerData(int index);
+
+    /**
+     * <code>repeated bytes ip_television_data = 3;</code>
+     */
+    java.util.List<com.google.protobuf.ByteString> getIpTelevisionDataList();
+    /**
+     * <code>repeated bytes ip_television_data = 3;</code>
+     */
+    int getIpTelevisionDataCount();
+    /**
+     * <code>repeated bytes ip_television_data = 3;</code>
+     */
+    com.google.protobuf.ByteString getIpTelevisionData(int index);
+
+    /**
+     * <code>repeated bytes settop_box_data = 4;</code>
+     */
+    java.util.List<com.google.protobuf.ByteString> getSettopBoxDataList();
+    /**
+     * <code>repeated bytes settop_box_data = 4;</code>
+     */
+    int getSettopBoxDataCount();
+    /**
+     * <code>repeated bytes settop_box_data = 4;</code>
+     */
+    com.google.protobuf.ByteString getSettopBoxData(int index);
+
+    /**
+     * <code>repeated bytes television_data = 5;</code>
+     */
+    java.util.List<com.google.protobuf.ByteString> getTelevisionDataList();
+    /**
+     * <code>repeated bytes television_data = 5;</code>
+     */
+    int getTelevisionDataCount();
+    /**
+     * <code>repeated bytes television_data = 5;</code>
+     */
+    com.google.protobuf.ByteString getTelevisionData(int index);
+
+    /**
+     * <code>repeated bytes electric_fan_data = 6;</code>
+     */
+    java.util.List<com.google.protobuf.ByteString> getElectricFanDataList();
+    /**
+     * <code>repeated bytes electric_fan_data = 6;</code>
+     */
+    int getElectricFanDataCount();
+    /**
+     * <code>repeated bytes electric_fan_data = 6;</code>
+     */
+    com.google.protobuf.ByteString getElectricFanData(int index);
+
+    /**
+     * <code>repeated bytes projector_data = 7;</code>
+     */
+    java.util.List<com.google.protobuf.ByteString> getProjectorDataList();
+    /**
+     * <code>repeated bytes projector_data = 7;</code>
+     */
+    int getProjectorDataCount();
+    /**
+     * <code>repeated bytes projector_data = 7;</code>
+     */
+    com.google.protobuf.ByteString getProjectorData(int index);
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.IrControllerCode}
+   */
+  public static final class IrControllerCode extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.IrControllerCode)
+      IrControllerCodeOrBuilder {
+    // Use IrControllerCode.newBuilder() to construct.
+    private IrControllerCode(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private IrControllerCode(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final IrControllerCode defaultInstance;
+    public static IrControllerCode getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public IrControllerCode getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private IrControllerCode(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                airConditionerData_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              airConditionerData_.add(input.readBytes());
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                dvdPlayerData_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              dvdPlayerData_.add(input.readBytes());
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                ipTelevisionData_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              ipTelevisionData_.add(input.readBytes());
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                settopBoxData_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              settopBoxData_.add(input.readBytes());
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                televisionData_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              televisionData_.add(input.readBytes());
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                electricFanData_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              electricFanData_.add(input.readBytes());
+              break;
+            }
+            case 58: {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+                projectorData_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              projectorData_.add(input.readBytes());
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          airConditionerData_ = java.util.Collections.unmodifiableList(airConditionerData_);
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          dvdPlayerData_ = java.util.Collections.unmodifiableList(dvdPlayerData_);
+        }
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          ipTelevisionData_ = java.util.Collections.unmodifiableList(ipTelevisionData_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          settopBoxData_ = java.util.Collections.unmodifiableList(settopBoxData_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          televisionData_ = java.util.Collections.unmodifiableList(televisionData_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          electricFanData_ = java.util.Collections.unmodifiableList(electricFanData_);
+        }
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+          projectorData_ = java.util.Collections.unmodifiableList(projectorData_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrControllerCode_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrControllerCode_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.IrControllerCode.class, mrtech.smarthome.rpc.Models.IrControllerCode.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<IrControllerCode> PARSER =
+        new com.google.protobuf.AbstractParser<IrControllerCode>() {
+      public IrControllerCode parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new IrControllerCode(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<IrControllerCode> getParserForType() {
+      return PARSER;
+    }
+
+    public static final int AIR_CONDITIONER_DATA_FIELD_NUMBER = 1;
+    private java.util.List<com.google.protobuf.ByteString> airConditionerData_;
+    /**
+     * <code>repeated bytes air_conditioner_data = 1;</code>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getAirConditionerDataList() {
+      return airConditionerData_;
+    }
+    /**
+     * <code>repeated bytes air_conditioner_data = 1;</code>
+     */
+    public int getAirConditionerDataCount() {
+      return airConditionerData_.size();
+    }
+    /**
+     * <code>repeated bytes air_conditioner_data = 1;</code>
+     */
+    public com.google.protobuf.ByteString getAirConditionerData(int index) {
+      return airConditionerData_.get(index);
+    }
+
+    public static final int DVD_PLAYER_DATA_FIELD_NUMBER = 2;
+    private java.util.List<com.google.protobuf.ByteString> dvdPlayerData_;
+    /**
+     * <code>repeated bytes dvd_player_data = 2;</code>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getDvdPlayerDataList() {
+      return dvdPlayerData_;
+    }
+    /**
+     * <code>repeated bytes dvd_player_data = 2;</code>
+     */
+    public int getDvdPlayerDataCount() {
+      return dvdPlayerData_.size();
+    }
+    /**
+     * <code>repeated bytes dvd_player_data = 2;</code>
+     */
+    public com.google.protobuf.ByteString getDvdPlayerData(int index) {
+      return dvdPlayerData_.get(index);
+    }
+
+    public static final int IP_TELEVISION_DATA_FIELD_NUMBER = 3;
+    private java.util.List<com.google.protobuf.ByteString> ipTelevisionData_;
+    /**
+     * <code>repeated bytes ip_television_data = 3;</code>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getIpTelevisionDataList() {
+      return ipTelevisionData_;
+    }
+    /**
+     * <code>repeated bytes ip_television_data = 3;</code>
+     */
+    public int getIpTelevisionDataCount() {
+      return ipTelevisionData_.size();
+    }
+    /**
+     * <code>repeated bytes ip_television_data = 3;</code>
+     */
+    public com.google.protobuf.ByteString getIpTelevisionData(int index) {
+      return ipTelevisionData_.get(index);
+    }
+
+    public static final int SETTOP_BOX_DATA_FIELD_NUMBER = 4;
+    private java.util.List<com.google.protobuf.ByteString> settopBoxData_;
+    /**
+     * <code>repeated bytes settop_box_data = 4;</code>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getSettopBoxDataList() {
+      return settopBoxData_;
+    }
+    /**
+     * <code>repeated bytes settop_box_data = 4;</code>
+     */
+    public int getSettopBoxDataCount() {
+      return settopBoxData_.size();
+    }
+    /**
+     * <code>repeated bytes settop_box_data = 4;</code>
+     */
+    public com.google.protobuf.ByteString getSettopBoxData(int index) {
+      return settopBoxData_.get(index);
+    }
+
+    public static final int TELEVISION_DATA_FIELD_NUMBER = 5;
+    private java.util.List<com.google.protobuf.ByteString> televisionData_;
+    /**
+     * <code>repeated bytes television_data = 5;</code>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getTelevisionDataList() {
+      return televisionData_;
+    }
+    /**
+     * <code>repeated bytes television_data = 5;</code>
+     */
+    public int getTelevisionDataCount() {
+      return televisionData_.size();
+    }
+    /**
+     * <code>repeated bytes television_data = 5;</code>
+     */
+    public com.google.protobuf.ByteString getTelevisionData(int index) {
+      return televisionData_.get(index);
+    }
+
+    public static final int ELECTRIC_FAN_DATA_FIELD_NUMBER = 6;
+    private java.util.List<com.google.protobuf.ByteString> electricFanData_;
+    /**
+     * <code>repeated bytes electric_fan_data = 6;</code>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getElectricFanDataList() {
+      return electricFanData_;
+    }
+    /**
+     * <code>repeated bytes electric_fan_data = 6;</code>
+     */
+    public int getElectricFanDataCount() {
+      return electricFanData_.size();
+    }
+    /**
+     * <code>repeated bytes electric_fan_data = 6;</code>
+     */
+    public com.google.protobuf.ByteString getElectricFanData(int index) {
+      return electricFanData_.get(index);
+    }
+
+    public static final int PROJECTOR_DATA_FIELD_NUMBER = 7;
+    private java.util.List<com.google.protobuf.ByteString> projectorData_;
+    /**
+     * <code>repeated bytes projector_data = 7;</code>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getProjectorDataList() {
+      return projectorData_;
+    }
+    /**
+     * <code>repeated bytes projector_data = 7;</code>
+     */
+    public int getProjectorDataCount() {
+      return projectorData_.size();
+    }
+    /**
+     * <code>repeated bytes projector_data = 7;</code>
+     */
+    public com.google.protobuf.ByteString getProjectorData(int index) {
+      return projectorData_.get(index);
+    }
+
+    private void initFields() {
+      airConditionerData_ = java.util.Collections.emptyList();
+      dvdPlayerData_ = java.util.Collections.emptyList();
+      ipTelevisionData_ = java.util.Collections.emptyList();
+      settopBoxData_ = java.util.Collections.emptyList();
+      televisionData_ = java.util.Collections.emptyList();
+      electricFanData_ = java.util.Collections.emptyList();
+      projectorData_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < airConditionerData_.size(); i++) {
+        output.writeBytes(1, airConditionerData_.get(i));
+      }
+      for (int i = 0; i < dvdPlayerData_.size(); i++) {
+        output.writeBytes(2, dvdPlayerData_.get(i));
+      }
+      for (int i = 0; i < ipTelevisionData_.size(); i++) {
+        output.writeBytes(3, ipTelevisionData_.get(i));
+      }
+      for (int i = 0; i < settopBoxData_.size(); i++) {
+        output.writeBytes(4, settopBoxData_.get(i));
+      }
+      for (int i = 0; i < televisionData_.size(); i++) {
+        output.writeBytes(5, televisionData_.get(i));
+      }
+      for (int i = 0; i < electricFanData_.size(); i++) {
+        output.writeBytes(6, electricFanData_.get(i));
+      }
+      for (int i = 0; i < projectorData_.size(); i++) {
+        output.writeBytes(7, projectorData_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      {
+        int dataSize = 0;
+        for (int i = 0; i < airConditionerData_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(airConditionerData_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getAirConditionerDataList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < dvdPlayerData_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(dvdPlayerData_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getDvdPlayerDataList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < ipTelevisionData_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(ipTelevisionData_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getIpTelevisionDataList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < settopBoxData_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(settopBoxData_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getSettopBoxDataList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < televisionData_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(televisionData_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getTelevisionDataList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < electricFanData_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(electricFanData_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getElectricFanDataList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < projectorData_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(projectorData_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getProjectorDataList().size();
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrControllerCode parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.IrControllerCode prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.IrControllerCode}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.IrControllerCode)
+        mrtech.smarthome.rpc.Models.IrControllerCodeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrControllerCode_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrControllerCode_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.IrControllerCode.class, mrtech.smarthome.rpc.Models.IrControllerCode.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.IrControllerCode.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        airConditionerData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        dvdPlayerData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        ipTelevisionData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        settopBoxData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        televisionData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        electricFanData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        projectorData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrControllerCode_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.IrControllerCode getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.IrControllerCode.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.IrControllerCode build() {
+        mrtech.smarthome.rpc.Models.IrControllerCode result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.IrControllerCode buildPartial() {
+        mrtech.smarthome.rpc.Models.IrControllerCode result = new mrtech.smarthome.rpc.Models.IrControllerCode(this);
+        int from_bitField0_ = bitField0_;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          airConditionerData_ = java.util.Collections.unmodifiableList(airConditionerData_);
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.airConditionerData_ = airConditionerData_;
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          dvdPlayerData_ = java.util.Collections.unmodifiableList(dvdPlayerData_);
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.dvdPlayerData_ = dvdPlayerData_;
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          ipTelevisionData_ = java.util.Collections.unmodifiableList(ipTelevisionData_);
+          bitField0_ = (bitField0_ & ~0x00000004);
+        }
+        result.ipTelevisionData_ = ipTelevisionData_;
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          settopBoxData_ = java.util.Collections.unmodifiableList(settopBoxData_);
+          bitField0_ = (bitField0_ & ~0x00000008);
+        }
+        result.settopBoxData_ = settopBoxData_;
+        if (((bitField0_ & 0x00000010) == 0x00000010)) {
+          televisionData_ = java.util.Collections.unmodifiableList(televisionData_);
+          bitField0_ = (bitField0_ & ~0x00000010);
+        }
+        result.televisionData_ = televisionData_;
+        if (((bitField0_ & 0x00000020) == 0x00000020)) {
+          electricFanData_ = java.util.Collections.unmodifiableList(electricFanData_);
+          bitField0_ = (bitField0_ & ~0x00000020);
+        }
+        result.electricFanData_ = electricFanData_;
+        if (((bitField0_ & 0x00000040) == 0x00000040)) {
+          projectorData_ = java.util.Collections.unmodifiableList(projectorData_);
+          bitField0_ = (bitField0_ & ~0x00000040);
+        }
+        result.projectorData_ = projectorData_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.IrControllerCode) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.IrControllerCode)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.IrControllerCode other) {
+        if (other == mrtech.smarthome.rpc.Models.IrControllerCode.getDefaultInstance()) return this;
+        if (!other.airConditionerData_.isEmpty()) {
+          if (airConditionerData_.isEmpty()) {
+            airConditionerData_ = other.airConditionerData_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureAirConditionerDataIsMutable();
+            airConditionerData_.addAll(other.airConditionerData_);
+          }
+          onChanged();
+        }
+        if (!other.dvdPlayerData_.isEmpty()) {
+          if (dvdPlayerData_.isEmpty()) {
+            dvdPlayerData_ = other.dvdPlayerData_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensureDvdPlayerDataIsMutable();
+            dvdPlayerData_.addAll(other.dvdPlayerData_);
+          }
+          onChanged();
+        }
+        if (!other.ipTelevisionData_.isEmpty()) {
+          if (ipTelevisionData_.isEmpty()) {
+            ipTelevisionData_ = other.ipTelevisionData_;
+            bitField0_ = (bitField0_ & ~0x00000004);
+          } else {
+            ensureIpTelevisionDataIsMutable();
+            ipTelevisionData_.addAll(other.ipTelevisionData_);
+          }
+          onChanged();
+        }
+        if (!other.settopBoxData_.isEmpty()) {
+          if (settopBoxData_.isEmpty()) {
+            settopBoxData_ = other.settopBoxData_;
+            bitField0_ = (bitField0_ & ~0x00000008);
+          } else {
+            ensureSettopBoxDataIsMutable();
+            settopBoxData_.addAll(other.settopBoxData_);
+          }
+          onChanged();
+        }
+        if (!other.televisionData_.isEmpty()) {
+          if (televisionData_.isEmpty()) {
+            televisionData_ = other.televisionData_;
+            bitField0_ = (bitField0_ & ~0x00000010);
+          } else {
+            ensureTelevisionDataIsMutable();
+            televisionData_.addAll(other.televisionData_);
+          }
+          onChanged();
+        }
+        if (!other.electricFanData_.isEmpty()) {
+          if (electricFanData_.isEmpty()) {
+            electricFanData_ = other.electricFanData_;
+            bitField0_ = (bitField0_ & ~0x00000020);
+          } else {
+            ensureElectricFanDataIsMutable();
+            electricFanData_.addAll(other.electricFanData_);
+          }
+          onChanged();
+        }
+        if (!other.projectorData_.isEmpty()) {
+          if (projectorData_.isEmpty()) {
+            projectorData_ = other.projectorData_;
+            bitField0_ = (bitField0_ & ~0x00000040);
+          } else {
+            ensureProjectorDataIsMutable();
+            projectorData_.addAll(other.projectorData_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.IrControllerCode parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.IrControllerCode) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<com.google.protobuf.ByteString> airConditionerData_ = java.util.Collections.emptyList();
+      private void ensureAirConditionerDataIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          airConditionerData_ = new java.util.ArrayList<com.google.protobuf.ByteString>(airConditionerData_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      /**
+       * <code>repeated bytes air_conditioner_data = 1;</code>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getAirConditionerDataList() {
+        return java.util.Collections.unmodifiableList(airConditionerData_);
+      }
+      /**
+       * <code>repeated bytes air_conditioner_data = 1;</code>
+       */
+      public int getAirConditionerDataCount() {
+        return airConditionerData_.size();
+      }
+      /**
+       * <code>repeated bytes air_conditioner_data = 1;</code>
+       */
+      public com.google.protobuf.ByteString getAirConditionerData(int index) {
+        return airConditionerData_.get(index);
+      }
+      /**
+       * <code>repeated bytes air_conditioner_data = 1;</code>
+       */
+      public Builder setAirConditionerData(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureAirConditionerDataIsMutable();
+        airConditionerData_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes air_conditioner_data = 1;</code>
+       */
+      public Builder addAirConditionerData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureAirConditionerDataIsMutable();
+        airConditionerData_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes air_conditioner_data = 1;</code>
+       */
+      public Builder addAllAirConditionerData(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureAirConditionerDataIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, airConditionerData_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes air_conditioner_data = 1;</code>
+       */
+      public Builder clearAirConditionerData() {
+        airConditionerData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.google.protobuf.ByteString> dvdPlayerData_ = java.util.Collections.emptyList();
+      private void ensureDvdPlayerDataIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          dvdPlayerData_ = new java.util.ArrayList<com.google.protobuf.ByteString>(dvdPlayerData_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      /**
+       * <code>repeated bytes dvd_player_data = 2;</code>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getDvdPlayerDataList() {
+        return java.util.Collections.unmodifiableList(dvdPlayerData_);
+      }
+      /**
+       * <code>repeated bytes dvd_player_data = 2;</code>
+       */
+      public int getDvdPlayerDataCount() {
+        return dvdPlayerData_.size();
+      }
+      /**
+       * <code>repeated bytes dvd_player_data = 2;</code>
+       */
+      public com.google.protobuf.ByteString getDvdPlayerData(int index) {
+        return dvdPlayerData_.get(index);
+      }
+      /**
+       * <code>repeated bytes dvd_player_data = 2;</code>
+       */
+      public Builder setDvdPlayerData(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureDvdPlayerDataIsMutable();
+        dvdPlayerData_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes dvd_player_data = 2;</code>
+       */
+      public Builder addDvdPlayerData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureDvdPlayerDataIsMutable();
+        dvdPlayerData_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes dvd_player_data = 2;</code>
+       */
+      public Builder addAllDvdPlayerData(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureDvdPlayerDataIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, dvdPlayerData_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes dvd_player_data = 2;</code>
+       */
+      public Builder clearDvdPlayerData() {
+        dvdPlayerData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.google.protobuf.ByteString> ipTelevisionData_ = java.util.Collections.emptyList();
+      private void ensureIpTelevisionDataIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          ipTelevisionData_ = new java.util.ArrayList<com.google.protobuf.ByteString>(ipTelevisionData_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+      /**
+       * <code>repeated bytes ip_television_data = 3;</code>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getIpTelevisionDataList() {
+        return java.util.Collections.unmodifiableList(ipTelevisionData_);
+      }
+      /**
+       * <code>repeated bytes ip_television_data = 3;</code>
+       */
+      public int getIpTelevisionDataCount() {
+        return ipTelevisionData_.size();
+      }
+      /**
+       * <code>repeated bytes ip_television_data = 3;</code>
+       */
+      public com.google.protobuf.ByteString getIpTelevisionData(int index) {
+        return ipTelevisionData_.get(index);
+      }
+      /**
+       * <code>repeated bytes ip_television_data = 3;</code>
+       */
+      public Builder setIpTelevisionData(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureIpTelevisionDataIsMutable();
+        ipTelevisionData_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes ip_television_data = 3;</code>
+       */
+      public Builder addIpTelevisionData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureIpTelevisionDataIsMutable();
+        ipTelevisionData_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes ip_television_data = 3;</code>
+       */
+      public Builder addAllIpTelevisionData(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureIpTelevisionDataIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, ipTelevisionData_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes ip_television_data = 3;</code>
+       */
+      public Builder clearIpTelevisionData() {
+        ipTelevisionData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.google.protobuf.ByteString> settopBoxData_ = java.util.Collections.emptyList();
+      private void ensureSettopBoxDataIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          settopBoxData_ = new java.util.ArrayList<com.google.protobuf.ByteString>(settopBoxData_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+      /**
+       * <code>repeated bytes settop_box_data = 4;</code>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getSettopBoxDataList() {
+        return java.util.Collections.unmodifiableList(settopBoxData_);
+      }
+      /**
+       * <code>repeated bytes settop_box_data = 4;</code>
+       */
+      public int getSettopBoxDataCount() {
+        return settopBoxData_.size();
+      }
+      /**
+       * <code>repeated bytes settop_box_data = 4;</code>
+       */
+      public com.google.protobuf.ByteString getSettopBoxData(int index) {
+        return settopBoxData_.get(index);
+      }
+      /**
+       * <code>repeated bytes settop_box_data = 4;</code>
+       */
+      public Builder setSettopBoxData(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureSettopBoxDataIsMutable();
+        settopBoxData_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes settop_box_data = 4;</code>
+       */
+      public Builder addSettopBoxData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureSettopBoxDataIsMutable();
+        settopBoxData_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes settop_box_data = 4;</code>
+       */
+      public Builder addAllSettopBoxData(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureSettopBoxDataIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, settopBoxData_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes settop_box_data = 4;</code>
+       */
+      public Builder clearSettopBoxData() {
+        settopBoxData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.google.protobuf.ByteString> televisionData_ = java.util.Collections.emptyList();
+      private void ensureTelevisionDataIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          televisionData_ = new java.util.ArrayList<com.google.protobuf.ByteString>(televisionData_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+      /**
+       * <code>repeated bytes television_data = 5;</code>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getTelevisionDataList() {
+        return java.util.Collections.unmodifiableList(televisionData_);
+      }
+      /**
+       * <code>repeated bytes television_data = 5;</code>
+       */
+      public int getTelevisionDataCount() {
+        return televisionData_.size();
+      }
+      /**
+       * <code>repeated bytes television_data = 5;</code>
+       */
+      public com.google.protobuf.ByteString getTelevisionData(int index) {
+        return televisionData_.get(index);
+      }
+      /**
+       * <code>repeated bytes television_data = 5;</code>
+       */
+      public Builder setTelevisionData(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTelevisionDataIsMutable();
+        televisionData_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes television_data = 5;</code>
+       */
+      public Builder addTelevisionData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTelevisionDataIsMutable();
+        televisionData_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes television_data = 5;</code>
+       */
+      public Builder addAllTelevisionData(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureTelevisionDataIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, televisionData_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes television_data = 5;</code>
+       */
+      public Builder clearTelevisionData() {
+        televisionData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.google.protobuf.ByteString> electricFanData_ = java.util.Collections.emptyList();
+      private void ensureElectricFanDataIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          electricFanData_ = new java.util.ArrayList<com.google.protobuf.ByteString>(electricFanData_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+      /**
+       * <code>repeated bytes electric_fan_data = 6;</code>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getElectricFanDataList() {
+        return java.util.Collections.unmodifiableList(electricFanData_);
+      }
+      /**
+       * <code>repeated bytes electric_fan_data = 6;</code>
+       */
+      public int getElectricFanDataCount() {
+        return electricFanData_.size();
+      }
+      /**
+       * <code>repeated bytes electric_fan_data = 6;</code>
+       */
+      public com.google.protobuf.ByteString getElectricFanData(int index) {
+        return electricFanData_.get(index);
+      }
+      /**
+       * <code>repeated bytes electric_fan_data = 6;</code>
+       */
+      public Builder setElectricFanData(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureElectricFanDataIsMutable();
+        electricFanData_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes electric_fan_data = 6;</code>
+       */
+      public Builder addElectricFanData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureElectricFanDataIsMutable();
+        electricFanData_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes electric_fan_data = 6;</code>
+       */
+      public Builder addAllElectricFanData(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureElectricFanDataIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, electricFanData_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes electric_fan_data = 6;</code>
+       */
+      public Builder clearElectricFanData() {
+        electricFanData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.google.protobuf.ByteString> projectorData_ = java.util.Collections.emptyList();
+      private void ensureProjectorDataIsMutable() {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
+          projectorData_ = new java.util.ArrayList<com.google.protobuf.ByteString>(projectorData_);
+          bitField0_ |= 0x00000040;
+         }
+      }
+      /**
+       * <code>repeated bytes projector_data = 7;</code>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getProjectorDataList() {
+        return java.util.Collections.unmodifiableList(projectorData_);
+      }
+      /**
+       * <code>repeated bytes projector_data = 7;</code>
+       */
+      public int getProjectorDataCount() {
+        return projectorData_.size();
+      }
+      /**
+       * <code>repeated bytes projector_data = 7;</code>
+       */
+      public com.google.protobuf.ByteString getProjectorData(int index) {
+        return projectorData_.get(index);
+      }
+      /**
+       * <code>repeated bytes projector_data = 7;</code>
+       */
+      public Builder setProjectorData(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureProjectorDataIsMutable();
+        projectorData_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes projector_data = 7;</code>
+       */
+      public Builder addProjectorData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureProjectorDataIsMutable();
+        projectorData_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes projector_data = 7;</code>
+       */
+      public Builder addAllProjectorData(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureProjectorDataIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, projectorData_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes projector_data = 7;</code>
+       */
+      public Builder clearProjectorData() {
+        projectorData_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.IrControllerCode)
+    }
+
+    static {
+      defaultInstance = new IrControllerCode(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.IrControllerCode)
+  }
+
+  public interface IrMatchCodeOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.IrMatchCode)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+     */
+    boolean hasAirConditioner();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObj getAirConditioner();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getAirConditionerOrBuilder();
+
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+     */
+    boolean hasDvdPlayer();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObj getDvdPlayer();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getDvdPlayerOrBuilder();
+
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+     */
+    boolean hasIpTelevision();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObj getIpTelevision();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getIpTelevisionOrBuilder();
+
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+     */
+    boolean hasSettopBox();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObj getSettopBox();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getSettopBoxOrBuilder();
+
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+     */
+    boolean hasTelevision();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObj getTelevision();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getTelevisionOrBuilder();
+
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+     */
+    boolean hasElectricFan();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObj getElectricFan();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getElectricFanOrBuilder();
+
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+     */
+    boolean hasProjector();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObj getProjector();
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+     */
+    mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getProjectorOrBuilder();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.IrMatchCode}
+   */
+  public static final class IrMatchCode extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.IrMatchCode)
+      IrMatchCodeOrBuilder {
+    // Use IrMatchCode.newBuilder() to construct.
+    private IrMatchCode(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private IrMatchCode(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final IrMatchCode defaultInstance;
+    public static IrMatchCode getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public IrMatchCode getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private IrMatchCode(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              mrtech.smarthome.rpc.Models.IrMatchObj.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = airConditioner_.toBuilder();
+              }
+              airConditioner_ = input.readMessage(mrtech.smarthome.rpc.Models.IrMatchObj.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(airConditioner_);
+                airConditioner_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
+              break;
+            }
+            case 18: {
+              mrtech.smarthome.rpc.Models.IrMatchObj.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = dvdPlayer_.toBuilder();
+              }
+              dvdPlayer_ = input.readMessage(mrtech.smarthome.rpc.Models.IrMatchObj.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(dvdPlayer_);
+                dvdPlayer_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+            case 26: {
+              mrtech.smarthome.rpc.Models.IrMatchObj.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = ipTelevision_.toBuilder();
+              }
+              ipTelevision_ = input.readMessage(mrtech.smarthome.rpc.Models.IrMatchObj.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(ipTelevision_);
+                ipTelevision_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 34: {
+              mrtech.smarthome.rpc.Models.IrMatchObj.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = settopBox_.toBuilder();
+              }
+              settopBox_ = input.readMessage(mrtech.smarthome.rpc.Models.IrMatchObj.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(settopBox_);
+                settopBox_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+            case 42: {
+              mrtech.smarthome.rpc.Models.IrMatchObj.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = television_.toBuilder();
+              }
+              television_ = input.readMessage(mrtech.smarthome.rpc.Models.IrMatchObj.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(television_);
+                television_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000010;
+              break;
+            }
+            case 50: {
+              mrtech.smarthome.rpc.Models.IrMatchObj.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
+                subBuilder = electricFan_.toBuilder();
+              }
+              electricFan_ = input.readMessage(mrtech.smarthome.rpc.Models.IrMatchObj.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(electricFan_);
+                electricFan_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000020;
+              break;
+            }
+            case 58: {
+              mrtech.smarthome.rpc.Models.IrMatchObj.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000040) == 0x00000040)) {
+                subBuilder = projector_.toBuilder();
+              }
+              projector_ = input.readMessage(mrtech.smarthome.rpc.Models.IrMatchObj.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(projector_);
+                projector_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000040;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchCode_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchCode_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.IrMatchCode.class, mrtech.smarthome.rpc.Models.IrMatchCode.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<IrMatchCode> PARSER =
+        new com.google.protobuf.AbstractParser<IrMatchCode>() {
+      public IrMatchCode parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new IrMatchCode(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<IrMatchCode> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int AIR_CONDITIONER_FIELD_NUMBER = 1;
+    private mrtech.smarthome.rpc.Models.IrMatchObj airConditioner_;
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+     */
+    public boolean hasAirConditioner() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObj getAirConditioner() {
+      return airConditioner_;
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getAirConditionerOrBuilder() {
+      return airConditioner_;
+    }
+
+    public static final int DVD_PLAYER_FIELD_NUMBER = 2;
+    private mrtech.smarthome.rpc.Models.IrMatchObj dvdPlayer_;
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+     */
+    public boolean hasDvdPlayer() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObj getDvdPlayer() {
+      return dvdPlayer_;
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getDvdPlayerOrBuilder() {
+      return dvdPlayer_;
+    }
+
+    public static final int IP_TELEVISION_FIELD_NUMBER = 3;
+    private mrtech.smarthome.rpc.Models.IrMatchObj ipTelevision_;
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+     */
+    public boolean hasIpTelevision() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObj getIpTelevision() {
+      return ipTelevision_;
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getIpTelevisionOrBuilder() {
+      return ipTelevision_;
+    }
+
+    public static final int SETTOP_BOX_FIELD_NUMBER = 4;
+    private mrtech.smarthome.rpc.Models.IrMatchObj settopBox_;
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+     */
+    public boolean hasSettopBox() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObj getSettopBox() {
+      return settopBox_;
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getSettopBoxOrBuilder() {
+      return settopBox_;
+    }
+
+    public static final int TELEVISION_FIELD_NUMBER = 5;
+    private mrtech.smarthome.rpc.Models.IrMatchObj television_;
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+     */
+    public boolean hasTelevision() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObj getTelevision() {
+      return television_;
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getTelevisionOrBuilder() {
+      return television_;
+    }
+
+    public static final int ELECTRIC_FAN_FIELD_NUMBER = 6;
+    private mrtech.smarthome.rpc.Models.IrMatchObj electricFan_;
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+     */
+    public boolean hasElectricFan() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObj getElectricFan() {
+      return electricFan_;
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getElectricFanOrBuilder() {
+      return electricFan_;
+    }
+
+    public static final int PROJECTOR_FIELD_NUMBER = 7;
+    private mrtech.smarthome.rpc.Models.IrMatchObj projector_;
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+     */
+    public boolean hasProjector() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObj getProjector() {
+      return projector_;
+    }
+    /**
+     * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getProjectorOrBuilder() {
+      return projector_;
+    }
+
+    private void initFields() {
+      airConditioner_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      dvdPlayer_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      ipTelevision_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      settopBox_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      television_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      electricFan_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      projector_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasAirConditioner()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasDvdPlayer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasIpTelevision()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSettopBox()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTelevision()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasElectricFan()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasProjector()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getAirConditioner().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getDvdPlayer().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getIpTelevision().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getSettopBox().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getTelevision().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getElectricFan().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getProjector().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, airConditioner_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(2, dvdPlayer_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, ipTelevision_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, settopBox_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(5, television_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeMessage(6, electricFan_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeMessage(7, projector_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, airConditioner_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, dvdPlayer_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, ipTelevision_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, settopBox_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, television_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, electricFan_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, projector_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchCode parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.IrMatchCode prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.IrMatchCode}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.IrMatchCode)
+        mrtech.smarthome.rpc.Models.IrMatchCodeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchCode_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchCode_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.IrMatchCode.class, mrtech.smarthome.rpc.Models.IrMatchCode.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.IrMatchCode.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getAirConditionerFieldBuilder();
+          getDvdPlayerFieldBuilder();
+          getIpTelevisionFieldBuilder();
+          getSettopBoxFieldBuilder();
+          getTelevisionFieldBuilder();
+          getElectricFanFieldBuilder();
+          getProjectorFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (airConditionerBuilder_ == null) {
+          airConditioner_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+        } else {
+          airConditionerBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (dvdPlayerBuilder_ == null) {
+          dvdPlayer_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+        } else {
+          dvdPlayerBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (ipTelevisionBuilder_ == null) {
+          ipTelevision_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+        } else {
+          ipTelevisionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (settopBoxBuilder_ == null) {
+          settopBox_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+        } else {
+          settopBoxBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (televisionBuilder_ == null) {
+          television_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+        } else {
+          televisionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        if (electricFanBuilder_ == null) {
+          electricFan_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+        } else {
+          electricFanBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        if (projectorBuilder_ == null) {
+          projector_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+        } else {
+          projectorBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchCode_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.IrMatchCode getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.IrMatchCode.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.IrMatchCode build() {
+        mrtech.smarthome.rpc.Models.IrMatchCode result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.IrMatchCode buildPartial() {
+        mrtech.smarthome.rpc.Models.IrMatchCode result = new mrtech.smarthome.rpc.Models.IrMatchCode(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        if (airConditionerBuilder_ == null) {
+          result.airConditioner_ = airConditioner_;
+        } else {
+          result.airConditioner_ = airConditionerBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (dvdPlayerBuilder_ == null) {
+          result.dvdPlayer_ = dvdPlayer_;
+        } else {
+          result.dvdPlayer_ = dvdPlayerBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (ipTelevisionBuilder_ == null) {
+          result.ipTelevision_ = ipTelevision_;
+        } else {
+          result.ipTelevision_ = ipTelevisionBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (settopBoxBuilder_ == null) {
+          result.settopBox_ = settopBox_;
+        } else {
+          result.settopBox_ = settopBoxBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (televisionBuilder_ == null) {
+          result.television_ = television_;
+        } else {
+          result.television_ = televisionBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        if (electricFanBuilder_ == null) {
+          result.electricFan_ = electricFan_;
+        } else {
+          result.electricFan_ = electricFanBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        if (projectorBuilder_ == null) {
+          result.projector_ = projector_;
+        } else {
+          result.projector_ = projectorBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.IrMatchCode) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.IrMatchCode)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.IrMatchCode other) {
+        if (other == mrtech.smarthome.rpc.Models.IrMatchCode.getDefaultInstance()) return this;
+        if (other.hasAirConditioner()) {
+          mergeAirConditioner(other.getAirConditioner());
+        }
+        if (other.hasDvdPlayer()) {
+          mergeDvdPlayer(other.getDvdPlayer());
+        }
+        if (other.hasIpTelevision()) {
+          mergeIpTelevision(other.getIpTelevision());
+        }
+        if (other.hasSettopBox()) {
+          mergeSettopBox(other.getSettopBox());
+        }
+        if (other.hasTelevision()) {
+          mergeTelevision(other.getTelevision());
+        }
+        if (other.hasElectricFan()) {
+          mergeElectricFan(other.getElectricFan());
+        }
+        if (other.hasProjector()) {
+          mergeProjector(other.getProjector());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasAirConditioner()) {
+          
+          return false;
+        }
+        if (!hasDvdPlayer()) {
+          
+          return false;
+        }
+        if (!hasIpTelevision()) {
+          
+          return false;
+        }
+        if (!hasSettopBox()) {
+          
+          return false;
+        }
+        if (!hasTelevision()) {
+          
+          return false;
+        }
+        if (!hasElectricFan()) {
+          
+          return false;
+        }
+        if (!hasProjector()) {
+          
+          return false;
+        }
+        if (!getAirConditioner().isInitialized()) {
+          
+          return false;
+        }
+        if (!getDvdPlayer().isInitialized()) {
+          
+          return false;
+        }
+        if (!getIpTelevision().isInitialized()) {
+          
+          return false;
+        }
+        if (!getSettopBox().isInitialized()) {
+          
+          return false;
+        }
+        if (!getTelevision().isInitialized()) {
+          
+          return false;
+        }
+        if (!getElectricFan().isInitialized()) {
+          
+          return false;
+        }
+        if (!getProjector().isInitialized()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.IrMatchCode parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.IrMatchCode) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private mrtech.smarthome.rpc.Models.IrMatchObj airConditioner_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> airConditionerBuilder_;
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      public boolean hasAirConditioner() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj getAirConditioner() {
+        if (airConditionerBuilder_ == null) {
+          return airConditioner_;
+        } else {
+          return airConditionerBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      public Builder setAirConditioner(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (airConditionerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          airConditioner_ = value;
+          onChanged();
+        } else {
+          airConditionerBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      public Builder setAirConditioner(
+          mrtech.smarthome.rpc.Models.IrMatchObj.Builder builderForValue) {
+        if (airConditionerBuilder_ == null) {
+          airConditioner_ = builderForValue.build();
+          onChanged();
+        } else {
+          airConditionerBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      public Builder mergeAirConditioner(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (airConditionerBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              airConditioner_ != mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance()) {
+            airConditioner_ =
+              mrtech.smarthome.rpc.Models.IrMatchObj.newBuilder(airConditioner_).mergeFrom(value).buildPartial();
+          } else {
+            airConditioner_ = value;
+          }
+          onChanged();
+        } else {
+          airConditionerBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      public Builder clearAirConditioner() {
+        if (airConditionerBuilder_ == null) {
+          airConditioner_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+          onChanged();
+        } else {
+          airConditionerBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj.Builder getAirConditionerBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getAirConditionerFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getAirConditionerOrBuilder() {
+        if (airConditionerBuilder_ != null) {
+          return airConditionerBuilder_.getMessageOrBuilder();
+        } else {
+          return airConditioner_;
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj air_conditioner = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> 
+          getAirConditionerFieldBuilder() {
+        if (airConditionerBuilder_ == null) {
+          airConditionerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder>(
+                  getAirConditioner(),
+                  getParentForChildren(),
+                  isClean());
+          airConditioner_ = null;
+        }
+        return airConditionerBuilder_;
+      }
+
+      private mrtech.smarthome.rpc.Models.IrMatchObj dvdPlayer_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> dvdPlayerBuilder_;
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      public boolean hasDvdPlayer() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj getDvdPlayer() {
+        if (dvdPlayerBuilder_ == null) {
+          return dvdPlayer_;
+        } else {
+          return dvdPlayerBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      public Builder setDvdPlayer(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (dvdPlayerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          dvdPlayer_ = value;
+          onChanged();
+        } else {
+          dvdPlayerBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      public Builder setDvdPlayer(
+          mrtech.smarthome.rpc.Models.IrMatchObj.Builder builderForValue) {
+        if (dvdPlayerBuilder_ == null) {
+          dvdPlayer_ = builderForValue.build();
+          onChanged();
+        } else {
+          dvdPlayerBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      public Builder mergeDvdPlayer(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (dvdPlayerBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              dvdPlayer_ != mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance()) {
+            dvdPlayer_ =
+              mrtech.smarthome.rpc.Models.IrMatchObj.newBuilder(dvdPlayer_).mergeFrom(value).buildPartial();
+          } else {
+            dvdPlayer_ = value;
+          }
+          onChanged();
+        } else {
+          dvdPlayerBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      public Builder clearDvdPlayer() {
+        if (dvdPlayerBuilder_ == null) {
+          dvdPlayer_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+          onChanged();
+        } else {
+          dvdPlayerBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj.Builder getDvdPlayerBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getDvdPlayerFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getDvdPlayerOrBuilder() {
+        if (dvdPlayerBuilder_ != null) {
+          return dvdPlayerBuilder_.getMessageOrBuilder();
+        } else {
+          return dvdPlayer_;
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj dvd_player = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> 
+          getDvdPlayerFieldBuilder() {
+        if (dvdPlayerBuilder_ == null) {
+          dvdPlayerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder>(
+                  getDvdPlayer(),
+                  getParentForChildren(),
+                  isClean());
+          dvdPlayer_ = null;
+        }
+        return dvdPlayerBuilder_;
+      }
+
+      private mrtech.smarthome.rpc.Models.IrMatchObj ipTelevision_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> ipTelevisionBuilder_;
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      public boolean hasIpTelevision() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj getIpTelevision() {
+        if (ipTelevisionBuilder_ == null) {
+          return ipTelevision_;
+        } else {
+          return ipTelevisionBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      public Builder setIpTelevision(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (ipTelevisionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ipTelevision_ = value;
+          onChanged();
+        } else {
+          ipTelevisionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      public Builder setIpTelevision(
+          mrtech.smarthome.rpc.Models.IrMatchObj.Builder builderForValue) {
+        if (ipTelevisionBuilder_ == null) {
+          ipTelevision_ = builderForValue.build();
+          onChanged();
+        } else {
+          ipTelevisionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      public Builder mergeIpTelevision(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (ipTelevisionBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              ipTelevision_ != mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance()) {
+            ipTelevision_ =
+              mrtech.smarthome.rpc.Models.IrMatchObj.newBuilder(ipTelevision_).mergeFrom(value).buildPartial();
+          } else {
+            ipTelevision_ = value;
+          }
+          onChanged();
+        } else {
+          ipTelevisionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      public Builder clearIpTelevision() {
+        if (ipTelevisionBuilder_ == null) {
+          ipTelevision_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+          onChanged();
+        } else {
+          ipTelevisionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj.Builder getIpTelevisionBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getIpTelevisionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getIpTelevisionOrBuilder() {
+        if (ipTelevisionBuilder_ != null) {
+          return ipTelevisionBuilder_.getMessageOrBuilder();
+        } else {
+          return ipTelevision_;
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj ip_television = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> 
+          getIpTelevisionFieldBuilder() {
+        if (ipTelevisionBuilder_ == null) {
+          ipTelevisionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder>(
+                  getIpTelevision(),
+                  getParentForChildren(),
+                  isClean());
+          ipTelevision_ = null;
+        }
+        return ipTelevisionBuilder_;
+      }
+
+      private mrtech.smarthome.rpc.Models.IrMatchObj settopBox_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> settopBoxBuilder_;
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      public boolean hasSettopBox() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj getSettopBox() {
+        if (settopBoxBuilder_ == null) {
+          return settopBox_;
+        } else {
+          return settopBoxBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      public Builder setSettopBox(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (settopBoxBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          settopBox_ = value;
+          onChanged();
+        } else {
+          settopBoxBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      public Builder setSettopBox(
+          mrtech.smarthome.rpc.Models.IrMatchObj.Builder builderForValue) {
+        if (settopBoxBuilder_ == null) {
+          settopBox_ = builderForValue.build();
+          onChanged();
+        } else {
+          settopBoxBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      public Builder mergeSettopBox(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (settopBoxBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              settopBox_ != mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance()) {
+            settopBox_ =
+              mrtech.smarthome.rpc.Models.IrMatchObj.newBuilder(settopBox_).mergeFrom(value).buildPartial();
+          } else {
+            settopBox_ = value;
+          }
+          onChanged();
+        } else {
+          settopBoxBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      public Builder clearSettopBox() {
+        if (settopBoxBuilder_ == null) {
+          settopBox_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+          onChanged();
+        } else {
+          settopBoxBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj.Builder getSettopBoxBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getSettopBoxFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getSettopBoxOrBuilder() {
+        if (settopBoxBuilder_ != null) {
+          return settopBoxBuilder_.getMessageOrBuilder();
+        } else {
+          return settopBox_;
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj settop_box = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> 
+          getSettopBoxFieldBuilder() {
+        if (settopBoxBuilder_ == null) {
+          settopBoxBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder>(
+                  getSettopBox(),
+                  getParentForChildren(),
+                  isClean());
+          settopBox_ = null;
+        }
+        return settopBoxBuilder_;
+      }
+
+      private mrtech.smarthome.rpc.Models.IrMatchObj television_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> televisionBuilder_;
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      public boolean hasTelevision() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj getTelevision() {
+        if (televisionBuilder_ == null) {
+          return television_;
+        } else {
+          return televisionBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      public Builder setTelevision(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (televisionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          television_ = value;
+          onChanged();
+        } else {
+          televisionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      public Builder setTelevision(
+          mrtech.smarthome.rpc.Models.IrMatchObj.Builder builderForValue) {
+        if (televisionBuilder_ == null) {
+          television_ = builderForValue.build();
+          onChanged();
+        } else {
+          televisionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      public Builder mergeTelevision(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (televisionBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              television_ != mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance()) {
+            television_ =
+              mrtech.smarthome.rpc.Models.IrMatchObj.newBuilder(television_).mergeFrom(value).buildPartial();
+          } else {
+            television_ = value;
+          }
+          onChanged();
+        } else {
+          televisionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      public Builder clearTelevision() {
+        if (televisionBuilder_ == null) {
+          television_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+          onChanged();
+        } else {
+          televisionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj.Builder getTelevisionBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getTelevisionFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getTelevisionOrBuilder() {
+        if (televisionBuilder_ != null) {
+          return televisionBuilder_.getMessageOrBuilder();
+        } else {
+          return television_;
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj television = 5;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> 
+          getTelevisionFieldBuilder() {
+        if (televisionBuilder_ == null) {
+          televisionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder>(
+                  getTelevision(),
+                  getParentForChildren(),
+                  isClean());
+          television_ = null;
+        }
+        return televisionBuilder_;
+      }
+
+      private mrtech.smarthome.rpc.Models.IrMatchObj electricFan_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> electricFanBuilder_;
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      public boolean hasElectricFan() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj getElectricFan() {
+        if (electricFanBuilder_ == null) {
+          return electricFan_;
+        } else {
+          return electricFanBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      public Builder setElectricFan(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (electricFanBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          electricFan_ = value;
+          onChanged();
+        } else {
+          electricFanBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      public Builder setElectricFan(
+          mrtech.smarthome.rpc.Models.IrMatchObj.Builder builderForValue) {
+        if (electricFanBuilder_ == null) {
+          electricFan_ = builderForValue.build();
+          onChanged();
+        } else {
+          electricFanBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      public Builder mergeElectricFan(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (electricFanBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+              electricFan_ != mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance()) {
+            electricFan_ =
+              mrtech.smarthome.rpc.Models.IrMatchObj.newBuilder(electricFan_).mergeFrom(value).buildPartial();
+          } else {
+            electricFan_ = value;
+          }
+          onChanged();
+        } else {
+          electricFanBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      public Builder clearElectricFan() {
+        if (electricFanBuilder_ == null) {
+          electricFan_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+          onChanged();
+        } else {
+          electricFanBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj.Builder getElectricFanBuilder() {
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return getElectricFanFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getElectricFanOrBuilder() {
+        if (electricFanBuilder_ != null) {
+          return electricFanBuilder_.getMessageOrBuilder();
+        } else {
+          return electricFan_;
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj electric_fan = 6;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> 
+          getElectricFanFieldBuilder() {
+        if (electricFanBuilder_ == null) {
+          electricFanBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder>(
+                  getElectricFan(),
+                  getParentForChildren(),
+                  isClean());
+          electricFan_ = null;
+        }
+        return electricFanBuilder_;
+      }
+
+      private mrtech.smarthome.rpc.Models.IrMatchObj projector_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> projectorBuilder_;
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      public boolean hasProjector() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj getProjector() {
+        if (projectorBuilder_ == null) {
+          return projector_;
+        } else {
+          return projectorBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      public Builder setProjector(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (projectorBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          projector_ = value;
+          onChanged();
+        } else {
+          projectorBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      public Builder setProjector(
+          mrtech.smarthome.rpc.Models.IrMatchObj.Builder builderForValue) {
+        if (projectorBuilder_ == null) {
+          projector_ = builderForValue.build();
+          onChanged();
+        } else {
+          projectorBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      public Builder mergeProjector(mrtech.smarthome.rpc.Models.IrMatchObj value) {
+        if (projectorBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+              projector_ != mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance()) {
+            projector_ =
+              mrtech.smarthome.rpc.Models.IrMatchObj.newBuilder(projector_).mergeFrom(value).buildPartial();
+          } else {
+            projector_ = value;
+          }
+          onChanged();
+        } else {
+          projectorBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      public Builder clearProjector() {
+        if (projectorBuilder_ == null) {
+          projector_ = mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+          onChanged();
+        } else {
+          projectorBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObj.Builder getProjectorBuilder() {
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return getProjectorFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder getProjectorOrBuilder() {
+        if (projectorBuilder_ != null) {
+          return projectorBuilder_.getMessageOrBuilder();
+        } else {
+          return projector_;
+        }
+      }
+      /**
+       * <code>required .mrtech.smarthome.rpc.IrMatchObj projector = 7;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder> 
+          getProjectorFieldBuilder() {
+        if (projectorBuilder_ == null) {
+          projectorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.IrMatchObj, mrtech.smarthome.rpc.Models.IrMatchObj.Builder, mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder>(
+                  getProjector(),
+                  getParentForChildren(),
+                  isClean());
+          projector_ = null;
+        }
+        return projectorBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.IrMatchCode)
+    }
+
+    static {
+      defaultInstance = new IrMatchCode(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.IrMatchCode)
+  }
+
+  public interface IrMatchObjOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.IrMatchObj)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated bytes match_code = 1;</code>
+     */
+    java.util.List<com.google.protobuf.ByteString> getMatchCodeList();
+    /**
+     * <code>repeated bytes match_code = 1;</code>
+     */
+    int getMatchCodeCount();
+    /**
+     * <code>repeated bytes match_code = 1;</code>
+     */
+    com.google.protobuf.ByteString getMatchCode(int index);
+
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    java.util.List<mrtech.smarthome.rpc.Models.IndexCodeTable> 
+        getIndexCodeList();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    mrtech.smarthome.rpc.Models.IndexCodeTable getIndexCode(int index);
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    int getIndexCodeCount();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    java.util.List<? extends mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder> 
+        getIndexCodeOrBuilderList();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder getIndexCodeOrBuilder(
+        int index);
+
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    java.util.List<mrtech.smarthome.rpc.Models.NameTable> 
+        getNameList();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    mrtech.smarthome.rpc.Models.NameTable getName(int index);
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    int getNameCount();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    java.util.List<? extends mrtech.smarthome.rpc.Models.NameTableOrBuilder> 
+        getNameOrBuilderList();
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    mrtech.smarthome.rpc.Models.NameTableOrBuilder getNameOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.IrMatchObj}
+   */
+  public static final class IrMatchObj extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.IrMatchObj)
+      IrMatchObjOrBuilder {
+    // Use IrMatchObj.newBuilder() to construct.
+    private IrMatchObj(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private IrMatchObj(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final IrMatchObj defaultInstance;
+    public static IrMatchObj getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public IrMatchObj getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private IrMatchObj(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                matchCode_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              matchCode_.add(input.readBytes());
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                indexCode_ = new java.util.ArrayList<mrtech.smarthome.rpc.Models.IndexCodeTable>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              indexCode_.add(input.readMessage(mrtech.smarthome.rpc.Models.IndexCodeTable.PARSER, extensionRegistry));
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                name_ = new java.util.ArrayList<mrtech.smarthome.rpc.Models.NameTable>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              name_.add(input.readMessage(mrtech.smarthome.rpc.Models.NameTable.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          matchCode_ = java.util.Collections.unmodifiableList(matchCode_);
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          indexCode_ = java.util.Collections.unmodifiableList(indexCode_);
+        }
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          name_ = java.util.Collections.unmodifiableList(name_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchObj_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchObj_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.IrMatchObj.class, mrtech.smarthome.rpc.Models.IrMatchObj.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<IrMatchObj> PARSER =
+        new com.google.protobuf.AbstractParser<IrMatchObj>() {
+      public IrMatchObj parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new IrMatchObj(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<IrMatchObj> getParserForType() {
+      return PARSER;
+    }
+
+    public static final int MATCH_CODE_FIELD_NUMBER = 1;
+    private java.util.List<com.google.protobuf.ByteString> matchCode_;
+    /**
+     * <code>repeated bytes match_code = 1;</code>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getMatchCodeList() {
+      return matchCode_;
+    }
+    /**
+     * <code>repeated bytes match_code = 1;</code>
+     */
+    public int getMatchCodeCount() {
+      return matchCode_.size();
+    }
+    /**
+     * <code>repeated bytes match_code = 1;</code>
+     */
+    public com.google.protobuf.ByteString getMatchCode(int index) {
+      return matchCode_.get(index);
+    }
+
+    public static final int INDEX_CODE_FIELD_NUMBER = 2;
+    private java.util.List<mrtech.smarthome.rpc.Models.IndexCodeTable> indexCode_;
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    public java.util.List<mrtech.smarthome.rpc.Models.IndexCodeTable> getIndexCodeList() {
+      return indexCode_;
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    public java.util.List<? extends mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder> 
+        getIndexCodeOrBuilderList() {
+      return indexCode_;
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    public int getIndexCodeCount() {
+      return indexCode_.size();
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IndexCodeTable getIndexCode(int index) {
+      return indexCode_.get(index);
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+     */
+    public mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder getIndexCodeOrBuilder(
+        int index) {
+      return indexCode_.get(index);
+    }
+
+    public static final int NAME_FIELD_NUMBER = 3;
+    private java.util.List<mrtech.smarthome.rpc.Models.NameTable> name_;
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    public java.util.List<mrtech.smarthome.rpc.Models.NameTable> getNameList() {
+      return name_;
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    public java.util.List<? extends mrtech.smarthome.rpc.Models.NameTableOrBuilder> 
+        getNameOrBuilderList() {
+      return name_;
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    public int getNameCount() {
+      return name_.size();
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    public mrtech.smarthome.rpc.Models.NameTable getName(int index) {
+      return name_.get(index);
+    }
+    /**
+     * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+     */
+    public mrtech.smarthome.rpc.Models.NameTableOrBuilder getNameOrBuilder(
+        int index) {
+      return name_.get(index);
+    }
+
+    private void initFields() {
+      matchCode_ = java.util.Collections.emptyList();
+      indexCode_ = java.util.Collections.emptyList();
+      name_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      for (int i = 0; i < getNameCount(); i++) {
+        if (!getName(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < matchCode_.size(); i++) {
+        output.writeBytes(1, matchCode_.get(i));
+      }
+      for (int i = 0; i < indexCode_.size(); i++) {
+        output.writeMessage(2, indexCode_.get(i));
+      }
+      for (int i = 0; i < name_.size(); i++) {
+        output.writeMessage(3, name_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      {
+        int dataSize = 0;
+        for (int i = 0; i < matchCode_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(matchCode_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getMatchCodeList().size();
+      }
+      for (int i = 0; i < indexCode_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, indexCode_.get(i));
+      }
+      for (int i = 0; i < name_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, name_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IrMatchObj parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.IrMatchObj prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.IrMatchObj}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.IrMatchObj)
+        mrtech.smarthome.rpc.Models.IrMatchObjOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchObj_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchObj_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.IrMatchObj.class, mrtech.smarthome.rpc.Models.IrMatchObj.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.IrMatchObj.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getIndexCodeFieldBuilder();
+          getNameFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        matchCode_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (indexCodeBuilder_ == null) {
+          indexCode_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          indexCodeBuilder_.clear();
+        }
+        if (nameBuilder_ == null) {
+          name_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        } else {
+          nameBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IrMatchObj_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.IrMatchObj getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.IrMatchObj build() {
+        mrtech.smarthome.rpc.Models.IrMatchObj result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.IrMatchObj buildPartial() {
+        mrtech.smarthome.rpc.Models.IrMatchObj result = new mrtech.smarthome.rpc.Models.IrMatchObj(this);
+        int from_bitField0_ = bitField0_;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          matchCode_ = java.util.Collections.unmodifiableList(matchCode_);
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.matchCode_ = matchCode_;
+        if (indexCodeBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            indexCode_ = java.util.Collections.unmodifiableList(indexCode_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.indexCode_ = indexCode_;
+        } else {
+          result.indexCode_ = indexCodeBuilder_.build();
+        }
+        if (nameBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+            name_ = java.util.Collections.unmodifiableList(name_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.name_ = name_;
+        } else {
+          result.name_ = nameBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.IrMatchObj) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.IrMatchObj)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.IrMatchObj other) {
+        if (other == mrtech.smarthome.rpc.Models.IrMatchObj.getDefaultInstance()) return this;
+        if (!other.matchCode_.isEmpty()) {
+          if (matchCode_.isEmpty()) {
+            matchCode_ = other.matchCode_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureMatchCodeIsMutable();
+            matchCode_.addAll(other.matchCode_);
+          }
+          onChanged();
+        }
+        if (indexCodeBuilder_ == null) {
+          if (!other.indexCode_.isEmpty()) {
+            if (indexCode_.isEmpty()) {
+              indexCode_ = other.indexCode_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureIndexCodeIsMutable();
+              indexCode_.addAll(other.indexCode_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.indexCode_.isEmpty()) {
+            if (indexCodeBuilder_.isEmpty()) {
+              indexCodeBuilder_.dispose();
+              indexCodeBuilder_ = null;
+              indexCode_ = other.indexCode_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              indexCodeBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getIndexCodeFieldBuilder() : null;
+            } else {
+              indexCodeBuilder_.addAllMessages(other.indexCode_);
+            }
+          }
+        }
+        if (nameBuilder_ == null) {
+          if (!other.name_.isEmpty()) {
+            if (name_.isEmpty()) {
+              name_ = other.name_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureNameIsMutable();
+              name_.addAll(other.name_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.name_.isEmpty()) {
+            if (nameBuilder_.isEmpty()) {
+              nameBuilder_.dispose();
+              nameBuilder_ = null;
+              name_ = other.name_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              nameBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNameFieldBuilder() : null;
+            } else {
+              nameBuilder_.addAllMessages(other.name_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getNameCount(); i++) {
+          if (!getName(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.IrMatchObj parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.IrMatchObj) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<com.google.protobuf.ByteString> matchCode_ = java.util.Collections.emptyList();
+      private void ensureMatchCodeIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          matchCode_ = new java.util.ArrayList<com.google.protobuf.ByteString>(matchCode_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      /**
+       * <code>repeated bytes match_code = 1;</code>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getMatchCodeList() {
+        return java.util.Collections.unmodifiableList(matchCode_);
+      }
+      /**
+       * <code>repeated bytes match_code = 1;</code>
+       */
+      public int getMatchCodeCount() {
+        return matchCode_.size();
+      }
+      /**
+       * <code>repeated bytes match_code = 1;</code>
+       */
+      public com.google.protobuf.ByteString getMatchCode(int index) {
+        return matchCode_.get(index);
+      }
+      /**
+       * <code>repeated bytes match_code = 1;</code>
+       */
+      public Builder setMatchCode(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureMatchCodeIsMutable();
+        matchCode_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes match_code = 1;</code>
+       */
+      public Builder addMatchCode(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureMatchCodeIsMutable();
+        matchCode_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes match_code = 1;</code>
+       */
+      public Builder addAllMatchCode(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureMatchCodeIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, matchCode_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes match_code = 1;</code>
+       */
+      public Builder clearMatchCode() {
+        matchCode_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<mrtech.smarthome.rpc.Models.IndexCodeTable> indexCode_ =
+        java.util.Collections.emptyList();
+      private void ensureIndexCodeIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          indexCode_ = new java.util.ArrayList<mrtech.smarthome.rpc.Models.IndexCodeTable>(indexCode_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          mrtech.smarthome.rpc.Models.IndexCodeTable, mrtech.smarthome.rpc.Models.IndexCodeTable.Builder, mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder> indexCodeBuilder_;
+
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public java.util.List<mrtech.smarthome.rpc.Models.IndexCodeTable> getIndexCodeList() {
+        if (indexCodeBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(indexCode_);
+        } else {
+          return indexCodeBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public int getIndexCodeCount() {
+        if (indexCodeBuilder_ == null) {
+          return indexCode_.size();
+        } else {
+          return indexCodeBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IndexCodeTable getIndexCode(int index) {
+        if (indexCodeBuilder_ == null) {
+          return indexCode_.get(index);
+        } else {
+          return indexCodeBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder setIndexCode(
+          int index, mrtech.smarthome.rpc.Models.IndexCodeTable value) {
+        if (indexCodeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureIndexCodeIsMutable();
+          indexCode_.set(index, value);
+          onChanged();
+        } else {
+          indexCodeBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder setIndexCode(
+          int index, mrtech.smarthome.rpc.Models.IndexCodeTable.Builder builderForValue) {
+        if (indexCodeBuilder_ == null) {
+          ensureIndexCodeIsMutable();
+          indexCode_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          indexCodeBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder addIndexCode(mrtech.smarthome.rpc.Models.IndexCodeTable value) {
+        if (indexCodeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureIndexCodeIsMutable();
+          indexCode_.add(value);
+          onChanged();
+        } else {
+          indexCodeBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder addIndexCode(
+          int index, mrtech.smarthome.rpc.Models.IndexCodeTable value) {
+        if (indexCodeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureIndexCodeIsMutable();
+          indexCode_.add(index, value);
+          onChanged();
+        } else {
+          indexCodeBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder addIndexCode(
+          mrtech.smarthome.rpc.Models.IndexCodeTable.Builder builderForValue) {
+        if (indexCodeBuilder_ == null) {
+          ensureIndexCodeIsMutable();
+          indexCode_.add(builderForValue.build());
+          onChanged();
+        } else {
+          indexCodeBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder addIndexCode(
+          int index, mrtech.smarthome.rpc.Models.IndexCodeTable.Builder builderForValue) {
+        if (indexCodeBuilder_ == null) {
+          ensureIndexCodeIsMutable();
+          indexCode_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          indexCodeBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder addAllIndexCode(
+          java.lang.Iterable<? extends mrtech.smarthome.rpc.Models.IndexCodeTable> values) {
+        if (indexCodeBuilder_ == null) {
+          ensureIndexCodeIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, indexCode_);
+          onChanged();
+        } else {
+          indexCodeBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder clearIndexCode() {
+        if (indexCodeBuilder_ == null) {
+          indexCode_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          indexCodeBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public Builder removeIndexCode(int index) {
+        if (indexCodeBuilder_ == null) {
+          ensureIndexCodeIsMutable();
+          indexCode_.remove(index);
+          onChanged();
+        } else {
+          indexCodeBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IndexCodeTable.Builder getIndexCodeBuilder(
+          int index) {
+        return getIndexCodeFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder getIndexCodeOrBuilder(
+          int index) {
+        if (indexCodeBuilder_ == null) {
+          return indexCode_.get(index);  } else {
+          return indexCodeBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public java.util.List<? extends mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder> 
+           getIndexCodeOrBuilderList() {
+        if (indexCodeBuilder_ != null) {
+          return indexCodeBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(indexCode_);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IndexCodeTable.Builder addIndexCodeBuilder() {
+        return getIndexCodeFieldBuilder().addBuilder(
+            mrtech.smarthome.rpc.Models.IndexCodeTable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.IndexCodeTable.Builder addIndexCodeBuilder(
+          int index) {
+        return getIndexCodeFieldBuilder().addBuilder(
+            index, mrtech.smarthome.rpc.Models.IndexCodeTable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.IndexCodeTable index_code = 2;</code>
+       */
+      public java.util.List<mrtech.smarthome.rpc.Models.IndexCodeTable.Builder> 
+           getIndexCodeBuilderList() {
+        return getIndexCodeFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          mrtech.smarthome.rpc.Models.IndexCodeTable, mrtech.smarthome.rpc.Models.IndexCodeTable.Builder, mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder> 
+          getIndexCodeFieldBuilder() {
+        if (indexCodeBuilder_ == null) {
+          indexCodeBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              mrtech.smarthome.rpc.Models.IndexCodeTable, mrtech.smarthome.rpc.Models.IndexCodeTable.Builder, mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder>(
+                  indexCode_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          indexCode_ = null;
+        }
+        return indexCodeBuilder_;
+      }
+
+      private java.util.List<mrtech.smarthome.rpc.Models.NameTable> name_ =
+        java.util.Collections.emptyList();
+      private void ensureNameIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          name_ = new java.util.ArrayList<mrtech.smarthome.rpc.Models.NameTable>(name_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          mrtech.smarthome.rpc.Models.NameTable, mrtech.smarthome.rpc.Models.NameTable.Builder, mrtech.smarthome.rpc.Models.NameTableOrBuilder> nameBuilder_;
+
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public java.util.List<mrtech.smarthome.rpc.Models.NameTable> getNameList() {
+        if (nameBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(name_);
+        } else {
+          return nameBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public int getNameCount() {
+        if (nameBuilder_ == null) {
+          return name_.size();
+        } else {
+          return nameBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.NameTable getName(int index) {
+        if (nameBuilder_ == null) {
+          return name_.get(index);
+        } else {
+          return nameBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder setName(
+          int index, mrtech.smarthome.rpc.Models.NameTable value) {
+        if (nameBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNameIsMutable();
+          name_.set(index, value);
+          onChanged();
+        } else {
+          nameBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder setName(
+          int index, mrtech.smarthome.rpc.Models.NameTable.Builder builderForValue) {
+        if (nameBuilder_ == null) {
+          ensureNameIsMutable();
+          name_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          nameBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder addName(mrtech.smarthome.rpc.Models.NameTable value) {
+        if (nameBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNameIsMutable();
+          name_.add(value);
+          onChanged();
+        } else {
+          nameBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder addName(
+          int index, mrtech.smarthome.rpc.Models.NameTable value) {
+        if (nameBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNameIsMutable();
+          name_.add(index, value);
+          onChanged();
+        } else {
+          nameBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder addName(
+          mrtech.smarthome.rpc.Models.NameTable.Builder builderForValue) {
+        if (nameBuilder_ == null) {
+          ensureNameIsMutable();
+          name_.add(builderForValue.build());
+          onChanged();
+        } else {
+          nameBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder addName(
+          int index, mrtech.smarthome.rpc.Models.NameTable.Builder builderForValue) {
+        if (nameBuilder_ == null) {
+          ensureNameIsMutable();
+          name_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          nameBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder addAllName(
+          java.lang.Iterable<? extends mrtech.smarthome.rpc.Models.NameTable> values) {
+        if (nameBuilder_ == null) {
+          ensureNameIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, name_);
+          onChanged();
+        } else {
+          nameBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder clearName() {
+        if (nameBuilder_ == null) {
+          name_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          nameBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public Builder removeName(int index) {
+        if (nameBuilder_ == null) {
+          ensureNameIsMutable();
+          name_.remove(index);
+          onChanged();
+        } else {
+          nameBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.NameTable.Builder getNameBuilder(
+          int index) {
+        return getNameFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.NameTableOrBuilder getNameOrBuilder(
+          int index) {
+        if (nameBuilder_ == null) {
+          return name_.get(index);  } else {
+          return nameBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public java.util.List<? extends mrtech.smarthome.rpc.Models.NameTableOrBuilder> 
+           getNameOrBuilderList() {
+        if (nameBuilder_ != null) {
+          return nameBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(name_);
+        }
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.NameTable.Builder addNameBuilder() {
+        return getNameFieldBuilder().addBuilder(
+            mrtech.smarthome.rpc.Models.NameTable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public mrtech.smarthome.rpc.Models.NameTable.Builder addNameBuilder(
+          int index) {
+        return getNameFieldBuilder().addBuilder(
+            index, mrtech.smarthome.rpc.Models.NameTable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .mrtech.smarthome.rpc.NameTable name = 3;</code>
+       */
+      public java.util.List<mrtech.smarthome.rpc.Models.NameTable.Builder> 
+           getNameBuilderList() {
+        return getNameFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          mrtech.smarthome.rpc.Models.NameTable, mrtech.smarthome.rpc.Models.NameTable.Builder, mrtech.smarthome.rpc.Models.NameTableOrBuilder> 
+          getNameFieldBuilder() {
+        if (nameBuilder_ == null) {
+          nameBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              mrtech.smarthome.rpc.Models.NameTable, mrtech.smarthome.rpc.Models.NameTable.Builder, mrtech.smarthome.rpc.Models.NameTableOrBuilder>(
+                  name_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          name_ = null;
+        }
+        return nameBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.IrMatchObj)
+    }
+
+    static {
+      defaultInstance = new IrMatchObj(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.IrMatchObj)
+  }
+
+  public interface IndexCodeTableOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.IndexCodeTable)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated uint32 data = 1;</code>
+     */
+    java.util.List<java.lang.Integer> getDataList();
+    /**
+     * <code>repeated uint32 data = 1;</code>
+     */
+    int getDataCount();
+    /**
+     * <code>repeated uint32 data = 1;</code>
+     */
+    int getData(int index);
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.IndexCodeTable}
+   */
+  public static final class IndexCodeTable extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.IndexCodeTable)
+      IndexCodeTableOrBuilder {
+    // Use IndexCodeTable.newBuilder() to construct.
+    private IndexCodeTable(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private IndexCodeTable(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final IndexCodeTable defaultInstance;
+    public static IndexCodeTable getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public IndexCodeTable getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private IndexCodeTable(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                data_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              data_.add(input.readUInt32());
+              break;
+            }
+            case 10: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001) && input.getBytesUntilLimit() > 0) {
+                data_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                data_.add(input.readUInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          data_ = java.util.Collections.unmodifiableList(data_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IndexCodeTable_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IndexCodeTable_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.IndexCodeTable.class, mrtech.smarthome.rpc.Models.IndexCodeTable.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<IndexCodeTable> PARSER =
+        new com.google.protobuf.AbstractParser<IndexCodeTable>() {
+      public IndexCodeTable parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new IndexCodeTable(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<IndexCodeTable> getParserForType() {
+      return PARSER;
+    }
+
+    public static final int DATA_FIELD_NUMBER = 1;
+    private java.util.List<java.lang.Integer> data_;
+    /**
+     * <code>repeated uint32 data = 1;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getDataList() {
+      return data_;
+    }
+    /**
+     * <code>repeated uint32 data = 1;</code>
+     */
+    public int getDataCount() {
+      return data_.size();
+    }
+    /**
+     * <code>repeated uint32 data = 1;</code>
+     */
+    public int getData(int index) {
+      return data_.get(index);
+    }
+
+    private void initFields() {
+      data_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < data_.size(); i++) {
+        output.writeUInt32(1, data_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      {
+        int dataSize = 0;
+        for (int i = 0; i < data_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeUInt32SizeNoTag(data_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getDataList().size();
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.IndexCodeTable parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.IndexCodeTable prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.IndexCodeTable}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.IndexCodeTable)
+        mrtech.smarthome.rpc.Models.IndexCodeTableOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IndexCodeTable_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IndexCodeTable_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.IndexCodeTable.class, mrtech.smarthome.rpc.Models.IndexCodeTable.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.IndexCodeTable.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        data_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_IndexCodeTable_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.IndexCodeTable getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.IndexCodeTable.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.IndexCodeTable build() {
+        mrtech.smarthome.rpc.Models.IndexCodeTable result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.IndexCodeTable buildPartial() {
+        mrtech.smarthome.rpc.Models.IndexCodeTable result = new mrtech.smarthome.rpc.Models.IndexCodeTable(this);
+        int from_bitField0_ = bitField0_;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          data_ = java.util.Collections.unmodifiableList(data_);
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.data_ = data_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.IndexCodeTable) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.IndexCodeTable)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.IndexCodeTable other) {
+        if (other == mrtech.smarthome.rpc.Models.IndexCodeTable.getDefaultInstance()) return this;
+        if (!other.data_.isEmpty()) {
+          if (data_.isEmpty()) {
+            data_ = other.data_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureDataIsMutable();
+            data_.addAll(other.data_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.IndexCodeTable parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.IndexCodeTable) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<java.lang.Integer> data_ = java.util.Collections.emptyList();
+      private void ensureDataIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          data_ = new java.util.ArrayList<java.lang.Integer>(data_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      /**
+       * <code>repeated uint32 data = 1;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getDataList() {
+        return java.util.Collections.unmodifiableList(data_);
+      }
+      /**
+       * <code>repeated uint32 data = 1;</code>
+       */
+      public int getDataCount() {
+        return data_.size();
+      }
+      /**
+       * <code>repeated uint32 data = 1;</code>
+       */
+      public int getData(int index) {
+        return data_.get(index);
+      }
+      /**
+       * <code>repeated uint32 data = 1;</code>
+       */
+      public Builder setData(
+          int index, int value) {
+        ensureDataIsMutable();
+        data_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated uint32 data = 1;</code>
+       */
+      public Builder addData(int value) {
+        ensureDataIsMutable();
+        data_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated uint32 data = 1;</code>
+       */
+      public Builder addAllData(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureDataIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, data_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated uint32 data = 1;</code>
+       */
+      public Builder clearData() {
+        data_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.IndexCodeTable)
+    }
+
+    static {
+      defaultInstance = new IndexCodeTable(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.IndexCodeTable)
+  }
+
+  public interface NameTableOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.NameTable)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required bytes ch_name = 1;</code>
+     */
+    boolean hasChName();
+    /**
+     * <code>required bytes ch_name = 1;</code>
+     */
+    com.google.protobuf.ByteString getChName();
+
+    /**
+     * <code>required bytes en_name = 2;</code>
+     */
+    boolean hasEnName();
+    /**
+     * <code>required bytes en_name = 2;</code>
+     */
+    com.google.protobuf.ByteString getEnName();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.NameTable}
+   */
+  public static final class NameTable extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.NameTable)
+      NameTableOrBuilder {
+    // Use NameTable.newBuilder() to construct.
+    private NameTable(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private NameTable(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final NameTable defaultInstance;
+    public static NameTable getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public NameTable getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private NameTable(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              chName_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              enName_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_NameTable_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_NameTable_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.NameTable.class, mrtech.smarthome.rpc.Models.NameTable.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<NameTable> PARSER =
+        new com.google.protobuf.AbstractParser<NameTable>() {
+      public NameTable parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new NameTable(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NameTable> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int CH_NAME_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString chName_;
+    /**
+     * <code>required bytes ch_name = 1;</code>
+     */
+    public boolean hasChName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required bytes ch_name = 1;</code>
+     */
+    public com.google.protobuf.ByteString getChName() {
+      return chName_;
+    }
+
+    public static final int EN_NAME_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString enName_;
+    /**
+     * <code>required bytes en_name = 2;</code>
+     */
+    public boolean hasEnName() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required bytes en_name = 2;</code>
+     */
+    public com.google.protobuf.ByteString getEnName() {
+      return enName_;
+    }
+
+    private void initFields() {
+      chName_ = com.google.protobuf.ByteString.EMPTY;
+      enName_ = com.google.protobuf.ByteString.EMPTY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasChName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEnName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, chName_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, enName_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, chName_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, enName_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.NameTable parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.NameTable parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.NameTable prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.NameTable}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.NameTable)
+        mrtech.smarthome.rpc.Models.NameTableOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_NameTable_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_NameTable_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.NameTable.class, mrtech.smarthome.rpc.Models.NameTable.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.NameTable.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        chName_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        enName_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_NameTable_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.NameTable getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.NameTable.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.NameTable build() {
+        mrtech.smarthome.rpc.Models.NameTable result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.NameTable buildPartial() {
+        mrtech.smarthome.rpc.Models.NameTable result = new mrtech.smarthome.rpc.Models.NameTable(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.chName_ = chName_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.enName_ = enName_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.NameTable) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.NameTable)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.NameTable other) {
+        if (other == mrtech.smarthome.rpc.Models.NameTable.getDefaultInstance()) return this;
+        if (other.hasChName()) {
+          setChName(other.getChName());
+        }
+        if (other.hasEnName()) {
+          setEnName(other.getEnName());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasChName()) {
+          
+          return false;
+        }
+        if (!hasEnName()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.NameTable parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.NameTable) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.google.protobuf.ByteString chName_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>required bytes ch_name = 1;</code>
+       */
+      public boolean hasChName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required bytes ch_name = 1;</code>
+       */
+      public com.google.protobuf.ByteString getChName() {
+        return chName_;
+      }
+      /**
+       * <code>required bytes ch_name = 1;</code>
+       */
+      public Builder setChName(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        chName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required bytes ch_name = 1;</code>
+       */
+      public Builder clearChName() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        chName_ = getDefaultInstance().getChName();
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString enName_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>required bytes en_name = 2;</code>
+       */
+      public boolean hasEnName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required bytes en_name = 2;</code>
+       */
+      public com.google.protobuf.ByteString getEnName() {
+        return enName_;
+      }
+      /**
+       * <code>required bytes en_name = 2;</code>
+       */
+      public Builder setEnName(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        enName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required bytes en_name = 2;</code>
+       */
+      public Builder clearEnName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        enName_ = getDefaultInstance().getEnName();
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.NameTable)
+    }
+
+    static {
+      defaultInstance = new NameTable(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.NameTable)
+  }
+
+  public interface BrandListOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.BrandList)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated string name = 1;</code>
+     */
+    com.google.protobuf.ProtocolStringList
+        getNameList();
+    /**
+     * <code>repeated string name = 1;</code>
+     */
+    int getNameCount();
+    /**
+     * <code>repeated string name = 1;</code>
+     */
+    java.lang.String getName(int index);
+    /**
+     * <code>repeated string name = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes(int index);
+
+    /**
+     * <code>repeated int32 index = 2;</code>
+     *
+     * <pre>
+     * 0 ~ end.
+     * </pre>
+     */
+    java.util.List<java.lang.Integer> getIndexList();
+    /**
+     * <code>repeated int32 index = 2;</code>
+     *
+     * <pre>
+     * 0 ~ end.
+     * </pre>
+     */
+    int getIndexCount();
+    /**
+     * <code>repeated int32 index = 2;</code>
+     *
+     * <pre>
+     * 0 ~ end.
+     * </pre>
+     */
+    int getIndex(int index);
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.BrandList}
+   */
+  public static final class BrandList extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.BrandList)
+      BrandListOrBuilder {
+    // Use BrandList.newBuilder() to construct.
+    private BrandList(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private BrandList(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final BrandList defaultInstance;
+    public static BrandList getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public BrandList getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private BrandList(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                name_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              name_.add(bs);
+              break;
+            }
+            case 16: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                index_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              index_.add(input.readInt32());
+              break;
+            }
+            case 18: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
+                index_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                index_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          name_ = name_.getUnmodifiableView();
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          index_ = java.util.Collections.unmodifiableList(index_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_BrandList_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_BrandList_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.BrandList.class, mrtech.smarthome.rpc.Models.BrandList.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<BrandList> PARSER =
+        new com.google.protobuf.AbstractParser<BrandList>() {
+      public BrandList parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new BrandList(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<BrandList> getParserForType() {
+      return PARSER;
+    }
+
+    public static final int NAME_FIELD_NUMBER = 1;
+    private com.google.protobuf.LazyStringList name_;
+    /**
+     * <code>repeated string name = 1;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getNameList() {
+      return name_;
+    }
+    /**
+     * <code>repeated string name = 1;</code>
+     */
+    public int getNameCount() {
+      return name_.size();
+    }
+    /**
+     * <code>repeated string name = 1;</code>
+     */
+    public java.lang.String getName(int index) {
+      return name_.get(index);
+    }
+    /**
+     * <code>repeated string name = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes(int index) {
+      return name_.getByteString(index);
+    }
+
+    public static final int INDEX_FIELD_NUMBER = 2;
+    private java.util.List<java.lang.Integer> index_;
+    /**
+     * <code>repeated int32 index = 2;</code>
+     *
+     * <pre>
+     * 0 ~ end.
+     * </pre>
+     */
+    public java.util.List<java.lang.Integer>
+        getIndexList() {
+      return index_;
+    }
+    /**
+     * <code>repeated int32 index = 2;</code>
+     *
+     * <pre>
+     * 0 ~ end.
+     * </pre>
+     */
+    public int getIndexCount() {
+      return index_.size();
+    }
+    /**
+     * <code>repeated int32 index = 2;</code>
+     *
+     * <pre>
+     * 0 ~ end.
+     * </pre>
+     */
+    public int getIndex(int index) {
+      return index_.get(index);
+    }
+
+    private void initFields() {
+      name_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      index_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < name_.size(); i++) {
+        output.writeBytes(1, name_.getByteString(i));
+      }
+      for (int i = 0; i < index_.size(); i++) {
+        output.writeInt32(2, index_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      {
+        int dataSize = 0;
+        for (int i = 0; i < name_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(name_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getNameList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < index_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(index_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getIndexList().size();
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.BrandList parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.BrandList parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.BrandList prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.BrandList}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.BrandList)
+        mrtech.smarthome.rpc.Models.BrandListOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_BrandList_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_BrandList_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.BrandList.class, mrtech.smarthome.rpc.Models.BrandList.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.BrandList.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        name_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        index_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_BrandList_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.BrandList getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.BrandList.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.BrandList build() {
+        mrtech.smarthome.rpc.Models.BrandList result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.BrandList buildPartial() {
+        mrtech.smarthome.rpc.Models.BrandList result = new mrtech.smarthome.rpc.Models.BrandList(this);
+        int from_bitField0_ = bitField0_;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          name_ = name_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.name_ = name_;
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          index_ = java.util.Collections.unmodifiableList(index_);
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.index_ = index_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.BrandList) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.BrandList)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.BrandList other) {
+        if (other == mrtech.smarthome.rpc.Models.BrandList.getDefaultInstance()) return this;
+        if (!other.name_.isEmpty()) {
+          if (name_.isEmpty()) {
+            name_ = other.name_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureNameIsMutable();
+            name_.addAll(other.name_);
+          }
+          onChanged();
+        }
+        if (!other.index_.isEmpty()) {
+          if (index_.isEmpty()) {
+            index_ = other.index_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensureIndexIsMutable();
+            index_.addAll(other.index_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.BrandList parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.BrandList) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.google.protobuf.LazyStringList name_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureNameIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          name_ = new com.google.protobuf.LazyStringArrayList(name_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public com.google.protobuf.ProtocolStringList
+          getNameList() {
+        return name_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public int getNameCount() {
+        return name_.size();
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public java.lang.String getName(int index) {
+        return name_.get(index);
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes(int index) {
+        return name_.getByteString(index);
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public Builder setName(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureNameIsMutable();
+        name_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public Builder addName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureNameIsMutable();
+        name_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public Builder addAllName(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureNameIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, name_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public Builder clearName() {
+        name_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string name = 1;</code>
+       */
+      public Builder addNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureNameIsMutable();
+        name_.add(value);
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<java.lang.Integer> index_ = java.util.Collections.emptyList();
+      private void ensureIndexIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          index_ = new java.util.ArrayList<java.lang.Integer>(index_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      /**
+       * <code>repeated int32 index = 2;</code>
+       *
+       * <pre>
+       * 0 ~ end.
+       * </pre>
+       */
+      public java.util.List<java.lang.Integer>
+          getIndexList() {
+        return java.util.Collections.unmodifiableList(index_);
+      }
+      /**
+       * <code>repeated int32 index = 2;</code>
+       *
+       * <pre>
+       * 0 ~ end.
+       * </pre>
+       */
+      public int getIndexCount() {
+        return index_.size();
+      }
+      /**
+       * <code>repeated int32 index = 2;</code>
+       *
+       * <pre>
+       * 0 ~ end.
+       * </pre>
+       */
+      public int getIndex(int index) {
+        return index_.get(index);
+      }
+      /**
+       * <code>repeated int32 index = 2;</code>
+       *
+       * <pre>
+       * 0 ~ end.
+       * </pre>
+       */
+      public Builder setIndex(
+          int index, int value) {
+        ensureIndexIsMutable();
+        index_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 index = 2;</code>
+       *
+       * <pre>
+       * 0 ~ end.
+       * </pre>
+       */
+      public Builder addIndex(int value) {
+        ensureIndexIsMutable();
+        index_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 index = 2;</code>
+       *
+       * <pre>
+       * 0 ~ end.
+       * </pre>
+       */
+      public Builder addAllIndex(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureIndexIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, index_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 index = 2;</code>
+       *
+       * <pre>
+       * 0 ~ end.
+       * </pre>
+       */
+      public Builder clearIndex() {
+        index_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.BrandList)
+    }
+
+    static {
+      defaultInstance = new BrandList(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.BrandList)
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mrtech_smarthome_rpc_SystemConfiguration_descriptor;
   private static
@@ -99290,6 +113605,66 @@ public final class Models {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_mrtech_smarthome_rpc_L2tpConfig_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_InfraredOpCode_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_InfraredOpCode_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_InfraredDevice_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_InfraredDevice_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_MatchSession_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_MatchSession_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_InfraredCommand_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_InfraredCommand_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_ExtensionCommand_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_ExtensionCommand_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_AirConditionerCommand_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_AirConditionerCommand_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_IrControllerCode_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_IrControllerCode_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_IrMatchCode_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_IrMatchCode_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_IrMatchObj_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_IrMatchObj_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_IndexCodeTable_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_IndexCodeTable_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_NameTable_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_NameTable_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_BrandList_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_BrandList_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -99365,524 +113740,709 @@ public final class Models {
       "rs\030\005 \003(\0132!.mrtech.smarthome.rpc.PhoneNum" +
       "ber\022\022\n\nenable_nat\030\006 \001(\010\"=\n\014AccountQuery\022" +
       "\014\n\004page\030\001 \001(\005\022\021\n\tpage_size\030\002 \001(\005\022\014\n\004name" +
-      "\030\003 \001(\t\"{\n\007Account\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 " +
-      "\001(\t\022\017\n\007api_key\030\003 \001(\t\022\025\n\rlast_activity\030\004 " +
-      "\001(\005\022\022\n\npassphrase\030\005 \001(\t\022\032\n\022passphrase_no" +
-      "t_set\030\006 \001(\010\"\234\001\n\006Device\022\n\n\002id\030\001 \001(\005\022.\n\004ty",
-      "pe\030\002 \001(\0162 .mrtech.smarthome.rpc.DeviceTy" +
-      "pe\022\r\n\005alias\030\003 \001(\t\022\020\n\010group_id\030\004 \001(\005\022*\n\005g" +
-      "roup\030\005 \001(\0132\033.mrtech.smarthome.rpc.Group*" +
-      "\t\010\200\002\020\200\200\200\200\002\"\215\004\n\014ZigBeeDevice\022\n\n\002id\030\001 \001(\005\022" +
-      "\017\n\007address\030\002 \001(\005\022\023\n\013mac_address\030\003 \001(\004\022\024\n" +
-      "\014link_quality\030\004 \001(\002\022\020\n\010endpoint\030\005 \001(\005\0221\n" +
-      "\tdevice_id\030\006 \001(\0162\036.mrtech.smarthome.rpc." +
-      "DeviceId\022\023\n\013zcl_version\030\007 \001(\005\022\033\n\023applica" +
-      "tion_version\030\010 \001(\005\022\025\n\rstack_version\030\t \001(" +
-      "\005\022\030\n\020hardware_version\030\n \001(\005\022\031\n\021manufactu",
-      "rer_name\030\013 \001(\t\022\030\n\020model_identifier\030\014 \001(\t" +
-      "\022\021\n\tdate_code\030\r \001(\t\0227\n\014power_source\030\016 \001(" +
-      "\0162!.mrtech.smarthome.rpc.PowerSource\022\036\n\026" +
-      "secondary_power_source\030\017 \001(\010\022\016\n\006online\030\020" +
-      " \001(\010*\t\010\200\002\020\200\200\200\200\0022Q\n\006detail\022\034.mrtech.smart" +
-      "home.rpc.Device\030\200\002 \001(\0132\".mrtech.smarthom" +
-      "e.rpc.ZigBeeDevice\"w\n\014OnOffCluster\022\r\n\005st" +
-      "ate\030\001 \001(\0102X\n\006detail\022\".mrtech.smarthome.r" +
-      "pc.ZigBeeDevice\030\206\200\004 \001(\0132\".mrtech.smartho" +
-      "me.rpc.OnOffCluster\"\367\002\n\034ElectricalMeasur",
-      "ementCluster\022?\n\020measurement_type\030\001 \001(\0162%" +
-      ".mrtech.smarthome.rpc.MeasurementType\022\021\n" +
-      "\tfrequency\030\002 \001(\005\022\023\n\013rms_voltage\030\003 \001(\001\022\023\n" +
-      "\013rms_current\030\004 \001(\001\022\024\n\014active_power\030\005 \001(\001" +
-      "\022\026\n\016reactive_power\030\006 \001(\005\022\026\n\016apparent_pow" +
-      "er\030\007 \001(\005\022\024\n\014power_factor\030\010 \001(\005\022\023\n\013overcu" +
-      "rrent\030\t \001(\0102h\n\006detail\022\".mrtech.smarthome" +
-      ".rpc.ZigBeeDevice\030\204\226\004 \001(\01322.mrtech.smart" +
-      "home.rpc.ElectricalMeasurementCluster\"\322\001" +
-      "\n\025SimpleMeteringCluster\022#\n\033current_summa",
-      "tion_delivered\030\001 \001(\001\0221\n\004unit\030\002 \001(\0162#.mrt" +
-      "ech.smarthome.rpc.UnitOfMeasure2a\n\006detai" +
-      "l\022\".mrtech.smarthome.rpc.ZigBeeDevice\030\202\216" +
-      "\004 \001(\0132+.mrtech.smarthome.rpc.SimpleMeter" +
-      "ingCluster\"\242\001\n\035TemperatureMeasurementClu" +
-      "ster\022\026\n\016measured_value\030\001 \001(\0012i\n\006detail\022\"" +
-      ".mrtech.smarthome.rpc.ZigBeeDevice\030\202\210\004 \001" +
-      "(\01323.mrtech.smarthome.rpc.TemperatureMea" +
-      "surementCluster\"\336\003\n\007IasZone\022\n\n\002id\030\001 \001(\005\022" +
-      "\021\n\tdevice_id\030\002 \001(\005\022,\n\006device\030\003 \001(\0132\034.mrt",
-      "ech.smarthome.rpc.Device\022,\n\004type\030\004 \001(\0162\036" +
-      ".mrtech.smarthome.rpc.ZoneType\022\025\n\rprimar" +
-      "y_alarm\030\005 \001(\010\022\027\n\017secondary_alarm\030\006 \001(\010\022\016" +
-      "\n\006tamper\030\007 \001(\010\022\023\n\013low_battery\030\010 \001(\010\022\032\n\022s" +
-      "upervision_report\030\t \001(\010\022\026\n\016restore_repor" +
-      "t\030\n \001(\010\022\017\n\007trouble\030\013 \001(\010\022\023\n\013mains_fault\030" +
-      "\014 \001(\010\022\021\n\ttest_mode\030\r \001(\010\022\026\n\016battery_defe" +
-      "ct\030\016 \001(\010\022\"\n\032lack_of_supervision_report\030\017" +
-      " \001(\010\022\025\n\rlast_activity\030\020 \001(\005\022\020\n\010bypassed\030" +
-      "\021 \001(\010\0221\n\tarm_group\030\022 \001(\0162\036.mrtech.smarth",
-      "ome.rpc.ArmGroup\"\264\001\n\020CieConfiguration\022/\n" +
-      "\010arm_mode\030\001 \001(\0162\035.mrtech.smarthome.rpc.A" +
-      "rmMode\022\033\n\023supervision_timeout\030\002 \001(\005\022\027\n\017r" +
-      "estore_timeout\030\003 \001(\005\022\023\n\013entry_delay\030\004 \001(" +
-      "\005\022\022\n\nexit_delay\030\005 \001(\005\022\020\n\010passcode\030\006 \001(\t\"" +
-      "\314\001\n\013DeviceQuery\022.\n\004type\030\001 \001(\0162 .mrtech.s" +
-      "marthome.rpc.DeviceType\022\r\n\005alias\030\002 \001(\t\022\027" +
-      "\n\017filter_by_group\030\003 \001(\010\022\020\n\010group_id\030\004 \001(" +
-      "\005\022\014\n\004page\030\005 \001(\005\022\021\n\tpage_size\030\006 \001(\005\0222\n\nde" +
-      "vice_ids\030\007 \003(\0162\036.mrtech.smarthome.rpc.De",
-      "viceId\"Z\n\tZoneQuery\022,\n\004type\030\001 \001(\0162\036.mrte" +
-      "ch.smarthome.rpc.ZoneType\022\014\n\004page\030\003 \001(\005\022" +
-      "\021\n\tpage_size\030\004 \001(\005\"\242\001\n\010Timeline\022\n\n\002id\030\001 " +
-      "\001(\005\022\021\n\ttimestamp\030\002 \001(\003\0222\n\005level\030\003 \001(\0162#." +
-      "mrtech.smarthome.rpc.TimelineLevel\0220\n\004ty" +
-      "pe\030\004 \001(\0162\".mrtech.smarthome.rpc.Timeline" +
-      "Type\022\021\n\tparameter\030\005 \001(\t\"\321\003\n\014CameraDevice" +
-      "\022\n\n\002id\030\001 \001(\005\022\023\n\013device_name\030\002 \001(\t\022\020\n\010dev" +
-      "iceid\030\003 \001(\t\022\022\n\nip_address\030\004 \001(\t\022\014\n\004port\030" +
-      "\005 \001(\005\022\014\n\004user\030\006 \001(\t\022\020\n\010password\030\007 \001(\t\022\020\n",
-      "\010new_user\030\010 \001(\t\022\024\n\014new_password\030\t \001(\t\022\021\n" +
-      "\tis_online\030\n \001(\010\022\034\n\024local_record_enabled" +
-      "\030\013 \001(\010\022\020\n\010bypassed\030\014 \001(\010\0221\n\tarm_group\030\r " +
-      "\001(\0162\036.mrtech.smarthome.rpc.ArmGroup\022\024\n\014m" +
-      "otion_alarm\030\016 \001(\010\022\024\n\014is_connected\030\017 \001(\010\022" +
-      "\021\n\tlast_seen\030\020 \001(\004\022\034\n\024authentication_err" +
-      "or\030\021 \001(\0102Q\n\006detail\022\034.mrtech.smarthome.rp" +
-      "c.Device\030\201\002 \001(\0132\".mrtech.smarthome.rpc.C" +
-      "ameraDevice\"\263\001\n\nCameraInfo\0222\n\006status\030\001 \001" +
-      "(\0132\".mrtech.smarthome.rpc.CameraStatus\0220",
-      "\n\005param\030\002 \001(\0132!.mrtech.smarthome.rpc.Cam" +
-      "eraParam\022?\n\006record\030\003 \001(\0132/.mrtech.smarth" +
-      "ome.rpc.CameraRecordConfiguration\"\245\003\n\014Ca" +
-      "meraStatus\022\r\n\005alias\030\001 \001(\t\022\020\n\010deviceid\030\002 " +
-      "\001(\t\022\017\n\007sys_ver\030\003 \001(\t\022\013\n\003now\030\004 \001(\005\022\024\n\014ala" +
-      "rm_status\030\005 \001(\005\022\023\n\013upnp_status\030\006 \001(\010\022\021\n\t" +
-      "dnsenable\030\007 \001(\010\022\021\n\tosdenable\030\010 \001(\010\022\024\n\014sy" +
-      "swifi_mode\030\t \001(\010\022\013\n\003mac\030\n \001(\t\022\017\n\007wifimac" +
-      "\030\013 \001(\t\022\030\n\020record_sd_status\030\014 \001(\005\022\022\n\ndns_" +
-      "status\030\r \001(\005\022\020\n\010internet\030\016 \001(\010\022\021\n\tp2psta",
-      "tus\030\017 \001(\010\022\022\n\ndevicetype\030\020 \001(\005\022\025\n\rdevices" +
-      "ubtype\030\021 \001(\005\022\022\n\nexternwifi\030\022 \001(\005\022\017\n\007encr" +
-      "ypt\030\023 \001(\010\022\r\n\005under\030\024 \001(\010\022\017\n\007sdtotal\030\025 \001(" +
-      "\004\022\016\n\006sdfree\030\026 \001(\004\"\227\002\n\013CameraParam\022.\n\004tim" +
-      "e\030\001 \001(\0132 .mrtech.smarthome.rpc.CameraTim" +
-      "e\0224\n\007network\030\002 \001(\0132#.mrtech.smarthome.rp" +
-      "c.CameraNetwork\022.\n\004wlan\030\003 \001(\0132 .mrtech.s" +
-      "marthome.rpc.CameraWlan\0220\n\005alarm\030\004 \001(\0132!" +
-      ".mrtech.smarthome.rpc.CameraAlarm\022@\n\rsna" +
-      "pshotparam\030\005 \001(\0132).mrtech.smarthome.rpc.",
-      "CameraSnapshotParam\"\302\001\n\031CameraRecordConf" +
-      "iguration\022\026\n\016record_enabled\030\001 \001(\010\022\034\n\024rec" +
-      "ord_cover_enabled\030\002 \001(\010\022\030\n\020sd_card_capac" +
-      "ity\030\003 \001(\004\0227\n\tsd_status\030\004 \001(\0162$.mrtech.sm" +
-      "arthome.rpc.CameraSdStatus\022\034\n\024local_reco" +
-      "rd_enabled\030\005 \001(\010\"w\n\030LocalRecordConfigura" +
-      "tion\022\"\n\032local_record_cover_enabled\030\001 \001(\010" +
-      "\022\032\n\022record_file_length\030\002 \001(\005\022\033\n\023reserved" +
-      "_disk_space\030\003 \001(\005\"S\n\013CameraAlarm\022\036\n\026moti" +
-      "on_detection_armed\030\001 \001(\010\022$\n\034motion_detec",
-      "tion_sensitivity\030\002 \001(\005\"N\n\nCameraTime\022\013\n\003" +
-      "now\030\001 \001(\005\022\n\n\002tz\030\002 \001(\005\022\023\n\013ntp_enabled\030\003 \001" +
-      "(\010\022\022\n\nntp_server\030\004 \001(\t\"%\n\021CameraSetSnaps" +
-      "hot\022\020\n\010Snapshot\030\001 \001(\t\"\220\006\n\023CameraSnapshot" +
-      "Param\022\022\n\ncameratype\030\001 \001(\005\022\022\n\nresolution\030" +
-      "\002 \001(\005\022\025\n\rresolutionsub\030\003 \001(\005\022\030\n\020resoluti" +
-      "onsubsub\030\004 \001(\005\022\017\n\007vbright\030\005 \001(\005\022\021\n\tvcont" +
-      "rast\030\006 \001(\005\022\014\n\004vhue\030\007 \001(\005\022\023\n\013vsaturation\030" +
-      "\010 \001(\005\022\021\n\tOSDEnable\030\t \001(\010\022\014\n\004mode\030\n \001(\005\022\014" +
-      "\n\004flip\030\013 \001(\005\022\020\n\010enc_size\030\014 \001(\005\022\025\n\renc_fr",
-      "amerate\030\r \001(\005\022\024\n\014enc_keyframe\030\016 \001(\005\022\021\n\te" +
-      "nc_quant\030\017 \001(\005\022\024\n\014enc_ratemode\030\020 \001(\005\022\023\n\013" +
-      "enc_bitrate\030\021 \001(\005\022\025\n\renc_main_mode\030\022 \001(\005" +
-      "\022\024\n\014sub_enc_size\030\023 \001(\005\022\031\n\021sub_enc_framer" +
-      "ate\030\024 \001(\005\022\030\n\020sub_enc_keyframe\030\025 \001(\005\022\025\n\rs" +
-      "ub_enc_quant\030\026 \001(\005\022\030\n\020sub_enc_ratemode\030\027" +
-      " \001(\005\022\027\n\017sub_enc_bitrate\030\030 \001(\005\022\030\n\020sub_sub" +
-      "_enc_size\030\031 \001(\005\022\035\n\025sub_sub_enc_framerate" +
-      "\030\032 \001(\005\022\034\n\024sub_sub_enc_keyframe\030\033 \001(\005\022\031\n\021" +
-      "sub_sub_enc_quant\030\034 \001(\005\022\034\n\024sub_sub_enc_r",
-      "atemode\030\035 \001(\005\022\033\n\023sub_sub_enc_bitrate\030\036 \001" +
-      "(\005\022\r\n\005speed\030\037 \001(\005\022\r\n\005ircut\030  \001(\005\022\020\n\010invo" +
-      "lume\030! \001(\005\022\021\n\toutvolume\030\" \001(\005\022\021\n\taudioty" +
-      "pe\030# \001(\005\"\211\001\n\rCameraNetwork\022\024\n\014dhcp_enabl" +
-      "ed\030\001 \001(\010\022\022\n\nip_address\030\002 \001(\t\022\023\n\013subnet_m" +
-      "ask\030\003 \001(\t\022\017\n\007gateway\030\004 \001(\t\022\014\n\004dns1\030\005 \001(\t" +
-      "\022\014\n\004dns2\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\"\216\003\n\nCameraW" +
-      "lan\022\017\n\007enabled\030\001 \001(\010\022\014\n\004ssid\030\002 \001(\t\0222\n\004mo" +
-      "de\030\003 \001(\0162$.mrtech.smarthome.rpc.CameraWl" +
-      "anMode\022@\n\017encryption_type\030\004 \001(\0162\'.mrtech",
-      ".smarthome.rpc.CameraWlanEncrypt\022E\n\023auth" +
-      "entication_type\030\005 \001(\0162(.mrtech.smarthome" +
-      ".rpc.CameraWlanAuthtype\022A\n\016wep_key_forma" +
-      "t\030\006 \001(\0162).mrtech.smarthome.rpc.CameraWla" +
-      "nKeyFormat\022\017\n\007wep_key\030\007 \001(\t\022?\n\014wep_key_b" +
-      "its\030\010 \001(\0162).mrtech.smarthome.rpc.CameraW" +
-      "lanKeyLength\022\017\n\007wpa_psk\030\t \001(\t\"\257\001\n\014Camera" +
-      "WifiAp\022\014\n\004ssid\030\001 \001(\t\022\013\n\003mac\030\002 \001(\t\022:\n\010sec" +
-      "urity\030\003 \001(\0162(.mrtech.smarthome.rpc.Camer" +
-      "aWlanAuthtype\0222\n\004mode\030\004 \001(\0162$.mrtech.sma",
-      "rthome.rpc.CameraWlanMode\022\024\n\014link_qualit" +
-      "y\030\005 \001(\002\"\312\001\n\rTimelineQuery\022\r\n\005since\030\001 \001(\003" +
-      "\022\r\n\005until\030\002 \001(\003\0222\n\005level\030\003 \001(\0162#.mrtech." +
-      "smarthome.rpc.TimelineLevel\0220\n\004type\030\004 \001(" +
-      "\0162\".mrtech.smarthome.rpc.TimelineType\022\024\n" +
-      "\014fixed_paging\030\005 \001(\010\022\014\n\004page\030\006 \001(\005\022\021\n\tpag" +
-      "e_size\030\007 \001(\005\"\312\002\n\013ProductInfo\022\022\n\nhw_versi" +
-      "on\030\001 \001(\t\022\022\n\nsw_version\030\002 \001(\t\022\031\n\021db_schem" +
-      "a_version\030\003 \001(\002\022\013\n\003sku\030\004 \001(\t\022\014\n\004imei\030\005 \001" +
-      "(\t\022\020\n\010cloud_id\030\006 \001(\t\022\017\n\007lan_mac\030\007 \001(\t\022\020\n",
-      "\010wlan_mac\030\010 \001(\t\022\023\n\013wlan_5g_mac\030\t \001(\t\022\022\n\n" +
-      "zigbee_mac\030\n \001(\t\022\022\n\nproduct_id\030\013 \001(\t\022\030\n\020" +
-      "manufacture_date\030\014 \001(\t\022\027\n\017runtime_versio" +
-      "n\030\r \001(\t\022\023\n\013web_version\030\016 \001(\t\022\022\n\nos_versi" +
-      "on\030\017 \001(\t\022\017\n\007wan_mac\030\020 \001(\t\"y\n\tComponent\022\014" +
-      "\n\004name\030\001 \001(\t\022\027\n\017current_version\030\002 \001(\t\022\026\n" +
-      "\016latest_version\030\003 \001(\t\022\026\n\016time_published\030" +
-      "\004 \001(\005\022\025\n\rfile_checksum\030\005 \001(\t\"\347\001\n\tOtaStat" +
-      "us\0222\n\tcomponent\030\001 \003(\0132\037.mrtech.smarthome" +
-      ".rpc.Component\022>\n\006status\030\002 \001(\0162..mrtech.",
-      "smarthome.rpc.OtaStatus.OtaAgentStatus\022\027" +
-      "\n\017last_check_time\030\003 \001(\005\"M\n\016OtaAgentStatu" +
-      "s\022\010\n\004IDLE\020\000\022\017\n\013DOWNLOADING\020\001\022\024\n\020READY_TO" +
-      "_INSTALL\020\002\022\n\n\006FAILED\020\003\"!\n\005Group\022\n\n\002id\030\001 " +
-      "\001(\005\022\014\n\004name\030\002 \001(\t\";\n\nGroupQuery\022\014\n\004name\030" +
-      "\001 \001(\t\022\014\n\004page\030\002 \001(\005\022\021\n\tpage_size\030\003 \001(\005\"P" +
-      "\n\005Scene\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022-\n\007act" +
-      "ions\030\003 \003(\0132\034.mrtech.smarthome.rpc.Action" +
-      "\"\226\001\n\006Action\022\n\n\002id\030\001 \001(\005\022\020\n\010scene_id\030\002 \001(" +
-      "\005\022\017\n\007plan_id\030\003 \001(\005\0220\n\006action\030\004 \001(\0162 .mrt",
-      "ech.smarthome.rpc.ActionType\022\022\n\nparamete" +
-      "rs\030\005 \001(\t\022\027\n\017execution_order\030\006 \001(\005\";\n\nSce" +
-      "neQuery\022\014\n\004name\030\001 \001(\t\022\014\n\004page\030\002 \001(\005\022\021\n\tp" +
-      "age_size\030\003 \001(\005\":\n\tPlanQuery\022\014\n\004name\030\001 \001(" +
-      "\t\022\014\n\004page\030\002 \001(\005\022\021\n\tpage_size\030\003 \001(\005\"\271\001\n\004P" +
-      "lan\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\025\n\rlast_ac" +
-      "tivity\030\003 \001(\005\022\017\n\007enabled\030\004 \001(\010\022,\n\004type\030\005 " +
-      "\001(\0162\036.mrtech.smarthome.rpc.PlanType\022\022\n\np" +
-      "arameters\030\006 \001(\t\022-\n\007actions\030\007 \003(\0132\034.mrtec" +
-      "h.smarthome.rpc.Action\"\204\004\n\tWanConfig\022/\n\010",
-      "wan_mode\030\001 \001(\0162\035.mrtech.smarthome.rpc.Wa" +
-      "nMode\022\017\n\007account\030\002 \001(\t\022\020\n\010password\030\003 \001(\t" +
-      "\022\022\n\nip_address\030\004 \001(\t\022\023\n\013subnet_mask\030\005 \001(" +
-      "\t\022\017\n\007gateway\030\006 \001(\t\022\022\n\nstatic_dns\030\007 \001(\010\022\023" +
-      "\n\013primary_dns\030\010 \001(\t\022\025\n\rsecondary_dns\030\t \001" +
-      "(\t\022+\n\004type\030\n \001(\0162\035.mrtech.smarthome.rpc." +
-      "WanType\0225\n\nclone_mode\030\013 \001(\0162!.mrtech.sma" +
-      "rthome.rpc.WanMacClone\022\021\n\tclone_mac\030\014 \001(" +
-      "\t\022\016\n\006domain\030\r \001(\t\022\024\n\014service_name\030\016 \001(\t\022" +
-      "\035\n\025enable_dos_protection\030\017 \001(\010\022\022\n\nenable",
-      "_dmz\030\020 \001(\010\022\020\n\010dmz_host\030\021 \001(\t\022\031\n\021enable_i" +
-      "gmp_proxy\030\022 \001(\010\022\013\n\003mtu\030\023 \001(\005\022\013\n\003mru\030\024 \001(" +
-      "\005\022\022\n\nallow_ping\030\025 \001(\010\"\314\002\n\nWlanConfig\022\014\n\004" +
-      "ssid\030\001 \001(\t\022\026\n\016ssid_broadcast\030\002 \001(\010\022:\n\016op" +
-      "eration_mode\030\003 \001(\0162\".mrtech.smarthome.rp" +
-      "c.WirelessMode\0226\n\010security\030\004 \003(\0132$.mrtec" +
-      "h.smarthome.rpc.EncryptionMode\022\022\n\npassph" +
-      "rase\030\005 \001(\t\022\017\n\007channel\030\006 \001(\005\0229\n\013access_ru" +
-      "le\030\007 \001(\0162$.mrtech.smarthome.rpc.AccessRu" +
-      "leMode\022\017\n\007enabled\030\010 \001(\010\0223\n\nband_width\030\t ",
-      "\001(\0162\037.mrtech.smarthome.rpc.BandWidth\"\252\001\n" +
-      "\017GuestWlanConfig\022\017\n\007enabled\030\001 \001(\010\022\024\n\014loc" +
-      "al_access\030\002 \001(\010\022\014\n\004ssid\030\003 \001(\t\022\026\n\016ssid_br" +
-      "oadcast\030\004 \001(\010\0226\n\010security\030\005 \003(\0132$.mrtech" +
-      ".smarthome.rpc.EncryptionMode\022\022\n\npassphr" +
-      "ase\030\006 \001(\t\"\\\n\013SambaConfig\022-\n\004mode\030\001 \001(\0162\037" +
-      ".mrtech.smarthome.rpc.SambaMode\022\014\n\004user\030" +
-      "\002 \001(\t\022\020\n\010password\030\003 \001(\t\"\303\001\n\rNetworkDevic" +
-      "e\022\013\n\003mac\030\001 \001(\t\022\n\n\002ip\030\002 \001(\t\022\017\n\007netbios\030\003 " +
-      "\001(\t\022.\n\004type\030\004 \001(\0162 .mrtech.smarthome.rpc",
-      ".AccessType\022,\n\004port\030\005 \001(\0162\036.mrtech.smart" +
-      "home.rpc.WlanPort\022\023\n\013upload_rate\030\006 \001(\004\022\025" +
-      "\n\rdownload_rate\030\007 \001(\004\"\247\001\n\023BandwidthTestR" +
-      "esult\022\017\n\007testing\030\001 \001(\010\022\032\n\022download_bandw" +
-      "idth\030\002 \001(\004\022\030\n\020upload_bandwidth\030\003 \001(\004\022\r\n\005" +
-      "delay\030\004 \001(\005\022\017\n\007carrier\030\005 \001(\t\022\020\n\010location" +
-      "\030\006 \001(\t\022\027\n\017server_location\030\007 \001(\t\"c\n\007HddIn" +
-      "fo\022/\n\006status\030\001 \001(\0162\037.mrtech.smarthome.rp" +
-      "c.HddStatus\022\023\n\013total_space\030\002 \001(\004\022\022\n\nused" +
-      "_space\030\003 \001(\004\"|\n\nPortFilter\0227\n\010protocol\030\001",
-      " \001(\0162%.mrtech.smarthome.rpc.NetworkProto" +
-      "col\022\022\n\nstart_port\030\002 \001(\r\022\020\n\010end_port\030\003 \001(" +
-      "\r\022\017\n\007enabled\030\004 \001(\010\"\220\001\n\013PortForward\022\020\n\010wa" +
-      "n_port\030\001 \001(\r\022\020\n\010lan_port\030\002 \001(\r\022\023\n\013lan_ad" +
-      "dress\030\003 \001(\t\0227\n\010protocol\030\004 \001(\0162%.mrtech.s" +
-      "marthome.rpc.NetworkProtocol\022\017\n\007enabled\030" +
-      "\005 \001(\010\"\200\010\n\013NetworkInfo\022\026\n\016lan_ip_address\030" +
-      "\001 \001(\t\022\027\n\017lan_subnet_mask\030\002 \001(\t\022/\n\010wan_mo" +
-      "de\030\003 \001(\0162\035.mrtech.smarthome.rpc.WanMode\022" +
-      ":\n\020wan_pppoe_status\030\004 \001(\0162 .mrtech.smart",
-      "home.rpc.PPPoEState\022\026\n\016wan_ip_address\030\005 " +
-      "\001(\t\022\027\n\017wan_subnet_mask\030\006 \001(\t\022\023\n\013wan_gate" +
-      "way\030\007 \001(\t\022\027\n\017wan_primary_dns\030\010 \001(\t\022\031\n\021wa" +
-      "n_secondary_dns\030\t \001(\t\022/\n\005modem\030\n \001(\0132 .m" +
-      "rtech.smarthome.rpc.MobileInfo\022\026\n\016wifi_2" +
-      "_4g_ssid\030\013 \001(\t\022@\n\022wifi_2_4g_security\030\014 \003" +
-      "(\0132$.mrtech.smarthome.rpc.EncryptionMode" +
-      "\022\031\n\021wifi_2_4g_channel\030\r \001(\005\022<\n\023wifi_2_4g" +
-      "_bandwidth\030\016 \001(\0162\037.mrtech.smarthome.rpc." +
-      "BandWidth\022\034\n\024guest_wifi_2_4g_ssid\030\017 \001(\t\022",
-      "F\n\030guest_wifi_2_4g_security\030\020 \003(\0132$.mrte" +
-      "ch.smarthome.rpc.EncryptionMode\022\026\n\016wifi_" +
-      "5_8g_ssid\030\021 \001(\t\022@\n\022wifi_5_8g_security\030\022 " +
-      "\003(\0132$.mrtech.smarthome.rpc.EncryptionMod" +
-      "e\022\031\n\021wifi_5_8g_channel\030\023 \001(\005\022<\n\023wifi_5_8" +
-      "g_bandwidth\030\024 \001(\0162\037.mrtech.smarthome.rpc" +
-      ".BandWidth\022\034\n\024guest_wifi_5_8g_ssid\030\025 \001(\t" +
-      "\022F\n\030guest_wifi_5_8g_security\030\026 \003(\0132$.mrt" +
-      "ech.smarthome.rpc.EncryptionMode\022\031\n\021wifi" +
-      "_2_4g_enabled\030\027 \001(\010\022\037\n\027guest_wifi_2_4g_e",
-      "nabled\030\030 \001(\010\022\031\n\021wifi_5_8g_enabled\030\031 \001(\010\022" +
-      "\037\n\027guest_wifi_5_8g_enabled\030\032 \001(\010\"\324\001\n\tQos" +
-      "Config\022\017\n\007enabled\030\001 \001(\010\022+\n\004mode\030\002 \001(\0162\035." +
-      "mrtech.smarthome.rpc.QosMode\022\025\n\rexclusiv" +
-      "e_mac\030\003 \001(\t\022\035\n\025max_inbound_bandwidth\030\004 \001" +
-      "(\005\022\036\n\026max_outbound_bandwidth\030\005 \001(\005\0223\n\010pr" +
-      "iority\030\006 \001(\0162!.mrtech.smarthome.rpc.QosP" +
-      "riority\"S\n\007QosRule\0223\n\010priority\030\001 \001(\0162!.m" +
-      "rtech.smarthome.rpc.QosPriority\022\023\n\013mac_a" +
-      "ddress\030\002 \001(\t\"Q\n\014GroupSummary\022*\n\005group\030\001 ",
-      "\001(\0132\033.mrtech.smarthome.rpc.Group\022\025\n\rdevi" +
-      "ce_models\030\002 \003(\t\"l\n\007CpuInfo\022\'\n\002id\030\001 \001(\0162\033" +
-      ".mrtech.smarthome.rpc.CpuId\022\014\n\004user\030\002 \001(" +
-      "\004\022\016\n\006kernel\030\003 \001(\004\022\014\n\004nice\030\004 \001(\004\022\014\n\004idle\030" +
-      "\005 \001(\004\"1\n\nMemoryInfo\022\021\n\ttotal_ram\030\001 \001(\004\022\020" +
-      "\n\010free_ram\030\002 \001(\004\"<\n\023InternalStorageInfo\022" +
-      "\022\n\ntotal_size\030\001 \001(\004\022\021\n\tfree_size\030\002 \001(\004\"\257" +
-      "\001\n\nSystemInfo\022*\n\003cpu\030\001 \003(\0132\035.mrtech.smar" +
-      "thome.rpc.CpuInfo\0220\n\006memory\030\002 \001(\0132 .mrte" +
-      "ch.smarthome.rpc.MemoryInfo\022C\n\020internal_",
-      "storage\030\003 \001(\0132).mrtech.smarthome.rpc.Int" +
-      "ernalStorageInfo\"N\n\020DeviceStatistics\022\026\n\016" +
-      "zigbee_devices\030\001 \001(\r\022\021\n\tias_zones\030\002 \001(\r\022" +
-      "\017\n\007cameras\030\003 \001(\r\"\230\001\n\tVpnConfig\022+\n\004type\030\001" +
-      " \001(\0162\035.mrtech.smarthome.rpc.VpnType\022.\n\004p" +
-      "ptp\030\002 \001(\0132 .mrtech.smarthome.rpc.PptpCon" +
-      "fig\022.\n\004l2tp\030\003 \001(\0132 .mrtech.smarthome.rpc" +
-      ".L2tpConfig\"j\n\nPptpConfig\022\017\n\007account\030\001 \001" +
-      "(\t\022\022\n\npassphrase\030\002 \001(\t\022\023\n\013server_host\030\003 " +
-      "\001(\t\022\023\n\013enable_mppe\030\004 \001(\010\022\r\n\005route\030\005 \001(\t\"",
-      "~\n\nL2tpConfig\022\017\n\007account\030\001 \001(\t\022\022\n\npassph" +
-      "rase\030\002 \001(\t\022\023\n\013server_host\030\003 \001(\t\022\024\n\014enabl" +
-      "e_ipsec\030\004 \001(\010\022\021\n\tipsec_psk\030\005 \001(\t\022\r\n\005rout" +
-      "e\030\006 \001(\t*<\n\rSeverityLevel\022\010\n\004INFO\020\001\022\013\n\007WA" +
-      "RNING\020\002\022\t\n\005ERROR\020\003\022\t\n\005FATAL\020\004*\214\001\n\rBatter" +
-      "yStatus\022\035\n\031BATTERY_STATUS_NO_BATTERY\020\000\022\033" +
-      "\n\027BATTERY_STATUS_CHARGING\020\001\022\036\n\032BATTERY_S" +
-      "TATUS_DISCHARGING\020\002\022\037\n\033BATTERY_STATUS_NO" +
-      "T_CHARGING\020\003*\265\001\n\rServiceStatus\022\035\n\031SERVIC" +
-      "E_STATUS_NO_SERVICE\020\000\022\035\n\031SERVICE_STATUS_",
-      "RESTRICTED\020\001\022\030\n\024SERVICE_STATUS_VALID\020\002\022." +
-      "\n*SERVICE_STATUS_RESTRICTED_REGIONAL_SER" +
-      "VICE\020\003\022\034\n\030SERVICE_STATUS_HIBERNATE\020\004*\263\001\n" +
-      "\rServiceDomain\022\035\n\031SERVICE_DOMAIN_NO_SERV" +
-      "ICE\020\000\022\025\n\021SERVICE_DOMAIN_CS\020\001\022\025\n\021SERVICE_" +
-      "DOMAIN_PS\020\002\022\030\n\024SERVICE_DOMAIN_PS_CS\020\003\022!\n" +
-      "\035SERVICE_DOMAIN_NOT_REGISTERED\020\004\022\030\n\023SERV" +
-      "ICE_DOMAIN_CDMA\020\377\001*\237\002\n\rOperationMode\022\035\n\031" +
-      "OPERATION_MODE_NO_SERVICE\020\000\022\027\n\023OPERATION" +
-      "_MODE_AMPS\020\001\022\027\n\023OPERATION_MODE_CDMA\020\002\022\033\n",
-      "\027OPERATION_MODE_GSM_GPRS\020\003\022\026\n\022OPERATION_" +
-      "MODE_HDR\020\004\022\030\n\024OPERATION_MODE_WCDMA\020\005\022\026\n\022" +
-      "OPERATION_MODE_GPS\020\006\022\034\n\030OPERATION_MODE_G" +
-      "SM_WCDMA\020\007\022\033\n\027OPERATION_MODE_CDMA_HDR\020\010\022" +
-      "\033\n\027OPERATION_MODE_TD_SCDMA\020\017*\265\001\n\010SimStat" +
-      "e\022\025\n\021SIM_STATE_INVALID\020\000\022\023\n\017SIM_STATE_VA" +
-      "LID\020\001\022\030\n\024SIM_STATE_CS_INVALID\020\002\022\030\n\024SIM_S" +
-      "TATE_PS_INVALID\020\003\022\033\n\027SIM_STATE_PS_CS_INV" +
-      "ALID\020\004\022\025\n\020SIM_STATE_ROMSIM\020\360\001\022\025\n\020SIM_STA" +
-      "TE_NO_SIM\020\372\001*\205\005\n\020SubOperationMode\022!\n\035SUB",
-      "_OPERATION_MODE_NO_SERVICE\020\000\022\032\n\026SUB_OPER" +
-      "ATION_MODE_GSM\020\001\022\033\n\027SUB_OPERATION_MODE_G" +
-      "PRS\020\002\022\033\n\027SUB_OPERATION_MODE_EDGE\020\003\022\034\n\030SU" +
-      "B_OPERATION_MODE_WCDMA\020\004\022\034\n\030SUB_OPERATIO" +
-      "N_MODE_HSDPA\020\005\022\034\n\030SUB_OPERATION_MODE_HSU" +
-      "PA\020\006\022\"\n\036SUB_OPERATION_MODE_HSUPA_HSDPA\020\007" +
-      "\022\037\n\033SUB_OPERATION_MODE_TD_SCDMA\020\010\022 \n\034SUB" +
-      "_OPERATION_MODE_HSPA_PLUS\020\t\022\035\n\031SUB_OPERA" +
-      "TION_MODE_EVDO_0\020\n\022\035\n\031SUB_OPERATION_MODE" +
-      "_EVDO_A\020\013\022\035\n\031SUB_OPERATION_MODE_EVDO_B\020\014",
-      "\022\"\n\036SUB_OPERATION_MODE_CDMA2000_1X\020\r\022\032\n\026" +
-      "SUB_OPERATION_MODE_UMB\020\016\022\'\n#SUB_OPERATIO" +
-      "N_MODE_CDMA2000_1X_EVDV\020\017\022\"\n\036SUB_OPERATI" +
-      "ON_MODE_CDMA2000_3X\020\020\022&\n\"SUB_OPERATION_M" +
-      "ODE_HSPA_PLUS_64QAM\020\021\022%\n!SUB_OPERATION_M" +
-      "ODE_HSPA_PLUS_MIMO\020\022*\321\001\n\014WirelessMode\022\023\n" +
-      "\017WIRELESS_MODE_B\020\000\022\023\n\017WIRELESS_MODE_G\020\001\022" +
-      "\023\n\017WIRELESS_MODE_N\020\002\022\024\n\020WIRELESS_MODE_BG" +
-      "\020\003\022\024\n\020WIRELESS_MODE_NG\020\004\022\025\n\021WIRELESS_MOD" +
-      "E_BGN\020\005\022\023\n\017WIRELESS_MODE_A\020\006\022\024\n\020WIRELESS",
-      "_MODE_AN\020\007\022\024\n\020WIRELESS_MODE_AC\020\010*P\n\nWpaV" +
-      "ersion\022\023\n\017WPA_VERSION_WPA\020\000\022\024\n\020WPA_VERSI" +
-      "ON_WPA2\020\001\022\027\n\023WPA_VERSION_UNKNOWN\020\002*E\n\rKe" +
-      "yManagement\022\026\n\022KEY_MANAGEMENT_PSK\020\000\022\034\n\030K" +
-      "EY_MANAGEMENT_IEEE8021X\020\001*H\n\017PhoneNumber" +
-      "Type\022\031\n\025PHONE_NUMBER_TYPE_SMS\020\000\022\032\n\026PHONE" +
-      "_NUMBER_TYPE_DIAL\020\001*<\n\nDeviceType\022\026\n\022DEV" +
-      "ICE_TYPE_ZIGBEE\020\000\022\026\n\022DEVICE_TYPE_CAMERA\020" +
-      "\001*\344\001\n\013PowerSource\022\030\n\024POWER_SOURCE_UNKNOW" +
-      "N\020\000\022\036\n\032POWER_SOURCE_MAINS_1_PHASE\020\001\022\036\n\032P",
-      "OWER_SOURCE_MAINS_3_PHASE\020\002\022\030\n\024POWER_SOU" +
-      "RCE_BATTERY\020\003\022\023\n\017POWER_SOURCE_DC\020\004\022&\n\"PO" +
-      "WER_SOURCE_EMERG_MAINS_CONST_PWR\020\005\022$\n PO" +
-      "WER_SOURCE_EMERG_MAINS_XFER_SW\020\006*\202\013\n\010Dev" +
-      "iceId\022\033\n\027DEVICE_ID_ON_OFF_SWITCH\020\000\022\"\n\036DE" +
-      "VICE_ID_LEVEL_CONTROL_SWITCH\020\001\022\033\n\027DEVICE" +
-      "_ID_ON_OFF_OUTPUT\020\002\022\'\n#DEVICE_ID_LEVEL_C" +
-      "ONTROLLABLE_OUTPUT\020\003\022\034\n\030DEVICE_ID_SCENE_" +
-      "SELECTOR\020\004\022 \n\034DEVICE_ID_CONFIGURATION_TO" +
-      "OL\020\005\022\034\n\030DEVICE_ID_REMOTE_CONTROL\020\006\022 \n\034DE",
-      "VICE_ID_COMBINED_INTERFACE\020\007\022\034\n\030DEVICE_I" +
-      "D_RANGE_EXTENDER\020\010\022 \n\034DEVICE_ID_MAINS_PO" +
-      "WER_OUTLET\020\t\022\027\n\023DEVICE_ID_DOOR_LOCK\020\n\022\"\n" +
-      "\036DEVICE_ID_DOOR_LOCK_CONTROLLER\020\013\022\033\n\027DEV" +
-      "ICE_ID_SIMPLE_SENSOR\020\014\022*\n&DEVICE_ID_CONS" +
-      "UMPTION_AWARENESS_DEVICE\020\r\022\032\n\026DEVICE_ID_" +
-      "HOME_GATEWAY\020P\022\030\n\024DEVICE_ID_SMART_PLUG\020Q" +
-      "\022\031\n\025DEVICE_ID_WHITE_GOODS\020R\022\035\n\031DEVICE_ID" +
-      "_METER_INTERFACE\020S\022\032\n\025DEVICE_ID_TEST_DEV" +
-      "ICE\020\377\001\022\033\n\026DEVICE_ID_ON_OFF_LIGHT\020\200\002\022\035\n\030D",
-      "EVICE_ID_DIMMABLE_LIGHT\020\201\002\022%\n DEVICE_ID_" +
-      "COLORED_DIMMABLE_LIGHT\020\202\002\022\"\n\035DEVICE_ID_O" +
-      "N_OFF_LIGHT_SWITCH\020\203\002\022\034\n\027DEVICE_ID_DIMME" +
-      "R_SWITCH\020\204\002\022\"\n\035DEVICE_ID_COLOR_DIMMER_SW" +
-      "ITCH\020\205\002\022\033\n\026DEVICE_ID_LIGHT_SENSOR\020\206\002\022\037\n\032" +
-      "DEVICE_ID_OCCUPANCY_SENSOR\020\207\002\022\024\n\017DEVICE_" +
-      "ID_SHADE\020\200\004\022\037\n\032DEVICE_ID_SHADE_CONTROLLE" +
-      "R\020\201\004\022%\n DEVICE_ID_WINDOW_COVERING_DEVICE" +
-      "\020\202\004\022)\n$DEVICE_ID_WINDOW_COVERING_CONTROL" +
-      "LER\020\203\004\022#\n\036DEVICE_ID_HEATING_COOLING_UNIT",
-      "\020\200\006\022\031\n\024DEVICE_ID_THERMOSTAT\020\201\006\022!\n\034DEVICE" +
-      "_ID_TEMPERATURE_SENSOR\020\202\006\022\023\n\016DEVICE_ID_P" +
-      "UMP\020\203\006\022\036\n\031DEVICE_ID_PUMP_CONTROLLER\020\204\006\022\036" +
-      "\n\031DEVICE_ID_PRESSURE_SENSOR\020\205\006\022\032\n\025DEVICE" +
-      "_ID_FLOW_SENSOR\020\206\006\022\034\n\027DEVICE_ID_MINI_SPL" +
-      "IT_AC\020\207\006\022/\n*DEVICE_ID_IAS_CONTROL_INDICA" +
-      "TING_EQUIPMENT\020\200\010\022.\n)DEVICE_ID_IAS_ANCIL" +
-      "LARY_CONTROL_EQUIPMENT\020\201\010\022\027\n\022DEVICE_ID_I" +
-      "AS_ZONE\020\202\010\022!\n\034DEVICE_ID_IAS_WARNING_DEVI" +
-      "CE\020\203\010*Z\n\nTargetType\022\035\n\031TARGET_TYPE_NOT_S",
-      "PECIFIED\020\000\022\026\n\022TARGET_TYPE_DEVICE\020\001\022\025\n\021TA" +
-      "RGET_TYPE_GROUP\020\002*\300\002\n\017MeasurementType\022\031\n" +
-      "\025MEASUREMENT_TYPE_NONE\020\000\022\033\n\027MEASUREMENT_" +
-      "TYPE_ACTIVE\020\001\022\035\n\031MEASUREMENT_TYPE_REACTI" +
-      "VE\020\002\022\035\n\031MEASUREMENT_TYPE_APPARENT\020\004\022\034\n\030M" +
-      "EASUREMENT_TYPE_PHASE_A\020\010\022\034\n\030MEASUREMENT" +
-      "_TYPE_PHASE_B\020\020\022\034\n\030MEASUREMENT_TYPE_PHAS" +
-      "E_C\020 \022\027\n\023MEASUREMENT_TYPE_DC\020@\022\037\n\032MEASUR" +
-      "EMENT_TYPE_HARMONICS\020\200\001\022#\n\036MEASUREMENT_T" +
-      "YPE_POWER_QUALITY\020\200\002*\222\003\n\rUnitOfMeasure\022#",
-      "\n\037UNIT_OF_MEASURE_KILO_WATT_HOURS\020\000\022(\n$U" +
-      "NIT_OF_MEASURE_CUBIC_METER_PER_HOUR\020\001\022\'\n" +
-      "#UNIT_OF_MEASURE_CUBIC_FEET_PER_HOUR\020\002\022." +
-      "\n*UNIT_OF_MEASURE_CENTUM_CUBIC_FEET_PER_" +
-      "HOUR\020\003\022\'\n#UNIT_OF_MEASURE_US_GALLONS_PER" +
-      "_HOUR\020\004\022(\n$UNIT_OF_MEASURE_IMP_GALLONS_P" +
-      "ER_HOUR\020\005\022 \n\034UNIT_OF_MEASURE_BTU_PER_HOU" +
-      "R\020\006\022#\n\037UNIT_OF_MEASURE_LITERS_PER_HOUR\020\007" +
-      "\022\035\n\031UNIT_OF_MEASURE_GUAGE_KPA\020\010\022 \n\034UNIT_" +
-      "OF_MEASURE_ABSOLUTE_KPA\020\t*\342\003\n\010ZoneType\022\032",
-      "\n\026ZONE_TYPE_STANDARD_CIE\020\000\022\033\n\027ZONE_TYPE_" +
-      "MOTION_SENSOR\020\r\022\034\n\030ZONE_TYPE_CONTACT_SWI" +
-      "TCH\020\025\022\031\n\025ZONE_TYPE_FIRE_SENSOR\020(\022\032\n\026ZONE" +
-      "_TYPE_WATER_SENSOR\020*\022\030\n\024ZONE_TYPE_GAS_SE" +
-      "NSOR\020+\022\'\n#ZONE_TYPE_PERSONAL_EMERGENCY_D" +
-      "EVICE\020,\022\'\n#ZONE_TYPE_VIBRATION_MOVEMENT_" +
-      "SENSOR\020-\022\035\n\030ZONE_TYPE_REMOTE_CONTROL\020\217\002\022" +
-      "\026\n\021ZONE_TYPE_KEY_FOB\020\225\002\022\025\n\020ZONE_TYPE_KEY" +
-      "PAD\020\235\004\022&\n!ZONE_TYPE_STANDARD_WARNING_DEV" +
-      "ICE\020\245\004\022!\n\034ZONE_TYPE_GLASS_BREAK_SENSOR\020\246",
-      "\004\022 \n\033ZONE_TYPE_SECURITY_REPEATER\020\251\004\022!\n\033Z" +
-      "ONE_TYPE_INVALID_ZONE_TYPE\020\377\377\003*]\n\010ArmGro" +
-      "up\022\022\n\016ARM_GROUP_STAY\020\000\022\023\n\017ARM_GROUP_SLEE" +
-      "P\020\001\022\022\n\016ARM_GROUP_BOTH\020\002\022\024\n\020ARM_GROUP_ALW" +
-      "AYS\020\003*X\n\007ArmMode\022\023\n\017ARM_MODE_DISARM\020\000\022\021\n" +
-      "\rARM_MODE_STAY\020\001\022\022\n\016ARM_MODE_SLEEP\020\002\022\021\n\r" +
-      "ARM_MODE_AWAY\020\003*\371\001\n\013PanelStatus\022\031\n\025PANEL" +
-      "_STATUS_DISARMED\020\000\022\033\n\027PANEL_STATUS_ARMED" +
-      "_STAY\020\001\022\034\n\030PANEL_STATUS_ARMED_SLEEP\020\002\022\033\n" +
-      "\027PANEL_STATUS_ARMED_AWAY\020\003\022\033\n\027PANEL_STAT",
-      "US_EXIT_DELAY\020\004\022\034\n\030PANEL_STATUS_ENTRY_DE" +
-      "LAY\020\005\022!\n\035PANEL_STATUS_NOT_READY_TO_ARM\020\006" +
-      "\022\031\n\025PANEL_STATUS_IN_ALARM\020\007*\323\001\n\013AlarmSta" +
-      "tus\022\031\n\025ALARM_STATUS_NO_ALARM\020\000\022\030\n\024ALARM_" +
-      "STATUS_BURGLAR\020\001\022\025\n\021ALARM_STATUS_FIRE\020\002\022" +
-      "\032\n\026ALARM_STATUS_EMERGENCY\020\003\022\035\n\031ALARM_STA" +
-      "TUS_POLICE_PANIC\020\004\022\033\n\027ALARM_STATUS_FIRE_" +
-      "PANIC\020\005\022 \n\034ALARM_STATUS_EMERGENCY_PANIC\020" +
-      "\006*^\n\rTimelineLevel\022\027\n\023TIMELINE_LEVEL_INF" +
-      "O\020\000\022\032\n\026TIMELINE_LEVEL_WARNING\020\001\022\030\n\024TIMEL",
-      "INE_LEVEL_ALARM\020\002*\222\005\n\014TimelineType\022 \n\034TI" +
-      "MELINE_TYPE_SYSTEM_STARTUP\020\000\022\027\n\023TIMELINE" +
-      "_TYPE_ARMED\020\001\022\032\n\026TIMELINE_TYPE_DISARMED\020" +
-      "\002\022&\n\"TIMELINE_TYPE_IAS_ZONE_BATTERY_LOW\020" +
-      "\003\022 \n\034TIMELINE_TYPE_IAS_ZONE_ALARM\020\004\022!\n\035T" +
-      "IMELINE_TYPE_IAS_ZONE_TAMPER\020\005\022\"\n\036TIMELI" +
-      "NE_TYPE_IAS_ZONE_TROUBLE\020\006\022&\n\"TIMELINE_T" +
-      "YPE_IAS_ZONE_MAINS_FAULT\020\007\0225\n1TIMELINE_T" +
-      "YPE_IAS_ZONE_LACK_OF_SUPERVISION_REPORT\020" +
-      "\010\022)\n%TIMELINE_TYPE_IAS_ZONE_BATTERY_DEFE",
-      "CT\020\t\022\037\n\033TIMELINE_TYPE_TOGGLE_ON_OFF\020\n\022&\n" +
-      "\"TIMELINE_TYPE_ON_OFF_STATE_CHANGED\020\013\022 \n" +
-      "\034TIMELINE_TYPE_CAMERA_OFFLINE\020\014\022/\n+TIMEL" +
-      "INE_TYPE_CAMERA_MOTION_DETECTION_ALARM\020\r" +
-      "\022&\n\"TIMELINE_TYPE_OVERCURRENT_DETECTED\020\016" +
-      "\022&\n\"TIMELINE_TYPE_POWER_SOURCE_CHANGED\020\017" +
-      "\022$\n TIMELINE_TYPE_SYSTEM_BATTERY_LOW\020\020*\266" +
-      "\001\n\016CameraSdStatus\022\035\n\031CAMERA_SD_STATUS_NO" +
-      "_EXIST\020\000\022\035\n\031CAMERA_SD_STATUS_INSERTED\020\001\022" +
-      "\036\n\032CAMERA_SD_STATUS_RECORDING\020\002\022%\n!CAMER",
-      "A_SD_STATUS_FILESYSTEM_ERROR\020\003\022\037\n\033CAMERA" +
-      "_SD_STATUS_FORMATTING\020\004*H\n\016CameraWlanMod" +
-      "e\022\032\n\026CAMERA_WLAN_MODE_INFRA\020\000\022\032\n\026CAMERA_" +
-      "WLAN_MODE_ADHOC\020\001*P\n\021CameraWlanEncrypt\022\034" +
-      "\n\030CAMERA_WLAN_ENCRYPT_OPEN\020\000\022\035\n\031CAMERA_W" +
-      "LAN_ENCRYPT_SHARE\020\001*\355\001\n\022CameraWlanAuthty" +
-      "pe\022\035\n\031CAMERA_WLAN_AUTHTYPE_NONE\020\000\022\034\n\030CAM" +
-      "ERA_WLAN_AUTHTYPE_WEP\020\001\022%\n!CAMERA_WLAN_A" +
-      "UTHTYPE_WPA_PSK_TKIP\020\002\022$\n CAMERA_WLAN_AU" +
-      "THTYPE_WPA_PSK_AES\020\003\022&\n\"CAMERA_WLAN_AUTH",
-      "TYPE_WPA2_PSK_TKIP\020\004\022%\n!CAMERA_WLAN_AUTH" +
-      "TYPE_WPA2_PSK_AES\020\005*W\n\023CameraWlanKeyForm" +
-      "at\022\036\n\032CAMERA_WLAN_KEY_FORMAT_HEX\020\000\022 \n\034CA" +
-      "MERA_WLAN_KEY_FORMAT_ASCII\020\001*Z\n\023CameraWl" +
-      "anKeyLength\022 \n\034CAMERA_WLAN_KEY_LENGTH_64" +
-      "BIT\020\000\022!\n\035CAMERA_WLAN_KEY_LENGTH_128BIT\020\001" +
-      "*@\n\nActionType\022\023\n\017ACTION_TYPE_ARM\020\000\022\035\n\031A" +
-      "CTION_TYPE_TOGGLE_ON_OFF\020\001*3\n\010PlanType\022\023" +
-      "\n\017PLAN_TYPE_TIMER\020\000\022\022\n\016PLAN_TYPE_FAKE\020\001*" +
-      "E\n\007WanMode\022\022\n\016WAN_MODE_PPPOE\020\000\022\021\n\rWAN_MO",
-      "DE_DHCP\020\001\022\023\n\017WAN_MODE_STATIC\020\002*)\n\007WanPor" +
-      "t\022\016\n\nWAN_PORT_1\020\001\022\016\n\nWAN_PORT_2\020\002*3\n\007Wan" +
-      "Type\022\025\n\021WAN_TYPE_INTERNET\020\000\022\021\n\rWAN_TYPE_" +
-      "AREA\020\001*W\n\013WanMacClone\022\026\n\022WAN_MAC_CLONE_N" +
-      "ONE\020\000\022\026\n\022WAN_MAC_CLONE_AUTO\020\001\022\030\n\024WAN_MAC" +
-      "_CLONE_MANUAL\020\002*,\n\010WlanPort\022\017\n\013WLAN_PORT" +
-      "_1\020\001\022\017\n\013WLAN_PORT_2\020\002*_\n\016AccessRuleMode\022" +
-      "\027\n\023ACCESS_RULE_DISABLE\020\000\022\031\n\025ACCESS_RULE_" +
-      "BLACKLIST\020\001\022\031\n\025ACCESS_RULE_WHITELIST\020\002*G" +
-      "\n\tBandWidth\022\022\n\016BAND_WIDTH_20M\020\000\022\022\n\016BAND_",
-      "WIDTH_40M\020\001\022\022\n\016BAND_WIDTH_80M\020\002*P\n\tSamba" +
-      "Mode\022\027\n\023SAMBA_MODE_DISABLED\020\000\022\023\n\017SAMBA_M" +
-      "ODE_USER\020\001\022\025\n\021SAMBA_MODE_PUBLIC\020\002*=\n\nAcc" +
-      "essType\022\025\n\021ACCESS_TYPE_WIRED\020\001\022\030\n\024ACCESS" +
-      "_TYPE_WIRELESS\020\002*6\n\007QosMode\022\023\n\017QOS_MODE_" +
-      "NORMAL\020\001\022\026\n\022QOS_MODE_EXCLUSIVE\020\002*S\n\013AclR" +
-      "uleMode\022\024\n\020ACL_RULE_DISABLE\020\000\022\026\n\022ACL_RUL" +
-      "E_BLACKLIST\020\001\022\026\n\022ACL_RULE_WHITELIST\020\002*c\n" +
-      "\tHddStatus\022\034\n\030HDD_STATUS_NOT_INSTALLED\020\000" +
-      "\022\036\n\032HDD_STATUS_NOT_INITIALIZED\020\001\022\030\n\024HDD_",
-      "STATUS_AVAILABLE\020\002*E\n\017NetworkProtocol\022\030\n" +
-      "\024NETWORK_PROTOCOL_TCP\020\000\022\030\n\024NETWORK_PROTO" +
-      "COL_UDP\020\001*v\n\023SignalStrengthLevel\022\035\n\031SIGN" +
-      "AL_STRENGTH_LEVEL_LOW\020\000\022 \n\034SIGNAL_STRENG" +
-      "TH_LEVEL_MIDDLE\020\001\022\036\n\032SIGNAL_STRENGTH_LEV" +
-      "EL_HIGH\020\002*E\n\nPPPoEState\022\034\n\030PPPOE_STATE_D" +
-      "ISCONNECTED\020\000\022\031\n\025PPPOE_STATE_CONNECTED\020\001" +
-      "*\206\001\n\013QosPriority\022\030\n\024QOS_PRIORITY_HIGHEST" +
-      "\020\000\022\025\n\021QOS_PRIORITY_HIGH\020\001\022\027\n\023QOS_PRIORIT" +
-      "Y_MEDIUM\020\002\022\024\n\020QOS_PRIORITY_LOW\020\003\022\027\n\023QOS_",
-      "PRIORITY_LOWEST\020\004*)\n\005CpuId\022\017\n\013CPU_ID_CPU" +
-      "0\020\000\022\017\n\013CPU_ID_CPU1\020\001*B\n\007VpnType\022\021\n\rVPN_T" +
-      "YPE_NONE\020\000\022\021\n\rVPN_TYPE_PPTP\020\001\022\021\n\rVPN_TYP" +
-      "E_L2TP\020\002"
+      "\030\003 \001(\t\"\266\001\n\007Account\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002" +
+      " \001(\t\022\017\n\007api_key\030\003 \001(\t\022\025\n\rlast_activity\030\004" +
+      " \001(\005\022\022\n\npassphrase\030\005 \001(\t\022\032\n\022passphrase_n" +
+      "ot_set\030\006 \001(\010\0229\n\raccount_group\030\007 \001(\0162\".mr",
+      "tech.smarthome.rpc.AccountGroup\"\234\001\n\006Devi" +
+      "ce\022\n\n\002id\030\001 \001(\005\022.\n\004type\030\002 \001(\0162 .mrtech.sm" +
+      "arthome.rpc.DeviceType\022\r\n\005alias\030\003 \001(\t\022\020\n" +
+      "\010group_id\030\004 \001(\005\022*\n\005group\030\005 \001(\0132\033.mrtech." +
+      "smarthome.rpc.Group*\t\010\200\002\020\200\200\200\200\002\"\215\004\n\014ZigBe" +
+      "eDevice\022\n\n\002id\030\001 \001(\005\022\017\n\007address\030\002 \001(\005\022\023\n\013" +
+      "mac_address\030\003 \001(\004\022\024\n\014link_quality\030\004 \001(\002\022" +
+      "\020\n\010endpoint\030\005 \001(\005\0221\n\tdevice_id\030\006 \001(\0162\036.m" +
+      "rtech.smarthome.rpc.DeviceId\022\023\n\013zcl_vers" +
+      "ion\030\007 \001(\005\022\033\n\023application_version\030\010 \001(\005\022\025",
+      "\n\rstack_version\030\t \001(\005\022\030\n\020hardware_versio" +
+      "n\030\n \001(\005\022\031\n\021manufacturer_name\030\013 \001(\t\022\030\n\020mo" +
+      "del_identifier\030\014 \001(\t\022\021\n\tdate_code\030\r \001(\t\022" +
+      "7\n\014power_source\030\016 \001(\0162!.mrtech.smarthome" +
+      ".rpc.PowerSource\022\036\n\026secondary_power_sour" +
+      "ce\030\017 \001(\010\022\016\n\006online\030\020 \001(\010*\t\010\200\002\020\200\200\200\200\0022Q\n\006d" +
+      "etail\022\034.mrtech.smarthome.rpc.Device\030\200\002 \001" +
+      "(\0132\".mrtech.smarthome.rpc.ZigBeeDevice\"w" +
+      "\n\014OnOffCluster\022\r\n\005state\030\001 \001(\0102X\n\006detail\022" +
+      "\".mrtech.smarthome.rpc.ZigBeeDevice\030\206\200\004 ",
+      "\001(\0132\".mrtech.smarthome.rpc.OnOffCluster\"" +
+      "\367\002\n\034ElectricalMeasurementCluster\022?\n\020meas" +
+      "urement_type\030\001 \001(\0162%.mrtech.smarthome.rp" +
+      "c.MeasurementType\022\021\n\tfrequency\030\002 \001(\005\022\023\n\013" +
+      "rms_voltage\030\003 \001(\001\022\023\n\013rms_current\030\004 \001(\001\022\024" +
+      "\n\014active_power\030\005 \001(\001\022\026\n\016reactive_power\030\006" +
+      " \001(\005\022\026\n\016apparent_power\030\007 \001(\005\022\024\n\014power_fa" +
+      "ctor\030\010 \001(\005\022\023\n\013overcurrent\030\t \001(\0102h\n\006detai" +
+      "l\022\".mrtech.smarthome.rpc.ZigBeeDevice\030\204\226" +
+      "\004 \001(\01322.mrtech.smarthome.rpc.ElectricalM",
+      "easurementCluster\"\322\001\n\025SimpleMeteringClus" +
+      "ter\022#\n\033current_summation_delivered\030\001 \001(\001" +
+      "\0221\n\004unit\030\002 \001(\0162#.mrtech.smarthome.rpc.Un" +
+      "itOfMeasure2a\n\006detail\022\".mrtech.smarthome" +
+      ".rpc.ZigBeeDevice\030\202\216\004 \001(\0132+.mrtech.smart" +
+      "home.rpc.SimpleMeteringCluster\"\242\001\n\035Tempe" +
+      "ratureMeasurementCluster\022\026\n\016measured_val" +
+      "ue\030\001 \001(\0012i\n\006detail\022\".mrtech.smarthome.rp" +
+      "c.ZigBeeDevice\030\202\210\004 \001(\01323.mrtech.smarthom" +
+      "e.rpc.TemperatureMeasurementCluster\"\336\003\n\007",
+      "IasZone\022\n\n\002id\030\001 \001(\005\022\021\n\tdevice_id\030\002 \001(\005\022," +
+      "\n\006device\030\003 \001(\0132\034.mrtech.smarthome.rpc.De" +
+      "vice\022,\n\004type\030\004 \001(\0162\036.mrtech.smarthome.rp" +
+      "c.ZoneType\022\025\n\rprimary_alarm\030\005 \001(\010\022\027\n\017sec" +
+      "ondary_alarm\030\006 \001(\010\022\016\n\006tamper\030\007 \001(\010\022\023\n\013lo" +
+      "w_battery\030\010 \001(\010\022\032\n\022supervision_report\030\t " +
+      "\001(\010\022\026\n\016restore_report\030\n \001(\010\022\017\n\007trouble\030\013" +
+      " \001(\010\022\023\n\013mains_fault\030\014 \001(\010\022\021\n\ttest_mode\030\r" +
+      " \001(\010\022\026\n\016battery_defect\030\016 \001(\010\022\"\n\032lack_of_" +
+      "supervision_report\030\017 \001(\010\022\025\n\rlast_activit",
+      "y\030\020 \001(\005\022\020\n\010bypassed\030\021 \001(\010\0221\n\tarm_group\030\022" +
+      " \001(\0162\036.mrtech.smarthome.rpc.ArmGroup\"\264\001\n" +
+      "\020CieConfiguration\022/\n\010arm_mode\030\001 \001(\0162\035.mr" +
+      "tech.smarthome.rpc.ArmMode\022\033\n\023supervisio" +
+      "n_timeout\030\002 \001(\005\022\027\n\017restore_timeout\030\003 \001(\005" +
+      "\022\023\n\013entry_delay\030\004 \001(\005\022\022\n\nexit_delay\030\005 \001(" +
+      "\005\022\020\n\010passcode\030\006 \001(\t\"\314\001\n\013DeviceQuery\022.\n\004t" +
+      "ype\030\001 \001(\0162 .mrtech.smarthome.rpc.DeviceT" +
+      "ype\022\r\n\005alias\030\002 \001(\t\022\027\n\017filter_by_group\030\003 " +
+      "\001(\010\022\020\n\010group_id\030\004 \001(\005\022\014\n\004page\030\005 \001(\005\022\021\n\tp",
+      "age_size\030\006 \001(\005\0222\n\ndevice_ids\030\007 \003(\0162\036.mrt" +
+      "ech.smarthome.rpc.DeviceId\"Z\n\tZoneQuery\022" +
+      ",\n\004type\030\001 \001(\0162\036.mrtech.smarthome.rpc.Zon" +
+      "eType\022\014\n\004page\030\003 \001(\005\022\021\n\tpage_size\030\004 \001(\005\"\242" +
+      "\001\n\010Timeline\022\n\n\002id\030\001 \001(\005\022\021\n\ttimestamp\030\002 \001" +
+      "(\003\0222\n\005level\030\003 \001(\0162#.mrtech.smarthome.rpc" +
+      ".TimelineLevel\0220\n\004type\030\004 \001(\0162\".mrtech.sm" +
+      "arthome.rpc.TimelineType\022\021\n\tparameter\030\005 " +
+      "\001(\t\"\321\003\n\014CameraDevice\022\n\n\002id\030\001 \001(\005\022\023\n\013devi" +
+      "ce_name\030\002 \001(\t\022\020\n\010deviceid\030\003 \001(\t\022\022\n\nip_ad",
+      "dress\030\004 \001(\t\022\014\n\004port\030\005 \001(\005\022\014\n\004user\030\006 \001(\t\022" +
+      "\020\n\010password\030\007 \001(\t\022\020\n\010new_user\030\010 \001(\t\022\024\n\014n" +
+      "ew_password\030\t \001(\t\022\021\n\tis_online\030\n \001(\010\022\034\n\024" +
+      "local_record_enabled\030\013 \001(\010\022\020\n\010bypassed\030\014" +
+      " \001(\010\0221\n\tarm_group\030\r \001(\0162\036.mrtech.smartho" +
+      "me.rpc.ArmGroup\022\024\n\014motion_alarm\030\016 \001(\010\022\024\n" +
+      "\014is_connected\030\017 \001(\010\022\021\n\tlast_seen\030\020 \001(\004\022\034" +
+      "\n\024authentication_error\030\021 \001(\0102Q\n\006detail\022\034" +
+      ".mrtech.smarthome.rpc.Device\030\201\002 \001(\0132\".mr" +
+      "tech.smarthome.rpc.CameraDevice\"\263\001\n\nCame",
+      "raInfo\0222\n\006status\030\001 \001(\0132\".mrtech.smarthom" +
+      "e.rpc.CameraStatus\0220\n\005param\030\002 \001(\0132!.mrte" +
+      "ch.smarthome.rpc.CameraParam\022?\n\006record\030\003" +
+      " \001(\0132/.mrtech.smarthome.rpc.CameraRecord" +
+      "Configuration\"\245\003\n\014CameraStatus\022\r\n\005alias\030" +
+      "\001 \001(\t\022\020\n\010deviceid\030\002 \001(\t\022\017\n\007sys_ver\030\003 \001(\t" +
+      "\022\013\n\003now\030\004 \001(\005\022\024\n\014alarm_status\030\005 \001(\005\022\023\n\013u" +
+      "pnp_status\030\006 \001(\010\022\021\n\tdnsenable\030\007 \001(\010\022\021\n\to" +
+      "sdenable\030\010 \001(\010\022\024\n\014syswifi_mode\030\t \001(\010\022\013\n\003" +
+      "mac\030\n \001(\t\022\017\n\007wifimac\030\013 \001(\t\022\030\n\020record_sd_",
+      "status\030\014 \001(\005\022\022\n\ndns_status\030\r \001(\005\022\020\n\010inte" +
+      "rnet\030\016 \001(\010\022\021\n\tp2pstatus\030\017 \001(\010\022\022\n\ndevicet" +
+      "ype\030\020 \001(\005\022\025\n\rdevicesubtype\030\021 \001(\005\022\022\n\nexte" +
+      "rnwifi\030\022 \001(\005\022\017\n\007encrypt\030\023 \001(\010\022\r\n\005under\030\024" +
+      " \001(\010\022\017\n\007sdtotal\030\025 \001(\004\022\016\n\006sdfree\030\026 \001(\004\"\227\002" +
+      "\n\013CameraParam\022.\n\004time\030\001 \001(\0132 .mrtech.sma" +
+      "rthome.rpc.CameraTime\0224\n\007network\030\002 \001(\0132#" +
+      ".mrtech.smarthome.rpc.CameraNetwork\022.\n\004w" +
+      "lan\030\003 \001(\0132 .mrtech.smarthome.rpc.CameraW" +
+      "lan\0220\n\005alarm\030\004 \001(\0132!.mrtech.smarthome.rp",
+      "c.CameraAlarm\022@\n\rsnapshotparam\030\005 \001(\0132).m" +
+      "rtech.smarthome.rpc.CameraSnapshotParam\"" +
+      "\302\001\n\031CameraRecordConfiguration\022\026\n\016record_" +
+      "enabled\030\001 \001(\010\022\034\n\024record_cover_enabled\030\002 " +
+      "\001(\010\022\030\n\020sd_card_capacity\030\003 \001(\004\0227\n\tsd_stat" +
+      "us\030\004 \001(\0162$.mrtech.smarthome.rpc.CameraSd" +
+      "Status\022\034\n\024local_record_enabled\030\005 \001(\010\"w\n\030" +
+      "LocalRecordConfiguration\022\"\n\032local_record" +
+      "_cover_enabled\030\001 \001(\010\022\032\n\022record_file_leng" +
+      "th\030\002 \001(\005\022\033\n\023reserved_disk_space\030\003 \001(\005\"S\n",
+      "\013CameraAlarm\022\036\n\026motion_detection_armed\030\001" +
+      " \001(\010\022$\n\034motion_detection_sensitivity\030\002 \001" +
+      "(\005\"N\n\nCameraTime\022\013\n\003now\030\001 \001(\005\022\n\n\002tz\030\002 \001(" +
+      "\005\022\023\n\013ntp_enabled\030\003 \001(\010\022\022\n\nntp_server\030\004 \001" +
+      "(\t\"%\n\021CameraSetSnapshot\022\020\n\010Snapshot\030\001 \001(" +
+      "\t\"\220\006\n\023CameraSnapshotParam\022\022\n\ncameratype\030" +
+      "\001 \001(\005\022\022\n\nresolution\030\002 \001(\005\022\025\n\rresolutions" +
+      "ub\030\003 \001(\005\022\030\n\020resolutionsubsub\030\004 \001(\005\022\017\n\007vb" +
+      "right\030\005 \001(\005\022\021\n\tvcontrast\030\006 \001(\005\022\014\n\004vhue\030\007" +
+      " \001(\005\022\023\n\013vsaturation\030\010 \001(\005\022\021\n\tOSDEnable\030\t",
+      " \001(\010\022\014\n\004mode\030\n \001(\005\022\014\n\004flip\030\013 \001(\005\022\020\n\010enc_" +
+      "size\030\014 \001(\005\022\025\n\renc_framerate\030\r \001(\005\022\024\n\014enc" +
+      "_keyframe\030\016 \001(\005\022\021\n\tenc_quant\030\017 \001(\005\022\024\n\014en" +
+      "c_ratemode\030\020 \001(\005\022\023\n\013enc_bitrate\030\021 \001(\005\022\025\n" +
+      "\renc_main_mode\030\022 \001(\005\022\024\n\014sub_enc_size\030\023 \001" +
+      "(\005\022\031\n\021sub_enc_framerate\030\024 \001(\005\022\030\n\020sub_enc" +
+      "_keyframe\030\025 \001(\005\022\025\n\rsub_enc_quant\030\026 \001(\005\022\030" +
+      "\n\020sub_enc_ratemode\030\027 \001(\005\022\027\n\017sub_enc_bitr" +
+      "ate\030\030 \001(\005\022\030\n\020sub_sub_enc_size\030\031 \001(\005\022\035\n\025s" +
+      "ub_sub_enc_framerate\030\032 \001(\005\022\034\n\024sub_sub_en",
+      "c_keyframe\030\033 \001(\005\022\031\n\021sub_sub_enc_quant\030\034 " +
+      "\001(\005\022\034\n\024sub_sub_enc_ratemode\030\035 \001(\005\022\033\n\023sub" +
+      "_sub_enc_bitrate\030\036 \001(\005\022\r\n\005speed\030\037 \001(\005\022\r\n" +
+      "\005ircut\030  \001(\005\022\020\n\010involume\030! \001(\005\022\021\n\toutvol" +
+      "ume\030\" \001(\005\022\021\n\taudiotype\030# \001(\005\"\211\001\n\rCameraN" +
+      "etwork\022\024\n\014dhcp_enabled\030\001 \001(\010\022\022\n\nip_addre" +
+      "ss\030\002 \001(\t\022\023\n\013subnet_mask\030\003 \001(\t\022\017\n\007gateway" +
+      "\030\004 \001(\t\022\014\n\004dns1\030\005 \001(\t\022\014\n\004dns2\030\006 \001(\t\022\014\n\004po" +
+      "rt\030\007 \001(\005\"\216\003\n\nCameraWlan\022\017\n\007enabled\030\001 \001(\010" +
+      "\022\014\n\004ssid\030\002 \001(\t\0222\n\004mode\030\003 \001(\0162$.mrtech.sm",
+      "arthome.rpc.CameraWlanMode\022@\n\017encryption" +
+      "_type\030\004 \001(\0162\'.mrtech.smarthome.rpc.Camer" +
+      "aWlanEncrypt\022E\n\023authentication_type\030\005 \001(" +
+      "\0162(.mrtech.smarthome.rpc.CameraWlanAutht" +
+      "ype\022A\n\016wep_key_format\030\006 \001(\0162).mrtech.sma" +
+      "rthome.rpc.CameraWlanKeyFormat\022\017\n\007wep_ke" +
+      "y\030\007 \001(\t\022?\n\014wep_key_bits\030\010 \001(\0162).mrtech.s" +
+      "marthome.rpc.CameraWlanKeyLength\022\017\n\007wpa_" +
+      "psk\030\t \001(\t\"\257\001\n\014CameraWifiAp\022\014\n\004ssid\030\001 \001(\t" +
+      "\022\013\n\003mac\030\002 \001(\t\022:\n\010security\030\003 \001(\0162(.mrtech",
+      ".smarthome.rpc.CameraWlanAuthtype\0222\n\004mod" +
+      "e\030\004 \001(\0162$.mrtech.smarthome.rpc.CameraWla" +
+      "nMode\022\024\n\014link_quality\030\005 \001(\002\"\312\001\n\rTimeline" +
+      "Query\022\r\n\005since\030\001 \001(\003\022\r\n\005until\030\002 \001(\003\0222\n\005l" +
+      "evel\030\003 \001(\0162#.mrtech.smarthome.rpc.Timeli" +
+      "neLevel\0220\n\004type\030\004 \001(\0162\".mrtech.smarthome" +
+      ".rpc.TimelineType\022\024\n\014fixed_paging\030\005 \001(\010\022" +
+      "\014\n\004page\030\006 \001(\005\022\021\n\tpage_size\030\007 \001(\005\"\312\002\n\013Pro" +
+      "ductInfo\022\022\n\nhw_version\030\001 \001(\t\022\022\n\nsw_versi" +
+      "on\030\002 \001(\t\022\031\n\021db_schema_version\030\003 \001(\002\022\013\n\003s",
+      "ku\030\004 \001(\t\022\014\n\004imei\030\005 \001(\t\022\020\n\010cloud_id\030\006 \001(\t" +
+      "\022\017\n\007lan_mac\030\007 \001(\t\022\020\n\010wlan_mac\030\010 \001(\t\022\023\n\013w" +
+      "lan_5g_mac\030\t \001(\t\022\022\n\nzigbee_mac\030\n \001(\t\022\022\n\n" +
+      "product_id\030\013 \001(\t\022\030\n\020manufacture_date\030\014 \001" +
+      "(\t\022\027\n\017runtime_version\030\r \001(\t\022\023\n\013web_versi" +
+      "on\030\016 \001(\t\022\022\n\nos_version\030\017 \001(\t\022\017\n\007wan_mac\030" +
+      "\020 \001(\t\"\373\001\n\tComponent\022\014\n\004name\030\001 \001(\t\022\027\n\017cur" +
+      "rent_version\030\002 \001(\t\022\026\n\016latest_version\030\003 \001" +
+      "(\t\022\026\n\016time_published\030\004 \001(\005\022\025\n\rfile_check" +
+      "sum\030\005 \001(\t\022?\n\013file_status\030\006 \001(\0162*.mrtech.",
+      "smarthome.rpc.Component.FileStatus\"?\n\nFi" +
+      "leStatus\022\020\n\014NOT_DOWNLOAD\020\000\022\016\n\nDOWNLOADED" +
+      "\020\001\022\017\n\013RE_DOWNLOAD\020\002\"\374\001\n\tOtaStatus\0222\n\tcom" +
+      "ponent\030\001 \003(\0132\037.mrtech.smarthome.rpc.Comp" +
+      "onent\022>\n\006status\030\002 \001(\0162..mrtech.smarthome" +
+      ".rpc.OtaStatus.OtaAgentStatus\022\027\n\017last_ch" +
+      "eck_time\030\003 \001(\005\"b\n\016OtaAgentStatus\022\010\n\004IDLE" +
+      "\020\000\022\017\n\013DOWNLOADING\020\001\022\024\n\020READY_TO_INSTALL\020" +
+      "\002\022\n\n\006FAILED\020\003\022\023\n\017DOWNLOAD_FAILED\020\004\"!\n\005Gr" +
+      "oup\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\";\n\nGroupQu",
+      "ery\022\014\n\004name\030\001 \001(\t\022\014\n\004page\030\002 \001(\005\022\021\n\tpage_" +
+      "size\030\003 \001(\005\"P\n\005Scene\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030" +
+      "\002 \001(\t\022-\n\007actions\030\003 \003(\0132\034.mrtech.smarthom" +
+      "e.rpc.Action\"\226\001\n\006Action\022\n\n\002id\030\001 \001(\005\022\020\n\010s" +
+      "cene_id\030\002 \001(\005\022\017\n\007plan_id\030\003 \001(\005\0220\n\006action" +
+      "\030\004 \001(\0162 .mrtech.smarthome.rpc.ActionType" +
+      "\022\022\n\nparameters\030\005 \001(\t\022\027\n\017execution_order\030" +
+      "\006 \001(\005\";\n\nSceneQuery\022\014\n\004name\030\001 \001(\t\022\014\n\004pag" +
+      "e\030\002 \001(\005\022\021\n\tpage_size\030\003 \001(\005\":\n\tPlanQuery\022" +
+      "\014\n\004name\030\001 \001(\t\022\014\n\004page\030\002 \001(\005\022\021\n\tpage_size",
+      "\030\003 \001(\005\"\271\001\n\004Plan\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(" +
+      "\t\022\025\n\rlast_activity\030\003 \001(\005\022\017\n\007enabled\030\004 \001(" +
+      "\010\022,\n\004type\030\005 \001(\0162\036.mrtech.smarthome.rpc.P" +
+      "lanType\022\022\n\nparameters\030\006 \001(\t\022-\n\007actions\030\007" +
+      " \003(\0132\034.mrtech.smarthome.rpc.Action\"\204\004\n\tW" +
+      "anConfig\022/\n\010wan_mode\030\001 \001(\0162\035.mrtech.smar" +
+      "thome.rpc.WanMode\022\017\n\007account\030\002 \001(\t\022\020\n\010pa" +
+      "ssword\030\003 \001(\t\022\022\n\nip_address\030\004 \001(\t\022\023\n\013subn" +
+      "et_mask\030\005 \001(\t\022\017\n\007gateway\030\006 \001(\t\022\022\n\nstatic" +
+      "_dns\030\007 \001(\010\022\023\n\013primary_dns\030\010 \001(\t\022\025\n\rsecon",
+      "dary_dns\030\t \001(\t\022+\n\004type\030\n \001(\0162\035.mrtech.sm" +
+      "arthome.rpc.WanType\0225\n\nclone_mode\030\013 \001(\0162" +
+      "!.mrtech.smarthome.rpc.WanMacClone\022\021\n\tcl" +
+      "one_mac\030\014 \001(\t\022\016\n\006domain\030\r \001(\t\022\024\n\014service" +
+      "_name\030\016 \001(\t\022\035\n\025enable_dos_protection\030\017 \001" +
+      "(\010\022\022\n\nenable_dmz\030\020 \001(\010\022\020\n\010dmz_host\030\021 \001(\t" +
+      "\022\031\n\021enable_igmp_proxy\030\022 \001(\010\022\013\n\003mtu\030\023 \001(\005" +
+      "\022\013\n\003mru\030\024 \001(\005\022\022\n\nallow_ping\030\025 \001(\010\"\341\002\n\nWl" +
+      "anConfig\022\014\n\004ssid\030\001 \001(\t\022\026\n\016ssid_broadcast" +
+      "\030\002 \001(\010\022:\n\016operation_mode\030\003 \001(\0162\".mrtech.",
+      "smarthome.rpc.WirelessMode\0226\n\010security\030\004" +
+      " \003(\0132$.mrtech.smarthome.rpc.EncryptionMo" +
+      "de\022\022\n\npassphrase\030\005 \001(\t\022\017\n\007channel\030\006 \001(\005\022" +
+      "9\n\013access_rule\030\007 \001(\0162$.mrtech.smarthome." +
+      "rpc.AccessRuleMode\022\017\n\007enabled\030\010 \001(\010\0223\n\nb" +
+      "and_width\030\t \001(\0162\037.mrtech.smarthome.rpc.B" +
+      "andWidth\022\023\n\013wps_enabled\030\n \001(\010\"\252\001\n\017GuestW" +
+      "lanConfig\022\017\n\007enabled\030\001 \001(\010\022\024\n\014local_acce" +
+      "ss\030\002 \001(\010\022\014\n\004ssid\030\003 \001(\t\022\026\n\016ssid_broadcast" +
+      "\030\004 \001(\010\0226\n\010security\030\005 \003(\0132$.mrtech.smarth",
+      "ome.rpc.EncryptionMode\022\022\n\npassphrase\030\006 \001" +
+      "(\t\"\\\n\013SambaConfig\022-\n\004mode\030\001 \001(\0162\037.mrtech" +
+      ".smarthome.rpc.SambaMode\022\014\n\004user\030\002 \001(\t\022\020" +
+      "\n\010password\030\003 \001(\t\"\303\001\n\rNetworkDevice\022\013\n\003ma" +
+      "c\030\001 \001(\t\022\n\n\002ip\030\002 \001(\t\022\017\n\007netbios\030\003 \001(\t\022.\n\004" +
+      "type\030\004 \001(\0162 .mrtech.smarthome.rpc.Access" +
+      "Type\022,\n\004port\030\005 \001(\0162\036.mrtech.smarthome.rp" +
+      "c.WlanPort\022\023\n\013upload_rate\030\006 \001(\004\022\025\n\rdownl" +
+      "oad_rate\030\007 \001(\004\"\247\001\n\023BandwidthTestResult\022\017" +
+      "\n\007testing\030\001 \001(\010\022\032\n\022download_bandwidth\030\002 ",
+      "\001(\004\022\030\n\020upload_bandwidth\030\003 \001(\004\022\r\n\005delay\030\004" +
+      " \001(\005\022\017\n\007carrier\030\005 \001(\t\022\020\n\010location\030\006 \001(\t\022" +
+      "\027\n\017server_location\030\007 \001(\t\"c\n\007HddInfo\022/\n\006s" +
+      "tatus\030\001 \001(\0162\037.mrtech.smarthome.rpc.HddSt" +
+      "atus\022\023\n\013total_space\030\002 \001(\004\022\022\n\nused_space\030" +
+      "\003 \001(\004\"|\n\nPortFilter\0227\n\010protocol\030\001 \001(\0162%." +
+      "mrtech.smarthome.rpc.NetworkProtocol\022\022\n\n" +
+      "start_port\030\002 \001(\r\022\020\n\010end_port\030\003 \001(\r\022\017\n\007en" +
+      "abled\030\004 \001(\010\"\220\001\n\013PortForward\022\020\n\010wan_port\030" +
+      "\001 \001(\r\022\020\n\010lan_port\030\002 \001(\r\022\023\n\013lan_address\030\003",
+      " \001(\t\0227\n\010protocol\030\004 \001(\0162%.mrtech.smarthom" +
+      "e.rpc.NetworkProtocol\022\017\n\007enabled\030\005 \001(\010\"\200" +
+      "\010\n\013NetworkInfo\022\026\n\016lan_ip_address\030\001 \001(\t\022\027" +
+      "\n\017lan_subnet_mask\030\002 \001(\t\022/\n\010wan_mode\030\003 \001(" +
+      "\0162\035.mrtech.smarthome.rpc.WanMode\022:\n\020wan_" +
+      "pppoe_status\030\004 \001(\0162 .mrtech.smarthome.rp" +
+      "c.PPPoEState\022\026\n\016wan_ip_address\030\005 \001(\t\022\027\n\017" +
+      "wan_subnet_mask\030\006 \001(\t\022\023\n\013wan_gateway\030\007 \001" +
+      "(\t\022\027\n\017wan_primary_dns\030\010 \001(\t\022\031\n\021wan_secon" +
+      "dary_dns\030\t \001(\t\022/\n\005modem\030\n \001(\0132 .mrtech.s",
+      "marthome.rpc.MobileInfo\022\026\n\016wifi_2_4g_ssi" +
+      "d\030\013 \001(\t\022@\n\022wifi_2_4g_security\030\014 \003(\0132$.mr" +
+      "tech.smarthome.rpc.EncryptionMode\022\031\n\021wif" +
+      "i_2_4g_channel\030\r \001(\005\022<\n\023wifi_2_4g_bandwi" +
+      "dth\030\016 \001(\0162\037.mrtech.smarthome.rpc.BandWid" +
+      "th\022\034\n\024guest_wifi_2_4g_ssid\030\017 \001(\t\022F\n\030gues" +
+      "t_wifi_2_4g_security\030\020 \003(\0132$.mrtech.smar" +
+      "thome.rpc.EncryptionMode\022\026\n\016wifi_5_8g_ss" +
+      "id\030\021 \001(\t\022@\n\022wifi_5_8g_security\030\022 \003(\0132$.m" +
+      "rtech.smarthome.rpc.EncryptionMode\022\031\n\021wi",
+      "fi_5_8g_channel\030\023 \001(\005\022<\n\023wifi_5_8g_bandw" +
+      "idth\030\024 \001(\0162\037.mrtech.smarthome.rpc.BandWi" +
+      "dth\022\034\n\024guest_wifi_5_8g_ssid\030\025 \001(\t\022F\n\030gue" +
+      "st_wifi_5_8g_security\030\026 \003(\0132$.mrtech.sma" +
+      "rthome.rpc.EncryptionMode\022\031\n\021wifi_2_4g_e" +
+      "nabled\030\027 \001(\010\022\037\n\027guest_wifi_2_4g_enabled\030" +
+      "\030 \001(\010\022\031\n\021wifi_5_8g_enabled\030\031 \001(\010\022\037\n\027gues" +
+      "t_wifi_5_8g_enabled\030\032 \001(\010\"\324\001\n\tQosConfig\022" +
+      "\017\n\007enabled\030\001 \001(\010\022+\n\004mode\030\002 \001(\0162\035.mrtech." +
+      "smarthome.rpc.QosMode\022\025\n\rexclusive_mac\030\003",
+      " \001(\t\022\035\n\025max_inbound_bandwidth\030\004 \001(\005\022\036\n\026m" +
+      "ax_outbound_bandwidth\030\005 \001(\005\0223\n\010priority\030" +
+      "\006 \001(\0162!.mrtech.smarthome.rpc.QosPriority" +
+      "\"S\n\007QosRule\0223\n\010priority\030\001 \001(\0162!.mrtech.s" +
+      "marthome.rpc.QosPriority\022\023\n\013mac_address\030" +
+      "\002 \001(\t\"Q\n\014GroupSummary\022*\n\005group\030\001 \001(\0132\033.m" +
+      "rtech.smarthome.rpc.Group\022\025\n\rdevice_mode" +
+      "ls\030\002 \003(\t\"l\n\007CpuInfo\022\'\n\002id\030\001 \001(\0162\033.mrtech" +
+      ".smarthome.rpc.CpuId\022\014\n\004user\030\002 \001(\004\022\016\n\006ke" +
+      "rnel\030\003 \001(\004\022\014\n\004nice\030\004 \001(\004\022\014\n\004idle\030\005 \001(\004\"1",
+      "\n\nMemoryInfo\022\021\n\ttotal_ram\030\001 \001(\004\022\020\n\010free_" +
+      "ram\030\002 \001(\004\"<\n\023InternalStorageInfo\022\022\n\ntota" +
+      "l_size\030\001 \001(\004\022\021\n\tfree_size\030\002 \001(\004\"\257\001\n\nSyst" +
+      "emInfo\022*\n\003cpu\030\001 \003(\0132\035.mrtech.smarthome.r" +
+      "pc.CpuInfo\0220\n\006memory\030\002 \001(\0132 .mrtech.smar" +
+      "thome.rpc.MemoryInfo\022C\n\020internal_storage" +
+      "\030\003 \001(\0132).mrtech.smarthome.rpc.InternalSt" +
+      "orageInfo\"N\n\020DeviceStatistics\022\026\n\016zigbee_" +
+      "devices\030\001 \001(\r\022\021\n\tias_zones\030\002 \001(\r\022\017\n\007came" +
+      "ras\030\003 \001(\r\"\230\001\n\tVpnConfig\022+\n\004type\030\001 \001(\0162\035.",
+      "mrtech.smarthome.rpc.VpnType\022.\n\004pptp\030\002 \001" +
+      "(\0132 .mrtech.smarthome.rpc.PptpConfig\022.\n\004" +
+      "l2tp\030\003 \001(\0132 .mrtech.smarthome.rpc.L2tpCo" +
+      "nfig\"j\n\nPptpConfig\022\017\n\007account\030\001 \001(\t\022\022\n\np" +
+      "assphrase\030\002 \001(\t\022\023\n\013server_host\030\003 \001(\t\022\023\n\013" +
+      "enable_mppe\030\004 \001(\010\022\r\n\005route\030\005 \001(\t\"~\n\nL2tp" +
+      "Config\022\017\n\007account\030\001 \001(\t\022\022\n\npassphrase\030\002 " +
+      "\001(\t\022\023\n\013server_host\030\003 \001(\t\022\024\n\014enable_ipsec" +
+      "\030\004 \001(\010\022\021\n\tipsec_psk\030\005 \001(\t\022\r\n\005route\030\006 \001(\t" +
+      "\"M\n\016InfraredOpCode\022\n\n\002id\030\001 \001(\005\022\021\n\tdevice",
+      "_id\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\016\n\006opcode\030\004 \001(\014\"" +
+      "\231\002\n\016InfraredDevice\022\n\n\002id\030\001 \001(\005\0226\n\004type\030\002" +
+      " \001(\0162(.mrtech.smarthome.rpc.InfraredDevi" +
+      "ceType\022\022\n\nindex_code\030\003 \001(\r\022\030\n\020ir_control" +
+      "ler_id\030\004 \001(\005\0225\n\007opcodes\030\005 \003(\0132$.mrtech.s" +
+      "marthome.rpc.InfraredOpCode*\t\010\200\002\020\200\200\200\200\0022S" +
+      "\n\006detail\022\034.mrtech.smarthome.rpc.Device\030\202" +
+      "\002 \001(\0132$.mrtech.smarthome.rpc.InfraredDev" +
+      "ice\"\231\001\n\014MatchSession\022\030\n\020ir_controller_id" +
+      "\030\001 \001(\005\0226\n\004type\030\002 \001(\0162(.mrtech.smarthome.",
+      "rpc.InfraredDeviceType\0227\n\005level\030\003 \001(\0162(." +
+      "mrtech.smarthome.rpc.InfraredMatchLevel\"" +
+      "\237\004\n\017InfraredCommand\022F\n\017air_conditioner\030\001" +
+      " \001(\0132+.mrtech.smarthome.rpc.AirCondition" +
+      "erCommandH\000\022<\n\ndvd_player\030\002 \001(\0162&.mrtech" +
+      ".smarthome.rpc.DvdPlayerCommandH\000\022B\n\rip_" +
+      "television\030\003 \001(\0162).mrtech.smarthome.rpc." +
+      "IpTelevisionCommandH\000\022<\n\nsettop_box\030\004 \001(" +
+      "\0162&.mrtech.smarthome.rpc.SettopBoxComman" +
+      "dH\000\022=\n\ntelevision\030\005 \001(\0162\'.mrtech.smartho",
+      "me.rpc.TelevisionCommandH\000\022@\n\014electric_f" +
+      "an\030\006 \001(\0162(.mrtech.smarthome.rpc.Electric" +
+      "FanCommandH\000\022;\n\tprojector\030\007 \001(\0162&.mrtech" +
+      ".smarthome.rpc.ProjectorCommandH\000\022;\n\text" +
+      "ension\030\010 \001(\0132&.mrtech.smarthome.rpc.Exte" +
+      "nsionCommandH\000B\t\n\007command\"A\n\020ExtensionCo" +
+      "mmand\022\023\n\topcode_id\030\001 \001(\005H\000\022\020\n\006opcode\030\002 \001" +
+      "(\014H\000B\006\n\004data\"\306\002\n\025AirConditionerCommand\022\023" +
+      "\n\013temperature\030\001 \001(\005\022E\n\014blowing_rate\030\002 \001(" +
+      "\0162/.mrtech.smarthome.rpc.AirConditionerB",
+      "lowingRate\022=\n\010wind_dir\030\003 \001(\0162+.mrtech.sm" +
+      "arthome.rpc.AirConditionerWindDir\022\025\n\raut" +
+      "o_wind_dir\030\004 \001(\010\022\r\n\005power\030\005 \001(\010\0224\n\003key\030\006" +
+      " \001(\0162\'.mrtech.smarthome.rpc.AirCondition" +
+      "erKey\0226\n\004mode\030\007 \001(\0162(.mrtech.smarthome.r" +
+      "pc.AirConditionerMode\"\312\001\n\020IrControllerCo" +
+      "de\022\034\n\024air_conditioner_data\030\001 \003(\014\022\027\n\017dvd_" +
+      "player_data\030\002 \003(\014\022\032\n\022ip_television_data\030" +
+      "\003 \003(\014\022\027\n\017settop_box_data\030\004 \003(\014\022\027\n\017televi" +
+      "sion_data\030\005 \003(\014\022\031\n\021electric_fan_data\030\006 \003",
+      "(\014\022\026\n\016projector_data\030\007 \003(\014\"\220\003\n\013IrMatchCo" +
+      "de\0229\n\017air_conditioner\030\001 \002(\0132 .mrtech.sma" +
+      "rthome.rpc.IrMatchObj\0224\n\ndvd_player\030\002 \002(" +
+      "\0132 .mrtech.smarthome.rpc.IrMatchObj\0227\n\ri" +
+      "p_television\030\003 \002(\0132 .mrtech.smarthome.rp" +
+      "c.IrMatchObj\0224\n\nsettop_box\030\004 \002(\0132 .mrtec" +
+      "h.smarthome.rpc.IrMatchObj\0224\n\ntelevision" +
+      "\030\005 \002(\0132 .mrtech.smarthome.rpc.IrMatchObj" +
+      "\0226\n\014electric_fan\030\006 \002(\0132 .mrtech.smarthom" +
+      "e.rpc.IrMatchObj\0223\n\tprojector\030\007 \002(\0132 .mr",
+      "tech.smarthome.rpc.IrMatchObj\"\211\001\n\nIrMatc" +
+      "hObj\022\022\n\nmatch_code\030\001 \003(\014\0228\n\nindex_code\030\002" +
+      " \003(\0132$.mrtech.smarthome.rpc.IndexCodeTab" +
+      "le\022-\n\004name\030\003 \003(\0132\037.mrtech.smarthome.rpc." +
+      "NameTable\"\036\n\016IndexCodeTable\022\014\n\004data\030\001 \003(" +
+      "\r\"-\n\tNameTable\022\017\n\007ch_name\030\001 \002(\014\022\017\n\007en_na" +
+      "me\030\002 \002(\014\"(\n\tBrandList\022\014\n\004name\030\001 \003(\t\022\r\n\005i" +
+      "ndex\030\002 \003(\005*<\n\rSeverityLevel\022\010\n\004INFO\020\001\022\013\n" +
+      "\007WARNING\020\002\022\t\n\005ERROR\020\003\022\t\n\005FATAL\020\004*\214\001\n\rBat" +
+      "teryStatus\022\035\n\031BATTERY_STATUS_NO_BATTERY\020",
+      "\000\022\033\n\027BATTERY_STATUS_CHARGING\020\001\022\036\n\032BATTER" +
+      "Y_STATUS_DISCHARGING\020\002\022\037\n\033BATTERY_STATUS" +
+      "_NOT_CHARGING\020\003*\265\001\n\rServiceStatus\022\035\n\031SER" +
+      "VICE_STATUS_NO_SERVICE\020\000\022\035\n\031SERVICE_STAT" +
+      "US_RESTRICTED\020\001\022\030\n\024SERVICE_STATUS_VALID\020" +
+      "\002\022.\n*SERVICE_STATUS_RESTRICTED_REGIONAL_" +
+      "SERVICE\020\003\022\034\n\030SERVICE_STATUS_HIBERNATE\020\004*" +
+      "\263\001\n\rServiceDomain\022\035\n\031SERVICE_DOMAIN_NO_S" +
+      "ERVICE\020\000\022\025\n\021SERVICE_DOMAIN_CS\020\001\022\025\n\021SERVI" +
+      "CE_DOMAIN_PS\020\002\022\030\n\024SERVICE_DOMAIN_PS_CS\020\003",
+      "\022!\n\035SERVICE_DOMAIN_NOT_REGISTERED\020\004\022\030\n\023S" +
+      "ERVICE_DOMAIN_CDMA\020\377\001*\237\002\n\rOperationMode\022" +
+      "\035\n\031OPERATION_MODE_NO_SERVICE\020\000\022\027\n\023OPERAT" +
+      "ION_MODE_AMPS\020\001\022\027\n\023OPERATION_MODE_CDMA\020\002" +
+      "\022\033\n\027OPERATION_MODE_GSM_GPRS\020\003\022\026\n\022OPERATI" +
+      "ON_MODE_HDR\020\004\022\030\n\024OPERATION_MODE_WCDMA\020\005\022" +
+      "\026\n\022OPERATION_MODE_GPS\020\006\022\034\n\030OPERATION_MOD" +
+      "E_GSM_WCDMA\020\007\022\033\n\027OPERATION_MODE_CDMA_HDR" +
+      "\020\010\022\033\n\027OPERATION_MODE_TD_SCDMA\020\017*\265\001\n\010SimS" +
+      "tate\022\025\n\021SIM_STATE_INVALID\020\000\022\023\n\017SIM_STATE",
+      "_VALID\020\001\022\030\n\024SIM_STATE_CS_INVALID\020\002\022\030\n\024SI" +
+      "M_STATE_PS_INVALID\020\003\022\033\n\027SIM_STATE_PS_CS_" +
+      "INVALID\020\004\022\025\n\020SIM_STATE_ROMSIM\020\360\001\022\025\n\020SIM_" +
+      "STATE_NO_SIM\020\372\001*\205\005\n\020SubOperationMode\022!\n\035" +
+      "SUB_OPERATION_MODE_NO_SERVICE\020\000\022\032\n\026SUB_O" +
+      "PERATION_MODE_GSM\020\001\022\033\n\027SUB_OPERATION_MOD" +
+      "E_GPRS\020\002\022\033\n\027SUB_OPERATION_MODE_EDGE\020\003\022\034\n" +
+      "\030SUB_OPERATION_MODE_WCDMA\020\004\022\034\n\030SUB_OPERA" +
+      "TION_MODE_HSDPA\020\005\022\034\n\030SUB_OPERATION_MODE_" +
+      "HSUPA\020\006\022\"\n\036SUB_OPERATION_MODE_HSUPA_HSDP",
+      "A\020\007\022\037\n\033SUB_OPERATION_MODE_TD_SCDMA\020\010\022 \n\034" +
+      "SUB_OPERATION_MODE_HSPA_PLUS\020\t\022\035\n\031SUB_OP" +
+      "ERATION_MODE_EVDO_0\020\n\022\035\n\031SUB_OPERATION_M" +
+      "ODE_EVDO_A\020\013\022\035\n\031SUB_OPERATION_MODE_EVDO_" +
+      "B\020\014\022\"\n\036SUB_OPERATION_MODE_CDMA2000_1X\020\r\022" +
+      "\032\n\026SUB_OPERATION_MODE_UMB\020\016\022\'\n#SUB_OPERA" +
+      "TION_MODE_CDMA2000_1X_EVDV\020\017\022\"\n\036SUB_OPER" +
+      "ATION_MODE_CDMA2000_3X\020\020\022&\n\"SUB_OPERATIO" +
+      "N_MODE_HSPA_PLUS_64QAM\020\021\022%\n!SUB_OPERATIO" +
+      "N_MODE_HSPA_PLUS_MIMO\020\022*\321\001\n\014WirelessMode",
+      "\022\023\n\017WIRELESS_MODE_B\020\000\022\023\n\017WIRELESS_MODE_G" +
+      "\020\001\022\023\n\017WIRELESS_MODE_N\020\002\022\024\n\020WIRELESS_MODE" +
+      "_BG\020\003\022\024\n\020WIRELESS_MODE_NG\020\004\022\025\n\021WIRELESS_" +
+      "MODE_BGN\020\005\022\023\n\017WIRELESS_MODE_A\020\006\022\024\n\020WIREL" +
+      "ESS_MODE_AN\020\007\022\024\n\020WIRELESS_MODE_AC\020\010*P\n\nW" +
+      "paVersion\022\023\n\017WPA_VERSION_WPA\020\000\022\024\n\020WPA_VE" +
+      "RSION_WPA2\020\001\022\027\n\023WPA_VERSION_UNKNOWN\020\002*E\n" +
+      "\rKeyManagement\022\026\n\022KEY_MANAGEMENT_PSK\020\000\022\034" +
+      "\n\030KEY_MANAGEMENT_IEEE8021X\020\001*H\n\017PhoneNum" +
+      "berType\022\031\n\025PHONE_NUMBER_TYPE_SMS\020\000\022\032\n\026PH",
+      "ONE_NUMBER_TYPE_DIAL\020\001*I\n\014AccountGroup\022\037" +
+      "\n\033ACCOUNT_GROUP_ADMINISTRATOR\020\000\022\030\n\024ACCOU" +
+      "NT_GROUP_MEMBER\020\001*V\n\nDeviceType\022\026\n\022DEVIC" +
+      "E_TYPE_ZIGBEE\020\000\022\026\n\022DEVICE_TYPE_CAMERA\020\001\022" +
+      "\030\n\024DEVICE_TYPE_INFRARED\020\002*\344\001\n\013PowerSourc" +
+      "e\022\030\n\024POWER_SOURCE_UNKNOWN\020\000\022\036\n\032POWER_SOU" +
+      "RCE_MAINS_1_PHASE\020\001\022\036\n\032POWER_SOURCE_MAIN" +
+      "S_3_PHASE\020\002\022\030\n\024POWER_SOURCE_BATTERY\020\003\022\023\n" +
+      "\017POWER_SOURCE_DC\020\004\022&\n\"POWER_SOURCE_EMERG" +
+      "_MAINS_CONST_PWR\020\005\022$\n POWER_SOURCE_EMERG",
+      "_MAINS_XFER_SW\020\006*\245\013\n\010DeviceId\022\033\n\027DEVICE_" +
+      "ID_ON_OFF_SWITCH\020\000\022\"\n\036DEVICE_ID_LEVEL_CO" +
+      "NTROL_SWITCH\020\001\022\033\n\027DEVICE_ID_ON_OFF_OUTPU" +
+      "T\020\002\022\'\n#DEVICE_ID_LEVEL_CONTROLLABLE_OUTP" +
+      "UT\020\003\022\034\n\030DEVICE_ID_SCENE_SELECTOR\020\004\022 \n\034DE" +
+      "VICE_ID_CONFIGURATION_TOOL\020\005\022\034\n\030DEVICE_I" +
+      "D_REMOTE_CONTROL\020\006\022 \n\034DEVICE_ID_COMBINED" +
+      "_INTERFACE\020\007\022\034\n\030DEVICE_ID_RANGE_EXTENDER" +
+      "\020\010\022 \n\034DEVICE_ID_MAINS_POWER_OUTLET\020\t\022\027\n\023" +
+      "DEVICE_ID_DOOR_LOCK\020\n\022\"\n\036DEVICE_ID_DOOR_",
+      "LOCK_CONTROLLER\020\013\022\033\n\027DEVICE_ID_SIMPLE_SE" +
+      "NSOR\020\014\022*\n&DEVICE_ID_CONSUMPTION_AWARENES" +
+      "S_DEVICE\020\r\022\032\n\026DEVICE_ID_HOME_GATEWAY\020P\022\030" +
+      "\n\024DEVICE_ID_SMART_PLUG\020Q\022\031\n\025DEVICE_ID_WH" +
+      "ITE_GOODS\020R\022\035\n\031DEVICE_ID_METER_INTERFACE" +
+      "\020S\022!\n\035DEVICE_ID_INFRARED_CONTROLLER\020T\022\032\n" +
+      "\025DEVICE_ID_TEST_DEVICE\020\377\001\022\033\n\026DEVICE_ID_O" +
+      "N_OFF_LIGHT\020\200\002\022\035\n\030DEVICE_ID_DIMMABLE_LIG" +
+      "HT\020\201\002\022%\n DEVICE_ID_COLORED_DIMMABLE_LIGH" +
+      "T\020\202\002\022\"\n\035DEVICE_ID_ON_OFF_LIGHT_SWITCH\020\203\002",
+      "\022\034\n\027DEVICE_ID_DIMMER_SWITCH\020\204\002\022\"\n\035DEVICE" +
+      "_ID_COLOR_DIMMER_SWITCH\020\205\002\022\033\n\026DEVICE_ID_" +
+      "LIGHT_SENSOR\020\206\002\022\037\n\032DEVICE_ID_OCCUPANCY_S" +
+      "ENSOR\020\207\002\022\024\n\017DEVICE_ID_SHADE\020\200\004\022\037\n\032DEVICE" +
+      "_ID_SHADE_CONTROLLER\020\201\004\022%\n DEVICE_ID_WIN" +
+      "DOW_COVERING_DEVICE\020\202\004\022)\n$DEVICE_ID_WIND" +
+      "OW_COVERING_CONTROLLER\020\203\004\022#\n\036DEVICE_ID_H" +
+      "EATING_COOLING_UNIT\020\200\006\022\031\n\024DEVICE_ID_THER" +
+      "MOSTAT\020\201\006\022!\n\034DEVICE_ID_TEMPERATURE_SENSO" +
+      "R\020\202\006\022\023\n\016DEVICE_ID_PUMP\020\203\006\022\036\n\031DEVICE_ID_P",
+      "UMP_CONTROLLER\020\204\006\022\036\n\031DEVICE_ID_PRESSURE_" +
+      "SENSOR\020\205\006\022\032\n\025DEVICE_ID_FLOW_SENSOR\020\206\006\022\034\n" +
+      "\027DEVICE_ID_MINI_SPLIT_AC\020\207\006\022/\n*DEVICE_ID" +
+      "_IAS_CONTROL_INDICATING_EQUIPMENT\020\200\010\022.\n)" +
+      "DEVICE_ID_IAS_ANCILLARY_CONTROL_EQUIPMEN" +
+      "T\020\201\010\022\027\n\022DEVICE_ID_IAS_ZONE\020\202\010\022!\n\034DEVICE_" +
+      "ID_IAS_WARNING_DEVICE\020\203\010*Z\n\nTargetType\022\035" +
+      "\n\031TARGET_TYPE_NOT_SPECIFIED\020\000\022\026\n\022TARGET_" +
+      "TYPE_DEVICE\020\001\022\025\n\021TARGET_TYPE_GROUP\020\002*\300\002\n" +
+      "\017MeasurementType\022\031\n\025MEASUREMENT_TYPE_NON",
+      "E\020\000\022\033\n\027MEASUREMENT_TYPE_ACTIVE\020\001\022\035\n\031MEAS" +
+      "UREMENT_TYPE_REACTIVE\020\002\022\035\n\031MEASUREMENT_T" +
+      "YPE_APPARENT\020\004\022\034\n\030MEASUREMENT_TYPE_PHASE" +
+      "_A\020\010\022\034\n\030MEASUREMENT_TYPE_PHASE_B\020\020\022\034\n\030ME" +
+      "ASUREMENT_TYPE_PHASE_C\020 \022\027\n\023MEASUREMENT_" +
+      "TYPE_DC\020@\022\037\n\032MEASUREMENT_TYPE_HARMONICS\020" +
+      "\200\001\022#\n\036MEASUREMENT_TYPE_POWER_QUALITY\020\200\002*" +
+      "\222\003\n\rUnitOfMeasure\022#\n\037UNIT_OF_MEASURE_KIL" +
+      "O_WATT_HOURS\020\000\022(\n$UNIT_OF_MEASURE_CUBIC_" +
+      "METER_PER_HOUR\020\001\022\'\n#UNIT_OF_MEASURE_CUBI",
+      "C_FEET_PER_HOUR\020\002\022.\n*UNIT_OF_MEASURE_CEN" +
+      "TUM_CUBIC_FEET_PER_HOUR\020\003\022\'\n#UNIT_OF_MEA" +
+      "SURE_US_GALLONS_PER_HOUR\020\004\022(\n$UNIT_OF_ME" +
+      "ASURE_IMP_GALLONS_PER_HOUR\020\005\022 \n\034UNIT_OF_" +
+      "MEASURE_BTU_PER_HOUR\020\006\022#\n\037UNIT_OF_MEASUR" +
+      "E_LITERS_PER_HOUR\020\007\022\035\n\031UNIT_OF_MEASURE_G" +
+      "UAGE_KPA\020\010\022 \n\034UNIT_OF_MEASURE_ABSOLUTE_K" +
+      "PA\020\t*\342\003\n\010ZoneType\022\032\n\026ZONE_TYPE_STANDARD_" +
+      "CIE\020\000\022\033\n\027ZONE_TYPE_MOTION_SENSOR\020\r\022\034\n\030ZO" +
+      "NE_TYPE_CONTACT_SWITCH\020\025\022\031\n\025ZONE_TYPE_FI",
+      "RE_SENSOR\020(\022\032\n\026ZONE_TYPE_WATER_SENSOR\020*\022" +
+      "\030\n\024ZONE_TYPE_GAS_SENSOR\020+\022\'\n#ZONE_TYPE_P" +
+      "ERSONAL_EMERGENCY_DEVICE\020,\022\'\n#ZONE_TYPE_" +
+      "VIBRATION_MOVEMENT_SENSOR\020-\022\035\n\030ZONE_TYPE" +
+      "_REMOTE_CONTROL\020\217\002\022\026\n\021ZONE_TYPE_KEY_FOB\020" +
+      "\225\002\022\025\n\020ZONE_TYPE_KEYPAD\020\235\004\022&\n!ZONE_TYPE_S" +
+      "TANDARD_WARNING_DEVICE\020\245\004\022!\n\034ZONE_TYPE_G" +
+      "LASS_BREAK_SENSOR\020\246\004\022 \n\033ZONE_TYPE_SECURI" +
+      "TY_REPEATER\020\251\004\022!\n\033ZONE_TYPE_INVALID_ZONE" +
+      "_TYPE\020\377\377\003*]\n\010ArmGroup\022\022\n\016ARM_GROUP_STAY\020",
+      "\000\022\023\n\017ARM_GROUP_SLEEP\020\001\022\022\n\016ARM_GROUP_BOTH" +
+      "\020\002\022\024\n\020ARM_GROUP_ALWAYS\020\003*X\n\007ArmMode\022\023\n\017A" +
+      "RM_MODE_DISARM\020\000\022\021\n\rARM_MODE_STAY\020\001\022\022\n\016A" +
+      "RM_MODE_SLEEP\020\002\022\021\n\rARM_MODE_AWAY\020\003*\371\001\n\013P" +
+      "anelStatus\022\031\n\025PANEL_STATUS_DISARMED\020\000\022\033\n" +
+      "\027PANEL_STATUS_ARMED_STAY\020\001\022\034\n\030PANEL_STAT" +
+      "US_ARMED_SLEEP\020\002\022\033\n\027PANEL_STATUS_ARMED_A" +
+      "WAY\020\003\022\033\n\027PANEL_STATUS_EXIT_DELAY\020\004\022\034\n\030PA" +
+      "NEL_STATUS_ENTRY_DELAY\020\005\022!\n\035PANEL_STATUS" +
+      "_NOT_READY_TO_ARM\020\006\022\031\n\025PANEL_STATUS_IN_A",
+      "LARM\020\007*\323\001\n\013AlarmStatus\022\031\n\025ALARM_STATUS_N" +
+      "O_ALARM\020\000\022\030\n\024ALARM_STATUS_BURGLAR\020\001\022\025\n\021A" +
+      "LARM_STATUS_FIRE\020\002\022\032\n\026ALARM_STATUS_EMERG" +
+      "ENCY\020\003\022\035\n\031ALARM_STATUS_POLICE_PANIC\020\004\022\033\n" +
+      "\027ALARM_STATUS_FIRE_PANIC\020\005\022 \n\034ALARM_STAT" +
+      "US_EMERGENCY_PANIC\020\006*^\n\rTimelineLevel\022\027\n" +
+      "\023TIMELINE_LEVEL_INFO\020\000\022\032\n\026TIMELINE_LEVEL" +
+      "_WARNING\020\001\022\030\n\024TIMELINE_LEVEL_ALARM\020\002*\273\005\n" +
+      "\014TimelineType\022 \n\034TIMELINE_TYPE_SYSTEM_ST" +
+      "ARTUP\020\000\022\027\n\023TIMELINE_TYPE_ARMED\020\001\022\032\n\026TIME",
+      "LINE_TYPE_DISARMED\020\002\022&\n\"TIMELINE_TYPE_IA" +
+      "S_ZONE_BATTERY_LOW\020\003\022 \n\034TIMELINE_TYPE_IA" +
+      "S_ZONE_ALARM\020\004\022!\n\035TIMELINE_TYPE_IAS_ZONE" +
+      "_TAMPER\020\005\022\"\n\036TIMELINE_TYPE_IAS_ZONE_TROU" +
+      "BLE\020\006\022&\n\"TIMELINE_TYPE_IAS_ZONE_MAINS_FA" +
+      "ULT\020\007\0225\n1TIMELINE_TYPE_IAS_ZONE_LACK_OF_" +
+      "SUPERVISION_REPORT\020\010\022)\n%TIMELINE_TYPE_IA" +
+      "S_ZONE_BATTERY_DEFECT\020\t\022\037\n\033TIMELINE_TYPE" +
+      "_TOGGLE_ON_OFF\020\n\022&\n\"TIMELINE_TYPE_ON_OFF" +
+      "_STATE_CHANGED\020\013\022 \n\034TIMELINE_TYPE_CAMERA",
+      "_OFFLINE\020\014\022/\n+TIMELINE_TYPE_CAMERA_MOTIO" +
+      "N_DETECTION_ALARM\020\r\022&\n\"TIMELINE_TYPE_OVE" +
+      "RCURRENT_DETECTED\020\016\022&\n\"TIMELINE_TYPE_POW" +
+      "ER_SOURCE_CHANGED\020\017\022$\n TIMELINE_TYPE_SYS" +
+      "TEM_BATTERY_LOW\020\020\022\'\n#TIMELINE_TYPE_MOBIL" +
+      "E_DATA_CONNECTED\020\021*\266\001\n\016CameraSdStatus\022\035\n" +
+      "\031CAMERA_SD_STATUS_NO_EXIST\020\000\022\035\n\031CAMERA_S" +
+      "D_STATUS_INSERTED\020\001\022\036\n\032CAMERA_SD_STATUS_" +
+      "RECORDING\020\002\022%\n!CAMERA_SD_STATUS_FILESYST" +
+      "EM_ERROR\020\003\022\037\n\033CAMERA_SD_STATUS_FORMATTIN",
+      "G\020\004*H\n\016CameraWlanMode\022\032\n\026CAMERA_WLAN_MOD" +
+      "E_INFRA\020\000\022\032\n\026CAMERA_WLAN_MODE_ADHOC\020\001*P\n" +
+      "\021CameraWlanEncrypt\022\034\n\030CAMERA_WLAN_ENCRYP" +
+      "T_OPEN\020\000\022\035\n\031CAMERA_WLAN_ENCRYPT_SHARE\020\001*" +
+      "\355\001\n\022CameraWlanAuthtype\022\035\n\031CAMERA_WLAN_AU" +
+      "THTYPE_NONE\020\000\022\034\n\030CAMERA_WLAN_AUTHTYPE_WE" +
+      "P\020\001\022%\n!CAMERA_WLAN_AUTHTYPE_WPA_PSK_TKIP" +
+      "\020\002\022$\n CAMERA_WLAN_AUTHTYPE_WPA_PSK_AES\020\003" +
+      "\022&\n\"CAMERA_WLAN_AUTHTYPE_WPA2_PSK_TKIP\020\004" +
+      "\022%\n!CAMERA_WLAN_AUTHTYPE_WPA2_PSK_AES\020\005*",
+      "W\n\023CameraWlanKeyFormat\022\036\n\032CAMERA_WLAN_KE" +
+      "Y_FORMAT_HEX\020\000\022 \n\034CAMERA_WLAN_KEY_FORMAT" +
+      "_ASCII\020\001*Z\n\023CameraWlanKeyLength\022 \n\034CAMER" +
+      "A_WLAN_KEY_LENGTH_64BIT\020\000\022!\n\035CAMERA_WLAN" +
+      "_KEY_LENGTH_128BIT\020\001*@\n\nActionType\022\023\n\017AC" +
+      "TION_TYPE_ARM\020\000\022\035\n\031ACTION_TYPE_TOGGLE_ON" +
+      "_OFF\020\001*3\n\010PlanType\022\023\n\017PLAN_TYPE_TIMER\020\000\022" +
+      "\022\n\016PLAN_TYPE_FAKE\020\001*E\n\007WanMode\022\022\n\016WAN_MO" +
+      "DE_PPPOE\020\000\022\021\n\rWAN_MODE_DHCP\020\001\022\023\n\017WAN_MOD" +
+      "E_STATIC\020\002*)\n\007WanPort\022\016\n\nWAN_PORT_1\020\001\022\016\n",
+      "\nWAN_PORT_2\020\002*3\n\007WanType\022\025\n\021WAN_TYPE_INT" +
+      "ERNET\020\000\022\021\n\rWAN_TYPE_AREA\020\001*W\n\013WanMacClon" +
+      "e\022\026\n\022WAN_MAC_CLONE_NONE\020\000\022\026\n\022WAN_MAC_CLO" +
+      "NE_AUTO\020\001\022\030\n\024WAN_MAC_CLONE_MANUAL\020\002*,\n\010W" +
+      "lanPort\022\017\n\013WLAN_PORT_1\020\001\022\017\n\013WLAN_PORT_2\020" +
+      "\002*_\n\016AccessRuleMode\022\027\n\023ACCESS_RULE_DISAB" +
+      "LE\020\000\022\031\n\025ACCESS_RULE_BLACKLIST\020\001\022\031\n\025ACCES" +
+      "S_RULE_WHITELIST\020\002*G\n\tBandWidth\022\022\n\016BAND_" +
+      "WIDTH_20M\020\000\022\022\n\016BAND_WIDTH_40M\020\001\022\022\n\016BAND_" +
+      "WIDTH_80M\020\002*P\n\tSambaMode\022\027\n\023SAMBA_MODE_D",
+      "ISABLED\020\000\022\023\n\017SAMBA_MODE_USER\020\001\022\025\n\021SAMBA_" +
+      "MODE_PUBLIC\020\002*=\n\nAccessType\022\025\n\021ACCESS_TY" +
+      "PE_WIRED\020\001\022\030\n\024ACCESS_TYPE_WIRELESS\020\002*6\n\007" +
+      "QosMode\022\023\n\017QOS_MODE_NORMAL\020\001\022\026\n\022QOS_MODE" +
+      "_EXCLUSIVE\020\002*S\n\013AclRuleMode\022\024\n\020ACL_RULE_" +
+      "DISABLE\020\000\022\026\n\022ACL_RULE_BLACKLIST\020\001\022\026\n\022ACL" +
+      "_RULE_WHITELIST\020\002*c\n\tHddStatus\022\034\n\030HDD_ST" +
+      "ATUS_NOT_INSTALLED\020\000\022\036\n\032HDD_STATUS_NOT_I" +
+      "NITIALIZED\020\001\022\030\n\024HDD_STATUS_AVAILABLE\020\002*E" +
+      "\n\017NetworkProtocol\022\030\n\024NETWORK_PROTOCOL_TC",
+      "P\020\000\022\030\n\024NETWORK_PROTOCOL_UDP\020\001*v\n\023SignalS" +
+      "trengthLevel\022\035\n\031SIGNAL_STRENGTH_LEVEL_LO" +
+      "W\020\000\022 \n\034SIGNAL_STRENGTH_LEVEL_MIDDLE\020\001\022\036\n" +
+      "\032SIGNAL_STRENGTH_LEVEL_HIGH\020\002*E\n\nPPPoESt" +
+      "ate\022\034\n\030PPPOE_STATE_DISCONNECTED\020\000\022\031\n\025PPP" +
+      "OE_STATE_CONNECTED\020\001*\206\001\n\013QosPriority\022\030\n\024" +
+      "QOS_PRIORITY_HIGHEST\020\000\022\025\n\021QOS_PRIORITY_H" +
+      "IGH\020\001\022\027\n\023QOS_PRIORITY_MEDIUM\020\002\022\024\n\020QOS_PR" +
+      "IORITY_LOW\020\003\022\027\n\023QOS_PRIORITY_LOWEST\020\004*)\n" +
+      "\005CpuId\022\017\n\013CPU_ID_CPU0\020\000\022\017\n\013CPU_ID_CPU1\020\001",
+      "*B\n\007VpnType\022\021\n\rVPN_TYPE_NONE\020\000\022\021\n\rVPN_TY" +
+      "PE_PPTP\020\001\022\021\n\rVPN_TYPE_L2TP\020\002*r\n\022Infrared" +
+      "MatchLevel\022\034\n\030INFRARED_MATCH_LEVEL_LOW\020\000" +
+      "\022\037\n\033INFRARED_MATCH_LEVEL_MEDIUM\020\001\022\035\n\031INF" +
+      "RARED_MATCH_LEVEL_HIGH\020\002*\301\002\n\022InfraredDev" +
+      "iceType\022(\n$INFRARED_DEVICE_TYPE_AIR_COND" +
+      "ITIONER\020\000\022#\n\037INFRARED_DEVICE_TYPE_DVD_PL" +
+      "AYER\020\001\022&\n\"INFRARED_DEVICE_TYPE_IP_TELEVI" +
+      "SION\020\002\022#\n\037INFRARED_DEVICE_TYPE_SETTOP_BO" +
+      "X\020\003\022#\n\037INFRARED_DEVICE_TYPE_TELEVISION\020\004",
+      "\022%\n!INFRARED_DEVICE_TYPE_ELECTRIC_FAN\020\005\022" +
+      "\"\n\036INFRARED_DEVICE_TYPE_PROJECTOR\020\006\022\037\n\033I" +
+      "NFRARED_DEVICE_TYPE_CUSTOM\020\007*\303\001\n\022Infrare" +
+      "dMatchError\022 \n\034INFRARED_MATCH_ERROR_SUCC" +
+      "ESS\020\000\022!\n\035INFRARED_MATCH_ERROR_NO_MATCH\020\001" +
+      "\022\"\n\036INFRARED_MATCH_ERROR_CANCELLED\020\002\022\"\n\036" +
+      "INFRARED_MATCH_ERROR_TIMED_OUT\020\003\022 \n\034INFR" +
+      "ARED_MATCH_ERROR_FAILURE\020\004*\270\001\n\031AirCondit" +
+      "ionerBlowingRate\022%\n!AIR_CONDITIONER_BLOW" +
+      "ING_RATE_AUTO\020\000\022$\n AIR_CONDITIONER_BLOWI",
+      "NG_RATE_LOW\020\001\022\'\n#AIR_CONDITIONER_BLOWING" +
+      "_RATE_MEDIUM\020\002\022%\n!AIR_CONDITIONER_BLOWIN" +
+      "G_RATE_HIGH\020\003*\200\001\n\025AirConditionerWindDir\022" +
+      "\037\n\033AIR_CONDITIONER_WIND_DIR_UP\020\000\022#\n\037AIR_" +
+      "CONDITIONER_WIND_DIR_MIDDLE\020\001\022!\n\035AIR_CON" +
+      "DITIONER_WIND_DIR_DOWN\020\002*\210\002\n\021AirConditio" +
+      "nerKey\022\035\n\031AIR_CONDITIONER_KEY_POWER\020\000\022\034\n" +
+      "\030AIR_CONDITIONER_KEY_MODE\020\001\022$\n AIR_CONDI" +
+      "TIONER_KEY_BLOWING_RATE\020\002\022\'\n#AIR_CONDITI" +
+      "ONER_KEY_MANUAL_WIND_DIR\020\003\022%\n!AIR_CONDIT",
+      "IONER_KEY_AUTO_WIND_DIR\020\004\022\036\n\032AIR_CONDITI" +
+      "ONER_KEY_TEMPUP\020\005\022 \n\034AIR_CONDITIONER_KEY" +
+      "_TEMPDOWN\020\006*\257\001\n\022AirConditionerMode\022\035\n\031AI" +
+      "R_CONDITIONER_MODE_AUTO\020\000\022\037\n\033AIR_CONDITI" +
+      "ONER_MODE_FREEZE\020\001\022\034\n\030AIR_CONDITIONER_MO" +
+      "DE_DRY\020\002\022\034\n\030AIR_CONDITIONER_MODE_FAN\020\003\022\035" +
+      "\n\031AIR_CONDITIONER_MODE_HEAT\020\004*\320\003\n\020DvdPla" +
+      "yerCommand\022\023\n\017DVD_PLAYER_LEFT\020\000\022\021\n\rDVD_P" +
+      "LAYER_UP\020\001\022\021\n\rDVD_PLAYER_OK\020\002\022\023\n\017DVD_PLA" +
+      "YER_DOWN\020\003\022\024\n\020DVD_PLAYER_RIGHT\020\004\022\024\n\020DVD_",
+      "PLAYER_POWER\020\005\022\023\n\017DVD_PLAYER_MUTE\020\006\022\033\n\027D" +
+      "VD_PLAYER_FAST_REVERSE\020\007\022\023\n\017DVD_PLAYER_P" +
+      "LAY\020\010\022\035\n\031DVD_PLAYER_FAST_FORWARDED\020\t\022\031\n\025" +
+      "DVD_PLAYER_LAST_PIECE\020\n\022\023\n\017DVD_PLAYER_ST" +
+      "OP\020\013\022\031\n\025DVD_PLAYER_NEXT_PIECE\020\014\022\027\n\023DVD_P" +
+      "LAYER_STANDARD\020\r\022\024\n\020DVD_PLAYER_PAUSE\020\016\022\024" +
+      "\n\020DVD_PLAYER_TITLE\020\017\022\036\n\032DVD_PLAYER_SWITC" +
+      "H_POSITION\020\020\022\023\n\017DVD_PLAYER_MENU\020\021\022\025\n\021DVD" +
+      "_PLAYER_RETURN\020\022*\333\004\n\023IpTelevisionCommand" +
+      "\022\027\n\023IP_TELEVISION_POWER\020\000\022\026\n\022IP_TELEVISI",
+      "ON_MUTE\020\001\022\030\n\024IP_TELEVISION_VOLUME\020\002\022\"\n\036I" +
+      "P_TELEVISION_VOLUME_REDUCTION\020\003\022&\n\"IP_TE" +
+      "LEVISION_CHANNEL_PLUS_OR_HOME\020\004\022+\n\'IP_TE" +
+      "LEVISION_CHANNEL_REDUCTION_OR_MENU\020\005\022\024\n\020" +
+      "IP_TELEVISION_UP\020\006\022\026\n\022IP_TELEVISION_LEFT" +
+      "\020\007\022\024\n\020IP_TELEVISION_OK\020\010\022\027\n\023IP_TELEVISIO" +
+      "N_RIGHT\020\t\022\026\n\022IP_TELEVISION_DOWN\020\n\022\037\n\033IP_" +
+      "TELEVISION_PLAY_OR_PAUSE\020\013\022\023\n\017IP_TELEVIS" +
+      "ION_1\020\014\022\023\n\017IP_TELEVISION_2\020\r\022\023\n\017IP_TELEV" +
+      "ISION_3\020\016\022\023\n\017IP_TELEVISION_4\020\017\022\023\n\017IP_TEL",
+      "EVISION_5\020\020\022\023\n\017IP_TELEVISION_6\020\021\022\023\n\017IP_T" +
+      "ELEVISION_7\020\022\022\023\n\017IP_TELEVISION_8\020\023\022\023\n\017IP" +
+      "_TELEVISION_9\020\024\022\023\n\017IP_TELEVISION_0\020\025\022\030\n\024" +
+      "IP_TELEVISION_RETURN\020\026*\202\004\n\020SettopBoxComm" +
+      "and\022\026\n\022SETTOP_BOX_STANDBY\020\000\022\020\n\014SETTOP_BO" +
+      "X_1\020\001\022\020\n\014SETTOP_BOX_2\020\002\022\020\n\014SETTOP_BOX_3\020" +
+      "\003\022\020\n\014SETTOP_BOX_4\020\004\022\020\n\014SETTOP_BOX_5\020\005\022\020\n" +
+      "\014SETTOP_BOX_6\020\006\022\020\n\014SETTOP_BOX_7\020\007\022\020\n\014SET" +
+      "TOP_BOX_8\020\010\022\020\n\014SETTOP_BOX_9\020\t\022\024\n\020SETTOP_" +
+      "BOX_GUIDE\020\n\022\020\n\014SETTOP_BOX_0\020\013\022\025\n\021SETTOP_",
+      "BOX_RETURN\020\014\022\021\n\rSETTOP_BOX_UP\020\r\022\023\n\017SETTO" +
+      "P_BOX_LEFT\020\016\022\026\n\022SETTOP_BOX_CONFIRM\020\017\022\024\n\020" +
+      "SETTOP_BOX_RIGHT\020\020\022\023\n\017SETTOP_BOX_DOWN\020\021\022" +
+      "\025\n\021SETTOP_BOX_VOLUME\020\022\022\037\n\033SETTOP_BOX_VOL" +
+      "UME_REDUCTION\020\023\022\033\n\027SETTOP_BOX_CHANNEL_PL" +
+      "US\020\024\022 \n\034SETTOP_BOX_CHANNEL_REDUCTION\020\025\022\023" +
+      "\n\017SETTOP_BOX_MENU\020\026*\262\004\n\021TelevisionComman" +
+      "d\022\037\n\033TELEVISION_VOLUME_REDUCTION\020\000\022\033\n\027TE" +
+      "LEVISION_CHANNEL_PLUS\020\001\022\023\n\017TELEVISION_ME" +
+      "NU\020\002\022 \n\034TELEVISION_CHANNEL_REDUCTION\020\003\022\025",
+      "\n\021TELEVISION_VOLUME\020\004\022\024\n\020TELEVISION_POWE" +
+      "R\020\005\022\023\n\017TELEVISION_MUTE\020\006\022\020\n\014TELEVISION_1" +
+      "\020\007\022\020\n\014TELEVISION_2\020\010\022\020\n\014TELEVISION_3\020\t\022\020" +
+      "\n\014TELEVISION_4\020\n\022\020\n\014TELEVISION_5\020\013\022\020\n\014TE" +
+      "LEVISION_6\020\014\022\020\n\014TELEVISION_7\020\r\022\020\n\014TELEVI" +
+      "SION_8\020\016\022\020\n\014TELEVISION_9\020\017\022\032\n\026TELEVISION" +
+      "_COMBINATION\020\020\022\020\n\014TELEVISION_0\020\021\022\024\n\020TELE" +
+      "VISION_AV_TV\020\022\022\025\n\021TELEVISION_RETURN\020\023\022\026\n" +
+      "\022TELEVISION_CONFIRM\020\024\022\021\n\rTELEVISION_UP\020\025" +
+      "\022\023\n\017TELEVISION_LEFT\020\026\022\024\n\020TELEVISION_RIGH",
+      "T\020\027\022\023\n\017TELEVISION_DOWN\020\030*\253\004\n\022ElectricFan" +
+      "Command\022\027\n\023ELECTRIC_FAN_ON_OFF\020\000\022\036\n\032ELEC" +
+      "TRIC_FAN_WIND_VELOCITY\020\001\022\026\n\022ELECTRIC_FAN" +
+      "_SWING\020\002\022\025\n\021ELECTRIC_FAN_MODE\020\003\022\033\n\027ELECT" +
+      "RIC_FAN_FIXED_TIME\020\004\022\026\n\022ELECTRIC_FAN_LIG" +
+      "HT\020\005\022\026\n\022ELECTRIC_FAN_ANION\020\006\022\022\n\016ELECTRIC" +
+      "_FAN_1\020\007\022\022\n\016ELECTRIC_FAN_2\020\010\022\022\n\016ELECTRIC" +
+      "_FAN_3\020\t\022\022\n\016ELECTRIC_FAN_4\020\n\022\022\n\016ELECTRIC" +
+      "_FAN_5\020\013\022\022\n\016ELECTRIC_FAN_6\020\014\022\022\n\016ELECTRIC" +
+      "_FAN_7\020\r\022\022\n\016ELECTRIC_FAN_8\020\016\022\022\n\016ELECTRIC",
+      "_FAN_9\020\017\022\026\n\022ELECTRIC_FAN_SLEEP\020\020\022\027\n\023ELEC" +
+      "TRIC_FAN_FREEZE\020\021\022\035\n\031ELECTRIC_FAN_BLOWIN" +
+      "G_RATE\020\022\022\034\n\030ELECTRIC_FAN_BLOWING_LOW\020\023\022\037" +
+      "\n\033ELECTRIC_FAN_BLOWING_MEDIUM\020\024\022\035\n\031ELECT" +
+      "RIC_FAN_BLOWING_HIGH\020\025*\230\004\n\020ProjectorComm" +
+      "and\022\026\n\022PROJECTOR_POWER_ON\020\000\022\027\n\023PROJECTOR" +
+      "_POWER_OFF\020\001\022\026\n\022PROJECTOR_COMPUTER\020\002\022\023\n\017" +
+      "PROJECTOR_VIDEO\020\003\022\033\n\027PROJECTOR_SIGNAL_SO" +
+      "URCE\020\004\022\027\n\023PROJECTOR_ZOOM_PLUS\020\005\022\034\n\030PROJE" +
+      "CTOR_ZOOM_REDUCTION\020\006\022\030\n\024PROJECTOR_IMAGE",
+      "_PLUS\020\007\022\035\n\031PROJECTOR_IMAGE_REDUCTION\020\010\022\022" +
+      "\n\016PROJECTOR_MENU\020\t\022\025\n\021PROJECTOR_CONFIRM\020" +
+      "\n\022\020\n\014PROJECTOR_UP\020\013\022\022\n\016PROJECTOR_LEFT\020\014\022" +
+      "\023\n\017PROJECTOR_RIGHT\020\r\022\022\n\016PROJECTOR_DOWN\020\016" +
+      "\022\022\n\016PROJECTOR_QUIT\020\017\022\024\n\020PROJECTOR_VOLUME" +
+      "\020\020\022\036\n\032PROJECTOR_VOLUME_REDUCTION\020\021\022\022\n\016PR" +
+      "OJECTOR_MUTE\020\022\022\022\n\016PROJECTOR_AUTO\020\023\022\023\n\017PR" +
+      "OJECTOR_PAUSE\020\024\022\030\n\024PROJECTOR_BRIGHTNESS\020" +
+      "\025"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -99997,7 +114557,7 @@ public final class Models {
     internal_static_mrtech_smarthome_rpc_Account_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_Account_descriptor,
-        new java.lang.String[] { "Id", "Name", "ApiKey", "LastActivity", "Passphrase", "PassphraseNotSet", });
+        new java.lang.String[] { "Id", "Name", "ApiKey", "LastActivity", "Passphrase", "PassphraseNotSet", "AccountGroup", });
     internal_static_mrtech_smarthome_rpc_Device_descriptor =
       getDescriptor().getMessageTypes().get(17);
     internal_static_mrtech_smarthome_rpc_Device_fieldAccessorTable = new
@@ -100159,7 +114719,7 @@ public final class Models {
     internal_static_mrtech_smarthome_rpc_Component_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_Component_descriptor,
-        new java.lang.String[] { "Name", "CurrentVersion", "LatestVersion", "TimePublished", "FileChecksum", });
+        new java.lang.String[] { "Name", "CurrentVersion", "LatestVersion", "TimePublished", "FileChecksum", "FileStatus", });
     internal_static_mrtech_smarthome_rpc_OtaStatus_descriptor =
       getDescriptor().getMessageTypes().get(44);
     internal_static_mrtech_smarthome_rpc_OtaStatus_fieldAccessorTable = new
@@ -100219,7 +114779,7 @@ public final class Models {
     internal_static_mrtech_smarthome_rpc_WlanConfig_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_WlanConfig_descriptor,
-        new java.lang.String[] { "Ssid", "SsidBroadcast", "OperationMode", "Security", "Passphrase", "Channel", "AccessRule", "Enabled", "BandWidth", });
+        new java.lang.String[] { "Ssid", "SsidBroadcast", "OperationMode", "Security", "Passphrase", "Channel", "AccessRule", "Enabled", "BandWidth", "WpsEnabled", });
     internal_static_mrtech_smarthome_rpc_GuestWlanConfig_descriptor =
       getDescriptor().getMessageTypes().get(54);
     internal_static_mrtech_smarthome_rpc_GuestWlanConfig_fieldAccessorTable = new
@@ -100334,6 +114894,78 @@ public final class Models {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_L2tpConfig_descriptor,
         new java.lang.String[] { "Account", "Passphrase", "ServerHost", "EnableIpsec", "IpsecPsk", "Route", });
+    internal_static_mrtech_smarthome_rpc_InfraredOpCode_descriptor =
+      getDescriptor().getMessageTypes().get(73);
+    internal_static_mrtech_smarthome_rpc_InfraredOpCode_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_InfraredOpCode_descriptor,
+        new java.lang.String[] { "Id", "DeviceId", "Name", "Opcode", });
+    internal_static_mrtech_smarthome_rpc_InfraredDevice_descriptor =
+      getDescriptor().getMessageTypes().get(74);
+    internal_static_mrtech_smarthome_rpc_InfraredDevice_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_InfraredDevice_descriptor,
+        new java.lang.String[] { "Id", "Type", "IndexCode", "IrControllerId", "Opcodes", });
+    internal_static_mrtech_smarthome_rpc_MatchSession_descriptor =
+      getDescriptor().getMessageTypes().get(75);
+    internal_static_mrtech_smarthome_rpc_MatchSession_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_MatchSession_descriptor,
+        new java.lang.String[] { "IrControllerId", "Type", "Level", });
+    internal_static_mrtech_smarthome_rpc_InfraredCommand_descriptor =
+      getDescriptor().getMessageTypes().get(76);
+    internal_static_mrtech_smarthome_rpc_InfraredCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_InfraredCommand_descriptor,
+        new java.lang.String[] { "AirConditioner", "DvdPlayer", "IpTelevision", "SettopBox", "Television", "ElectricFan", "Projector", "Extension", "Command", });
+    internal_static_mrtech_smarthome_rpc_ExtensionCommand_descriptor =
+      getDescriptor().getMessageTypes().get(77);
+    internal_static_mrtech_smarthome_rpc_ExtensionCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_ExtensionCommand_descriptor,
+        new java.lang.String[] { "OpcodeId", "Opcode", "Data", });
+    internal_static_mrtech_smarthome_rpc_AirConditionerCommand_descriptor =
+      getDescriptor().getMessageTypes().get(78);
+    internal_static_mrtech_smarthome_rpc_AirConditionerCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_AirConditionerCommand_descriptor,
+        new java.lang.String[] { "Temperature", "BlowingRate", "WindDir", "AutoWindDir", "Power", "Key", "Mode", });
+    internal_static_mrtech_smarthome_rpc_IrControllerCode_descriptor =
+      getDescriptor().getMessageTypes().get(79);
+    internal_static_mrtech_smarthome_rpc_IrControllerCode_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_IrControllerCode_descriptor,
+        new java.lang.String[] { "AirConditionerData", "DvdPlayerData", "IpTelevisionData", "SettopBoxData", "TelevisionData", "ElectricFanData", "ProjectorData", });
+    internal_static_mrtech_smarthome_rpc_IrMatchCode_descriptor =
+      getDescriptor().getMessageTypes().get(80);
+    internal_static_mrtech_smarthome_rpc_IrMatchCode_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_IrMatchCode_descriptor,
+        new java.lang.String[] { "AirConditioner", "DvdPlayer", "IpTelevision", "SettopBox", "Television", "ElectricFan", "Projector", });
+    internal_static_mrtech_smarthome_rpc_IrMatchObj_descriptor =
+      getDescriptor().getMessageTypes().get(81);
+    internal_static_mrtech_smarthome_rpc_IrMatchObj_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_IrMatchObj_descriptor,
+        new java.lang.String[] { "MatchCode", "IndexCode", "Name", });
+    internal_static_mrtech_smarthome_rpc_IndexCodeTable_descriptor =
+      getDescriptor().getMessageTypes().get(82);
+    internal_static_mrtech_smarthome_rpc_IndexCodeTable_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_IndexCodeTable_descriptor,
+        new java.lang.String[] { "Data", });
+    internal_static_mrtech_smarthome_rpc_NameTable_descriptor =
+      getDescriptor().getMessageTypes().get(83);
+    internal_static_mrtech_smarthome_rpc_NameTable_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_NameTable_descriptor,
+        new java.lang.String[] { "ChName", "EnName", });
+    internal_static_mrtech_smarthome_rpc_BrandList_descriptor =
+      getDescriptor().getMessageTypes().get(84);
+    internal_static_mrtech_smarthome_rpc_BrandList_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_BrandList_descriptor,
+        new java.lang.String[] { "Name", "Index", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

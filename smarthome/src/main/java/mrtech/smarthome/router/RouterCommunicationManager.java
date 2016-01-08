@@ -17,7 +17,6 @@ import javax.net.ssl.SSLSocket;
 
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
-import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -196,8 +195,8 @@ class RouterCommunicationManager implements CommunicationManager {
                         if (callback != null) {
                             callback.call(null, e);
                         }
-                        mClient.disconnect();
                         trace(mClient + " socket IO exception ,socket will be reset..");
+                        mClient.reconnect();
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
@@ -417,7 +416,7 @@ class RouterCommunicationManager implements CommunicationManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                     trace(mClient + " read stream error");
-                    mClient.disconnect();
+                    mClient.reconnect();
                     break;
                 }
             }

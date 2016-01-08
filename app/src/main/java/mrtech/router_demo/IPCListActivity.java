@@ -41,13 +41,15 @@ public class IPCListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ipclist);
-        cameraManager = getDefaultData(Router.class).getRouterSession().getCameraManager();
-        ipcManager = cameraManager.getIPCManager();
-        if (ipcManager == null) {
+        final Router router = getDefaultData(Router.class);
+        if (router == null) {
             Toast.makeText(IPCListActivity.this, "参数无效", Toast.LENGTH_SHORT).show();
             finish();
+            return;
         }
-         subscriptionCameraStatusChanged = ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
+        cameraManager = router.getRouterSession().getCameraManager();
+        ipcManager = cameraManager.getIPCManager();
+        subscriptionCameraStatusChanged = ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
             @Override
             public void call(IPCModels.IPCStateChanged ipcStateChanged) {
                 final IPCamera camera = ipcManager.getCamera(ipcStateChanged.getCameraId());
@@ -232,7 +234,7 @@ public class IPCListActivity extends BaseActivity {
                 if (i < 0) i = 0;
                 if (i >= max) i = max - 1;
                 index = i;
-                viewCamera.setText("已连接:"+ max+"/"+ipcManager.getCameraList().length +" 正在播放:" + (i + 1) + "/" + max);
+                viewCamera.setText("已连接:" + max + "/" + ipcManager.getCameraList().length + " 正在播放:" + (i + 1) + "/" + max);
                 if (playingList[i].equals(cameraPlayer.getPlayingCamera())) return;
                 cameraPlayer.play(playingList[i]);
                 ((Switch) findViewById(R.id.audio_switch)).setChecked(false);

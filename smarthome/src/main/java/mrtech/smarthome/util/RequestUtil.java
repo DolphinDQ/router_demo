@@ -531,6 +531,7 @@ public class RequestUtil {
     }
 
     public static Request getNetWorkDevice() {
+
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.GET_NETWORK_DEVICE);
         requestBuilder.setRequestId(RequestType.GET_NETWORK_DEVICE_VALUE + createId());

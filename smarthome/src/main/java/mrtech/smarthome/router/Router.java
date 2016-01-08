@@ -15,7 +15,7 @@ import mrtech.smarthome.router.Models.*;
 public class Router {
     private final String sn;
     private final String name;
-    private HashMap<String,Object> userData =new HashMap<>();
+    private HashMap<String, Object> userData = new HashMap<>();
     private RouterConfig config;
     private RouterSession routerSession;
 
@@ -23,20 +23,18 @@ public class Router {
         return routerSession;
     }
 
-    void setRouterSession(RouterSession routerSession) {
-        this.routerSession = routerSession;
-    }
 
     /**
      * create router object
      *
-     * @param source source data
-     * @param sn     router serial number
+     * @param name source data
+     * @param sn   router serial number
      */
     public Router(String name, String sn) {
+        if (sn==null||sn.equals(""))
+            throw new IllegalArgumentException("参数sn不能为空。");
         this.sn = sn;
         this.name = name;
-
     }
 
     /**
@@ -52,8 +50,14 @@ public class Router {
         final RouterSession routerSession = getRouterSession();
         if (routerSession != null && routerSession.isAuthenticated()) {
             final mrtech.smarthome.rpc.Models.SystemConfiguration routerConfiguration = routerSession.getRouterConfiguration(true);
-            if (routerConfiguration != null)
-                return routerConfiguration.getDeviceName();
+            if (routerConfiguration != null) {
+                final String deviceName = routerConfiguration.getDeviceName();
+                if (!deviceName.equals(getConfig().getName())) {
+                    getConfig().setName(deviceName);
+                    saveConfig();
+                }
+                return getConfig().getName();
+            }
         }
         return name;
     }
@@ -63,21 +67,21 @@ public class Router {
      *
      * @return data
      */
-    public Object getSource(String key) {
-        return  userData.get(key);
+    public Object getUserData(String key) {
+        return userData.get(key);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getSource(Class<T> cls){
-        return (T)getSource(cls.getName());
+    public <T> T getUserData(Class<T> cls) {
+        return (T) getUserData(cls.getName());
     }
 
-    public <T> void setSource(Class<T> cls,T source){
-        setSource(cls.getName(),source);
+    public <T> void setUserData(Class<T> cls, T source) {
+        setUserData(cls.getName(), source);
     }
 
-    public void setSource(String key, Object source) {
-        userData.put(key,source);
+    public void setUserData(String key, Object source) {
+        userData.put(key, source);
     }
 
     public RouterConfig getConfig() {
@@ -85,7 +89,7 @@ public class Router {
         return config;
     }
 
-    public void loadConfig() {
+    void loadConfig() {
         final List<RouterConfig> routerConfigs = SugarRecord.find(RouterConfig.class, "sn = ?", sn);
         if (routerConfigs.size() == 0) {
             saveConfig();
@@ -94,11 +98,15 @@ public class Router {
         }
     }
 
-    public void saveConfig() {
+    void saveConfig() {
         if (config == null) {
             config = new RouterConfig(sn);
         }
         SugarRecord.save(config);
+    }
+
+    void setRouterSession(RouterSession routerSession) {
+        this.routerSession = routerSession;
     }
 
     @Override

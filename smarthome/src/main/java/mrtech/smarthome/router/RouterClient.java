@@ -14,6 +14,7 @@ import java.util.concurrent.TimeoutException;
 import javax.net.ssl.SSLSocket;
 
 import mrtech.smarthome.rpc.Messages;
+import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.NetUtil;
 import mrtech.smarthome.util.CharUtil;
 import mrtech.smarthome.util.RequestUtil;
@@ -27,7 +28,7 @@ import rx.subjects.PublishSubject;
 class RouterClient implements RouterSession {
     private final RouterClient mContext;
     private final RouterCameraManager mCameraManager;
-    private Thread mCheckStatusTask;
+    private CheckStatusTask mCheckStatusTask;
 
     private static void trace(String msg) {
         Log.e(RouterClient.class.getName(), msg);
@@ -58,7 +59,7 @@ class RouterClient implements RouterSession {
         mRouter = router;
         mIPCManager = IPCManager.createNewManager();
         mCommunicationManager = new RouterCommunicationManager(this);
-        mCameraManager=new RouterCameraManager(mRouter,mCommunicationManager);
+        mCameraManager = new RouterCameraManager(mRouter, mCommunicationManager);
         setRouterStatus(RouterStatus.INITIAL);
     }
 
@@ -72,8 +73,9 @@ class RouterClient implements RouterSession {
         initialized = true;
         mIPCManager.removeAll();
         setRouterStatus(RouterStatus.INITIALIZED);
-        mCheckStatusTask = new Thread(new CheckStatusTask());
-        mCheckStatusTask.start();
+
+        mCheckStatusTask = new CheckStatusTask();
+        new Thread(mCheckStatusTask).start();
     }
 
     public boolean decodeSN() {
@@ -223,12 +225,19 @@ class RouterClient implements RouterSession {
         }).start();
     }
 
+    public void reconnect() {
+        disconnect();
+        if (mCheckStatusTask != null)
+            mCheckStatusTask.interrupt();
+    }
+
     @Override
     public mrtech.smarthome.rpc.Models.SystemConfiguration getRouterConfiguration(boolean cache) {
         try {
             final Messages.Response response = mCommunicationManager.postRequest(RequestUtil.getSysConfig(), cache);
-            if (response != null)
-                return   response.getExtension(Messages.GetSystemConfigurationResponse.response).getConfiguration();
+            if (response != null) {
+                return response.getExtension(Messages.GetSystemConfigurationResponse.response).getConfiguration();
+            }
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
@@ -288,6 +297,8 @@ class RouterClient implements RouterSession {
 
     private class CheckStatusTask implements Runnable {
 
+        private Thread currentThread;
+
         private void keepAlive() {
             if (!isAuthenticated()) return;
             trace(mContext + " keep alive..");
@@ -316,17 +327,27 @@ class RouterClient implements RouterSession {
             return ROUTER_KEEP_ALIVE_DELAY;
         }
 
+        private boolean running;
+
+        public void interrupt() {
+            if (!running)
+                currentThread.interrupt();
+        }
+
         @Override
         public void run() {
-            Thread.currentThread().setName("checkRouterStatus:" + mContext);
+            currentThread = Thread.currentThread();
+            currentThread.setName("checkRouterStatus:" + mContext);
             decodeSN();
             do {
                 int delay = 0;
                 try {
+                    running = true;
                     delay = checkRouterStatus();
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
+                    running = false;
                     try {
                         if (delay < 0) {
                             destroy();

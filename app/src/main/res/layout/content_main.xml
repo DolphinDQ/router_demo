@@ -16,7 +16,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="视频"
+        android:text="@string/camera"
         android:id="@+id/camera_btn"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -26,8 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="配置"
-        android:id="@+id/button2"
+        android:id="@+id/router_config_btn"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/camera_btn"
         android:layout_toEndOf="@+id/camera_btn" />
+
 </RelativeLayout>

@@ -39,8 +39,6 @@ public class RouterManager {
     private final RouterEventManager mEventManager;
 
     private static RouterManager ourInstance = new RouterManager();
-
-
     /**
      * 创建路由器管理单例对象。
      *
@@ -150,7 +148,11 @@ public class RouterManager {
     }
 
     /**
-     * 路由管理器初始化。
+     * 路由管理器初始化：
+     * 1.IPCManager，IPC管理模块。
+     * 2.SugarContext，数据库插件。
+     * 3.ProtoBuf数据对象，路由器通讯对象。
+     * 4.P2P组件，路由器连接组件。
      */
     public static void init(Context context) {
         IPCManager.init();
@@ -186,14 +188,16 @@ public class RouterManager {
             while (all.hasNext()) {
                 final RouterConfig next = all.next();
                 if (next != null)
-                    addRouter(new Router( "路由器", next.getSn()));
+                    addRouter(new Router("路由器", next.getSn()));
             }
     }
 
     /**
-     * 添加一台路由器
+     * 添加路由器后，管理器会自动连接路由器，获取基础信息，并保持通讯连接。
+     * 连接成功的路由器，将会被缓存在本地数据库，同时上传至用户云端数据（如果用户已登录）。
+     * 相同路由器无法重复添加。
      *
-     * @param router 路由器对象。
+     * @param router Router对象，可以直接new构造对象，构造对象需要路由器序列号，与路由器名称。相同序列号视为相同路由器。
      */
     public void addRouter(final Router router) {
         if (router == null || router.getSn() == null || getRouter(router.getSn()) != null) return;
@@ -218,14 +222,20 @@ public class RouterManager {
     }
 
     /**
-     * 删除一台路由器。
+     * 删除一台路由器。默认不删除数据库缓存路由器信息。
      *
-     * @param router 路由器对象。
+     * @param router 路由器对象。路由器对象可以通过，getRouterList或getRouter获得。
      */
     public void removeRouter(Router router) {
         removeRouter(router, false);
     }
 
+    /**
+     * 删除一台路由器。
+     *
+     * @param router      路由器对象。路由器对象可以通过，getRouterList或getRouter获得。
+     * @param removeCache 指定是否不删除数据库缓存路由器信息。true为删除。
+     */
     public void removeRouter(final Router router, boolean removeCache) {
         if (router == null) return;
         if (mRouters.remove(router)) {
@@ -248,23 +258,24 @@ public class RouterManager {
     }
 
     /**
-     * 获取指定路由器。
+     * 获取指定路由器，即通过路由器序列号获取对应的路由器。
      *
-     * @param sn 路由器SN码。
+     * @param sn 路由器序列码。
      * @return 路由器对象。
      */
     public Router getRouter(String sn) {
-        for (Router mRouter : mRouters) {
-            if (mRouter.getSn().equals(sn))
-                return mRouter;
-        }
+        if (sn != null)
+            for (Router mRouter : mRouters) {
+                if (mRouter.getSn().equals(sn))
+                    return mRouter;
+            }
         return null;
     }
 
     /**
      * 获取当前路由器列表。
      *
-     * @return 路由器列表。只读，请勿执行增删操作。
+     * @return 路由器列表。（源列表对象，请勿执行增删操作。)
      */
     public List<Router> getRouterList() {
         return mRouters;
@@ -273,7 +284,7 @@ public class RouterManager {
     /**
      * 获取指定类型的路由器列表。
      *
-     * @param valid 路由器是否可以通讯。
+     * @param valid 路由器是否可以通讯。true为可以正常通讯。
      * @return
      */
     public List<Router> getRouterList(boolean valid) {
@@ -289,7 +300,7 @@ public class RouterManager {
     /**
      * 清除当期添加的所有路由器。
      */
-    public void removeAll(boolean removeCache) {
+    public void removeAllRouters(boolean removeCache) {
         final Router[] routers = getRouterList().toArray(new Router[getRouterList().size()]);
         for (Router router : routers) {
             removeRouter(router);
@@ -306,7 +317,7 @@ public class RouterManager {
     }
 
 
-    public Subscription subscribeRouterCreateEvent(Action1<RouterCallback<Boolean>> callback){
+    public Subscription subscribeRouterCreateEvent(Action1<RouterCallback<Boolean>> callback) {
         return subjectRouterCreate.subscribe(callback);
     }
 }

@@ -123,7 +123,7 @@ public class UserManager {
                 if (booleanRouterCallback.getData()) {
                     uploadRouter(booleanRouterCallback.getRouter(), null);
                 } else {
-                    final Object source = booleanRouterCallback.getRouter().getSource(ROUTER_SOURCE);
+                    final Object source = booleanRouterCallback.getRouter().getUserData(ROUTER_SOURCE);
                     if (source != null) {
                         removeRouter((Integer) source, null);
                     }
@@ -158,9 +158,9 @@ public class UserManager {
     public void uploadRouter(final Router router, final Action1<Throwable> callback) {
         try {
             final RouterCloudData data = new RouterCloudData(router.getName(), router.getSn());
-            if (router.getSource(ROUTER_SOURCE) != null) {
+            if (router.getUserData(ROUTER_SOURCE) != null) {
                 executeApiRequest(new TypeToken<ApiCallback<Object>>() {
-                                  }, createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_PUT + router.getSource(ROUTER_SOURCE))
+                                  }, createApiRequestBuilder(Constants.ServerUrl.ROUTER_CONFIGURATION_PUT + router.getUserData(ROUTER_SOURCE))
                                 .put(RequestBody.create(MEDIA_TYPE_JSON, GSON.toJson(data))).build(),
                         new Action1<ApiCallback<Object>>() {
                             @Override
@@ -186,7 +186,7 @@ public class UserManager {
                                     if (callback != null)
                                         callback.call(new Exception(apiCallback.getMessage()));
                                 } else {
-                                    router.setSource(ROUTER_SOURCE, apiCallback.getData());
+                                    router.setUserData(ROUTER_SOURCE, apiCallback.getData());
                                     if (callback != null) callback.call(null);
                                 }
                             }
@@ -445,7 +445,7 @@ public class UserManager {
                                     router = new Router(routerCloudData.getName(), routerCloudData.getConnectionKey());
                                     mRouterManager.addRouter(router);
                                 }
-                                router.setSource(ROUTER_SOURCE, routerCloudData.getID());
+                                router.setUserData(ROUTER_SOURCE, routerCloudData.getID());
                             }
                         }
                         trace("开始上传...");
@@ -467,7 +467,7 @@ public class UserManager {
      */
     public void tryUploadRouterList(final Action1<Throwable> callback) {
         for (Router router : mRouterManager.getRouterList()) {
-            if (router.getSource(ROUTER_SOURCE) == null) {
+            if (router.getUserData(ROUTER_SOURCE) == null) {
                 uploadRouter(router, callback);
             }
         }

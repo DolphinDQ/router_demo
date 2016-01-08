@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+import mrtech.smarthome.SmartHomeApp;
 import mrtech.smarthome.auth.UserManager;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
@@ -30,7 +31,7 @@ import rx.functions.Action1;
 /**
  * Created by sphynx on 2015/12/11.
  */
-public class App extends Application {
+public class App extends SmartHomeApp {
     private static App instance;
     private int id;
 
@@ -48,14 +49,16 @@ public class App extends Application {
 
     /**
      * 推送路由器报警信息。
+     *
      * @param mes
      * @param time
      */
-    private void pushAlarmNotification(String mes, String time) {
+    private void pushAlarmNotification(String sn, String mes, String time) {
         Notification notification = new Notification();
         notification.icon = R.drawable.ic_notifications_black_24dp;
         notification.tickerText = mes;
-        Intent routerActivityIntent = new Intent(this, RouterSettingsActivity.class);
+        Intent routerActivityIntent = new Intent(this, MainActivity.class);
+        routerActivityIntent.setAction(sn);
         routerActivityIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         notification.contentIntent = PendingIntent.getActivity(this, 0, routerActivityIntent, 0);
         notification.contentView = new RemoteViews(this.getPackageName(), R.layout.layout_notification);
@@ -86,17 +89,8 @@ public class App extends Application {
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        //安装编译兼容模块。
-        MultiDex.install(this);
-    }
-
-    @Override
     public void onCreate() {
         super.onCreate();
-        RouterManager.init(this);
-        UserManager.getInstance().init(this);
         startService(new Intent(getBaseContext(), RouterQueryTimelineService.class));
         final RouterManager routerManager = RouterManager.getInstance();
         //订阅路由器报警事件。
@@ -109,7 +103,7 @@ public class App extends Application {
                         return;
                     JSONObject object = new JSONObject(timeline.getParameter());
                     final Object name = object.get("name");
-                    pushAlarmNotification(name + "报警", new Date(timeline.getTimestamp() * 1000).toLocaleString());
+                    pushAlarmNotification(timelineRouterCallback.getRouter().getSn(), name + "报警", new Date(timeline.getTimestamp() * 1000).toLocaleString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -143,9 +137,4 @@ public class App extends Application {
         routerManager.loadRouters();
     }
 
-    @Override
-    public void onTerminate() {
-        RouterManager.destroy();
-        super.onTerminate();
-    }
 }

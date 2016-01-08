@@ -25,11 +25,29 @@ public class BaseActivity extends AppCompatActivity {
         return result;
     }
 
+    /**
+     * 设置默认值
+     *
+     * @param object 不能为空。
+     */
     public static void setDefaultData(Object object) {
-        if (defaultData.containsKey(object.getClass())) {
-            defaultData.remove(object.getClass());
-        }
+        if (object == null) throw new IllegalArgumentException("setDefaultData(Object) 参数不能为空！");
         defaultData.put(object.getClass(), object);
+    }
+
+    /**
+     * 设置默认值
+     *
+     * @param cls  数据类型
+     * @param data 可以为空
+     * @param <T>  数据类型
+     */
+    public static <T> void setDefaultData(Class<T> cls, T data) {
+        if (defaultData.containsKey(cls)) {
+            defaultData.remove(cls);
+        }
+        if (data != null)
+            defaultData.put(cls, data);
     }
 
     @Override
@@ -39,12 +57,7 @@ public class BaseActivity extends AppCompatActivity {
         if (intent != null) {
             Router temp = routerManager.getRouter(intent.getAction());
             if (temp != null) setDefaultData(temp);
-            if (getDefaultData(Router.class) != null) {
-                super.onCreate(savedInstanceState);
-                return;
-            }
         }
-        Toast.makeText(BaseActivity.this, "需要指定操作的路由器。", Toast.LENGTH_SHORT).show();
-        finish();
+        super.onCreate(savedInstanceState);
     }
 }

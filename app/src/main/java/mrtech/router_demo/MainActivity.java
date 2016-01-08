@@ -12,16 +12,18 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.okhttp.Request;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -29,18 +31,26 @@ import java.util.HashMap;
 import mrtech.models.RouterListItemData;
 import mrtech.smarthome.auth.AuthConfig;
 import mrtech.smarthome.auth.UserManager;
+import mrtech.smarthome.ipc.IPCManager;
+import mrtech.smarthome.ipc.IPCModels;
+import mrtech.smarthome.ipc.IPCamera;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
+import mrtech.smarthome.rpc.Messages;
+import mrtech.smarthome.rpc.Models;
+import mrtech.smarthome.util.RequestUtil;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Action2;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private boolean readyExit;
     private Context mContext;
     private UserManager mUserManager;
     private Router currentRouter;
     private final HashMap<String, Subscription> mSubscriptions = new HashMap<>();
     private RouterManager mRouterManager;
+    private Subscription cameraStatusChanged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         mUserManager = UserManager.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setCurrentRouter(getDefaultData(Router.class));
         initToolBar();
         initNavBar();
         initContent();
@@ -55,11 +66,38 @@ public class MainActivity extends AppCompatActivity {
 
     private void initContent() {
         final View cameraBtn = findViewById(R.id.camera_btn);
-        cameraBtn.setEnabled(BaseActivity.getDefaultData(Router.class) != null);
+        final Router router = BaseActivity.getDefaultData(Router.class);
+        cameraBtn.setEnabled(router != null);
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(mContext, IPCListActivity.class));
+            }
+        });
+
+        final View routerConfigBtn = findViewById(R.id.router_config_btn);
+        routerConfigBtn.setEnabled(router != null);
+        routerConfigBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Messages.Request request = RequestUtil.getDevices(Models.DeviceQuery
+                        .newBuilder()
+                        .setPage(0)
+                        .setPageSize(10)
+                        .setType(Models.DeviceType.DEVICE_TYPE_ZIGBEE)
+                        .build());
+                currentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
+                    @Override
+                    public void call(final Messages.Response response, Throwable throwable) {
+                        new Handler(getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Toast.makeText(MainActivity.this, "获取到设备:" + response.getExtension(Messages.QueryDeviceResponse.response).getResultsList().size(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
             }
         });
     }
@@ -117,23 +155,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 final Router router = getItem(position);
-                RouterListItemData source = router.getSource(RouterListItemData.class);
+                RouterListItemData source = router.getUserData(RouterListItemData.class);
                 if (source == null) {
                     source = new RouterListItemData();
-                    router.setSource(RouterListItemData.class, source);
+                    router.setUserData(RouterListItemData.class, source);
                 }
                 if (convertView == null) {
                     convertView = LayoutInflater.from(this.getContext())
                             .inflate(R.layout.layout_router_list_item, parent, false);
                 }
                 String routerName = router.getName();
-                if (source.isActive()) {
-                    setCurrentRouter(router);
-                }
+
                 ((TextView) convertView.findViewById(R.id.router_name)).setText(routerName + (source.isActive() ? "*" : ""));
                 ((TextView) convertView.findViewById(R.id.router_state)).setText(router.getRouterSession().getRouterStatus().toString());
-                convertView.findViewById(R.id.camera_btn).setVisibility(View.GONE);
-                convertView.findViewById(R.id.delete_btn).setVisibility(View.GONE);
                 return convertView;
             }
         };
@@ -143,11 +177,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
                 Router router = routerArrayAdapter.getItem(position);
-                for (Router rt : mRouterManager.getRouterList()) {
-                    RouterListItemData src = rt.getSource(RouterListItemData.class);
-                    src.setActive(rt.equals(router));
-
-                }
+                setCurrentRouter(router);
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
                 routerArrayAdapter.notifyDataSetChanged();
@@ -158,6 +188,9 @@ public class MainActivity extends AppCompatActivity {
             mSubscriptions.put("subscribeRouterStatusChangedEvent", mRouterManager.getEventManager().subscribeRouterStatusChangedEvent(new Action1<Router>() {
                 @Override
                 public void call(Router router) {
+                    if (currentRouter == null && router.getRouterSession().isAuthenticated()) {
+                        setCurrentRouter(router);
+                    }
                     new Handler(getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
@@ -200,7 +233,8 @@ public class MainActivity extends AppCompatActivity {
                 mUserManager.logoff(null);
                 return true;
             case R.id.action_refresh_router:
-                mRouterManager.removeAll(false);
+                mRouterManager.removeAllRouters(false);
+                setCurrentRouter(null);
                 mRouterManager.loadRouters();
                 return true;
             case R.id.action_exit:
@@ -246,17 +280,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setCurrentRouter(final Router router) {
-        if (router == null) return;
         if (router == currentRouter) return;
-        this.currentRouter = router;
+        routerInactive(currentRouter);
+        currentRouter = router;
+        routerActive(currentRouter);
+
+    }
+
+    private void routerInactive(final Router router) {
+        if (router != null) {
+            RouterListItemData src = router.getUserData(RouterListItemData.class);
+            src.setActive(false);
+        }
+        BaseActivity.setDefaultData(Router.class, null);
+        if (cameraStatusChanged != null) {
+            cameraStatusChanged.unsubscribe();
+        }
+    }
+
+    private void routerActive(final Router router) {
+        BaseActivity.setDefaultData(Router.class, router);
+        final boolean turnOn = router != null;
+        if (turnOn) {
+            RouterListItemData src = router.getUserData(RouterListItemData.class);
+            src.setActive(true);
+        }
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                BaseActivity.setDefaultData(router);
-                setTitle(router.getName());
-                findViewById(R.id.camera_btn).setEnabled(true);
+                setTitle(turnOn ? router.getName() : getText(R.string.title_activity_main));
+                findViewById(R.id.router_config_btn).setEnabled(turnOn);
+                if (turnOn) {
+                    final IPCManager ipcManager = router.getRouterSession().getCameraManager().getIPCManager();
+                    cameraStatusChanged = ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
+                        @Override
+                        public void call(IPCModels.IPCStateChanged ipcStateChanged) {
+                            setCameraCount(ipcManager.getCameraList());
+                        }
+                    });
+                    setCameraCount(ipcManager.getCameraList());
+                } else {
+                    findViewById(R.id.camera_btn).setEnabled(false);
+                    ((Button) findViewById(R.id.camera_btn)).setText(getText(R.string.camera));
+                }
             }
         });
+    }
+
+    private void setCameraCount(final IPCamera[] cameras) {
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                int validCount = 0;
+                for (IPCamera camera : cameras) {
+                    if (camera.getIpcContext().getStatus() == IPCModels.IPCStatus.CONNECTED)
+                        validCount++;
+                }
+                final Button button = (Button) findViewById(R.id.camera_btn);
+                button.setText("" + getText(R.string.camera) + validCount + "/" + cameras.length);
+                button.setEnabled(validCount > 0);
+            }
+        });
+
+
     }
 
 
