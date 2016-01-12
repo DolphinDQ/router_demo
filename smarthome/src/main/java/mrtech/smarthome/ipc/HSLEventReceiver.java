@@ -1,11 +1,15 @@
 package mrtech.smarthome.ipc;
 
 import android.bluetooth.BluetoothClass;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
-import mrtech.smarthome.ipc.IPCModels.*;
-
+import mrtech.smarthome.ipc.Models.IPCAlarm;
+import mrtech.smarthome.ipc.Models.IPCAudioFrame;
+import mrtech.smarthome.ipc.Models.IPCGetParameter;
+import mrtech.smarthome.ipc.Models.IPCSetParameter;
+import mrtech.smarthome.ipc.Models.IPCStateChanged;
+import mrtech.smarthome.ipc.Models.IPCStatus;
+import mrtech.smarthome.ipc.Models.IPCVideoFrame;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;

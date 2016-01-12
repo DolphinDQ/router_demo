@@ -3,7 +3,7 @@ package mrtech.smarthome.ipc;
 import android.util.Log;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
-import mrtech.smarthome.ipc.IPCModels.*;
+import mrtech.smarthome.ipc.Models.*;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;

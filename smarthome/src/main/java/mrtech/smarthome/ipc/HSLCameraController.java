@@ -3,11 +3,6 @@ package mrtech.smarthome.ipc;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import hsl.p2pipcam.nativecaller.NativeCaller;
-import mrtech.smarthome.ipc.IPCModels.*;
 import hsl.p2pipcam.nativecaller.DeviceSDK;
 
 /**

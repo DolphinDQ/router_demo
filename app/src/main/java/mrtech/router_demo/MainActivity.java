@@ -31,8 +31,9 @@ import mrtech.models.RouterListItemData;
 import mrtech.smarthome.auth.AuthConfig;
 import mrtech.smarthome.auth.UserManager;
 import mrtech.smarthome.ipc.IPCManager;
-import mrtech.smarthome.ipc.IPCModels;
 import mrtech.smarthome.ipc.IPCamera;
+import mrtech.smarthome.ipc.Models.IPCStateChanged;
+import mrtech.smarthome.ipc.Models.IPCStatus;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.rpc.Messages;
@@ -344,9 +345,9 @@ public class MainActivity extends BaseActivity {
                 findViewById(R.id.router_config_btn).setEnabled(turnOn);
                 if (turnOn) {
                     final IPCManager ipcManager = router.getRouterSession().getCameraManager().getIPCManager();
-                    cameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
+                    cameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCStateChanged>() {
                         @Override
-                        public void call(IPCModels.IPCStateChanged ipcStateChanged) {
+                        public void call(IPCStateChanged ipcStateChanged) {
                             setCameraCount(ipcManager.getCameraList());
                         }
                     });
@@ -365,7 +366,7 @@ public class MainActivity extends BaseActivity {
             public void run() {
                 int validCount = 0;
                 for (IPCamera camera : cameras) {
-                    if (camera.getIpcContext().getStatus() == IPCModels.IPCStatus.CONNECTED)
+                    if (camera.getIpcContext().getStatus() == IPCStatus.CONNECTED)
                         validCount++;
                 }
                 final Button button = (Button) findViewById(R.id.camera_btn);

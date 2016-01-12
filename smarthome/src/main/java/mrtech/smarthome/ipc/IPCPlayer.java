@@ -1,5 +1,7 @@
 package mrtech.smarthome.ipc;
 
+import mrtech.smarthome.ipc.Models.PictureData;
+import mrtech.smarthome.ipc.Models.RenderContext;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -81,14 +83,14 @@ public interface IPCPlayer {
      * @param callback 音频渲染事件回调。
      * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）。
      */
-    Subscription subscribeRenderAction(Action1<IPCModels.RenderContext> callback);
+    Subscription subscribeRenderAction(Action1<RenderContext> callback);
 
     /**
      * 当前视频截图。
      *
      * @param callback 截图数据回调。
      */
-    void takePicture(Action1<IPCModels.PictureData> callback);
+    void takePicture(Action1<PictureData> callback);
 
 
     /**

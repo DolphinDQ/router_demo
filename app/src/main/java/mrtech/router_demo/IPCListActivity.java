@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import mrtech.smarthome.ipc.IPCController;
 import mrtech.smarthome.ipc.IPCManager;
-import mrtech.smarthome.ipc.IPCModels;
 import mrtech.smarthome.ipc.IPCPlayer;
 import mrtech.smarthome.ipc.IPCamera;
+import mrtech.smarthome.ipc.Models.IPCStateChanged;
 import mrtech.smarthome.router.Models.CameraDataManager;
 import mrtech.smarthome.router.Router;
 import rx.Subscription;
@@ -49,9 +49,9 @@ public class IPCListActivity extends BaseActivity {
         }
         cameraManager = router.getRouterSession().getCameraManager();
         ipcManager = cameraManager.getIPCManager();
-        subscriptionCameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
+        subscriptionCameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCStateChanged>() {
             @Override
-            public void call(IPCModels.IPCStateChanged ipcStateChanged) {
+            public void call(IPCStateChanged ipcStateChanged) {
                 final IPCamera camera = ipcManager.getCamera(ipcStateChanged.getCameraId());
                 if (camera != null) {
                     play(0);

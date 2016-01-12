@@ -1,6 +1,6 @@
 package mrtech.smarthome.ipc;
 
-import mrtech.smarthome.ipc.IPCModels.*;
+import mrtech.smarthome.ipc.Models.*;
 
 /**
  * IP camera object

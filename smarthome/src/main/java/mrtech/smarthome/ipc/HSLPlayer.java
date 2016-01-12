@@ -25,7 +25,7 @@ import hsl.p2pipcam.util.CustomAudioRecorder;
 import hsl.p2pipcam.util.CustomBuffer;
 import hsl.p2pipcam.util.CustomBufferData;
 import hsl.p2pipcam.util.CustomBufferHead;
-import mrtech.smarthome.ipc.IPCModels.*;
+import mrtech.smarthome.ipc.Models.*;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;

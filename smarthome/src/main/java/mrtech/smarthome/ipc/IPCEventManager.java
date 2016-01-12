@@ -2,7 +2,7 @@ package mrtech.smarthome.ipc;
 
 import rx.Subscription;
 import rx.functions.Action1;
-import mrtech.smarthome.ipc.IPCModels.*;
+import mrtech.smarthome.ipc.Models.*;
 
 /**
  * Created by sphynx on 2015/12/8.
