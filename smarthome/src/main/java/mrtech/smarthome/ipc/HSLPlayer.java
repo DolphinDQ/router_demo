@@ -13,18 +13,19 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
+import hsl.p2pipcam.nativecaller.NativeCaller;
 import hsl.p2pipcam.util.AudioPlayer;
 import hsl.p2pipcam.util.CustomAudioRecorder;
 import hsl.p2pipcam.util.CustomBuffer;
 import hsl.p2pipcam.util.CustomBufferData;
 import hsl.p2pipcam.util.CustomBufferHead;
 import mrtech.smarthome.ipc.IPCModels.*;
-import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -106,22 +107,24 @@ class HSLPlayer implements IPCPlayer {
     }
 
     private void subscribeAudio() {
-        subscribeAudioHandler = mManager.createEventController().subscribeIPCAudioFrame(new Action1<IPCAudioFrame>() {
-            @Override
-            public void call(IPCAudioFrame ipcAudioFrame) {
-                final IPCamera camera = mManager.getCamera(ipcAudioFrame.getCameraId());
-                if (playingCamera != null &&camera!=null&& camera.equals(playingCamera) && getAudioSwitch()) {
-                    CustomBufferHead head = new CustomBufferHead();
-                    CustomBufferData data = new CustomBufferData();
-                    head.length = ipcAudioFrame.getPcmSize();
-                    head.startcode = 0xff00ff;
-                    data.head = head;
-                    data.data = ipcAudioFrame.getPcm();
-                    if (mAudioPlayer.isAudioPlaying())
-                        mAudioBuffer.addData(data);
-                }
-            }
-        });
+        subscribeAudioHandler = mManager
+                .createEventManager(null)
+                .subscribeIPCAudioFrame(new Action1<IPCAudioFrame>() {
+                    @Override
+                    public void call(IPCAudioFrame ipcAudioFrame) {
+                        final IPCamera camera = mManager.getCamera(ipcAudioFrame.getCameraId());
+                        if (playingCamera != null && camera != null && camera.equals(playingCamera) && getAudioSwitch()) {
+                            CustomBufferHead head = new CustomBufferHead();
+                            CustomBufferData data = new CustomBufferData();
+                            head.length = ipcAudioFrame.getPcmSize();
+                            head.startcode = 0xff00ff;
+                            data.head = head;
+                            data.data = ipcAudioFrame.getPcm();
+                            if (mAudioPlayer.isAudioPlaying())
+                                mAudioBuffer.addData(data);
+                        }
+                    }
+                });
     }
 
     private void unsubscribeAudio() {
@@ -129,10 +132,6 @@ class HSLPlayer implements IPCPlayer {
             subscribeAudioHandler.unsubscribe();
     }
 
-    @Override
-    public void play(String deviceId) {
-        play(mManager.getCamera(deviceId));
-    }
 
     @Override
     public void play(IPCamera cam) {
@@ -194,7 +193,7 @@ class HSLPlayer implements IPCPlayer {
 
     @Override
     public IPCamera[] getPlayList() {
-        IPCamera[] cameraList = mManager.getCameraList();
+        List<IPCamera> cameraList = mManager.getCameraList();
         ArrayList<IPCamera> cameras = new ArrayList<IPCamera>();
         for (IPCamera cam : cameraList) {
             if (cam.getIpcContext().getStatus() == IPCStatus.CONNECTED) {
@@ -311,6 +310,34 @@ class HSLPlayer implements IPCPlayer {
     public boolean getTalkSwitch() {
         return talkSwitch;
     }
+
+
+    @Override
+    public void upAndDown(boolean reversed) {
+        if (playingCamera == null) return;
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("param", 5);
+            obj.put("value", reversed ? 3 : 1);
+            NativeCaller.SetParam(playingCamera.getIpcContext().getHandle(), 0x2026, obj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void leftAndRight(boolean reversed) {
+        if (playingCamera == null) return;
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("param", 5);
+            obj.put("value", reversed ? 2 : 0);
+            NativeCaller.SetParam(playingCamera.getIpcContext().getHandle(), 0x2026, obj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 //
 //    private class InnerAudioListener implements AudioListener {
 //        @Override

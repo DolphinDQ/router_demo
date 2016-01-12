@@ -14,7 +14,7 @@ import rx.subjects.PublishSubject;
 class HSLCameraClient implements IPCContext {
     private final IPCManager mManager;
     private final IPCamera mIPCamera;
-    private final IPCEventController mEventController;
+    private final IPCEventManager mEventController;
     private Subscription mAlarmEventHandle;
 
 
@@ -47,7 +47,7 @@ class HSLCameraClient implements IPCContext {
     public HSLCameraClient(IPCManager manager, IPCamera camera) {
         mManager = manager;
         mIPCamera = camera;
-        mEventController = mManager.createEventController();
+        mEventController = mManager.createEventManager(null);
     }
 
     private void setAutoReconnect() {

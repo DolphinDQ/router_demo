@@ -55,7 +55,7 @@ public class RouterQueryTimelineService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         do {
             try {
-                trace("还活着：" + RouterManager.getInstance().getRouterList(true).size() + "个路由器");
+                trace("还活着：" + RouterManager.getInstance().getRouterList().size() + "个路由器");
                 Thread.sleep(30 * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();

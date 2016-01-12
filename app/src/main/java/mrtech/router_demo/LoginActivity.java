@@ -32,6 +32,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import mrtech.smarthome.auth.AuthConfig;
 import mrtech.smarthome.auth.UserManager;
 import rx.functions.Action1;
 
@@ -66,7 +67,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-
+        final AuthConfig config = UserManager.getInstance().getConfig();
+        if (config != null) {
+            mEmailView.setText(config.getUser());
+        }
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

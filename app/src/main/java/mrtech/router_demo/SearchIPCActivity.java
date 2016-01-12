@@ -16,7 +16,7 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import mrtech.smarthome.router.Models.CameraManager;
+import mrtech.smarthome.router.Models.CameraDataManager;
 import mrtech.smarthome.router.Models.CommunicationManager;
 import mrtech.smarthome.router.Models.RouterSession;
 import mrtech.smarthome.router.Router;
@@ -28,7 +28,7 @@ import rx.functions.Action1;
 public class SearchIPCActivity extends BaseActivity {
 
     private ArrayAdapter<Models.Device> cameraDeviceArrayAdapter;
-    private CameraManager mCameraManager;
+    private CameraDataManager mCameraManager;
     private RouterSession mRouterSession;
     private CommunicationManager mCommunicationManager;
 

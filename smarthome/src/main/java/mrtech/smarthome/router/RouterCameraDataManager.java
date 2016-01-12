@@ -1,6 +1,5 @@
 package mrtech.smarthome.router;
 
-import android.app.DownloadManager;
 import android.util.Log;
 
 import java.util.List;
@@ -17,20 +16,18 @@ import rx.functions.Action2;
 /**
  * Created by sphynx on 2015/12/25.
  */
-class RouterCameraManager implements CameraManager {
+class RouterCameraDataManager implements CameraDataManager {
 
     private static void trace(String msg) {
-        Log.e(RouterClient.class.getName(), msg);
+        Log.e(RouterCameraDataManager.class.getName(), msg);
     }
 
     private final IPCManager mIPCManager;
     private final CommunicationManager mCommunicationManager;
-    private final Router mRouter;
 
-    public RouterCameraManager(Router router, CommunicationManager communicationManager) {
+    public RouterCameraDataManager(CommunicationManager communicationManager) {
         mIPCManager = IPCManager.createNewManager();
         mCommunicationManager = communicationManager;
-        mRouter = router;
     }
 
     @Override
@@ -58,7 +55,7 @@ class RouterCameraManager implements CameraManager {
                                     if (cameraDevice == null || device.getType() != mrtech.smarthome.rpc.Models.DeviceType.DEVICE_TYPE_CAMERA) {
                                         throw new IllegalArgumentException("device must be type of camera");
                                     }
-                                    mIPCManager.addCamera( new IPCamera(device, cameraDevice.getDeviceid(), cameraDevice.getUser(), cameraDevice.getPassword()));
+                                    mIPCManager.addCamera(new IPCamera(device, cameraDevice.getDeviceid(), cameraDevice.getUser(), cameraDevice.getPassword()));
                                 }
                             } catch (Exception e) {
                                 throwable = e;
@@ -117,5 +114,29 @@ class RouterCameraManager implements CameraManager {
             });
         }
     }
+
+//    public void searchCamera(final Action2<List<Models.Device>, Throwable> callback) {
+//        try {
+//            mCommunicationManager.postRequestAsync(RequestUtil.searchCamera(), new Action2<Messages.Response, Throwable>() {
+//                @Override
+//                public void call(Messages.Response response, Throwable throwable) {
+//                    if (response == null || response.getErrorCode() != Messages.Response.ErrorCode.SUCCESS || throwable != null) {
+//                        Throwable result;
+//                        if (response == null) {
+//                            result = throwable;
+//                        } else {
+//                            result = new Exception(response.getErrorCode().toString(), throwable);
+//                        }
+//                        callback.call(null, result);
+//                    } else {
+//                        final List<Models.Device> devicesList = response.getExtension(Messages.SearchCameraResponse.response).getDevicesList();
+//                        callback.call(devicesList, null);
+//                    }
+//                }
+//            });
+//        } catch (Exception ex) {
+//            callback.call(null, ex);
+//        }
+//    }
 
 }

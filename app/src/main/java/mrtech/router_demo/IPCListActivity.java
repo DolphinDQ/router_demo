@@ -18,7 +18,7 @@ import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.ipc.IPCModels;
 import mrtech.smarthome.ipc.IPCPlayer;
 import mrtech.smarthome.ipc.IPCamera;
-import mrtech.smarthome.router.Models.CameraManager;
+import mrtech.smarthome.router.Models.CameraDataManager;
 import mrtech.smarthome.router.Router;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -30,7 +30,7 @@ public class IPCListActivity extends BaseActivity {
     private int index;
     private IPCPlayer cameraPlayer;
     private TextView viewCamera;
-    private CameraManager cameraManager;
+    private CameraDataManager cameraManager;
     private Subscription subscriptionCameraStatusChanged;
 
     private static void trace(String msg) {
@@ -49,7 +49,7 @@ public class IPCListActivity extends BaseActivity {
         }
         cameraManager = router.getRouterSession().getCameraManager();
         ipcManager = cameraManager.getIPCManager();
-        subscriptionCameraStatusChanged = ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
+        subscriptionCameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
             @Override
             public void call(IPCModels.IPCStateChanged ipcStateChanged) {
                 final IPCamera camera = ipcManager.getCamera(ipcStateChanged.getCameraId());
@@ -234,7 +234,7 @@ public class IPCListActivity extends BaseActivity {
                 if (i < 0) i = 0;
                 if (i >= max) i = max - 1;
                 index = i;
-                viewCamera.setText("已连接:" + max + "/" + ipcManager.getCameraList().length + " 正在播放:" + (i + 1) + "/" + max);
+                viewCamera.setText("已连接:" + max + "/" + ipcManager.getCameraList().size() + " 正在播放:" + (i + 1) + "/" + max);
                 if (playingList[i].equals(cameraPlayer.getPlayingCamera())) return;
                 cameraPlayer.play(playingList[i]);
                 ((Switch) findViewById(R.id.audio_switch)).setChecked(false);

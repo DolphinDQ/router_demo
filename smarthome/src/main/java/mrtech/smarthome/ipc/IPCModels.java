@@ -1,4 +1,5 @@
 package mrtech.smarthome.ipc;
+
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -13,51 +14,60 @@ public class IPCModels {
      */
     public interface IPCContext {
         /**
-         * camera connection handle(userId)
+         * IPC连接句柄。
          *
          * @return
          */
         long getHandle();
+
         /**
-         * camera status
+         * IPC当前状态。
          *
          * @return 100 success
          */
         IPCStatus getStatus();
+
         /**
-         * is camera play
+         * IPC是否处于播放状态。
          *
-         * @return
+         * @return true为是。
          */
         boolean isPlaying();
+
         /**
-         * get reconnecting status
+         * IPC是否处于重连状态。
          *
-         * @return
+         * @return true为是。
          */
         boolean isReconnecting();
+
         /**
-         * destroy ip camera context
-         * @return
+         * 销毁IPC连接会话。
          */
         void destroy();
+
         /**
-         * init
+         * 初始化IPC连接会话，即重新连接。
          */
         void init();
+
         /**
-         * subscribe the action of camera playing changed.
-         * @param callback
-         * @return
+         * 订阅IPC播放状态变化事件。
+         *
+         * @param callback 播放状态变化回调。
+         * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）。
          */
         Subscription subscribePlayStatus(Action1<IPCContext> callback);
+
         /**
-         * subscribe the status of camera reconnection.
-         * @param callback
-         * @return
+         * 订阅IPC重连回调。
+         *
+         * @param callback IPC重连回调。
+         * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）。
          */
         Subscription subscribeReconnectionStatus(Action1<IPCContext> callback);
     }
+
     /**
      * Created by sphynx on 2015/12/8.
      */
@@ -112,8 +122,9 @@ public class IPCModels {
         CHECK_ACCOUNT("正在验证");
 
         private final String description;
-        private  IPCStatus(String description){
-            this.description =description;
+
+        private IPCStatus(String description) {
+            this.description = description;
         }
 
         @Override
@@ -122,48 +133,88 @@ public class IPCModels {
         }
     }
 
+    /**
+     * IPC事件数据。
+     */
     public interface IPCEventData {
+        /**
+         * IPC连接句柄。
+         *
+         * @return 连接句柄。
+         */
         long getCameraId();
     }
 
-    public interface IPCStateChanged extends IPCEventData{
+    /**
+     * IPC状态改变回调数据。
+     */
+    public interface IPCStateChanged extends IPCEventData {
+
+        /**
+         * 获取IPC即将改变的状态。
+         * @return IPC状态。
+         */
         IPCStatus getStatus();
     }
 
+    /**
+     * IPC视频帧回调数据。
+     */
     public interface IPCVideoFrame extends IPCEventData {
+        /**
+         * 获取视频帧数据。
+         * @return 视频帧。
+         */
         byte[] getFrameData();
+
+        /**
+         * 帧类型。
+         * @return 。。
+         */
         int getFrameType();
+
+        /**
+         * 帧大小。
+         * @return 。。。
+         */
         int getFrameSize();
     }
 
-    public interface IPCAudioFrame extends IPCEventData{
+    public interface IPCAudioFrame extends IPCEventData {
         byte[] getPcm();
+
         int getPcmSize();
     }
 
-    public interface IPCGetParameter extends IPCEventData{
+    public interface IPCGetParameter extends IPCEventData {
         int getParamType();
+
         Object getParamData();
     }
 
-    public interface IPCSetParameter extends IPCEventData{
+    public interface IPCSetParameter extends IPCEventData {
         int getParamType();
+
         Object getResult();
     }
 
-    public interface IPCAlarm extends IPCEventData{
+    public interface IPCAlarm extends IPCEventData {
         int getAlarmType();
     }
 
-    public interface PictureData  {
+    public interface PictureData {
         byte[] getImageBuffer();
+
         int getWidth();
+
         int getHeight();
     }
 
-    public interface RenderContext{
+    public interface RenderContext {
         int getWidth();
+
         int getHeight();
+
         int getSize();
     }
 }

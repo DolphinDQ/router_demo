@@ -23,9 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Request;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -347,7 +344,7 @@ public class MainActivity extends BaseActivity {
                 findViewById(R.id.router_config_btn).setEnabled(turnOn);
                 if (turnOn) {
                     final IPCManager ipcManager = router.getRouterSession().getCameraManager().getIPCManager();
-                    cameraStatusChanged = ipcManager.createEventController().subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
+                    cameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCModels.IPCStateChanged>() {
                         @Override
                         public void call(IPCModels.IPCStateChanged ipcStateChanged) {
                             setCameraCount(ipcManager.getCameraList());
@@ -362,7 +359,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void setCameraCount(final IPCamera[] cameras) {
+    private void setCameraCount(final List<IPCamera> cameras) {
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -372,7 +369,7 @@ public class MainActivity extends BaseActivity {
                         validCount++;
                 }
                 final Button button = (Button) findViewById(R.id.camera_btn);
-                button.setText("" + getText(R.string.camera) + validCount + "/" + cameras.length);
+                button.setText("" + getText(R.string.camera) + validCount + "/" + cameras.size());
                 button.setEnabled(validCount > 0);
             }
         });

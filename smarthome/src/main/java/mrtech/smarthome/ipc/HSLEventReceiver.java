@@ -1,11 +1,11 @@
 package mrtech.smarthome.ipc;
 
 import android.bluetooth.BluetoothClass;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import mrtech.smarthome.ipc.IPCModels.*;
 
-import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -14,10 +14,11 @@ import rx.subjects.PublishSubject;
 /**
  * Created by sphynx on 2015/12/8.
  */
-class HSLEventController implements IPCEventController {
+class HSLEventReceiver {
     private static void trace(String msg) {
         Log.e(IPCManager.class.getName(), msg);
     }
+
     public static IPCStatus getStatus(int code) {
         switch (code) {
             case 0:
@@ -46,11 +47,6 @@ class HSLEventController implements IPCEventController {
                 return IPCStatus.UNKNOWN;
         }
     }
-
-    private IPCamera getCamera(long userId) {
-        return IPCManager.getInstance().getCamera(userId);
-    }
-
 
     private PublishSubject<IPCAlarm> subjectAlarm = PublishSubject.create();
     private PublishSubject<IPCStateChanged> subjectState = PublishSubject.create();
@@ -125,8 +121,9 @@ class HSLEventController implements IPCEventController {
         subjectState.onNext(new IPCStateChanged() {
             @Override
             public IPCStatus getStatus() {
-                return HSLEventController.getStatus(status);
+                return HSLEventReceiver.getStatus(status);
             }
+
             @Override
             public long getCameraId() {
                 return UserID;
@@ -230,37 +227,74 @@ class HSLEventController implements IPCEventController {
 //        settingsListener = listener;
 //    }
 
-    //=============IPCEventController====================
-    @Override
-    public Subscription subscribeCameraStatus(Action1<IPCStateChanged> onNext) {
-        return subjectState.subscribe(onNext);
+    public class HSLEventManager implements IPCEventManager {
+
+        private final Long userId;
+
+        public HSLEventManager(Long userId) {
+            this.userId = userId;
+        }
+
+        @Override
+        public Subscription subscribeCameraStatus(Action1<IPCStateChanged> callback) {
+            return (userId == null ? subjectState : subjectState.filter(new Func1<IPCStateChanged, Boolean>() {
+                @Override
+                public Boolean call(IPCStateChanged ipcStateChanged) {
+                    return ipcStateChanged.getCameraId() == userId;
+                }
+            })).subscribe(callback);
+        }
+
+        @Override
+        public Subscription subscribeIPCAudioFrame(Action1<IPCAudioFrame> callback) {
+            return (userId == null ? subjectAudioFrame : subjectAudioFrame.filter(new Func1<IPCAudioFrame, Boolean>() {
+                @Override
+                public Boolean call(IPCAudioFrame ipcAudioFrame) {
+                    return ipcAudioFrame.getCameraId() == userId;
+                }
+            })).subscribe(callback);
+        }
+
+        @Override
+        public Subscription subscribeIPCVideoFrame(Action1<IPCVideoFrame> callback) {
+            return (userId == null ? subjectVideoFrame : subjectVideoFrame.filter(new Func1<IPCVideoFrame, Boolean>() {
+                @Override
+                public Boolean call(IPCVideoFrame ipcVideoFrame) {
+                    return ipcVideoFrame.getCameraId() == userId;
+                }
+            })).subscribe(callback);
+        }
+
+        public Subscription subscribeGetParam(Action1<IPCGetParameter> callback) {
+            return (userId == null ? subjectGetParam : subjectGetParam.filter(new Func1<IPCGetParameter, Boolean>() {
+                @Override
+                public Boolean call(IPCGetParameter ipcGetParameter) {
+                    return ipcGetParameter.getCameraId() == userId;
+                }
+            })).subscribe(callback);
+        }
+
+        public Subscription subscribeSetParam(Action1<IPCSetParameter> callback) {
+            return (userId == null ? subjectSetParam : subjectSetParam.filter(new Func1<IPCSetParameter, Boolean>() {
+                @Override
+                public Boolean call(IPCSetParameter ipcSetParameter) {
+                    return ipcSetParameter.getCameraId() == userId;
+                }
+            })).subscribe(callback);
+        }
+
+        public Subscription subscribeAlarm(Action1<IPCAlarm> callback) {
+            return (userId == null ? subjectAlarm : subjectAlarm.filter(new Func1<IPCAlarm, Boolean>() {
+                @Override
+                public Boolean call(IPCAlarm ipcAlarm) {
+                    return ipcAlarm.getCameraId() == userId;
+                }
+            })).subscribe(callback);
+        }
     }
 
-    @Override
-    public Subscription subscribeIPCAudioFrame(Action1<IPCAudioFrame> callback) {
-        return subjectAudioFrame.subscribe(callback);
+    public IPCEventManager createEventManager(final Long userId) {
+        return new HSLEventManager(userId);
     }
-
-    @Override
-    public Subscription subscribeIPCVideoFrame(Action1<IPCVideoFrame> callback) {
-        return subjectVideoFrame.subscribe(callback);
-    }
-
-    @Override
-    public Subscription subscribeGetParam(Action1<IPCGetParameter> callback) {
-        return subjectGetParam.subscribe(callback);
-    }
-
-    @Override
-    public Subscription subscribeSetParam(Action1<IPCSetParameter> callback) {
-        return subjectSetParam.subscribe(callback);
-    }
-
-    @Override
-    public Subscription subscribeAlarm(Action1<IPCAlarm> callback) {
-        return subjectAlarm.subscribe(callback);
-    }
-
-
 }
 

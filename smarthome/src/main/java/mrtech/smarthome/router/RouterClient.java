@@ -14,7 +14,6 @@ import java.util.concurrent.TimeoutException;
 import javax.net.ssl.SSLSocket;
 
 import mrtech.smarthome.rpc.Messages;
-import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.NetUtil;
 import mrtech.smarthome.util.CharUtil;
 import mrtech.smarthome.util.RequestUtil;
@@ -27,7 +26,7 @@ import rx.subjects.PublishSubject;
  */
 class RouterClient implements RouterSession {
     private final RouterClient mContext;
-    private final RouterCameraManager mCameraManager;
+    private final RouterCameraDataManager mCameraManager;
     private CheckStatusTask mCheckStatusTask;
 
     private static void trace(String msg) {
@@ -49,7 +48,6 @@ class RouterClient implements RouterSession {
     private String apiKey;
     private RouterStatus routerStatus;
     private SSLSocket socket;
-    private Messages.GetSystemConfigurationResponse systemConfigurationResponse;
 
     public RouterClient(Router router, int p2pHandle) {
         mContext = RouterClient.this;
@@ -59,7 +57,7 @@ class RouterClient implements RouterSession {
         mRouter = router;
         mIPCManager = IPCManager.createNewManager();
         mCommunicationManager = new RouterCommunicationManager(this);
-        mCameraManager = new RouterCameraManager(mRouter, mCommunicationManager);
+        mCameraManager = new RouterCameraDataManager( mCommunicationManager);
         setRouterStatus(RouterStatus.INITIAL);
     }
 
@@ -225,27 +223,23 @@ class RouterClient implements RouterSession {
         }).start();
     }
 
+    @Override
     public void reconnect() {
-        disconnect();
-        if (mCheckStatusTask != null)
-            mCheckStatusTask.interrupt();
-    }
-
-    @Override
-    public mrtech.smarthome.rpc.Models.SystemConfiguration getRouterConfiguration(boolean cache) {
-        try {
-            final Messages.Response response = mCommunicationManager.postRequest(RequestUtil.getSysConfig(), cache);
-            if (response != null) {
-                return response.getExtension(Messages.GetSystemConfigurationResponse.response).getConfiguration();
-            }
-        } catch (TimeoutException e) {
-            e.printStackTrace();
+        switch (getRouterStatus()) {
+            case ROUTER_CONNECTED:
+            case ROUTER_DISCONNECTED:
+            case API_AUTH:
+            case API_AUTH_SUCCESS:
+            case API_UNAUTHORIZED:
+                disconnect();
+                if (mCheckStatusTask != null)
+                    mCheckStatusTask.interrupt();
+                break;
         }
-        return null;
     }
 
     @Override
-    public CameraManager getCameraManager() {
+    public CameraDataManager getCameraManager() {
         return mCameraManager;
     }
 
@@ -267,11 +261,6 @@ class RouterClient implements RouterSession {
     @Override
     public boolean isAuthenticated() {
         return authenticated;
-    }
-
-    @Override
-    public boolean isInitialized() {
-        return initialized;
     }
 
     @Override
@@ -365,4 +354,6 @@ class RouterClient implements RouterSession {
     public Router getRouter() {
         return mRouter;
     }
+
+
 }

@@ -8,71 +8,74 @@ import rx.functions.Action1;
  * 路由器连接会话。
  */
 public interface RouterSession {
+    /**
+     * 路由器发送Keep alive 数据包时间间隔。（毫秒）
+     */
     int ROUTER_KEEP_ALIVE_DELAY = 30000;
+    /**
+     * 路由器连接失败重连时间间隔。（毫秒）
+     */
     int ROUTER_RECONNECTION_DELAY = 5000;
+    /**
+     * 路由器映射端口失败重新映射时间间隔。（毫秒）
+     */
     int ROUTER_ADD_PORT_DELAY = 10000;
+    /**
+     * 路由器登录验证失败重新验证时间间隔。（毫秒）
+     */
     int ROUTER_AUTH_DELAY = 5000;
 
     /**
-     * get sn decode result
+     * 获取路由器序列号是否有效。
      *
-     * @return
+     * @return true为有效。
      */
     boolean isSNValid();
 
     /**
-     * get the status of connection
+     * 获取路由器是否已经连接。
      *
-     * @return
+     * @return true为已连接。
      */
     boolean isConnected();
 
     /**
-     * get the status P2P port
+     * 获取路由器是否已经建立陪p2p通道。
      *
-     * @return
+     * @return true为已经建立通道。
      */
     boolean isPortValid();
 
     /**
-     * get the status of communication permission
+     * 获取路由器通讯授权。
      *
-     * @return
+     * @return true为取得路由器通讯授权。
      */
     boolean isAuthenticated();
 
     /**
-     * 会话是否初始化。
-     *
-     * @return
+     * 强制将会话重新连接。
      */
-    boolean isInitialized();
+    void  reconnect();
 
     /**
      * 获取路由器状态。
      *
-     * @return
+     * @return 路由器当前连接状态。
      */
     RouterStatus getRouterStatus();
 
     /**
-     * 获取路由器基础配置信息。
+     * 获取当前路由器的摄像头管理。
      *
-     * @param cache true 为使用缓存中的信息。
-     * @return
+     * @return 路由器的摄像头管理。
      */
-    mrtech.smarthome.rpc.Models.SystemConfiguration getRouterConfiguration(boolean cache);
+    CameraDataManager getCameraManager();
 
     /**
-     * 获取 路由器视频管理器。
-     * @return
-     */
-    CameraManager getCameraManager();
-
-    /**
-     * 获取数据通道。
+     * 获取当前路由器的通讯管理器，用于收发路由器数据。
      *
-     * @return
+     * @return 通讯管理器。
      */
     CommunicationManager getCommunicationManager();
 

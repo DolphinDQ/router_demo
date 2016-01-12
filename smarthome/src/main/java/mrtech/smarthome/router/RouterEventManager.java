@@ -103,11 +103,11 @@ class RouterEventManager implements EventManager {
      * 订阅所有路由器回调事件
      *
      * @param eventType
-     * @param callbackAction
+     * @param callback
      * @return 事件订阅句柄。注意：在不使用事件的时候，需要调用Subscription.unsubscribe()注销事件。
      */
     @Override
-    public Subscription subscribeRouterEvent(final Messages.Event.EventType eventType, final Action1<RouterCallback<Messages.Event>> callbackAction) {
+    public Subscription subscribeRouterEvent(final Messages.Event.EventType eventType, final Action1<RouterCallback<Messages.Event>> callback) {
         if (!mEventTypes.contains(eventType))
             mEventTypes.add(eventType);
         subscribeEvents();
@@ -122,7 +122,7 @@ class RouterEventManager implements EventManager {
             public Boolean call(RouterCallback<Messages.Event> eventRouterCallback) {
                 return eventRouterCallback.getData().getType() == eventType;
             }
-        }).subscribe(callbackAction);
+        }).subscribe(callback);
     }
 
     @Override
@@ -154,7 +154,6 @@ class RouterEventManager implements EventManager {
                     public Router getRouter() {
                         return client.getRouter();
                     }
-
                     @Override
                     public Messages.Event getData() {
                         return event;
@@ -165,23 +164,23 @@ class RouterEventManager implements EventManager {
         subscribeEvents();
     }
 
-    private class QueryTimeLineTask implements Runnable {
-        @Override
-        public void run() {
-            Thread.currentThread().setName("QueryTimelineTask");
-            do {
-                final List<Router> routerList = mManager.getRouterList(true);
-                for (final Router router : routerList) {
-                    queryTimeline(router);
-                }
-                try {
-                    Thread.sleep(60 * 1000);
-                } catch (InterruptedException e) {
-                    trace(Thread.currentThread().getName() + " wakeup!");
-                }
-            } while (true);
-        }
-    }
+//    private class QueryTimeLineTask implements Runnable {
+//        @Override
+//        public void run() {
+//            Thread.currentThread().setName("QueryTimelineTask");
+//            do {
+//                final List<Router> routerList = mManager.getRouterList(true);
+//                for (final Router router : routerList) {
+//                    queryTimeline(router);
+//                }
+//                try {
+//                    Thread.sleep(60 * 1000);
+//                } catch (InterruptedException e) {
+//                    trace(Thread.currentThread().getName() + " wakeup!");
+//                }
+//            } while (true);
+//        }
+//    }
 
 
     private void queryTimeline(final Router router) {

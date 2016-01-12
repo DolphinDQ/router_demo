@@ -25,7 +25,7 @@ import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
 /**
- * router connection manager
+ * 为单例对象，以工厂模式设计，所管理对象为Router对象，主要实现的方法，为Router对象的状态管理
  * Created by sphynx on 2015/12/1.
  */
 public class RouterManager {
@@ -39,6 +39,7 @@ public class RouterManager {
     private final RouterEventManager mEventManager;
 
     private static RouterManager ourInstance = new RouterManager();
+
     /**
      * 创建路由器管理单例对象。
      *
@@ -169,7 +170,7 @@ public class RouterManager {
     }
 
     /**
-     * 销毁路由管理器。
+     * 销毁管理器。
      */
     public static void destroy() {
         SugarContext.terminate();
@@ -223,6 +224,7 @@ public class RouterManager {
 
     /**
      * 删除一台路由器。默认不删除数据库缓存路由器信息。
+     * 如果用户已经登录，则会同步删除云端数据。
      *
      * @param router 路由器对象。路由器对象可以通过，getRouterList或getRouter获得。
      */
@@ -275,7 +277,7 @@ public class RouterManager {
     /**
      * 获取当前路由器列表。
      *
-     * @return 路由器列表。（源列表对象，请勿执行增删操作。)
+     * @return 路由器列表。（源列表对象，请勿执行增删操作。可以做为ArrayAdapter的源数据)
      */
     public List<Router> getRouterList() {
         return mRouters;
@@ -284,10 +286,10 @@ public class RouterManager {
     /**
      * 获取指定类型的路由器列表。
      *
-     * @param valid 路由器是否可以通讯。true为可以正常通讯。
+     * @param valid 路由器是否可以通讯。true为可以正常通讯。（
      * @return
      */
-    public List<Router> getRouterList(boolean valid) {
+    List<Router> getRouterList(boolean valid) {
         ArrayList<Router> routers = new ArrayList<>();
         for (Router mRouter : mRouters) {
             if (mRouter.getRouterSession().isAuthenticated() == valid) {
@@ -298,25 +300,33 @@ public class RouterManager {
     }
 
     /**
-     * 清除当期添加的所有路由器。
+     * 清除当期添加的所有路由器。不清除缓存信息，管理器中所有路由器将会断开连接，并删除。调用loadRouters可以恢复。
+     *
+     * @param removeCache 是否清楚缓存信息。
      */
     public void removeAllRouters(boolean removeCache) {
         final Router[] routers = getRouterList().toArray(new Router[getRouterList().size()]);
         for (Router router : routers) {
-            removeRouter(router);
+            removeRouter(router, removeCache);
         }
     }
 
     /**
-     * 获取事件管理器。事件管理器为所有路由器全局事件。
+     * 获取事件管理器。所有已经连接的路由器事件将会，被汇总到事件管理器统一发布。
+     * 如果需要订阅当个路由器的事件，可以在回调事件中筛选 或者 在指定路由器的RouterSession，CommunicationManager对象中订阅事件。
      *
-     * @return
+     * @return 事件管理器。
      */
     public EventManager getEventManager() {
         return mEventManager;
     }
 
-
+    /**
+     * 订阅路由器添加/删除事件。即getRouterList()发生变化就会回调。
+     *
+     * @param callback 回调参数中Data空则无意义，true则添加，false则删除。
+     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）。
+     */
     public Subscription subscribeRouterCreateEvent(Action1<RouterCallback<Boolean>> callback) {
         return subjectRouterCreate.subscribe(callback);
     }

@@ -23,22 +23,47 @@ public class IPCamera {
         this.password = password;
     }
 
+    /**
+     * 获取IPC绑定数据。
+     *
+     * @return 版定的数据。
+     */
     public Object getTag() {
         return tag;
     }
 
+    /**
+     * 获取设备ID。
+     *
+     * @return 设备ID。
+     */
     public String getDeviceId() {
         return deviceId;
     }
 
+    /**
+     * 获取登录账户。
+     *
+     * @return 登录账户。
+     */
     public String getUserName() {
         return userName;
     }
 
+    /**
+     * 获取登录密码。
+     *
+     * @return 登陆密码。
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * 获取IPC运行上下文。
+     *
+     * @return 运行上下文。
+     */
     public IPCContext getIpcContext() {
         return ipcContext;
     }

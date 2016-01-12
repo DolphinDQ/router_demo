@@ -96,7 +96,7 @@ class RouterCommunicationManager implements CommunicationManager {
                 if (mClient.isAuthenticated()) postEvents();
             }
         });
-        mRouterCacheProvider = new RouterCacheProvider(mClient.getRouter(), this);
+        mRouterCacheProvider = new RouterCacheProvider(mClient.getRouter(),this);
     }
 
     public rx.Observable<Messages.Callback> getSubjectCallback() {
@@ -320,11 +320,6 @@ class RouterCommunicationManager implements CommunicationManager {
         return getSubjectResponse().subscribe(callback);
     }
 
-    @Override
-    public void test() {
-        postEvents();
-    }
-
     public void flushRequestQueue() {
         if (mPostTask != null)
             mPostTask.interrupt();
@@ -357,7 +352,7 @@ class RouterCommunicationManager implements CommunicationManager {
     private Messages.Callback pullCallback(final SSLSocket sslSocket) throws IOException {
         InputStream in = sslSocket.getInputStream();
         byte[] prefix = new byte[2];
-        int received = 0;
+        int received;
         int read = in.read(prefix);
         if (prefix[0] == 0 && prefix[1] == 0) {
             throw new IOException("invalid package header.." + (read == -1 ? "the stream has been reached." : ""));
@@ -382,13 +377,13 @@ class RouterCommunicationManager implements CommunicationManager {
             Thread.currentThread().setName(mClient + " RequestQueuePostTask");
             trace(mClient + " start post task...");
             while (mClient.isConnected()) {
-                if (mPostQueue != null && mPostQueue.size() > 0 && mClient.isAuthenticated()) {
+                if ( mPostQueue.size() > 0 && mClient.isAuthenticated()) {
                     for (final Messages.Request request : getRequestQueue()) {
                         try {
                             final Messages.Response response = postRequest(request);
                             mPostQueue.remove(request).call(response);
                         } catch (TimeoutException e) {
-                            continue;
+                            e.printStackTrace();
                         }
                     }
                     continue;

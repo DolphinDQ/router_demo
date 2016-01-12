@@ -2,6 +2,11 @@ package mrtech.smarthome.ipc;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import hsl.p2pipcam.nativecaller.NativeCaller;
 import mrtech.smarthome.ipc.IPCModels.*;
 import hsl.p2pipcam.nativecaller.DeviceSDK;
 
@@ -12,16 +17,17 @@ class HSLCameraController implements IPCController {
     private static void trace(String msg) {
         Log.e(HSLCameraController.class.getName(), msg);
     }
+
     private static void trace(String msg, Throwable ex) {
         Log.d(IPCManager.class.getName(), msg, ex);
     }
+
     private static final int PTZ_CMD_DELAY = 1000;
 
-    private final IPCManager mManager;
     private final IPCamera mCurrent;
-    public HSLCameraController(IPCManager manager, IPCamera camera) {
+
+    public HSLCameraController(IPCamera camera) {
         mCurrent = camera;
-        mManager = manager;
     }
 
     private void ptzControl(final int cmd) {
@@ -74,4 +80,5 @@ class HSLCameraController implements IPCController {
     public void ptzRight() {
         ptzControl(6);
     }
+
 }

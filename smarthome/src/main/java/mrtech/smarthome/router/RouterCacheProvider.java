@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.orm.SugarRecord;
 import com.orm.dsl.Table;
+import com.squareup.okhttp.Route;
 
 import java.util.List;
 
@@ -19,11 +20,12 @@ import rx.functions.Action1;
  * Created by sphynx on 2015/12/11.
  */
 class RouterCacheProvider {
+    private final Router mRouter;
+
     private static void trace(String msg) {
         Log.e(RouterCacheProvider.class.getName(), msg);
     }
 
-    private final Router mRouter;
 
     public RouterCacheProvider(Router router, CommunicationManager communicationManager) {
         mRouter = router;
