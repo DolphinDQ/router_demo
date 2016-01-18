@@ -3,11 +3,13 @@ package mrtech.smarthome.ipc;
 import android.opengl.GLSurfaceView;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
+import mrtech.smarthome.BuildConfig;
 
 /**
  * IPC管理器，实现IPC功能调度。
@@ -20,7 +22,9 @@ public class IPCManager {
     private static final HSLEventReceiver hslEventController = new HSLEventReceiver();
 
     private static void trace(String msg) {
-        Log.e(IPCManager.class.getName(), msg);
+
+        if (BuildConfig.DEBUG)
+            Log.d(IPCManager.class.getName(), msg);
     }
 
     /**
@@ -39,6 +43,12 @@ public class IPCManager {
      */
     public static IPCManager createNewManager() {
         return new IPCManager();
+    }
+
+    public static VideoRenderer initGLSurfaceView(GLSurfaceView surfaceView) {
+        VideoRenderer videoRenderer = new VideoRenderer(surfaceView);
+        surfaceView.setRenderer(videoRenderer);
+        return videoRenderer;
     }
 
     /**
@@ -103,11 +113,10 @@ public class IPCManager {
      * 删除管理器中所有IPC。
      */
     public void removeAll() {
-        List<IPCamera> cameraList = getCameraList();
-        if (cameraList != null)
-            for (IPCamera camera : cameraList) {
-                removeCamera(camera);
-            }
+        IPCamera[] cameraList = mCameras.toArray(new IPCamera[mCameras.size()]);
+        for (IPCamera camera : cameraList) {
+            removeCamera(camera);
+        }
     }
 
 //    public void removeCamera(String deviceId) {
@@ -155,7 +164,17 @@ public class IPCManager {
      * @return IPC播放器。
      */
     public IPCPlayer createCameraPlayer(GLSurfaceView glSurfaceView) {
-        return new HSLPlayer(glSurfaceView, this);
+        return createCameraPlayer(initGLSurfaceView(glSurfaceView));
+    }
+
+    /**
+     * 使用已经创建的渲染器创建播放器
+     *
+     * @param videoRenderer 视频渲染器。
+     * @return
+     */
+    public IPCPlayer createCameraPlayer(VideoRenderer videoRenderer) {
+        return new HSLPlayer(videoRenderer, this);
     }
 
     /**

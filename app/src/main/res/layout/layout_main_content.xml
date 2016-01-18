@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="mrtech.router_demo.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context="mrtech.activities.MainActivity"
+    tools:showIn="@layout/layout_main_app_bar">
 
 
     <Button
@@ -30,5 +30,11 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/camera_btn"
         android:layout_toEndOf="@+id/camera_btn" />
+
+    <Button
+        android:id="@+id/infrared_control_btn"
+        android:text="@string/infrared_control"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

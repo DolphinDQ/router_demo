@@ -1,4 +1,4 @@
-package mrtech.router_demo;
+package mrtech.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -75,9 +75,16 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+
+
+
+
+
         final Button routerConfigBtn = (Button) findViewById(R.id.router_config_btn);
         routerConfigBtn.setEnabled(router != null);
         routerConfigBtn.setText("测试红外设备");
+
+
         routerConfigBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

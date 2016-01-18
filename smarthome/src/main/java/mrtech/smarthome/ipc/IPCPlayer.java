@@ -11,6 +11,12 @@ import rx.functions.Action1;
  */
 public interface IPCPlayer {
     /**
+     * 获取渲染器。
+     * @return 视频渲染器。
+     */
+    VideoRenderer getRenderer();
+
+    /**
      * 播放默认摄像头，上次播放或者摄像头列表第一个已经连接的摄像头。
      */
     void play();
@@ -21,6 +27,12 @@ public interface IPCPlayer {
      * @param cam 指定IPC。
      */
     void play(IPCamera cam);
+
+    /**
+     * 指定设备ID播放。
+     * @param deviceId 设备ID。
+     */
+    void play(String deviceId);
 
     /**
      * 获取当前播放IPC。

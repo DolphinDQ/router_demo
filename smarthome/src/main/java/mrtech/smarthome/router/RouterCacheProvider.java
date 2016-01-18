@@ -23,7 +23,9 @@ class RouterCacheProvider {
     private final Router mRouter;
 
     private static void trace(String msg) {
-        Log.e(RouterCacheProvider.class.getName(), msg);
+
+        if (BuildConfig.DEBUG)
+            Log.d(RouterCacheProvider.class.getName(), msg);
     }
 
 

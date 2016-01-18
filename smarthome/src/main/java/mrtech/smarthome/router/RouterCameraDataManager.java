@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import mrtech.smarthome.BuildConfig;
 import mrtech.smarthome.router.Models.*;
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.ipc.IPCamera;
@@ -19,7 +20,8 @@ import rx.functions.Action2;
 class RouterCameraDataManager implements CameraDataManager {
 
     private static void trace(String msg) {
-        Log.e(RouterCameraDataManager.class.getName(), msg);
+        if (BuildConfig.DEBUG)
+            Log.d(RouterCameraDataManager.class.getName(), msg);
     }
 
     private final IPCManager mIPCManager;

@@ -4,17 +4,19 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
+import mrtech.smarthome.BuildConfig;
 
 /**
  * Created by sphynx on 2015/12/8.
  */
 class HSLCameraController implements IPCController {
     private static void trace(String msg) {
-        Log.e(HSLCameraController.class.getName(), msg);
+        Log.d(HSLCameraController.class.getName(), msg);
     }
 
     private static void trace(String msg, Throwable ex) {
-        Log.d(IPCManager.class.getName(), msg, ex);
+        if (BuildConfig.DEBUG)
+            Log.d(IPCManager.class.getName(), msg, ex);
     }
 
     private static final int PTZ_CMD_DELAY = 1000;

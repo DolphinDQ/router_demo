@@ -25,4 +25,5 @@
     <string name="router_status">路由器状态</string>
     <string name="title_activity_main">路由器测试</string>
     <string name="camera">摄像头</string>
+    <string name="infrared_control">遥控器</string>
 </resources>

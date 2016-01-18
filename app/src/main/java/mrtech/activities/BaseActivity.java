@@ -1,9 +1,8 @@
-package mrtech.router_demo;
+package mrtech.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import java.lang.reflect.Type;
 import java.util.Hashtable;

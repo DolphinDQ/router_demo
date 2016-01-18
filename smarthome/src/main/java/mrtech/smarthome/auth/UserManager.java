@@ -41,7 +41,7 @@ public class UserManager {
     private Context mContext;
 
     private static void trace(String msg) {
-        Log.e(UserManager.class.getName(), msg);
+        Log.d(UserManager.class.getName(), msg);
     }
 
     /**

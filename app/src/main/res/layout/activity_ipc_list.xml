@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="mrtech.router_demo.IPCListActivity">
+    tools:context="mrtech.activities.IPCListActivity">
 
     <android.opengl.GLSurfaceView
         android:id="@+id/view_gls"

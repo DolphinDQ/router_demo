@@ -1,4 +1,4 @@
-package mrtech.router_demo;
+package mrtech.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,7 +25,7 @@ import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.RequestUtil;
 import rx.functions.Action1;
 
-public class SearchIPCActivity extends BaseActivity {
+public class IPCSearchActivity extends BaseActivity {
 
     private ArrayAdapter<Models.Device> cameraDeviceArrayAdapter;
     private CameraDataManager mCameraManager;
@@ -35,7 +35,7 @@ public class SearchIPCActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_ipc);
+        setContentView(R.layout.activity_ipc_search);
         mRouterSession = getDefaultData(Router.class).getRouterSession();
         mCommunicationManager = mRouterSession.getCommunicationManager();
         mCameraManager = mRouterSession.getCameraManager();
@@ -62,7 +62,7 @@ public class SearchIPCActivity extends BaseActivity {
                                     new Handler(getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(SearchIPCActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(IPCSearchActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 } else {
@@ -73,7 +73,7 @@ public class SearchIPCActivity extends BaseActivity {
                                                 @Override
                                                 public void run() {
                                                     if (throwable != null)
-                                                        Toast.makeText(SearchIPCActivity.this, "刷新失败." + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(IPCSearchActivity.this, "刷新失败." + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                                     finish();
                                                 }
                                             });
@@ -104,7 +104,7 @@ public class SearchIPCActivity extends BaseActivity {
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
-                    Toast.makeText(SearchIPCActivity.this, "开始搜索摄像头...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(IPCSearchActivity.this, "开始搜索摄像头...", Toast.LENGTH_SHORT).show();
                     item.setEnabled(false);
                 }
 
@@ -127,10 +127,10 @@ public class SearchIPCActivity extends BaseActivity {
                     if (devices != null) {
                         cameraDeviceArrayAdapter.clear();
                         cameraDeviceArrayAdapter.addAll(devices);
-                        Toast.makeText(SearchIPCActivity.this, "搜索完毕。", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(IPCSearchActivity.this, "搜索完毕。", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        Toast.makeText(SearchIPCActivity.this, "没找到摄像头。", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(IPCSearchActivity.this, "没找到摄像头。", Toast.LENGTH_SHORT).show();
                     }
                     item.setEnabled(true);
                 }

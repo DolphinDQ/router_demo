@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.stream.NewAllStreamParser;
 
+import mrtech.smarthome.BuildConfig;
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.router.Models.*;
 
@@ -30,7 +31,8 @@ class RouterClient implements RouterSession {
     private CheckStatusTask mCheckStatusTask;
 
     private static void trace(String msg) {
-        Log.e(RouterClient.class.getName(), msg);
+        if (BuildConfig.DEBUG)
+            Log.d(RouterClient.class.getName(), msg);
     }
 
     private final IPCManager mIPCManager;

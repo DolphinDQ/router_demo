@@ -1,4 +1,4 @@
-package mrtech.router_demo;
+package mrtech.activities;
 
 import org.junit.Test;
 

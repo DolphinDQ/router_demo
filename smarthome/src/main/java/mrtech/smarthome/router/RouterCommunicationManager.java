@@ -15,6 +15,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLSocket;
 
+import mrtech.smarthome.BuildConfig;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
 import rx.Observer;
@@ -30,7 +31,8 @@ import rx.subjects.PublishSubject;
  */
 class RouterCommunicationManager implements CommunicationManager {
     private static void trace(String msg) {
-        Log.e(RouterCommunicationManager.class.getName(), msg);
+        if (BuildConfig.DEBUG)
+            Log.d(RouterCommunicationManager.class.getName(), msg);
     }
 
     @Override

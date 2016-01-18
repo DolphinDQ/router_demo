@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import mrtech.smarthome.BuildConfig;
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
@@ -31,7 +32,8 @@ import rx.subjects.PublishSubject;
 public class RouterManager {
 
     private static void trace(String msg) {
-        Log.e(RouterManager.class.getName(), msg);
+        if (BuildConfig.DEBUG)
+            Log.d(RouterManager.class.getName(), msg);
     }
 
     public final static ExtensionRegistry registry = ExtensionRegistry.newInstance();

@@ -3,6 +3,7 @@ package mrtech.smarthome.ipc;
 import android.util.Log;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
+import mrtech.smarthome.BuildConfig;
 import mrtech.smarthome.ipc.Models.*;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -27,7 +28,8 @@ class HSLCameraClient implements IPCContext {
 
 
     private static void trace(String msg) {
-        Log.e(HSLCameraClient.class.getName(), msg);
+        if (BuildConfig.DEBUG)
+        Log.d(HSLCameraClient.class.getName(), msg);
     }
 
     private void setReconnecting(boolean reconnecting) {

@@ -1,4 +1,4 @@
-package mrtech.router_demo;
+package mrtech.activities;
 
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
@@ -40,7 +40,7 @@ public class IPCListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ipclist);
+        setContentView(R.layout.activity_ipc_list);
         final Router router = getDefaultData(Router.class);
         if (router == null) {
             Toast.makeText(IPCListActivity.this, "参数无效", Toast.LENGTH_SHORT).show();
@@ -148,7 +148,7 @@ public class IPCListActivity extends BaseActivity {
     }
 
     private void addCamera() {
-        startActivity(new Intent(this, SearchIPCActivity.class));
+        startActivity(new Intent(this, IPCSearchActivity.class));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package mrtech.router_demo;
+package mrtech.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import mrtech.smarthome.BuildConfig;
 import mrtech.smarthome.router.Models.*;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
@@ -22,7 +23,8 @@ import rx.subjects.PublishSubject;
 class RouterEventManager implements EventManager {
 
     private static void trace(String msg) {
-        Log.e(RouterEventManager.class.getName(), msg);
+        if (BuildConfig.DEBUG)
+            Log.d(RouterEventManager.class.getName(), msg);
     }
 
     //    private final Thread mQueryTimelineTask;

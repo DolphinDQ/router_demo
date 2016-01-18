@@ -1,6 +1,5 @@
-package mrtech.router_demo;
+package mrtech.activities;
 
-import android.accounts.AuthenticatorException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,18 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.squareup.okhttp.Request;
 
-import mrtech.smarthome.auth.Models.ApiCallback;
 import mrtech.smarthome.auth.UserManager;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
-import mrtech.smarthome.util.Constants;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -66,7 +60,7 @@ public class RouterSettingsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_router) {
             IntentIntegrator integrator = new IntentIntegrator(RouterSettingsActivity.this);
-            integrator.setCaptureActivity(RouterCaptureActivity.class);
+            integrator.setCaptureActivity(RouterScanActivity.class);
             integrator.initiateScan();
             return true;
         }
