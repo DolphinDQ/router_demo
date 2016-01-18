@@ -1,0 +1,362 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mrtech.fragments.TVControlFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <RelativeLayout
+                android:id="@+id/part1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/silence"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:text="静音" />
+
+                <Button
+                    android:id="@+id/power"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="104dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/silence"
+                    android:text="电源" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/part2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/part1" >
+
+                <Button
+                    android:id="@+id/num1"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:text="1" />
+
+                <Button
+                    android:id="@+id/num2"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/num1"
+                    android:text="2" />
+
+                <Button
+                    android:id="@+id/num3"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/num2"
+                    android:text="3" />
+
+                <Button
+                    android:id="@+id/num4"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num1"
+                    android:layout_margin="8dp"
+                    android:text="4" />
+
+                <Button
+                    android:id="@+id/num5"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num2"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/num4"
+                    android:text="5" />
+
+                <Button
+                    android:id="@+id/num6"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num3"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/num5"
+                    android:text="6" />
+
+                <Button
+                    android:id="@+id/num7"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num4"
+                    android:layout_margin="8dp"
+                    android:text="7" />
+
+                <Button
+                    android:id="@+id/num8"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num5"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/num7"
+                    android:text="8" />
+
+                <Button
+                    android:id="@+id/num9"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num6"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/num8"
+                    android:text="9" />
+
+                <Button
+                    android:id="@+id/show"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num7"
+                    android:layout_margin="8dp"
+                    android:text="显示" />
+
+                <Button
+                    android:id="@+id/num0"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num8"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/show"
+                    android:text="0" />
+
+                <Button
+                    android:id="@+id/back"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/num9"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/num0"
+                    android:text="回看" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/part3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/part2"
+                android:layout_marginTop="15dp" >
+
+                <Button
+                    android:id="@+id/source"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:text="信源" />
+
+                <Button
+                    android:id="@+id/up"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/source"
+                    android:text="上" />
+
+                <Button
+                    android:id="@+id/home"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/up"
+                    android:text="主页" />
+
+                <Button
+                    android:id="@+id/left"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/source"
+                    android:layout_margin="8dp"
+                    android:text="左" />
+
+                <Button
+                    android:id="@+id/ok"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/up"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/left"
+                    android:text="OK" />
+
+                <Button
+                    android:id="@+id/right"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/home"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/ok"
+                    android:text="右" />
+
+                <Button
+                    android:id="@+id/menu"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/left"
+                    android:layout_margin="8dp"
+                    android:text="菜单" />
+
+                <Button
+                    android:id="@+id/down"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/ok"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/menu"
+                    android:text="下" />
+
+                <Button
+                    android:id="@+id/turnBack"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/right"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/down"
+                    android:text="返回" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/part4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/part3"
+                android:layout_marginTop="15dp" >
+
+                <Button
+                    android:id="@+id/volumePlus"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:text="音量+" />
+
+                <Button
+                    android:id="@+id/epg"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/volumePlus"
+                    android:text="EPG" />
+
+                <Button
+                    android:id="@+id/channelPlus"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/epg"
+                    android:text="节目+" />
+
+                <Button
+                    android:id="@+id/volumeMinus"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/volumePlus"
+                    android:layout_margin="8dp"
+                    android:text="音量-" />
+
+                <Button
+                    android:id="@+id/info"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/epg"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/volumePlus"
+                    android:text="信息窗" />
+
+                <Button
+                    android:id="@+id/channelMinus"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/channelPlus"
+                    android:layout_margin="8dp"
+                    android:layout_toRightOf="@id/info"
+                    android:text="节目-" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/part5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/part4"
+                android:layout_marginTop="15dp" >
+
+                <Button
+                    android:id="@+id/proportion"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="6dp"
+                    android:text="比例" />
+
+                <Button
+                    android:id="@+id/effect"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="6dp"
+                    android:layout_toRightOf="@id/proportion"
+                    android:text="图效" />
+
+                <Button
+                    android:id="@+id/collection"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="6dp"
+                    android:layout_toRightOf="@id/effect"
+                    android:text="收藏" />
+
+                <Button
+                    android:id="@+id/search"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="6dp"
+                    android:layout_toRightOf="@id/collection"
+                    android:text="搜索" />
+
+                <Button
+                    android:id="@+id/red"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/proportion"
+                    android:layout_margin="6dp"
+                    android:background="#FF0000" />
+
+                <Button
+                    android:id="@+id/green"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/effect"
+                    android:layout_margin="6dp"
+                    android:layout_toRightOf="@id/red"
+                    android:background="#00FF00" />
+
+                <Button
+                    android:id="@+id/yellow"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/collection"
+                    android:layout_margin="6dp"
+                    android:layout_toRightOf="@id/green"
+                    android:background="#FFFF00" />
+
+                <Button
+                    android:id="@+id/blue"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/search"
+                    android:layout_margin="6dp"
+                    android:layout_toRightOf="@id/yellow"
+                    android:background="#0000FF" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

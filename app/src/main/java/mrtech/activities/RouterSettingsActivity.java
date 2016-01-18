@@ -35,7 +35,9 @@ public class RouterSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_router_settings);
         routerManager = RouterManager.getInstance();
         if (stateChangedHandle == null)
-            stateChangedHandle = routerManager.getEventManager().subscribeRouterStatusChangedEvent(new Action1<Router>() {
+            stateChangedHandle = routerManager
+                    .getEventManager()
+                    .subscribeRouterStatusChangedEvent(new Action1<Router>() {
                 @Override
                 public void call(final Router router) {
                     new Handler(getMainLooper()).post(new Runnable() {
@@ -85,12 +87,12 @@ public class RouterSettingsActivity extends AppCompatActivity {
 
     private void initView() {
         final ListView routerList = (ListView) findViewById(R.id.router_list);
-        routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_list_item, routerManager.getRouterList()) {
+        routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_item, routerManager.getRouterList()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
                     convertView = LayoutInflater.from(this.getContext())
-                            .inflate(R.layout.layout_router_list_item, parent, false);
+                            .inflate(R.layout.layout_router_item, parent, false);
                 }
                 final Router router = getItem(position);
                 ((TextView) convertView.findViewById(R.id.router_name)).setText(router.getName());

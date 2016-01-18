@@ -41,7 +41,7 @@ public class IPCListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ipc_list);
-        final Router router = getDefaultData(Router.class);
+        final Router router = getCacheData(Router.class);
         if (router == null) {
             Toast.makeText(IPCListActivity.this, "参数无效", Toast.LENGTH_SHORT).show();
             finish();
@@ -49,57 +49,60 @@ public class IPCListActivity extends BaseActivity {
         }
         cameraManager = router.getRouterSession().getCameraManager();
         ipcManager = cameraManager.getIPCManager();
-        subscriptionCameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCStateChanged>() {
-            @Override
-            public void call(IPCStateChanged ipcStateChanged) {
-                final IPCamera camera = ipcManager.getCamera(ipcStateChanged.getCameraId());
-                if (camera != null) {
-                    play(0);
-                }
-            }
-        });
+        if (subscriptionCameraStatusChanged != null) subscriptionCameraStatusChanged.unsubscribe();
+        subscriptionCameraStatusChanged = ipcManager
+                .createEventManager(null)
+                .subscribeCameraStatus(new Action1<IPCStateChanged>() {
+                    @Override
+                    public void call(IPCStateChanged ipcStateChanged) {
+                        final IPCamera camera = ipcManager.getCamera(ipcStateChanged.getCameraId());
+                        if (camera != null) {
+                            play(0);
+                        }
+                    }
+                });
         initView();
         play(0);
     }
 
     private void initView() {
-        ListeningClick(R.id.prov_btn, new View.OnClickListener() {
+        setOnClick(R.id.prov_btn, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 play(-1);
             }
         });
-        ListeningClick(R.id.next_btn, new View.OnClickListener() {
+        setOnClick(R.id.next_btn, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 play(1);
             }
         });
-        ListeningClick(R.id.replay_btn, new View.OnClickListener() {
+        setOnClick(R.id.replay_btn, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 play(0);
             }
         });
-        ListeningClick(R.id.delete_btn, new View.OnClickListener() {
+        setOnClick(R.id.delete_btn, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteCamera();
             }
         });
-        ListeningClick(R.id.add_btn, new View.OnClickListener() {
+        setOnClick(R.id.add_btn, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addCamera();
             }
         });
-        ListeningClick(R.id.close_btn, new View.OnClickListener() {
+        setOnClick(R.id.close_btn, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraPlayer.stop();
             }
         });
-        ListeningClick(R.id.refresh_btn, new View.OnClickListener() {
+        setOnClick(R.id.refresh_btn, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraManager.reloadIPCAsync(true, new Action1<Throwable>() {
@@ -126,7 +129,7 @@ public class IPCListActivity extends BaseActivity {
             }
         });
         cameraPlayer = ipcManager.createCameraPlayer(glSurfaceView);
-        ListeningClick(R.id.audio_switch, new View.OnClickListener() {
+        setOnClick(R.id.audio_switch, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cameraPlayer.setAudioSwitch(((Switch) v).isChecked());
@@ -214,7 +217,7 @@ public class IPCListActivity extends BaseActivity {
         }
     }
 
-    private void ListeningClick(int id, View.OnClickListener listener) {
+    private void setOnClick(int id, View.OnClickListener listener) {
         findViewById(id).setOnClickListener(listener);
     }
 

@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="mrtech.activities.MainActivity"
-    tools:showIn="@layout/layout_main_app_bar">
+    tools:showIn="@layout/layout_main_bar">
 
 
     <Button
@@ -35,6 +35,9 @@
         android:id="@+id/infrared_control_btn"
         android:text="@string/infrared_control"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/router_config_btn"
+        android:layout_toEndOf="@+id/router_config_btn" />
 
 </RelativeLayout>

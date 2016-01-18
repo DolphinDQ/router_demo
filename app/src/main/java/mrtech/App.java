@@ -1,4 +1,4 @@
-package mrtech.activities;
+package mrtech;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -15,6 +15,9 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+import mrtech.activities.MainActivity;
+import mrtech.activities.R;
+import mrtech.services.RouterQueryTimelineService;
 import mrtech.smarthome.SmartHomeApp;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;

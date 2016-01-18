@@ -1,4 +1,4 @@
-package mrtech.activities;
+package mrtech.services;
 
 import android.app.IntentService;
 import android.content.Intent;

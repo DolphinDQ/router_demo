@@ -16,14 +16,16 @@
     <string name="error_invalid_password">密码太短</string>
     <string name="error_incorrect_password">密码错误</string>
     <string name="error_field_required">必填字段</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="loading">加载中...</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="loading">加载中…</string>
     <string name="accept_finish">再按一下退出</string>
     <string name="router_setting">路由器</string>
     <string name="router_status">路由器状态</string>
     <string name="title_activity_main">路由器测试</string>
     <string name="camera">摄像头</string>
     <string name="infrared_control">遥控器</string>
+    <string name="start_infrared_control">启动控制</string>
+    <string name="custom">自定义</string>
+    <string name="router_not_found">没有指定路由器。</string>
+    <string name="infrared_not_found">没有指定红外控制设备。</string>
 </resources>

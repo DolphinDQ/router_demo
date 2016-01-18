@@ -13,7 +13,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
-        android:name="mrtech.activities.App"
+        android:name="mrtech.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,9 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="mrtech.activities.RouterSettingsActivity"
+            android:name=".RouterSettingsActivity"
             android:label="@string/router_setting"
-            android:parentActivityName="mrtech.activities.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mrtech.activities.MainActivity" />
@@ -35,13 +35,13 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <service
-            android:name="mrtech.activities.RouterQueryTimelineService"
+            android:name="mrtech.services.RouterQueryTimelineService"
             android:exported="false" />
 
         <activity
-            android:name="mrtech.activities.IPCListActivity"
+            android:name=".IPCListActivity"
             android:label="摄像头列表"
-            android:parentActivityName="mrtech.activities.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mrtech.activities.MainActivity" />
@@ -49,21 +49,21 @@
         <activity
             android:name=".IPCSearchActivity"
             android:label="搜索摄像头"
-            android:parentActivityName="mrtech.activities.IPCListActivity">
+            android:parentActivityName=".IPCListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mrtech.activities.IPCListActivity" />
         </activity>
         <activity
-            android:name="mrtech.activities.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName="mrtech.activities.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mrtech.activities.MainActivity" />
         </activity>
         <activity
-            android:name="mrtech.activities.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -72,7 +72,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="mrtech.activities.InfraredControlActivity"></activity>
+        <activity
+            android:name=".InfraredControlActivity"
+            android:label="@string/infrared_control"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mrtech.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".InfraredControlPanelActivity"
+            android:label="遥控器"
+            android:parentActivityName=".InfraredControlActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mrtech.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

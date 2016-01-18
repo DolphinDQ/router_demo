@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import mrtech.models.RouterListItemData;
+import mrtech.services.RouterQueryTimelineService;
 import mrtech.smarthome.auth.AuthConfig;
 import mrtech.smarthome.auth.UserManager;
 import mrtech.smarthome.ipc.IPCManager;
@@ -47,53 +48,47 @@ public class MainActivity extends BaseActivity {
     private boolean readyExit;
     private Context mContext;
     private UserManager mUserManager;
-    private Router currentRouter;
+    private Router mCurrentRouter;
     private final HashMap<String, Subscription> mSubscriptions = new HashMap<>();
     private RouterManager mRouterManager;
     private Subscription cameraStatusChanged;
     private Models.Device mIFDev;
+    private Button mIRCtrlBtn;
+    private Button mCameraBtn;
+    private Button mRouterConfigBtn;
+    private List<Models.Device> mInfraredDeviceList;
 
     protected void onCreate(Bundle savedInstanceState) {
         mContext = this;
         mUserManager = UserManager.getInstance();
+        mRouterManager = RouterManager.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setCurrentRouter(getDefaultData(Router.class));
+        initContent();
         initToolBar();
         initNavBar();
-        initContent();
+        setRouterActive(mCurrentRouter);
+        setCurrentRouter(getCacheData(Router.class));
     }
 
     private void initContent() {
-        final View cameraBtn = findViewById(R.id.camera_btn);
-        final Router router = BaseActivity.getDefaultData(Router.class);
-        cameraBtn.setEnabled(router != null);
-        cameraBtn.setOnClickListener(new View.OnClickListener() {
+        initCameraControl();
+        initInfraredControl();
+        initRouterConfigControl();
+    }
+
+    private void initRouterConfigControl() {
+        mRouterConfigBtn = (Button) findViewById(R.id.router_config_btn);
+        mRouterConfigBtn.setText("测试红外设备");
+        mRouterConfigBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mContext, IPCListActivity.class));
-            }
-        });
-
-
-
-
-
-
-        final Button routerConfigBtn = (Button) findViewById(R.id.router_config_btn);
-        routerConfigBtn.setEnabled(router != null);
-        routerConfigBtn.setText("测试红外设备");
-
-
-        routerConfigBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ( mIFDev != null) {
+                if (mIFDev != null) {
                     final Models.InfraredOpCode infraredOpCode = mIFDev.getExtension(Models.InfraredDevice.detail).getOpcodesList().get(0);
                     final Messages.Request request = RequestUtil
                             .sendIrCommand(infraredOpCode.getDeviceId(), Models.InfraredCommand.newBuilder()
                                     .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(infraredOpCode.getId())).build());
-                    currentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
+                    mCurrentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
                         @Override
                         public void call(Messages.Response response, final Throwable throwable) {
                             new Handler(getMainLooper()).post(new Runnable() {
@@ -116,17 +111,22 @@ public class MainActivity extends BaseActivity {
                             .setPageSize(100)
                             .setType(Models.DeviceType.DEVICE_TYPE_INFRARED)
                             .build());
-                    currentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
+                    mCurrentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
                         @Override
-                        public void call(final Messages.Response response, Throwable throwable) {
+                        public void call(final Messages.Response response, final Throwable throwable) {
                             new Handler(getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    final List<Models.Device> resultsList = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
-                                    Toast.makeText(MainActivity.this, "获取到红外设备:" + resultsList.size(), Toast.LENGTH_SHORT).show();
-                                    for (Models.Device device : resultsList) {
-                                        if (device.getExtension(Models.InfraredDevice.detail).getOpcodesCount() > 0)
-                                            mIFDev = device;
+                                    if (throwable != null) {
+                                        Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                    } else {
+
+                                        final List<Models.Device> resultsList = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
+                                        Toast.makeText(MainActivity.this, "获取到红外设备:" + resultsList.size(), Toast.LENGTH_SHORT).show();
+                                        for (Models.Device device : resultsList) {
+                                            if (device.getExtension(Models.InfraredDevice.detail).getOpcodesCount() > 0)
+                                                mIFDev = device;
+                                        }
                                     }
                                 }
                             });
@@ -134,10 +134,28 @@ public class MainActivity extends BaseActivity {
                     });
                 }
             }
-
         });
     }
 
+    private void initCameraControl() {
+        mCameraBtn = (Button) findViewById(R.id.camera_btn);
+        mCameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, IPCListActivity.class));
+            }
+        });
+    }
+
+    private void initInfraredControl() {
+        mIRCtrlBtn = (Button) findViewById(R.id.infrared_control_btn);
+        mIRCtrlBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, InfraredControlActivity.class));
+            }
+        });
+    }
 
     private void initToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -150,10 +168,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initNavBar() {
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
-
         final View navigationHeaderView = navigationView;
         navigationHeaderView.findViewById(R.id.user_face).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,8 +203,7 @@ public class MainActivity extends BaseActivity {
             }));
 
         final ListView routerList = (ListView) navigationView.findViewById(R.id.router_list);
-        mRouterManager = RouterManager.getInstance();
-        final ArrayAdapter<Router> routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_list_item, mRouterManager.getRouterList()) {
+        final ArrayAdapter<Router> routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_item, mRouterManager.getRouterList()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 final Router router = getItem(position);
@@ -199,7 +214,7 @@ public class MainActivity extends BaseActivity {
                 }
                 if (convertView == null) {
                     convertView = LayoutInflater.from(this.getContext())
-                            .inflate(R.layout.layout_router_list_item, parent, false);
+                            .inflate(R.layout.layout_router_item, parent, false);
                 }
                 String routerName = router.getName();
 
@@ -210,7 +225,6 @@ public class MainActivity extends BaseActivity {
                 return convertView;
             }
         };
-
         routerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -222,12 +236,11 @@ public class MainActivity extends BaseActivity {
                 routerArrayAdapter.notifyDataSetChanged();
             }
         });
-
         if (!mSubscriptions.containsKey("subscribeRouterStatusChangedEvent"))
             mSubscriptions.put("subscribeRouterStatusChangedEvent", mRouterManager.getEventManager().subscribeRouterStatusChangedEvent(new Action1<Router>() {
                 @Override
                 public void call(Router router) {
-                    if (currentRouter == null && router.getRouterSession().isAuthenticated()) {
+                    if (mCurrentRouter == null && router.getRouterSession().isAuthenticated()) {
                         setCurrentRouter(router);
                     }
                     new Handler(getMainLooper()).post(new Runnable() {
@@ -318,53 +331,89 @@ public class MainActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public void setCurrentRouter(final Router router) {
-        if (router == currentRouter) return;
-        routerInactive(currentRouter);
-        currentRouter = router;
-        routerActive(currentRouter);
+    private void setCurrentRouter(final Router router) {
+        if (router == mCurrentRouter) return;
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                setRouterInactive(mCurrentRouter);
+                mCurrentRouter = router;
+                setRouterActive(mCurrentRouter);
+            }
+        });
 
     }
 
-    private void routerInactive(final Router router) {
+    private void setRouterInactive(final Router router) {
         mIFDev = null;
         if (router != null) {
             RouterListItemData src = router.getUserData(RouterListItemData.class);
             src.setActive(false);
         }
-        BaseActivity.setDefaultData(Router.class, null);
+        BaseActivity.setCacheData(Router.class, null);
         if (cameraStatusChanged != null) {
             cameraStatusChanged.unsubscribe();
         }
     }
 
-    private void routerActive(final Router router) {
-        BaseActivity.setDefaultData(Router.class, router);
-        final boolean turnOn = router != null;
-        if (turnOn) {
+    /**
+     * @param router
+     */
+    private void setRouterActive(final Router router) {
+        BaseActivity.setCacheData(Router.class, router);
+        final boolean hasRouter = router != null;
+        setTitle(hasRouter ? router.getName() : getText(R.string.title_activity_main));
+        mRouterConfigBtn.setEnabled(hasRouter);
+        if (hasRouter) {
             RouterListItemData src = router.getUserData(RouterListItemData.class);
             src.setActive(true);
+            setCameraBtnState();
+            setInfraredControlBtnState();
+        } else {
+            mCameraBtn.setEnabled(false);
+            mIRCtrlBtn.setEnabled(false);
+            mCameraBtn.setText(getText(R.string.camera));
+            mIRCtrlBtn.setText(getText(R.string.infrared_control));
         }
-        new Handler(getMainLooper()).post(new Runnable() {
+    }
+
+    private void setCameraBtnState() {
+        final IPCManager ipcManager = mCurrentRouter.getRouterSession().getCameraManager().getIPCManager();
+        if (cameraStatusChanged != null) cameraStatusChanged.unsubscribe();
+        cameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCStateChanged>() {
             @Override
-            public void run() {
-                setTitle(turnOn ? router.getName() : getText(R.string.title_activity_main));
-                findViewById(R.id.router_config_btn).setEnabled(turnOn);
-                if (turnOn) {
-                    final IPCManager ipcManager = router.getRouterSession().getCameraManager().getIPCManager();
-                    cameraStatusChanged = ipcManager.createEventManager(null).subscribeCameraStatus(new Action1<IPCStateChanged>() {
-                        @Override
-                        public void call(IPCStateChanged ipcStateChanged) {
-                            setCameraCount(ipcManager.getCameraList());
-                        }
-                    });
-                    setCameraCount(ipcManager.getCameraList());
-                } else {
-                    findViewById(R.id.camera_btn).setEnabled(false);
-                    ((Button) findViewById(R.id.camera_btn)).setText(getText(R.string.camera));
-                }
+            public void call(IPCStateChanged ipcStateChanged) {
+                setCameraCount(ipcManager.getCameraList());
             }
         });
+        setCameraCount(ipcManager.getCameraList());
+
+    }
+
+    private void setInfraredControlBtnState() {
+        if (mCurrentRouter == null) return;
+        Messages.Request request = RequestUtil.getDevices(Models.DeviceQuery
+                .newBuilder()
+                .setPage(0)
+                .setPageSize(100)
+                .setType(Models.DeviceType.DEVICE_TYPE_INFRARED)
+                .build());
+        mCurrentRouter.getRouterSession().getCommunicationManager().postRequestToQueue(request, new Action1<Messages.Response>() {
+                    @Override
+                    public void call(Messages.Response response) {
+                        mInfraredDeviceList = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
+                        final boolean hasDevices = mInfraredDeviceList.size() > 0;
+                        setCacheData(InfraredControlActivity.IR_LIST_KEY, mInfraredDeviceList);
+                        new Handler(getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mIRCtrlBtn.setEnabled(hasDevices);
+                                mIRCtrlBtn.setText(getText(R.string.infrared_control) + "-" + mInfraredDeviceList.size());
+                            }
+                        });
+                    }
+                }
+        );
     }
 
     private void setCameraCount(final List<IPCamera> cameras) {
@@ -376,14 +425,10 @@ public class MainActivity extends BaseActivity {
                     if (camera.getIpcContext().getStatus() == IPCStatus.CONNECTED)
                         validCount++;
                 }
-                final Button button = (Button) findViewById(R.id.camera_btn);
-                button.setText("" + getText(R.string.camera) + validCount + "/" + cameras.size());
-                button.setEnabled(validCount > 0);
+                mCameraBtn.setText("" + getText(R.string.camera) + validCount + "/" + cameras.size());
+                mCameraBtn.setEnabled(validCount > 0);
             }
         });
-
-
     }
-
 
 }

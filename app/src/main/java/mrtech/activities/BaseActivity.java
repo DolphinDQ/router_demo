@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import java.lang.reflect.Type;
 import java.util.Hashtable;
 
 import mrtech.smarthome.router.Router;
@@ -14,24 +13,27 @@ import mrtech.smarthome.router.RouterManager;
  * Created by sphynx on 2015/12/28.
  */
 public class BaseActivity extends AppCompatActivity {
-    private static Hashtable<Type, Object> defaultData = new Hashtable<>();
+    private static Hashtable<String, Object> cacheData = new Hashtable<>();
 
-    public static <T> T getDefaultData(Class<T> cls) {
-        T result = null;
-        if (defaultData.containsKey(cls)) {
-            result = (T) defaultData.get(cls);
+    @SuppressWarnings("unchecked")
+    public static <T> T getCacheData(Class<T> cls) {
+        return (T) getCacheData(cls.getName());
+    }
+
+    public static Object getCacheData(String key) {
+        Object result = null;
+        if (cacheData.containsKey(key)) {
+            result = cacheData.get(key);
         }
         return result;
     }
 
-    /**
-     * 设置默认值
-     *
-     * @param object 不能为空。
-     */
-    public static void setDefaultData(Object object) {
-        if (object == null) throw new IllegalArgumentException("setDefaultData(Object) 参数不能为空！");
-        defaultData.put(object.getClass(), object);
+    public static void setCacheData(String key, Object data) {
+        if (cacheData.containsKey(key)) {
+            cacheData.remove(key);
+        }
+        if (data != null)
+            cacheData.put(key, data);
     }
 
     /**
@@ -41,12 +43,8 @@ public class BaseActivity extends AppCompatActivity {
      * @param data 可以为空
      * @param <T>  数据类型
      */
-    public static <T> void setDefaultData(Class<T> cls, T data) {
-        if (defaultData.containsKey(cls)) {
-            defaultData.remove(cls);
-        }
-        if (data != null)
-            defaultData.put(cls, data);
+    public static <T> void setCacheData(Class<T> cls, T data) {
+        setCacheData(cls.getName(), data);
     }
 
     @Override
@@ -55,7 +53,7 @@ public class BaseActivity extends AppCompatActivity {
         final RouterManager routerManager = RouterManager.getInstance();
         if (intent != null) {
             Router temp = routerManager.getRouter(intent.getAction());
-            if (temp != null) setDefaultData(temp);
+            if (temp != null) setCacheData(Router.class, temp);
         }
         super.onCreate(savedInstanceState);
     }
