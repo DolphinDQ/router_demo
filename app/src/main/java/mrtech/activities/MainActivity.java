@@ -67,7 +67,6 @@ public class MainActivity extends BaseActivity {
         initContent();
         initToolBar();
         initNavBar();
-        setRouterActive(mCurrentRouter);
         setCurrentRouter(getCacheData(Router.class));
     }
 
@@ -80,6 +79,7 @@ public class MainActivity extends BaseActivity {
     private void initRouterConfigControl() {
         mRouterConfigBtn = (Button) findViewById(R.id.router_config_btn);
         mRouterConfigBtn.setText("测试红外设备");
+        mRouterConfigBtn.setEnabled(false);
         mRouterConfigBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +139,7 @@ public class MainActivity extends BaseActivity {
 
     private void initCameraControl() {
         mCameraBtn = (Button) findViewById(R.id.camera_btn);
+        mCameraBtn.setEnabled(false);
         mCameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +149,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initInfraredControl() {
+
         mIRCtrlBtn = (Button) findViewById(R.id.infrared_control_btn);
+        mIRCtrlBtn.setEnabled(false);
         mIRCtrlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

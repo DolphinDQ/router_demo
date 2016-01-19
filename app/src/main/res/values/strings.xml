@@ -28,4 +28,41 @@
     <string name="custom">自定义</string>
     <string name="router_not_found">没有指定路由器。</string>
     <string name="infrared_not_found">没有指定红外控制设备。</string>
+
+    <!--电视遥控-->
+    <string name="silence">静音</string>
+    <string name="power">电源</string>
+    <string name="num1">1</string>
+    <string name="num2">2</string>
+    <string name="num3">3</string>
+    <string name="num4">4</string>
+    <string name="num5">5</string>
+    <string name="num6">6</string>
+    <string name="num7">7</string>
+    <string name="num8">8</string>
+    <string name="num9">9</string>
+    <string name="show">- -</string>
+    <string name="num0">0</string>
+    <string name="back">回看</string>
+    <string name="source">信源</string>
+    <string name="up">上</string>
+    <string name="home">主页</string>
+    <string name="left">左</string>
+    <string name="ok">OK</string>
+    <string name="right">右</string>
+    <string name="menu">菜单</string>
+    <string name="down">下</string>
+    <string name="turn_back">返回</string>
+    <string name="volume_plus">音量+</string>
+    <string name="epg">EPG</string>
+    <string name="channel_plus">节目+</string>
+    <string name="volume_minus">音量-</string>
+    <string name="info">信息窗</string>
+    <string name="channel_minus">节目-</string>
+    <string name="proportion">比例</string>
+    <string name="effect">图效</string>
+    <string name="collection">收藏</string>
+    <string name="search">搜索</string>
+
+
 </resources>

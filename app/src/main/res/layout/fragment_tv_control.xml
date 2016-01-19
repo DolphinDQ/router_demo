@@ -9,7 +9,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_horizontal" >
 
             <RelativeLayout
@@ -22,7 +22,7 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
-                    android:text="静音" />
+                    android:text="@string/silence" />
 
                 <Button
                     android:id="@+id/power"
@@ -33,21 +33,21 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_toRightOf="@id/silence"
-                    android:text="电源" />
+                    android:text="@string/power" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/part2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/part1" >
+                android:layout_below="@id/part1">
 
                 <Button
                     android:id="@+id/num1"
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
-                    android:text="1" />
+                    android:text="@string/num1" />
 
                 <Button
                     android:id="@+id/num2"
@@ -55,7 +55,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/num1"
-                    android:text="2" />
+                    android:text="@string/num2" />
 
                 <Button
                     android:id="@+id/num3"
@@ -63,7 +63,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/num2"
-                    android:text="3" />
+                    android:text="@string/num3" />
 
                 <Button
                     android:id="@+id/num4"
@@ -71,7 +71,7 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/num1"
                     android:layout_margin="8dp"
-                    android:text="4" />
+                    android:text="@string/num4" />
 
                 <Button
                     android:id="@+id/num5"
@@ -80,7 +80,7 @@
                     android:layout_below="@id/num2"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/num4"
-                    android:text="5" />
+                    android:text="@string/num5" />
 
                 <Button
                     android:id="@+id/num6"
@@ -89,7 +89,7 @@
                     android:layout_below="@id/num3"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/num5"
-                    android:text="6" />
+                    android:text="@string/num6" />
 
                 <Button
                     android:id="@+id/num7"
@@ -97,7 +97,7 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/num4"
                     android:layout_margin="8dp"
-                    android:text="7" />
+                    android:text="@string/num7" />
 
                 <Button
                     android:id="@+id/num8"
@@ -106,7 +106,7 @@
                     android:layout_below="@id/num5"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/num7"
-                    android:text="8" />
+                    android:text="@string/num8" />
 
                 <Button
                     android:id="@+id/num9"
@@ -115,15 +115,15 @@
                     android:layout_below="@id/num6"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/num8"
-                    android:text="9" />
+                    android:text="@string/num9" />
 
                 <Button
-                    android:id="@+id/show"
+                    android:id="@+id/combination"
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_below="@id/num7"
                     android:layout_margin="8dp"
-                    android:text="显示" />
+                    android:text="@string/show" />
 
                 <Button
                     android:id="@+id/num0"
@@ -131,8 +131,8 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/num8"
                     android:layout_margin="8dp"
-                    android:layout_toRightOf="@id/show"
-                    android:text="0" />
+                    android:layout_toRightOf="@id/combination"
+                    android:text="@string/num0" />
 
                 <Button
                     android:id="@+id/back"
@@ -141,7 +141,9 @@
                     android:layout_below="@id/num9"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/num0"
-                    android:text="回看" />
+                    android:text="@string/back"
+                    android:enabled="false"
+                    android:visibility="invisible" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -156,7 +158,7 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
-                    android:text="信源" />
+                    android:text="@string/source" />
 
                 <Button
                     android:id="@+id/up"
@@ -164,7 +166,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/source"
-                    android:text="上" />
+                    android:text="@string/up" />
 
                 <Button
                     android:id="@+id/home"
@@ -172,7 +174,9 @@
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/up"
-                    android:text="主页" />
+                    android:text="@string/home"
+                    android:enabled="false"
+                    android:visibility="invisible" />
 
                 <Button
                     android:id="@+id/left"
@@ -180,7 +184,7 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/source"
                     android:layout_margin="8dp"
-                    android:text="左" />
+                    android:text="@string/left" />
 
                 <Button
                     android:id="@+id/ok"
@@ -189,7 +193,7 @@
                     android:layout_below="@id/up"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/left"
-                    android:text="OK" />
+                    android:text="@string/ok" />
 
                 <Button
                     android:id="@+id/right"
@@ -198,7 +202,7 @@
                     android:layout_below="@id/home"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/ok"
-                    android:text="右" />
+                    android:text="@string/right" />
 
                 <Button
                     android:id="@+id/menu"
@@ -206,7 +210,7 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/left"
                     android:layout_margin="8dp"
-                    android:text="菜单" />
+                    android:text="@string/menu" />
 
                 <Button
                     android:id="@+id/down"
@@ -215,7 +219,7 @@
                     android:layout_below="@id/ok"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/menu"
-                    android:text="下" />
+                    android:text="@string/down" />
 
                 <Button
                     android:id="@+id/turnBack"
@@ -224,7 +228,7 @@
                     android:layout_below="@id/right"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/down"
-                    android:text="返回" />
+                    android:text="@string/turn_back" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -239,7 +243,7 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
-                    android:text="音量+" />
+                    android:text="@string/volume_plus" />
 
                 <Button
                     android:id="@+id/epg"
@@ -247,7 +251,8 @@
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/volumePlus"
-                    android:text="EPG" />
+                    android:text="@string/epg"
+                    android:visibility="invisible" />
 
                 <Button
                     android:id="@+id/channelPlus"
@@ -255,7 +260,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/epg"
-                    android:text="节目+" />
+                    android:text="@string/channel_plus" />
 
                 <Button
                     android:id="@+id/volumeMinus"
@@ -263,7 +268,7 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/volumePlus"
                     android:layout_margin="8dp"
-                    android:text="音量-" />
+                    android:text="@string/volume_minus" />
 
                 <Button
                     android:id="@+id/info"
@@ -272,7 +277,8 @@
                     android:layout_below="@id/epg"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/volumePlus"
-                    android:text="信息窗" />
+                    android:text="@string/info"
+                    android:visibility="invisible" />
 
                 <Button
                     android:id="@+id/channelMinus"
@@ -281,7 +287,7 @@
                     android:layout_below="@id/channelPlus"
                     android:layout_margin="8dp"
                     android:layout_toRightOf="@id/info"
-                    android:text="节目-" />
+                    android:text="@string/channel_minus" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -289,14 +295,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/part4"
-                android:layout_marginTop="15dp" >
+                android:layout_marginTop="15dp"
+                android:visibility="invisible">
 
                 <Button
                     android:id="@+id/proportion"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
                     android:layout_margin="6dp"
-                    android:text="比例" />
+                    android:text="@string/proportion" />
 
                 <Button
                     android:id="@+id/effect"
@@ -304,7 +311,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="6dp"
                     android:layout_toRightOf="@id/proportion"
-                    android:text="图效" />
+                    android:text="@string/effect" />
 
                 <Button
                     android:id="@+id/collection"
@@ -312,7 +319,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="6dp"
                     android:layout_toRightOf="@id/effect"
-                    android:text="收藏" />
+                    android:text="@string/collection" />
 
                 <Button
                     android:id="@+id/search"
@@ -320,7 +327,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="6dp"
                     android:layout_toRightOf="@id/collection"
-                    android:text="搜索" />
+                    android:text="@string/search" />
 
                 <Button
                     android:id="@+id/red"

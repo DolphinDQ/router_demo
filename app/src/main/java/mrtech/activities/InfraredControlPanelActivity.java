@@ -58,7 +58,7 @@ public class InfraredControlPanelActivity extends BaseActivity {
     private Fragment selectDefaultControlPanel(Models.InfraredDeviceType type) {
         switch (type) {
             case INFRARED_DEVICE_TYPE_TELEVISION:
-                return new TVControlFragment();
+                return TVControlFragment.newInstance(mRouter, mDevice);
             default:
                 return null;
         }
