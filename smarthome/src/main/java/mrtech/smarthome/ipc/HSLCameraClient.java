@@ -10,6 +10,7 @@ import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
 /**
+ * HSLCameraClient
  * Created by sphynx on 2015/12/8.
  */
 class HSLCameraClient implements IPCContext {
@@ -87,7 +88,6 @@ class HSLCameraClient implements IPCContext {
                         Thread.sleep(delay);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    } finally {
                     }
                     connect();
                     setReconnecting(false);
@@ -107,7 +107,7 @@ class HSLCameraClient implements IPCContext {
     /**
      * 获取指定状态摄像头重连时间。
      *
-     * @param status
+     * @param status 状态。
      * @return 不重连返回-1.
      */
     private int getReconnectDelay(IPCStatus status) {

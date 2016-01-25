@@ -6,6 +6,19 @@
     <GridView
         android:id="@+id/buttons"
         android:numColumns="3"
+        android:layout_margin="10dp"
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <FrameLayout
+        android:id="@+id/press_progress"
+        android:background="#88000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
 </FrameLayout>

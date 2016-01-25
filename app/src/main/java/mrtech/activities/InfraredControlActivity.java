@@ -34,17 +34,17 @@ public class InfraredControlActivity extends BaseActivity {
     private void initInfraredList() {
         if (mIRList == null) return;
         mInfraredList = (ListView) findViewById(R.id.infrared_list);
-        mInfraredList.setAdapter(new ArrayAdapter<Models.Device>(mContext, R.layout.layout_infrared_device_item, mIRList) {
+        mInfraredList.setAdapter(new ArrayAdapter<Models.Device>(mContext, R.layout.item_device, mIRList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null)
-                    convertView = getLayoutInflater().inflate(R.layout.layout_infrared_device_item, parent, false);
+                    convertView = getLayoutInflater().inflate(R.layout.item_device, parent, false);
                 final Models.Device device = getItem(position);
-                String type=device.getExtension(Models.InfraredDevice.detail).getType().toString();
-                type=type.replace("INFRARED_DEVICE_TYPE_","");
-                        ((TextView) convertView.findViewById(R.id.title)).setText(device.getAlias());
+                String type = device.getExtension(Models.InfraredDevice.detail).getType().toString();
+                type = type.replace("INFRARED_DEVICE_TYPE_", "");
+                ((TextView) convertView.findViewById(R.id.title)).setText(device.getAlias());
                 ((TextView) convertView.findViewById(R.id.description)).setText(type);
-                convertView.findViewById(R.id.infrared_control_btn).setOnClickListener(new View.OnClickListener() {
+                convertView.findViewById(R.id.control_btn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setCacheData(InfraredControlPanelActivity.INFRARED_DEVICE_KEY, device);
@@ -65,7 +65,6 @@ public class InfraredControlActivity extends BaseActivity {
                     mRouter == null ? R.string.router_not_found : R.string.infrared_not_found,
                     Toast.LENGTH_SHORT).show();
             finish();
-            return;
         }
     }
 }

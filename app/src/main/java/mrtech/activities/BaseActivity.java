@@ -1,10 +1,13 @@
 package mrtech.activities;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
@@ -14,6 +17,19 @@ import mrtech.smarthome.router.RouterManager;
  */
 public class BaseActivity extends AppCompatActivity {
     private static Hashtable<String, Object> cacheData = new Hashtable<>();
+
+    public static boolean isTopActivity(String className, Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfo = manager.getRunningTasks(Integer.MAX_VALUE);
+        String cmpNameTemp = null;
+        if (null != runningTaskInfo) {
+            cmpNameTemp = (runningTaskInfo.get(0).topActivity).getClassName();
+        }
+        if (null == cmpNameTemp) {
+            return false;
+        }
+        return cmpNameTemp.equals(className);
+    }
 
     @SuppressWarnings("unchecked")
     public static <T> T getCacheData(Class<T> cls) {
@@ -56,5 +72,9 @@ public class BaseActivity extends AppCompatActivity {
             if (temp != null) setCacheData(Router.class, temp);
         }
         super.onCreate(savedInstanceState);
+    }
+
+    protected boolean isActive() {
+        return isTopActivity(getClass().getName(), this);
     }
 }

@@ -4,7 +4,9 @@ group 'mrtech.smarthome'
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
-
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23

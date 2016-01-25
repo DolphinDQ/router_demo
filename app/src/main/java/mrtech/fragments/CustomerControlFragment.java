@@ -1,5 +1,6 @@
 package mrtech.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import mrtech.activities.R;
@@ -26,6 +28,7 @@ public class CustomerControlFragment extends Fragment {
     private Models.Device mDevice;
     private Models.InfraredDevice mInfraredDevice;
     private CommunicationManager mCommunicationManager;
+    private boolean mCodeTime;
 
 
     public static CustomerControlFragment newInstance(Router router, Models.Device device) {
@@ -42,8 +45,12 @@ public class CustomerControlFragment extends Fragment {
         initContext();
     }
 
+
+
     private void initButtons() {
-        GridView buttons = (GridView) getView().findViewById(R.id.buttons);
+        final   GridView buttons = (GridView) getView().findViewById(R.id.buttons);
+        final View progressBar =getView().findViewById(R.id.press_progress);
+        progressBar.setVisibility(View.GONE);
         buttons.setAdapter(new ArrayAdapter<Models.InfraredOpCode>(getContext(), R.layout.layou_custom_infrared_button, mInfraredDevice.getOpcodesList()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -55,6 +62,31 @@ public class CustomerControlFragment extends Fragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
+
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected void onPreExecute() {
+                                progressBar.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void aVoid) {
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }.execute();
+
                         final Messages.Request request = RequestUtil
                                 .sendIrCommand(opCode.getDeviceId(), Models.InfraredCommand.newBuilder()
                                         .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(opCode.getId())).build());

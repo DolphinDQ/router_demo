@@ -39,12 +39,12 @@ public class IPCSearchActivity extends BaseActivity {
         mRouterSession = getCacheData(Router.class).getRouterSession();
         mCommunicationManager = mRouterSession.getCommunicationManager();
         mCameraManager = mRouterSession.getCameraManager();
-        cameraDeviceArrayAdapter = new ArrayAdapter<Models.Device>(this, R.layout.layout_camera_item) {
+        cameraDeviceArrayAdapter = new ArrayAdapter<Models.Device>(this, R.layout.item_camera) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
                     convertView = LayoutInflater.from(this.getContext())
-                            .inflate(R.layout.layout_camera_item, parent, false);
+                            .inflate(R.layout.item_camera, parent, false);
                 }
                 final Models.Device device = getItem(position);
                 ((TextView) convertView.findViewById(R.id.device_name)).setText(device.getAlias());

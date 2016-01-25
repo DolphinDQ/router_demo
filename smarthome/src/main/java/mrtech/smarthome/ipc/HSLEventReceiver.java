@@ -17,6 +17,7 @@ import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
+ * HSLEventReceiver
  * Created by sphynx on 2015/12/8.
  */
 class HSLEventReceiver {

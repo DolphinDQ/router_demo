@@ -32,12 +32,21 @@
         android:layout_toEndOf="@+id/camera_btn" />
 
     <Button
-        android:id="@+id/infrared_control_btn"
+        android:id="@+id/control_btn"
         android:text="@string/infrared_control"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/router_config_btn"
         android:layout_toEndOf="@+id/router_config_btn" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/door_lock"
+        android:id="@+id/lock_list"
+        android:layout_below="@+id/camera_btn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

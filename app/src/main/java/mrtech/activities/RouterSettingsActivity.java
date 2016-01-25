@@ -87,12 +87,12 @@ public class RouterSettingsActivity extends AppCompatActivity {
 
     private void initView() {
         final ListView routerList = (ListView) findViewById(R.id.router_list);
-        routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_item, routerManager.getRouterList()) {
+        routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.item_router, routerManager.getRouterList()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
                     convertView = LayoutInflater.from(this.getContext())
-                            .inflate(R.layout.layout_router_item, parent, false);
+                            .inflate(R.layout.item_router, parent, false);
                 }
                 final Router router = getItem(position);
                 ((TextView) convertView.findViewById(R.id.router_name)).setText(router.getName());

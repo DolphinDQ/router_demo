@@ -57,9 +57,6 @@ class HSLPlayer implements IPCPlayer {
     private PublishSubject<PictureData> subjectPicture = PublishSubject.create();
 
 
-
-
-
     public HSLPlayer(VideoRenderer renderer, IPCManager manager) {
 
         mRenderer = renderer;
@@ -140,6 +137,7 @@ class HSLPlayer implements IPCPlayer {
 
     @Override
     public void play(IPCamera cam) {
+        if (cam == null) return;
         final HSLCameraClient cameraClient = (HSLCameraClient) cam.getIpcContext();
         if (cam.getIpcContext().getStatus() == IPCStatus.DISCONNECT) {
             cameraClient.reconnect(0);
@@ -158,36 +156,32 @@ class HSLPlayer implements IPCPlayer {
             });
         } else {
             stop();
-            if (cam != null) {
-                playingCamera = cam;
-                cameraClient.setIsPlaying(true);
-                subjectPlayingCameraChanged.onNext(playingCamera);
-                new AsyncTask<Long, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Long... params) {
-                        long userid = params[0];
-                        DeviceSDK.setRender(userid, mRenderer);
-                        DeviceSDK.startPlayStream(userid, 10, 1);
+            playingCamera = cam;
+            cameraClient.setIsPlaying(true);
+            subjectPlayingCameraChanged.onNext(playingCamera);
+            new AsyncTask<Long, Void, Void>() {
+                @Override
+                protected Void doInBackground(Long... params) {
+                    long userid = params[0];
+                    DeviceSDK.setRender(userid, mRenderer);
+                    DeviceSDK.startPlayStream(userid, 10, 1);
 
-                        try {
-                            JSONObject obj = new JSONObject();
-                            obj.put("param", 13);
-                            obj.put("value", 1024);
-                            DeviceSDK.setDeviceParam(userid, 0x2026, obj.toString());
+                    try {
+                        JSONObject obj = new JSONObject();
+                        obj.put("param", 13);
+                        obj.put("value", 1024);
+                        DeviceSDK.setDeviceParam(userid, 0x2026, obj.toString());
 
-                            JSONObject obj1 = new JSONObject();
-                            obj1.put("param", 6);
-                            obj1.put("value", 15);
-                            DeviceSDK.setDeviceParam(userid, 0x2026, obj1.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
+                        JSONObject obj1 = new JSONObject();
+                        obj1.put("param", 6);
+                        obj1.put("value", 15);
+                        DeviceSDK.setDeviceParam(userid, 0x2026, obj1.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }.execute(cam.getIpcContext().getHandle());
-            } else {
-                trace("Can't play NULL camera ...");
-            }
+                    return null;
+                }
+            }.execute(cam.getIpcContext().getHandle());
         }
     }
 
@@ -210,7 +204,7 @@ class HSLPlayer implements IPCPlayer {
                 cameras.add(cam);
             }
         }
-        return cameras.toArray(new IPCamera[0]);
+        return cameras.toArray(new IPCamera[cameras.size()]);
     }
 
     @Override

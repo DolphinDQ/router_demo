@@ -98,7 +98,7 @@ class RouterCommunicationManager implements CommunicationManager {
                 if (mClient.isAuthenticated()) postEvents();
             }
         });
-        mRouterCacheProvider = new RouterCacheProvider(mClient.getRouter(),this);
+        mRouterCacheProvider = new RouterCacheProvider(mClient.getRouter(), this);
     }
 
     public rx.Observable<Messages.Callback> getSubjectCallback() {
@@ -379,11 +379,12 @@ class RouterCommunicationManager implements CommunicationManager {
             Thread.currentThread().setName(mClient + " RequestQueuePostTask");
             trace(mClient + " start post task...");
             while (mClient.isConnected()) {
-                if ( mPostQueue.size() > 0 && mClient.isAuthenticated()) {
+                if (mPostQueue.size() > 0 && mClient.isAuthenticated()) {
                     for (final Messages.Request request : getRequestQueue()) {
                         try {
                             final Messages.Response response = postRequest(request);
-                            mPostQueue.remove(request).call(response);
+                            final Action1<Messages.Response> remove = mPostQueue.remove(request);
+                            if (remove != null) remove.call(response);
                         } catch (TimeoutException e) {
                             e.printStackTrace();
                         }

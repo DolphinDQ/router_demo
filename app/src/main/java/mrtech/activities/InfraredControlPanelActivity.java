@@ -25,6 +25,10 @@ public class InfraredControlPanelActivity extends BaseActivity {
         setContentView(R.layout.activity_infrared_control_panel);
         mContext = this;
         initContext();
+        if (mInfraredDevice== null){
+            finish();
+            Toast.makeText(InfraredControlPanelActivity.this, "无效的红外设备。", Toast.LENGTH_SHORT).show();
+        }
         initFragment();
     }
 
@@ -53,6 +57,7 @@ public class InfraredControlPanelActivity extends BaseActivity {
         }
         setTitle(mDevice.getAlias());
         mInfraredDevice = mDevice.getExtension(Models.InfraredDevice.detail);
+
     }
 
     private Fragment selectDefaultControlPanel(Models.InfraredDeviceType type) {

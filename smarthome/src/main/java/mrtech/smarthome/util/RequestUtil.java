@@ -1064,6 +1064,16 @@ public class RequestUtil {
 
         return requestBuilder.build();
     }
+
+    public static Request unlock(int deviceId) {
+        Request.Builder requestBuilder = Request.newBuilder();
+        requestBuilder.setType(RequestType.UNLOCK);
+        requestBuilder.setRequestId(RequestType.UNLOCK_VALUE + createId());
+
+        requestBuilder.setExtension(Messages.UnlockRequest.request, Messages.UnlockRequest.newBuilder().setSmartLockId(deviceId).build());
+
+        return requestBuilder.build();
+    }
 }
 
 

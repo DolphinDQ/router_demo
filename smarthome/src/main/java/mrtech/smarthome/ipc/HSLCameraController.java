@@ -7,6 +7,7 @@ import hsl.p2pipcam.nativecaller.DeviceSDK;
 import mrtech.smarthome.BuildConfig;
 
 /**
+ * HSLCameraController
  * Created by sphynx on 2015/12/8.
  */
 class HSLCameraController implements IPCController {

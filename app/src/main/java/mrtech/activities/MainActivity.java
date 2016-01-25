@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,8 @@ public class MainActivity extends BaseActivity {
     private Button mCameraBtn;
     private Button mRouterConfigBtn;
     private List<Models.Device> mInfraredDeviceList;
+    private Button mLockListBtn;
+    private List<Models.Device> mLockList;
 
     protected void onCreate(Bundle savedInstanceState) {
         mContext = this;
@@ -74,6 +77,19 @@ public class MainActivity extends BaseActivity {
         initCameraControl();
         initInfraredControl();
         initRouterConfigControl();
+        initLocks();
+
+    }
+
+    private void initLocks() {
+        mLockListBtn = (Button) findViewById(R.id.lock_list);
+        mLockListBtn.setEnabled(false);
+        mLockListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, LockListActivity.class));
+            }
+        });
     }
 
     private void initRouterConfigControl() {
@@ -150,7 +166,7 @@ public class MainActivity extends BaseActivity {
 
     private void initInfraredControl() {
 
-        mIRCtrlBtn = (Button) findViewById(R.id.infrared_control_btn);
+        mIRCtrlBtn = (Button) findViewById(R.id.control_btn);
         mIRCtrlBtn.setEnabled(false);
         mIRCtrlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,7 +222,7 @@ public class MainActivity extends BaseActivity {
             }));
 
         final ListView routerList = (ListView) navigationView.findViewById(R.id.router_list);
-        final ArrayAdapter<Router> routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.layout_router_item, mRouterManager.getRouterList()) {
+        final ArrayAdapter<Router> routerArrayAdapter = new ArrayAdapter<Router>(this, R.layout.item_router, mRouterManager.getRouterList()) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 final Router router = getItem(position);
@@ -217,7 +233,7 @@ public class MainActivity extends BaseActivity {
                 }
                 if (convertView == null) {
                     convertView = LayoutInflater.from(this.getContext())
-                            .inflate(R.layout.layout_router_item, parent, false);
+                            .inflate(R.layout.item_router, parent, false);
                 }
                 String routerName = router.getName();
 
@@ -372,12 +388,47 @@ public class MainActivity extends BaseActivity {
             src.setActive(true);
             setCameraBtnState();
             setInfraredControlBtnState();
+            setDoorLockBtnState();
         } else {
             mCameraBtn.setEnabled(false);
             mIRCtrlBtn.setEnabled(false);
+            mLockListBtn.setEnabled(false);
             mCameraBtn.setText(getText(R.string.camera));
             mIRCtrlBtn.setText(getText(R.string.infrared_control));
+            mLockListBtn.setText(getText(R.string.door_lock));
         }
+    }
+
+    private void setDoorLockBtnState() {
+        if (mCurrentRouter == null) return;
+        Messages.Request request = RequestUtil.getDevices(Models.DeviceQuery
+                .newBuilder()
+                .setPage(0)
+                .setPageSize(100)
+                .setType(Models.DeviceType.DEVICE_TYPE_ZIGBEE)
+                .build());
+        mCurrentRouter.getRouterSession().getCommunicationManager().postRequestToQueue(request, new Action1<Messages.Response>() {
+            @Override
+            public void call(Messages.Response response) {
+                final List<Models.Device> zigbeeDeviceList = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
+                mLockList = new ArrayList<>();
+                for (Models.Device device : zigbeeDeviceList) {
+                    final Models.ZigBeeDevice zigBeeDevice = device.getExtension(Models.ZigBeeDevice.detail);
+                    if (zigBeeDevice.getDeviceId() == Models.DeviceId.DEVICE_ID_DOOR_LOCK) {
+                        mLockList.add(device);
+                    }
+                }
+                if (isActive())
+                    setCacheData(LockListActivity.LOCK_LIST_KEY, mLockList);
+                new Handler(getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLockListBtn.setEnabled(mLockList.size() > 0);
+                        mLockListBtn.setText(getText(R.string.door_lock) + "-" + mLockList.size());
+                    }
+                });
+            }
+        });
     }
 
     private void setCameraBtnState() {
@@ -390,7 +441,6 @@ public class MainActivity extends BaseActivity {
             }
         });
         setCameraCount(ipcManager.getCameraList());
-
     }
 
     private void setInfraredControlBtnState() {
@@ -406,7 +456,8 @@ public class MainActivity extends BaseActivity {
                     public void call(Messages.Response response) {
                         mInfraredDeviceList = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
                         final boolean hasDevices = mInfraredDeviceList.size() > 0;
-                        setCacheData(InfraredControlActivity.IR_LIST_KEY, mInfraredDeviceList);
+                        if (isActive())
+                            setCacheData(InfraredControlActivity.IR_LIST_KEY, mInfraredDeviceList);
                         new Handler(getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
