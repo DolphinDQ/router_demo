@@ -86,9 +86,16 @@
             android:parentActivityName=".InfraredControlActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
+                android:value="mrtech.activities.InfraredControlActivity" />
+        </activity>
+        <activity
+            android:name=".LockListActivity"
+            android:label="@string/door_lock"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
                 android:value="mrtech.activities.MainActivity" />
         </activity>
-        <activity android:name=".LockListActivity"></activity>
     </application>
 
 </manifest>

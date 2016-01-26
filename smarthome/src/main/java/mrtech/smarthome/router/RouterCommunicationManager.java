@@ -215,7 +215,7 @@ class RouterCommunicationManager implements CommunicationManager {
             if (callback != null)
                 callback.call(null, new IOException("invalid connection..."));
             if (socket != null) {
-                mClient.disconnect();
+                mClient.reconnect();
             }
         }
     }

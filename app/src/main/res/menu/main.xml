@@ -8,6 +8,9 @@
         android:id="@+id/action_refresh_router"
         android:title="刷新路由器" />
     <item
+        android:id="@+id/test_crash_report"
+        android:title="闪退测试" />
+    <item
         android:id="@+id/action_logoff"
         android:title="注销用户" />
     <item

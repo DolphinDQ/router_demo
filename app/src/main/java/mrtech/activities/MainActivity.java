@@ -30,6 +30,8 @@ import java.util.List;
 
 import mrtech.models.RouterListItemData;
 import mrtech.services.RouterQueryTimelineService;
+import mrtech.smarthome.*;
+import mrtech.smarthome.BuildConfig;
 import mrtech.smarthome.auth.AuthConfig;
 import mrtech.smarthome.auth.UserManager;
 import mrtech.smarthome.ipc.IPCManager;
@@ -312,6 +314,10 @@ public class MainActivity extends BaseActivity {
                 RouterQueryTimelineService.setTerminate(true);
                 android.os.Process.killProcess(android.os.Process.myPid());
                 return true;
+            case R.id.test_crash_report:
+                Router router=null;
+                router.getRouterSession();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

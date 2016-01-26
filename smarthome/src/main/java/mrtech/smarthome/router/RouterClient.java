@@ -234,8 +234,10 @@ class RouterClient implements RouterSession {
             case API_AUTH_SUCCESS:
             case API_UNAUTHORIZED:
                 disconnect();
-                if (mCheckStatusTask != null)
+                if (mCheckStatusTask != null){
+                    trace("trying recheck status...");
                     mCheckStatusTask.interrupt();
+                }
                 break;
         }
     }

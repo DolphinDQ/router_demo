@@ -10,6 +10,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -88,6 +90,8 @@ public class App extends SmartHomeApp {
     @Override
     public void onCreate() {
         super.onCreate();
+        CrashReport.initCrashReport(this, "900018872", false);
+//        CrashReport.testJavaCrash();
         startService(new Intent(getBaseContext(), RouterQueryTimelineService.class));
         final RouterManager routerManager = RouterManager.getInstance();
         //订阅路由器报警事件。

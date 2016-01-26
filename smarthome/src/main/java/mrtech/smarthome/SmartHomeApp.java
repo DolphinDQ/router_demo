@@ -23,6 +23,7 @@ public class SmartHomeApp extends Application {
         super.onCreate();
         RouterManager.init(this);
         UserManager.getInstance().init(this);
+
     }
 
     @Override
