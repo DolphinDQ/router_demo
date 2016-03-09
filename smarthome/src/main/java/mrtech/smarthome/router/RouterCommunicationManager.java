@@ -171,6 +171,7 @@ class RouterCommunicationManager implements CommunicationManager {
 
                     @Override
                     public void onError(Throwable e) {
+
                         callback.call(null, e);
                     }
 
@@ -263,6 +264,52 @@ class RouterCommunicationManager implements CommunicationManager {
     @Override
     public Messages.Response postRequest(Messages.Request request, boolean cache) throws TimeoutException {
         return postRequest(request, ROUTER_REQUEST_TIMEOUT, cache);
+    }
+
+    @Override
+    public Subscription subscribeStream(final int streamId, final Action2<Messages.StreamMultiplexingUnit, Throwable> callback) {
+
+        final Subscription subscribe = subjectCallback.filter(new Func1<Messages.Callback, Boolean>() {
+            @Override
+            public Boolean call(Messages.Callback callback) {
+                return callback.getType() == Messages.Callback.CallbackType.MULTIPLEX_STREAM;
+            }
+        }).map(new Func1<Messages.Callback, Messages.StreamMultiplexingUnit>() {
+            @Override
+            public Messages.StreamMultiplexingUnit call(Messages.Callback callback) {
+                return callback.getExtension(Messages.StreamMultiplexingUnit.callback);
+            }
+        }).filter(new Func1<Messages.StreamMultiplexingUnit, Boolean>() {
+            @Override
+            public Boolean call(Messages.StreamMultiplexingUnit streamMultiplexingUnit) {
+                return streamMultiplexingUnit.getStreamId() == streamId;
+            }
+        }).map(new Func1<Messages.StreamMultiplexingUnit, Messages.StreamMultiplexingUnit>() {
+            @Override
+            public Messages.StreamMultiplexingUnit call(Messages.StreamMultiplexingUnit streamMultiplexingUnit) {
+                final Messages.StreamMultiplexingUnit.UnitType type = streamMultiplexingUnit.getType();
+                switch (type) {
+                    case OPEN:
+                        postRequestAsync(RequestUtil.streamMultiplexingUnit(streamId, Messages.StreamMultiplexingUnit.UnitType.OPEN_ACK), null);
+                        break;
+                    case DATA:
+                        postRequestAsync(RequestUtil.streamMultiplexingUnit(streamId, Messages.StreamMultiplexingUnit.UnitType.DATA_ACK), null);
+                        break;
+                    default:
+                        break;
+                }
+                return streamMultiplexingUnit;
+            }
+        }).subscribe(new Action1<Messages.StreamMultiplexingUnit>() {
+            @Override
+            public void call(Messages.StreamMultiplexingUnit streamMultiplexingUnit) {
+                if (callback != null) {
+                    callback.call(streamMultiplexingUnit, null);
+                }
+            }
+        });
+        postRequestAsync(RequestUtil.streamMultiplexingUnit(streamId, Messages.StreamMultiplexingUnit.UnitType.OPEN_ACK), null);
+        return subscribe;
     }
 
     @Override

@@ -8,6 +8,7 @@ import mrtech.smarthome.auth.UserManager;
 import mrtech.smarthome.router.RouterManager;
 
 /**
+ *
  * Created by sphynx on 2016/1/7.
  */
 public class SmartHomeApp extends Application {

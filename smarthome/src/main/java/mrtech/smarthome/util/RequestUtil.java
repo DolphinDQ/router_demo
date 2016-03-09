@@ -1074,6 +1074,31 @@ public class RequestUtil {
 
         return requestBuilder.build();
     }
+
+
+    public static Request streamMultiplexingUnit(int streamId, Messages.StreamMultiplexingUnit.UnitType unitType) {
+        Request.Builder requestBuilder = Request.newBuilder();
+        requestBuilder.setType(RequestType.MULTIPLEX_STREAM);
+        requestBuilder.setRequestId(RequestType.MULTIPLEX_STREAM_VALUE + createId());
+
+        final Messages.StreamMultiplexingUnit unit = Messages.StreamMultiplexingUnit.newBuilder()
+                .setType(unitType)
+                .setStreamId(streamId)
+                .build();
+        requestBuilder.setExtension(Messages.StreamMultiplexingUnit.request,unit);
+
+        return requestBuilder.build();
+    }
+
+    public  static Request collectDiagnosticInfo(){
+        Request.Builder requestBuilder = Request.newBuilder();
+        requestBuilder.setType(RequestType.COLLECT_DIAGNOSTIC_INFO);
+        requestBuilder.setRequestId(RequestType.COLLECT_DIAGNOSTIC_INFO_VALUE + createId());
+        return requestBuilder.build();
+    }
+
+
+
 }
 
 

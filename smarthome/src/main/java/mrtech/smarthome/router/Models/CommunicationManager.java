@@ -92,6 +92,13 @@ public interface CommunicationManager {
     Messages.Response postRequest(Messages.Request request, boolean cache) throws TimeoutException;
 
     /**
+     * 订阅指定数据流。
+     * @param streamId
+     * @param callback
+     * @return
+     */
+    Subscription subscribeStream(final int streamId, final Action2<Messages.StreamMultiplexingUnit, Throwable> callback);
+    /**
      * 获取请求队列，调用postRequestToQueue方法后，请求将会进入请求等待队列。获取到对应的请求可以调用cancelRequestFromQueue，取消请求。
      *
      * @return 返回请求队列。

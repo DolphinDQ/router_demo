@@ -1,10 +1,14 @@
 package mrtech.fragments;
 
+import android.app.Activity;
+import android.app.NotificationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -23,6 +27,7 @@ public class TVControlFragment extends Fragment {
     private Router mRouter;
     private Models.InfraredDevice mInfraredDevice;
     private CommunicationManager mCommunicationManager;
+    private AsyncTask<Object, Object, Object> mLongClick;
 
     public static TVControlFragment newInstance(Router router, Models.Device device) {
         final TVControlFragment fragment = new TVControlFragment();
@@ -51,35 +56,80 @@ public class TVControlFragment extends Fragment {
     }
 
     private void initButtons() {
-        binding(Models.TelevisionCommand.TELEVISION_0,R.id.num0);
-        binding(Models.TelevisionCommand.TELEVISION_1,R.id.num1);
-        binding(Models.TelevisionCommand.TELEVISION_2,R.id.num2);
-        binding(Models.TelevisionCommand.TELEVISION_3,R.id.num3);
-        binding(Models.TelevisionCommand.TELEVISION_4,R.id.num4);
-        binding(Models.TelevisionCommand.TELEVISION_5,R.id.num5);
-        binding(Models.TelevisionCommand.TELEVISION_6,R.id.num6);
-        binding(Models.TelevisionCommand.TELEVISION_7,R.id.num7);
-        binding(Models.TelevisionCommand.TELEVISION_8,R.id.num8);
-        binding(Models.TelevisionCommand.TELEVISION_9,R.id.num9);
-        binding(Models.TelevisionCommand.TELEVISION_AV_TV,R.id.source);
-        binding(Models.TelevisionCommand.TELEVISION_CHANNEL_PLUS,R.id.channelPlus);
-        binding(Models.TelevisionCommand.TELEVISION_CHANNEL_REDUCTION,R.id.channelMinus);
-        binding(Models.TelevisionCommand.TELEVISION_COMBINATION,R.id.combination);
-        binding(Models.TelevisionCommand.TELEVISION_UP,R.id.up);
-        binding(Models.TelevisionCommand.TELEVISION_DOWN,R.id.down);
-        binding(Models.TelevisionCommand.TELEVISION_LEFT,R.id.left);
-        binding(Models.TelevisionCommand.TELEVISION_RIGHT,R.id.right);
-        binding(Models.TelevisionCommand.TELEVISION_CONFIRM,R.id.ok);
-        binding(Models.TelevisionCommand.TELEVISION_MENU,R.id.menu);
-        binding(Models.TelevisionCommand.TELEVISION_MUTE,R.id.silence);
-        binding(Models.TelevisionCommand.TELEVISION_POWER,R.id.power);
-        binding(Models.TelevisionCommand.TELEVISION_RETURN,R.id.turnBack);
-        binding(Models.TelevisionCommand.TELEVISION_VOLUME,R.id.volumePlus);
-        binding(Models.TelevisionCommand.TELEVISION_VOLUME_REDUCTION,R.id.volumeMinus);
+        binding(Models.TelevisionCommand.TELEVISION_0, R.id.num0);
+        binding(Models.TelevisionCommand.TELEVISION_1, R.id.num1);
+        binding(Models.TelevisionCommand.TELEVISION_2, R.id.num2);
+        binding(Models.TelevisionCommand.TELEVISION_3, R.id.num3);
+        binding(Models.TelevisionCommand.TELEVISION_4, R.id.num4);
+        binding(Models.TelevisionCommand.TELEVISION_5, R.id.num5);
+        binding(Models.TelevisionCommand.TELEVISION_6, R.id.num6);
+        binding(Models.TelevisionCommand.TELEVISION_7, R.id.num7);
+        binding(Models.TelevisionCommand.TELEVISION_8, R.id.num8);
+        binding(Models.TelevisionCommand.TELEVISION_9, R.id.num9);
+        binding(Models.TelevisionCommand.TELEVISION_AV_TV, R.id.source);
+        binding(Models.TelevisionCommand.TELEVISION_CHANNEL_PLUS, R.id.channelPlus);
+        binding(Models.TelevisionCommand.TELEVISION_CHANNEL_REDUCTION, R.id.channelMinus);
+        binding(Models.TelevisionCommand.TELEVISION_COMBINATION, R.id.combination);
+        binding(Models.TelevisionCommand.TELEVISION_UP, R.id.up);
+        binding(Models.TelevisionCommand.TELEVISION_DOWN, R.id.down);
+        binding(Models.TelevisionCommand.TELEVISION_LEFT, R.id.left);
+        binding(Models.TelevisionCommand.TELEVISION_RIGHT, R.id.right);
+        binding(Models.TelevisionCommand.TELEVISION_CONFIRM, R.id.ok);
+        binding(Models.TelevisionCommand.TELEVISION_MENU, R.id.menu);
+        binding(Models.TelevisionCommand.TELEVISION_MUTE, R.id.silence);
+        binding(Models.TelevisionCommand.TELEVISION_POWER, R.id.power);
+        binding(Models.TelevisionCommand.TELEVISION_RETURN, R.id.turnBack);
+        binding(Models.TelevisionCommand.TELEVISION_VOLUME, R.id.volumePlus);
+        binding(Models.TelevisionCommand.TELEVISION_VOLUME_REDUCTION, R.id.volumeMinus);
     }
 
-    public void binding(final Models.TelevisionCommand command,@IdRes int res){
-        getView().findViewById(res).setOnClickListener(new View.OnClickListener() {
+    private void stop() {
+        if (mLongClick != null) {
+            mLongClick.cancel(false);
+            mLongClick = null;
+        }
+    }
+
+
+    public void binding(final Models.TelevisionCommand command, @IdRes int res) {
+        final View view = getView().findViewById(res);
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+//                ((NotificationManager) getActivity().getSystemService(Activity.NOTIFICATION_SERVICE)).notify(0,);
+                Toast.makeText(getActivity(), "开始长按...", Toast.LENGTH_SHORT).show();
+                mLongClick = new AsyncTask<Object, Object, Object>() {
+                    @Override
+                    protected Object doInBackground(Object[] params) {
+                        stop();
+                        boolean isStop = false;
+                        do {
+                            try {
+                                sendCommand(command);
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                isStop = true;
+                            }
+                        } while (isStop);
+                        return null;
+                    }
+                };
+
+                return false;
+            }
+        });
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction()==MotionEvent.ACTION_UP){
+                    Toast.makeText(getActivity(), "取消长按...", Toast.LENGTH_SHORT).show();
+                    stop();
+                }
+                return false;
+            }
+        });
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendCommand(command);
@@ -110,7 +160,7 @@ public class TVControlFragment extends Fragment {
         mCommunicationManager = mRouter.getRouterSession().getCommunicationManager();
     }
 
-    public void sendCommand(final Models.TelevisionCommand command){
+    public void sendCommand(final Models.TelevisionCommand command) {
         final Messages.Request request = RequestUtil
                 .sendIrCommand(mInfraredDevice.getId(), Models.InfraredCommand.newBuilder().setTelevision(command).build());
         mCommunicationManager.postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
@@ -129,7 +179,6 @@ public class TVControlFragment extends Fragment {
             }
         });
     }
-
 
 
 }

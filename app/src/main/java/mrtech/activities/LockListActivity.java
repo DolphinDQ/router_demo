@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import mrtech.smarthome.router.Router;
+import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.RequestUtil;
@@ -54,13 +55,13 @@ public class LockListActivity extends BaseActivity {
                         final Messages.Request request = RequestUtil.unlock(device.getId());
                         mRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
                             @Override
-                            public void call(Messages.Response response, final Throwable throwable) {
+                            public void call(final Messages.Response response, final Throwable throwable) {
                                 new Handler(getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (throwable==null){
-                                            Toast.makeText(LockListActivity.this, "解锁成功", Toast.LENGTH_SHORT).show();
-                                        }else {
+                                        if (throwable == null) {
+                                            Toast.makeText(LockListActivity.this, "解锁结果:" + RouterManager.getErrorMessage(response.getErrorCode()), Toast.LENGTH_SHORT).show();
+                                        } else {
                                             Toast.makeText(LockListActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     }

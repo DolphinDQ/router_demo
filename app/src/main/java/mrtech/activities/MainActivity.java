@@ -1,10 +1,15 @@
 package mrtech.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.text.format.Time;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +24,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,14 +41,13 @@ import java.util.List;
 
 import mrtech.models.RouterListItemData;
 import mrtech.services.RouterQueryTimelineService;
-import mrtech.smarthome.*;
-import mrtech.smarthome.BuildConfig;
 import mrtech.smarthome.auth.AuthConfig;
 import mrtech.smarthome.auth.UserManager;
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.ipc.IPCamera;
 import mrtech.smarthome.ipc.Models.IPCStateChanged;
 import mrtech.smarthome.ipc.Models.IPCStatus;
+import mrtech.smarthome.router.Models.CommunicationManager;
 import mrtech.smarthome.router.Router;
 import mrtech.smarthome.router.RouterManager;
 import mrtech.smarthome.rpc.Messages;
@@ -62,6 +72,8 @@ public class MainActivity extends BaseActivity {
     private List<Models.Device> mInfraredDeviceList;
     private Button mLockListBtn;
     private List<Models.Device> mLockList;
+    private Subscription mDownloadTask;
+    private TextView mDownLoadLog;
 
     protected void onCreate(Bundle savedInstanceState) {
         mContext = this;
@@ -80,7 +92,128 @@ public class MainActivity extends BaseActivity {
         initInfraredControl();
         initRouterConfigControl();
         initLocks();
+         mDownLoadLog=(TextView)findViewById(R.id.download_txt);
+        findViewById(R.id.user_report_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurrentRouter == null || !mCurrentRouter.getRouterSession().isAuthenticated()) {
+                    Toast.makeText(MainActivity.this, "当前未连接路由器，请选择需要反馈路由器...", Toast.LENGTH_SHORT).show();
+                } else {
+//                    final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//
+//                    final EditText et = new EditText(mContext);
+//                    builder.setTitle("请输入问题内容")
+//                            .setView(et)
+//                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    collectReport(et.getText().toString());
+//                                }
+//                            }).setNeutralButton("取消", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//                        }
+//                    });
+//                    builder.create().show();
+                    collectReport("");
+                }
+            }
+        });
+    }
 
+    private void show(final String mes) {
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                mDownLoadLog.setText(mes);
+//                Toast.makeText(MainActivity.this, mes, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * 发送反馈报告。
+     */
+    private void collectReport(final String mes) {
+        if (mCurrentRouter != null) {
+            final ArrayList<Byte> data = new ArrayList<>();
+            final CommunicationManager communicationManager = mCurrentRouter.getRouterSession().getCommunicationManager();
+            show("正在收集数据...请稍后...");
+            communicationManager.postRequestAsync(RequestUtil.collectDiagnosticInfo(), new Action2<Messages.Response, Throwable>() {
+                @Override
+                public void call(Messages.Response response, Throwable throwable) {
+                    if (throwable != null) {
+                        show("收集数据出错..." + throwable.getMessage());
+                    } else {
+                        if (response == null) {
+                            show("收集数据失败...请更新您的路由器固件版本...");
+                            return;
+                        }
+                        final Messages.CollectDiagnosticInfoResponse collectDiagnosticInfoResponse = response.getExtension(Messages.CollectDiagnosticInfoResponse.response);
+                        final int streamId = collectDiagnosticInfoResponse.getStreamId();
+                        show("正在下载数据...");
+                        mDownloadTask = communicationManager.subscribeStream(streamId, new Action2<Messages.StreamMultiplexingUnit, Throwable>() {
+                            @Override
+                            public void call(Messages.StreamMultiplexingUnit streamMultiplexingUnit, Throwable throwable) {
+                                if (throwable != null) {
+                                    show("下载异常:" + throwable);
+                                } else {
+                                    switch (streamMultiplexingUnit.getType()) {
+                                        case DATA:
+                                            //TODO 获取数据
+                                            final byte[] bytes = streamMultiplexingUnit.getData().toByteArray();
+                                            show("下载数据:"+bytes.length);
+                                            for (byte b : bytes) {
+                                                data.add(b);
+                                            }
+                                            return;
+                                        case ABORT:
+                                            show("下载失败...");
+                                            data.clear();
+                                            break;
+                                        case CLOSE:
+                                            show("下载完毕...");
+                                            processReport(mes, data);
+                                            //TODO 下载完毕 数据超过10M  不发邮件 发送失败Toast
+                                            break;
+                                        default:
+                                            return;
+                                    }
+                                }
+                                if (mDownloadTask != null) mDownloadTask.unsubscribe();
+                            }
+                        });
+                    }
+                }
+            }, 1000 * 60);
+
+        }
+    }
+
+    private void processReport(String mes, ArrayList<Byte> data) {
+        if (data == null || data.size() == 0) {
+            show("数据采集失败，请重新尝试下载...");
+        } else {
+            show("获取到数据:" + data.size() / (1024 ) + "KB");
+            final Date date = new Date(System.currentTimeMillis());
+            final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_MM_ss");
+            String file = "/sdcard/MR088_Info_" + simpleDateFormat.format(date) + ".bak";
+            FileOutputStream fout = null;
+            try {
+                fout = new FileOutputStream(file, false);
+                byte[] bytes = new byte[data.size()];
+                for (int i = 0; i < data.size(); i++) {
+                    bytes[i]=data.get(i);
+                }
+                fout.write(bytes);
+                fout.close();
+                show("保存成功:" + file);
+            } catch (Exception e) {
+                e.printStackTrace();
+                show("保存失败");
+            }
+        }
     }
 
     private void initLocks() {
@@ -315,8 +448,12 @@ public class MainActivity extends BaseActivity {
                 android.os.Process.killProcess(android.os.Process.myPid());
                 return true;
             case R.id.test_crash_report:
-                Router router=null;
-                router.getRouterSession();
+                try {
+                    Router router = null;
+                    router.getRouterSession();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -460,7 +597,9 @@ public class MainActivity extends BaseActivity {
         mCurrentRouter.getRouterSession().getCommunicationManager().postRequestToQueue(request, new Action1<Messages.Response>() {
                     @Override
                     public void call(Messages.Response response) {
-                        mInfraredDeviceList = response.getExtension(Messages.QueryDeviceResponse.response).getResultsList();
+                        final Messages.QueryDeviceResponse extension = response.getExtension(Messages.QueryDeviceResponse.response);
+                        if (extension == null) return;
+                        mInfraredDeviceList = extension.getResultsList();
                         final boolean hasDevices = mInfraredDeviceList.size() > 0;
                         if (isActive())
                             setCacheData(InfraredControlActivity.IR_LIST_KEY, mInfraredDeviceList);

@@ -74,6 +74,7 @@ public class RouterManager {
 
     private static void initErrorMessageMap() {
         errorMessageMap = new HashMap<Messages.Response.ErrorCode, String>();
+        errorMessageMap.put(Messages.Response.ErrorCode.SUCCESS, "成功");
         errorMessageMap.put(Messages.Response.ErrorCode.UNKNOWN_PROTOCOL, "未知协议。");
         errorMessageMap.put(Messages.Response.ErrorCode.UNSUPPORTED_VERSION, "版本不支持。");
         errorMessageMap.put(Messages.Response.ErrorCode.SERVER_BUSY, "服务器忙，请稍后再试。");
@@ -143,8 +144,7 @@ public class RouterManager {
      * @return
      */
     public static String getErrorMessage(Messages.Response.ErrorCode errorCode) {
-        String errorMessage = "";
-        errorMessage = errorMessageMap.get(errorCode);
+        String errorMessage = errorMessageMap.get(errorCode);
         if (errorMessage == null)
             errorMessage = "未知错误";
         return errorMessage;

@@ -3905,6 +3905,28 @@ public final class Models {
      * </pre>
      */
     TIMELINE_TYPE_FAILED_UNLOCK_ATTEMPT(20, 20),
+    /**
+     * <code>TIMELINE_TYPE_USB_MODEM_STATE_CHANGED = 21;</code>
+     *
+     * <pre>
+     * Recorded when 3G card insert or remove .
+     * Parameter format: { connected: bool }
+     *    &#64;param connected, true inserte, false is remove.
+     * </pre>
+     */
+    TIMELINE_TYPE_USB_MODEM_STATE_CHANGED(21, 21),
+    /**
+     * <code>TIMELINE_TYPE_CONTROL_WINDOW_COVER = 22;</code>
+     *
+     * <pre>
+     * Recorded when operate window cover.
+     * Parameter format: { id: int, name: string, action: int}
+     *    &#64;param id      ID of the window cover.
+     *    &#64;param name    Name of the window cover.
+     *    &#64;param action  Action of the window cover.
+     * </pre>
+     */
+    TIMELINE_TYPE_CONTROL_WINDOW_COVER(22, 22),
     ;
 
     /**
@@ -4177,6 +4199,28 @@ public final class Models {
      * </pre>
      */
     public static final int TIMELINE_TYPE_FAILED_UNLOCK_ATTEMPT_VALUE = 20;
+    /**
+     * <code>TIMELINE_TYPE_USB_MODEM_STATE_CHANGED = 21;</code>
+     *
+     * <pre>
+     * Recorded when 3G card insert or remove .
+     * Parameter format: { connected: bool }
+     *    &#64;param connected, true inserte, false is remove.
+     * </pre>
+     */
+    public static final int TIMELINE_TYPE_USB_MODEM_STATE_CHANGED_VALUE = 21;
+    /**
+     * <code>TIMELINE_TYPE_CONTROL_WINDOW_COVER = 22;</code>
+     *
+     * <pre>
+     * Recorded when operate window cover.
+     * Parameter format: { id: int, name: string, action: int}
+     *    &#64;param id      ID of the window cover.
+     *    &#64;param name    Name of the window cover.
+     *    &#64;param action  Action of the window cover.
+     * </pre>
+     */
+    public static final int TIMELINE_TYPE_CONTROL_WINDOW_COVER_VALUE = 22;
 
 
     public final int getNumber() { return value; }
@@ -4204,6 +4248,8 @@ public final class Models {
         case 18: return TIMELINE_TYPE_SMART_LOCK_LOW_BATTERY;
         case 19: return TIMELINE_TYPE_SMART_LOCK_UNLOCKED;
         case 20: return TIMELINE_TYPE_FAILED_UNLOCK_ATTEMPT;
+        case 21: return TIMELINE_TYPE_USB_MODEM_STATE_CHANGED;
+        case 22: return TIMELINE_TYPE_CONTROL_WINDOW_COVER;
         default: return null;
       }
     }
@@ -4838,6 +4884,78 @@ public final class Models {
      * </pre>
      */
     ACTION_TYPE_TOGGLE_ON_OFF(1, 1),
+    /**
+     * <code>ACTION_TYPE_CONTROL_IR_DEVICE = 2;</code>
+     *
+     * <pre>
+     * Define infrared device action for plan and scene.
+     *    Parameter json format:
+     *     1, target_type is TARGET_TYPE_NOT_SPECIFIED, 
+     *          &#64;param target_type(int)         Target type
+     *          &#64;param target_device_type(int)  Device type
+     *          &#64;param command_type(int)        Type of command, command_type=0
+     *          &#64;param command
+     *             if target_device_type == INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                    command { temperature : int,    (19 ~ 30)
+     *                              blowing_rate: int,
+     *                              wind_dir : int,
+     *                              auto_wind_dir : bool,
+     *                              power : bool,
+     *                              key : int,
+     *                              mode : int
+     *                            }
+     *             if target_device_type != INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                  command : int , the InfraredCommand enum value
+     *     2, target_type is TARGET_TYPE_DEVICE, 
+     *          &#64;param target_type(int)         Target type
+     *          &#64;param target_id(int)           device ID
+     *          &#64;param command_type(int)        Type of command
+     *          &#64;param command
+     *            if command_type==COMMAND_TYPE_BUILTIN:
+     *                  if device type is INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                         command { temperature : int, (19 ~ 30)
+     *                              blowing_rate: int,
+     *                              wind_dir : int,
+     *                              auto_wind_dir : bool,
+     *                              power : bool,
+     *                              key : int,
+     *                              mode : int
+     *                            }
+     *                  if device type is not INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                        command : int , the InfraredCommand enum value 
+     *            if command_type==COMMAND_TYPE_CUSTOM:  device_type is INFRARED_DEVICE_TYPE_CUSTOM
+     *                  command : int, the id of custom button.             
+     *     3, target_type is TARGET_TYPE_GROUP
+     *          &#64;param target_type(int)         Target type
+     *          &#64;param target_id(int)           group ID
+     *          &#64;param target_device_type(int)  Device type
+     *          &#64;param command_type(int)        Type of command, command_type=0
+     *          &#64;param command
+     *             if target_device_type == INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                    command { temperature : int, (19 ~ 30)
+     *                              blowing_rate: int,
+     *                              wind_dir : int,
+     *                              auto_wind_dir : bool,
+     *                              power : bool,
+     *                              key : int,
+     *                              mode : int
+     *                            }
+     *             if target_device_type != INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                  command : int , the InfraredCommand enum value
+     * </pre>
+     */
+    ACTION_TYPE_CONTROL_IR_DEVICE(2, 2),
+    /**
+     * <code>ACTION_TYPE_CONTROL_WINDOW_COVERING_DEVICE = 3;</code>
+     *
+     * <pre>
+     *    Parameter json format:
+     *     1, target_type is TARGET_TYPE_NOT_SPECIFIED, { command: int, target_type: int}
+     *     2, target_type is TARGET_TYPE_DEVICE, { command: int, target_type: int, target_id: int}
+     *     3, target_type is TARGET_TYPE_GROUP, { command: int, target_type: int, target_id: int}
+     * </pre>
+     */
+    ACTION_TYPE_CONTROL_WINDOW_COVERING_DEVICE(3, 3),
     ;
 
     /**
@@ -4863,6 +4981,78 @@ public final class Models {
      * </pre>
      */
     public static final int ACTION_TYPE_TOGGLE_ON_OFF_VALUE = 1;
+    /**
+     * <code>ACTION_TYPE_CONTROL_IR_DEVICE = 2;</code>
+     *
+     * <pre>
+     * Define infrared device action for plan and scene.
+     *    Parameter json format:
+     *     1, target_type is TARGET_TYPE_NOT_SPECIFIED, 
+     *          &#64;param target_type(int)         Target type
+     *          &#64;param target_device_type(int)  Device type
+     *          &#64;param command_type(int)        Type of command, command_type=0
+     *          &#64;param command
+     *             if target_device_type == INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                    command { temperature : int,    (19 ~ 30)
+     *                              blowing_rate: int,
+     *                              wind_dir : int,
+     *                              auto_wind_dir : bool,
+     *                              power : bool,
+     *                              key : int,
+     *                              mode : int
+     *                            }
+     *             if target_device_type != INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                  command : int , the InfraredCommand enum value
+     *     2, target_type is TARGET_TYPE_DEVICE, 
+     *          &#64;param target_type(int)         Target type
+     *          &#64;param target_id(int)           device ID
+     *          &#64;param command_type(int)        Type of command
+     *          &#64;param command
+     *            if command_type==COMMAND_TYPE_BUILTIN:
+     *                  if device type is INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                         command { temperature : int, (19 ~ 30)
+     *                              blowing_rate: int,
+     *                              wind_dir : int,
+     *                              auto_wind_dir : bool,
+     *                              power : bool,
+     *                              key : int,
+     *                              mode : int
+     *                            }
+     *                  if device type is not INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                        command : int , the InfraredCommand enum value 
+     *            if command_type==COMMAND_TYPE_CUSTOM:  device_type is INFRARED_DEVICE_TYPE_CUSTOM
+     *                  command : int, the id of custom button.             
+     *     3, target_type is TARGET_TYPE_GROUP
+     *          &#64;param target_type(int)         Target type
+     *          &#64;param target_id(int)           group ID
+     *          &#64;param target_device_type(int)  Device type
+     *          &#64;param command_type(int)        Type of command, command_type=0
+     *          &#64;param command
+     *             if target_device_type == INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                    command { temperature : int, (19 ~ 30)
+     *                              blowing_rate: int,
+     *                              wind_dir : int,
+     *                              auto_wind_dir : bool,
+     *                              power : bool,
+     *                              key : int,
+     *                              mode : int
+     *                            }
+     *             if target_device_type != INFRARED_DEVICE_TYPE_AIR_CONDITIONER
+     *                  command : int , the InfraredCommand enum value
+     * </pre>
+     */
+    public static final int ACTION_TYPE_CONTROL_IR_DEVICE_VALUE = 2;
+    /**
+     * <code>ACTION_TYPE_CONTROL_WINDOW_COVERING_DEVICE = 3;</code>
+     *
+     * <pre>
+     *    Parameter json format:
+     *     1, target_type is TARGET_TYPE_NOT_SPECIFIED, { command: int, target_type: int}
+     *     2, target_type is TARGET_TYPE_DEVICE, { command: int, target_type: int, target_id: int}
+     *     3, target_type is TARGET_TYPE_GROUP, { command: int, target_type: int, target_id: int}
+     * </pre>
+     */
+    public static final int ACTION_TYPE_CONTROL_WINDOW_COVERING_DEVICE_VALUE = 3;
 
 
     public final int getNumber() { return value; }
@@ -4871,6 +5061,8 @@ public final class Models {
       switch (value) {
         case 0: return ACTION_TYPE_ARM;
         case 1: return ACTION_TYPE_TOGGLE_ON_OFF;
+        case 2: return ACTION_TYPE_CONTROL_IR_DEVICE;
+        case 3: return ACTION_TYPE_CONTROL_WINDOW_COVERING_DEVICE;
         default: return null;
       }
     }
@@ -4920,6 +5112,88 @@ public final class Models {
     }
 
     // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.ActionType)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.CommandType}
+   */
+  public enum CommandType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>COMMAND_TYPE_BUILTIN = 0;</code>
+     */
+    COMMAND_TYPE_BUILTIN(0, 0),
+    /**
+     * <code>COMMAND_TYPE_CUSTOM = 1;</code>
+     */
+    COMMAND_TYPE_CUSTOM(1, 1),
+    ;
+
+    /**
+     * <code>COMMAND_TYPE_BUILTIN = 0;</code>
+     */
+    public static final int COMMAND_TYPE_BUILTIN_VALUE = 0;
+    /**
+     * <code>COMMAND_TYPE_CUSTOM = 1;</code>
+     */
+    public static final int COMMAND_TYPE_CUSTOM_VALUE = 1;
+
+
+    public final int getNumber() { return value; }
+
+    public static CommandType valueOf(int value) {
+      switch (value) {
+        case 0: return COMMAND_TYPE_BUILTIN;
+        case 1: return COMMAND_TYPE_CUSTOM;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<CommandType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<CommandType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<CommandType>() {
+            public CommandType findValueByNumber(int number) {
+              return CommandType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(32);
+    }
+
+    private static final CommandType[] VALUES = values();
+
+    public static CommandType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private CommandType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.CommandType)
   }
 
   /**
@@ -4995,7 +5269,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(32);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(33);
     }
 
     private static final PlanType[] VALUES = values();
@@ -5110,7 +5384,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(33);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(34);
     }
 
     private static final WanMode[] VALUES = values();
@@ -5192,7 +5466,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(34);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(35);
     }
 
     private static final WanPort[] VALUES = values();
@@ -5290,7 +5564,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(35);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(36);
     }
 
     private static final WanType[] VALUES = values();
@@ -5405,7 +5679,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(36);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(37);
     }
 
     private static final WanMacClone[] VALUES = values();
@@ -5503,7 +5777,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(37);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(38);
     }
 
     private static final WlanPort[] VALUES = values();
@@ -5594,7 +5868,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(38);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(39);
     }
 
     private static final AccessRuleMode[] VALUES = values();
@@ -5685,7 +5959,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(39);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(40);
     }
 
     private static final BandWidth[] VALUES = values();
@@ -5800,7 +6074,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(40);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(41);
     }
 
     private static final SambaMode[] VALUES = values();
@@ -5882,7 +6156,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(41);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(42);
     }
 
     private static final AccessType[] VALUES = values();
@@ -5964,7 +6238,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(42);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(43);
     }
 
     private static final QosMode[] VALUES = values();
@@ -6055,7 +6329,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(43);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(44);
     }
 
     private static final AclRuleMode[] VALUES = values();
@@ -6097,6 +6371,10 @@ public final class Models {
      * <code>HDD_STATUS_AVAILABLE = 2;</code>
      */
     HDD_STATUS_AVAILABLE(2, 2),
+    /**
+     * <code>HDD_STATUS_UNINSTALLED = 3;</code>
+     */
+    HDD_STATUS_UNINSTALLED(3, 3),
     ;
 
     /**
@@ -6111,6 +6389,10 @@ public final class Models {
      * <code>HDD_STATUS_AVAILABLE = 2;</code>
      */
     public static final int HDD_STATUS_AVAILABLE_VALUE = 2;
+    /**
+     * <code>HDD_STATUS_UNINSTALLED = 3;</code>
+     */
+    public static final int HDD_STATUS_UNINSTALLED_VALUE = 3;
 
 
     public final int getNumber() { return value; }
@@ -6120,6 +6402,7 @@ public final class Models {
         case 0: return HDD_STATUS_NOT_INSTALLED;
         case 1: return HDD_STATUS_NOT_INITIALIZED;
         case 2: return HDD_STATUS_AVAILABLE;
+        case 3: return HDD_STATUS_UNINSTALLED;
         default: return null;
       }
     }
@@ -6146,7 +6429,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(44);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(45);
     }
 
     private static final HddStatus[] VALUES = values();
@@ -6228,7 +6511,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(45);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(46);
     }
 
     private static final NetworkProtocol[] VALUES = values();
@@ -6319,7 +6602,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(46);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(47);
     }
 
     private static final SignalStrengthLevel[] VALUES = values();
@@ -6401,7 +6684,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(47);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(48);
     }
 
     private static final PPPoEState[] VALUES = values();
@@ -6510,7 +6793,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(48);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(49);
     }
 
     private static final QosPriority[] VALUES = values();
@@ -6592,7 +6875,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(49);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(50);
     }
 
     private static final CpuId[] VALUES = values();
@@ -6683,7 +6966,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(50);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(51);
     }
 
     private static final VpnType[] VALUES = values();
@@ -6774,7 +7057,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(51);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(52);
     }
 
     private static final InfraredMatchLevel[] VALUES = values();
@@ -6910,7 +7193,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(52);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(53);
     }
 
     private static final InfraredDeviceType[] VALUES = values();
@@ -7019,7 +7302,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(53);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(54);
     }
 
     private static final InfraredMatchError[] VALUES = values();
@@ -7119,7 +7402,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(54);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(55);
     }
 
     private static final AirConditionerBlowingRate[] VALUES = values();
@@ -7210,7 +7493,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(55);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(56);
     }
 
     private static final AirConditionerWindDir[] VALUES = values();
@@ -7337,7 +7620,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(56);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(57);
     }
 
     private static final AirConditionerKey[] VALUES = values();
@@ -7446,7 +7729,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(57);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(58);
     }
 
     private static final AirConditionerMode[] VALUES = values();
@@ -7681,7 +7964,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(58);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(59);
     }
 
     private static final DvdPlayerCommand[] VALUES = values();
@@ -7952,7 +8235,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(59);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(60);
     }
 
     private static final IpTelevisionCommand[] VALUES = values();
@@ -8223,7 +8506,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(60);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(61);
     }
 
     private static final SettopBoxCommand[] VALUES = values();
@@ -8512,7 +8795,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(61);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(62);
     }
 
     private static final TelevisionCommand[] VALUES = values();
@@ -8774,7 +9057,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(62);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(63);
     }
 
     private static final ElectricFanCommand[] VALUES = values();
@@ -9036,7 +9319,7 @@ public final class Models {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(63);
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(64);
     }
 
     private static final ProjectorCommand[] VALUES = values();
@@ -9059,6 +9342,267 @@ public final class Models {
     }
 
     // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.ProjectorCommand)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.AlarmType}
+   */
+  public enum AlarmType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>ALARM_TYPE_PRIMARY = 1;</code>
+     *
+     * <pre>
+     * ALARMS DEFINED IN ZCL
+     * </pre>
+     */
+    ALARM_TYPE_PRIMARY(0, 1),
+    /**
+     * <code>ALARM_TYPE_SECONDARY = 2;</code>
+     */
+    ALARM_TYPE_SECONDARY(1, 2),
+    /**
+     * <code>ALARM_TYPE_TAMPER = 4;</code>
+     */
+    ALARM_TYPE_TAMPER(2, 4),
+    /**
+     * <code>ALARM_TYPE_LOW_BATTERY = 8;</code>
+     */
+    ALARM_TYPE_LOW_BATTERY(3, 8),
+    /**
+     * <code>ALARM_TYPE_TROUBLE = 64;</code>
+     */
+    ALARM_TYPE_TROUBLE(4, 64),
+    /**
+     * <code>ALARM_TYPE_MAINS_FAULT = 128;</code>
+     */
+    ALARM_TYPE_MAINS_FAULT(5, 128),
+    /**
+     * <code>ALARM_TYPE_BATTERY_DEFECT = 512;</code>
+     */
+    ALARM_TYPE_BATTERY_DEFECT(6, 512),
+    /**
+     * <code>ALARM_TYPE_LACK_OF_SUPERVISION_REPORT = 65536;</code>
+     *
+     * <pre>
+     * CUSTOM ALARMS
+     * </pre>
+     */
+    ALARM_TYPE_LACK_OF_SUPERVISION_REPORT(7, 65536),
+    /**
+     * <code>ALARM_TYPE_CAMERA_OFFLINE = 65537;</code>
+     */
+    ALARM_TYPE_CAMERA_OFFLINE(8, 65537),
+    /**
+     * <code>ALARM_TYPE_CAMERA_MOTION_DETECTED = 65538;</code>
+     */
+    ALARM_TYPE_CAMERA_MOTION_DETECTED(9, 65538),
+    ;
+
+    /**
+     * <code>ALARM_TYPE_PRIMARY = 1;</code>
+     *
+     * <pre>
+     * ALARMS DEFINED IN ZCL
+     * </pre>
+     */
+    public static final int ALARM_TYPE_PRIMARY_VALUE = 1;
+    /**
+     * <code>ALARM_TYPE_SECONDARY = 2;</code>
+     */
+    public static final int ALARM_TYPE_SECONDARY_VALUE = 2;
+    /**
+     * <code>ALARM_TYPE_TAMPER = 4;</code>
+     */
+    public static final int ALARM_TYPE_TAMPER_VALUE = 4;
+    /**
+     * <code>ALARM_TYPE_LOW_BATTERY = 8;</code>
+     */
+    public static final int ALARM_TYPE_LOW_BATTERY_VALUE = 8;
+    /**
+     * <code>ALARM_TYPE_TROUBLE = 64;</code>
+     */
+    public static final int ALARM_TYPE_TROUBLE_VALUE = 64;
+    /**
+     * <code>ALARM_TYPE_MAINS_FAULT = 128;</code>
+     */
+    public static final int ALARM_TYPE_MAINS_FAULT_VALUE = 128;
+    /**
+     * <code>ALARM_TYPE_BATTERY_DEFECT = 512;</code>
+     */
+    public static final int ALARM_TYPE_BATTERY_DEFECT_VALUE = 512;
+    /**
+     * <code>ALARM_TYPE_LACK_OF_SUPERVISION_REPORT = 65536;</code>
+     *
+     * <pre>
+     * CUSTOM ALARMS
+     * </pre>
+     */
+    public static final int ALARM_TYPE_LACK_OF_SUPERVISION_REPORT_VALUE = 65536;
+    /**
+     * <code>ALARM_TYPE_CAMERA_OFFLINE = 65537;</code>
+     */
+    public static final int ALARM_TYPE_CAMERA_OFFLINE_VALUE = 65537;
+    /**
+     * <code>ALARM_TYPE_CAMERA_MOTION_DETECTED = 65538;</code>
+     */
+    public static final int ALARM_TYPE_CAMERA_MOTION_DETECTED_VALUE = 65538;
+
+
+    public final int getNumber() { return value; }
+
+    public static AlarmType valueOf(int value) {
+      switch (value) {
+        case 1: return ALARM_TYPE_PRIMARY;
+        case 2: return ALARM_TYPE_SECONDARY;
+        case 4: return ALARM_TYPE_TAMPER;
+        case 8: return ALARM_TYPE_LOW_BATTERY;
+        case 64: return ALARM_TYPE_TROUBLE;
+        case 128: return ALARM_TYPE_MAINS_FAULT;
+        case 512: return ALARM_TYPE_BATTERY_DEFECT;
+        case 65536: return ALARM_TYPE_LACK_OF_SUPERVISION_REPORT;
+        case 65537: return ALARM_TYPE_CAMERA_OFFLINE;
+        case 65538: return ALARM_TYPE_CAMERA_MOTION_DETECTED;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<AlarmType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<AlarmType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<AlarmType>() {
+            public AlarmType findValueByNumber(int number) {
+              return AlarmType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(65);
+    }
+
+    private static final AlarmType[] VALUES = values();
+
+    public static AlarmType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private AlarmType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.AlarmType)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.WindowCoverAction}
+   */
+  public enum WindowCoverAction
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>WINDOW_COVER_ACTION_OPEN = 0;</code>
+     */
+    WINDOW_COVER_ACTION_OPEN(0, 0),
+    /**
+     * <code>WINDOW_COVER_ACTION_CLOSE = 1;</code>
+     */
+    WINDOW_COVER_ACTION_CLOSE(1, 1),
+    /**
+     * <code>WINDOW_COVER_ACTION_STOP = 2;</code>
+     */
+    WINDOW_COVER_ACTION_STOP(2, 2),
+    ;
+
+    /**
+     * <code>WINDOW_COVER_ACTION_OPEN = 0;</code>
+     */
+    public static final int WINDOW_COVER_ACTION_OPEN_VALUE = 0;
+    /**
+     * <code>WINDOW_COVER_ACTION_CLOSE = 1;</code>
+     */
+    public static final int WINDOW_COVER_ACTION_CLOSE_VALUE = 1;
+    /**
+     * <code>WINDOW_COVER_ACTION_STOP = 2;</code>
+     */
+    public static final int WINDOW_COVER_ACTION_STOP_VALUE = 2;
+
+
+    public final int getNumber() { return value; }
+
+    public static WindowCoverAction valueOf(int value) {
+      switch (value) {
+        case 0: return WINDOW_COVER_ACTION_OPEN;
+        case 1: return WINDOW_COVER_ACTION_CLOSE;
+        case 2: return WINDOW_COVER_ACTION_STOP;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<WindowCoverAction>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<WindowCoverAction>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<WindowCoverAction>() {
+            public WindowCoverAction findValueByNumber(int number) {
+              return WindowCoverAction.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(66);
+    }
+
+    private static final WindowCoverAction[] VALUES = values();
+
+    public static WindowCoverAction valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private WindowCoverAction(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.WindowCoverAction)
   }
 
   public interface SystemConfigurationOrBuilder extends
@@ -26863,6 +27407,15 @@ public final class Models {
      * <code>optional bool enable_nat = 6;</code>
      */
     boolean getEnableNat();
+
+    /**
+     * <code>optional bool prefer_sms = 7;</code>
+     */
+    boolean hasPreferSms();
+    /**
+     * <code>optional bool prefer_sms = 7;</code>
+     */
+    boolean getPreferSms();
   }
   /**
    * Protobuf type {@code mrtech.smarthome.rpc.MobilePhoneConfig}
@@ -26953,6 +27506,11 @@ public final class Models {
             case 48: {
               bitField0_ |= 0x00000010;
               enableNat_ = input.readBool();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000020;
+              preferSms_ = input.readBool();
               break;
             }
           }
@@ -27108,6 +27666,21 @@ public final class Models {
       return enableNat_;
     }
 
+    public static final int PREFER_SMS_FIELD_NUMBER = 7;
+    private boolean preferSms_;
+    /**
+     * <code>optional bool prefer_sms = 7;</code>
+     */
+    public boolean hasPreferSms() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional bool prefer_sms = 7;</code>
+     */
+    public boolean getPreferSms() {
+      return preferSms_;
+    }
+
     private void initFields() {
       eventLevel_ = mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_INFO;
       allowSms_ = false;
@@ -27115,6 +27688,7 @@ public final class Models {
       allowData_ = false;
       numbers_ = java.util.Collections.emptyList();
       enableNat_ = false;
+      preferSms_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -27146,6 +27720,9 @@ public final class Models {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBool(6, enableNat_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBool(7, preferSms_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -27179,6 +27756,10 @@ public final class Models {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(6, enableNat_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, preferSms_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -27314,6 +27895,8 @@ public final class Models {
         }
         enableNat_ = false;
         bitField0_ = (bitField0_ & ~0x00000020);
+        preferSms_ = false;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -27371,6 +27954,10 @@ public final class Models {
           to_bitField0_ |= 0x00000010;
         }
         result.enableNat_ = enableNat_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.preferSms_ = preferSms_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -27427,6 +28014,9 @@ public final class Models {
         }
         if (other.hasEnableNat()) {
           setEnableNat(other.getEnableNat());
+        }
+        if (other.hasPreferSms()) {
+          setPreferSms(other.getPreferSms());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -27854,6 +28444,38 @@ public final class Models {
       public Builder clearEnableNat() {
         bitField0_ = (bitField0_ & ~0x00000020);
         enableNat_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean preferSms_ ;
+      /**
+       * <code>optional bool prefer_sms = 7;</code>
+       */
+      public boolean hasPreferSms() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional bool prefer_sms = 7;</code>
+       */
+      public boolean getPreferSms() {
+        return preferSms_;
+      }
+      /**
+       * <code>optional bool prefer_sms = 7;</code>
+       */
+      public Builder setPreferSms(boolean value) {
+        bitField0_ |= 0x00000040;
+        preferSms_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool prefer_sms = 7;</code>
+       */
+      public Builder clearPreferSms() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        preferSms_ = false;
         onChanged();
         return this;
       }
@@ -28598,6 +29220,23 @@ public final class Models {
      * <code>optional .mrtech.smarthome.rpc.AccountGroup account_group = 7;</code>
      */
     mrtech.smarthome.rpc.Models.AccountGroup getAccountGroup();
+
+    /**
+     * <code>optional int32 image_id = 8;</code>
+     *
+     * <pre>
+     * Image id
+     * </pre>
+     */
+    boolean hasImageId();
+    /**
+     * <code>optional int32 image_id = 8;</code>
+     *
+     * <pre>
+     * Image id
+     * </pre>
+     */
+    int getImageId();
   }
   /**
    * Protobuf type {@code mrtech.smarthome.rpc.Account}
@@ -28693,6 +29332,11 @@ public final class Models {
                 bitField0_ |= 0x00000040;
                 accountGroup_ = value;
               }
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000080;
+              imageId_ = input.readInt32();
               break;
             }
           }
@@ -28937,6 +29581,29 @@ public final class Models {
       return accountGroup_;
     }
 
+    public static final int IMAGE_ID_FIELD_NUMBER = 8;
+    private int imageId_;
+    /**
+     * <code>optional int32 image_id = 8;</code>
+     *
+     * <pre>
+     * Image id
+     * </pre>
+     */
+    public boolean hasImageId() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 image_id = 8;</code>
+     *
+     * <pre>
+     * Image id
+     * </pre>
+     */
+    public int getImageId() {
+      return imageId_;
+    }
+
     private void initFields() {
       id_ = 0;
       name_ = "";
@@ -28945,6 +29612,7 @@ public final class Models {
       passphrase_ = "";
       passphraseNotSet_ = false;
       accountGroup_ = mrtech.smarthome.rpc.Models.AccountGroup.ACCOUNT_GROUP_ADMINISTRATOR;
+      imageId_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -28979,6 +29647,9 @@ public final class Models {
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeEnum(7, accountGroup_.getNumber());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt32(8, imageId_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -29016,6 +29687,10 @@ public final class Models {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(7, accountGroup_.getNumber());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, imageId_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -29148,6 +29823,8 @@ public final class Models {
         bitField0_ = (bitField0_ & ~0x00000020);
         accountGroup_ = mrtech.smarthome.rpc.Models.AccountGroup.ACCOUNT_GROUP_ADMINISTRATOR;
         bitField0_ = (bitField0_ & ~0x00000040);
+        imageId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -29204,6 +29881,10 @@ public final class Models {
           to_bitField0_ |= 0x00000040;
         }
         result.accountGroup_ = accountGroup_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.imageId_ = imageId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -29246,6 +29927,9 @@ public final class Models {
         }
         if (other.hasAccountGroup()) {
           setAccountGroup(other.getAccountGroup());
+        }
+        if (other.hasImageId()) {
+          setImageId(other.getImageId());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -29661,6 +30345,54 @@ public final class Models {
       public Builder clearAccountGroup() {
         bitField0_ = (bitField0_ & ~0x00000040);
         accountGroup_ = mrtech.smarthome.rpc.Models.AccountGroup.ACCOUNT_GROUP_ADMINISTRATOR;
+        onChanged();
+        return this;
+      }
+
+      private int imageId_ ;
+      /**
+       * <code>optional int32 image_id = 8;</code>
+       *
+       * <pre>
+       * Image id
+       * </pre>
+       */
+      public boolean hasImageId() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional int32 image_id = 8;</code>
+       *
+       * <pre>
+       * Image id
+       * </pre>
+       */
+      public int getImageId() {
+        return imageId_;
+      }
+      /**
+       * <code>optional int32 image_id = 8;</code>
+       *
+       * <pre>
+       * Image id
+       * </pre>
+       */
+      public Builder setImageId(int value) {
+        bitField0_ |= 0x00000080;
+        imageId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 image_id = 8;</code>
+       *
+       * <pre>
+       * Image id
+       * </pre>
+       */
+      public Builder clearImageId() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        imageId_ = 0;
         onChanged();
         return this;
       }
@@ -31118,6 +31850,35 @@ public final class Models {
      * </pre>
      */
     boolean getOnline();
+
+    /**
+     * <code>optional string master_name = 17;</code>
+     *
+     * <pre>
+     * Represent the name of the physical device.
+     * Only available when the physical device has multiple endpoints.
+     * </pre>
+     */
+    boolean hasMasterName();
+    /**
+     * <code>optional string master_name = 17;</code>
+     *
+     * <pre>
+     * Represent the name of the physical device.
+     * Only available when the physical device has multiple endpoints.
+     * </pre>
+     */
+    java.lang.String getMasterName();
+    /**
+     * <code>optional string master_name = 17;</code>
+     *
+     * <pre>
+     * Represent the name of the physical device.
+     * Only available when the physical device has multiple endpoints.
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getMasterNameBytes();
   }
   /**
    * Protobuf type {@code mrtech.smarthome.rpc.ZigBeeDevice}
@@ -31269,6 +32030,12 @@ public final class Models {
             case 128: {
               bitField0_ |= 0x00008000;
               online_ = input.readBool();
+              break;
+            }
+            case 138: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00010000;
+              masterName_ = bs;
               break;
             }
           }
@@ -31774,6 +32541,63 @@ public final class Models {
       return online_;
     }
 
+    public static final int MASTER_NAME_FIELD_NUMBER = 17;
+    private java.lang.Object masterName_;
+    /**
+     * <code>optional string master_name = 17;</code>
+     *
+     * <pre>
+     * Represent the name of the physical device.
+     * Only available when the physical device has multiple endpoints.
+     * </pre>
+     */
+    public boolean hasMasterName() {
+      return ((bitField0_ & 0x00010000) == 0x00010000);
+    }
+    /**
+     * <code>optional string master_name = 17;</code>
+     *
+     * <pre>
+     * Represent the name of the physical device.
+     * Only available when the physical device has multiple endpoints.
+     * </pre>
+     */
+    public java.lang.String getMasterName() {
+      java.lang.Object ref = masterName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          masterName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string master_name = 17;</code>
+     *
+     * <pre>
+     * Represent the name of the physical device.
+     * Only available when the physical device has multiple endpoints.
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getMasterNameBytes() {
+      java.lang.Object ref = masterName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        masterName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       id_ = 0;
       address_ = 0;
@@ -31791,6 +32615,7 @@ public final class Models {
       powerSource_ = mrtech.smarthome.rpc.Models.PowerSource.POWER_SOURCE_UNKNOWN;
       secondaryPowerSource_ = false;
       online_ = false;
+      masterName_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -31859,6 +32684,9 @@ public final class Models {
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
         output.writeBool(16, online_);
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        output.writeBytes(17, getMasterNameBytes());
       }
       extensionWriter.writeUntil(536870912, output);
       getUnknownFields().writeTo(output);
@@ -31933,6 +32761,10 @@ public final class Models {
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(16, online_);
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(17, getMasterNameBytes());
       }
       size += extensionsSerializedSize();
       size += getUnknownFields().getSerializedSize();
@@ -32089,6 +32921,8 @@ public final class Models {
         bitField0_ = (bitField0_ & ~0x00004000);
         online_ = false;
         bitField0_ = (bitField0_ & ~0x00008000);
+        masterName_ = "";
+        bitField0_ = (bitField0_ & ~0x00010000);
         return this;
       }
 
@@ -32181,6 +33015,10 @@ public final class Models {
           to_bitField0_ |= 0x00008000;
         }
         result.online_ = online_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00010000;
+        }
+        result.masterName_ = masterName_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -32250,6 +33088,11 @@ public final class Models {
         }
         if (other.hasOnline()) {
           setOnline(other.getOnline());
+        }
+        if (other.hasMasterName()) {
+          bitField0_ |= 0x00010000;
+          masterName_ = other.masterName_;
+          onChanged();
         }
         this.mergeExtensionFields(other);
         this.mergeUnknownFields(other.getUnknownFields());
@@ -33213,6 +34056,112 @@ public final class Models {
       public Builder clearOnline() {
         bitField0_ = (bitField0_ & ~0x00008000);
         online_ = false;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object masterName_ = "";
+      /**
+       * <code>optional string master_name = 17;</code>
+       *
+       * <pre>
+       * Represent the name of the physical device.
+       * Only available when the physical device has multiple endpoints.
+       * </pre>
+       */
+      public boolean hasMasterName() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      /**
+       * <code>optional string master_name = 17;</code>
+       *
+       * <pre>
+       * Represent the name of the physical device.
+       * Only available when the physical device has multiple endpoints.
+       * </pre>
+       */
+      public java.lang.String getMasterName() {
+        java.lang.Object ref = masterName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            masterName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string master_name = 17;</code>
+       *
+       * <pre>
+       * Represent the name of the physical device.
+       * Only available when the physical device has multiple endpoints.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getMasterNameBytes() {
+        java.lang.Object ref = masterName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          masterName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string master_name = 17;</code>
+       *
+       * <pre>
+       * Represent the name of the physical device.
+       * Only available when the physical device has multiple endpoints.
+       * </pre>
+       */
+      public Builder setMasterName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        masterName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string master_name = 17;</code>
+       *
+       * <pre>
+       * Represent the name of the physical device.
+       * Only available when the physical device has multiple endpoints.
+       * </pre>
+       */
+      public Builder clearMasterName() {
+        bitField0_ = (bitField0_ & ~0x00010000);
+        masterName_ = getDefaultInstance().getMasterName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string master_name = 17;</code>
+       *
+       * <pre>
+       * Represent the name of the physical device.
+       * Only available when the physical device has multiple endpoints.
+       * </pre>
+       */
+      public Builder setMasterNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        masterName_ = value;
         onChanged();
         return this;
       }
@@ -70861,6 +71810,23 @@ public final class Models {
      */
     com.google.protobuf.ByteString
         getNameBytes();
+
+    /**
+     * <code>optional int32 image_id = 3;</code>
+     *
+     * <pre>
+     * Image id
+     * </pre>
+     */
+    boolean hasImageId();
+    /**
+     * <code>optional int32 image_id = 3;</code>
+     *
+     * <pre>
+     * Image id
+     * </pre>
+     */
+    int getImageId();
   }
   /**
    * Protobuf type {@code mrtech.smarthome.rpc.Group}
@@ -70927,6 +71893,11 @@ public final class Models {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
               name_ = bs;
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              imageId_ = input.readInt32();
               break;
             }
           }
@@ -71046,9 +72017,33 @@ public final class Models {
       }
     }
 
+    public static final int IMAGE_ID_FIELD_NUMBER = 3;
+    private int imageId_;
+    /**
+     * <code>optional int32 image_id = 3;</code>
+     *
+     * <pre>
+     * Image id
+     * </pre>
+     */
+    public boolean hasImageId() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 image_id = 3;</code>
+     *
+     * <pre>
+     * Image id
+     * </pre>
+     */
+    public int getImageId() {
+      return imageId_;
+    }
+
     private void initFields() {
       id_ = 0;
       name_ = "";
+      imageId_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -71069,6 +72064,9 @@ public final class Models {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(2, getNameBytes());
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, imageId_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -71085,6 +72083,10 @@ public final class Models {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, imageId_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -71211,6 +72213,8 @@ public final class Models {
         bitField0_ = (bitField0_ & ~0x00000001);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
+        imageId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -71247,6 +72251,10 @@ public final class Models {
           to_bitField0_ |= 0x00000002;
         }
         result.name_ = name_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.imageId_ = imageId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -71270,6 +72278,9 @@ public final class Models {
           bitField0_ |= 0x00000002;
           name_ = other.name_;
           onChanged();
+        }
+        if (other.hasImageId()) {
+          setImageId(other.getImageId());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -71442,6 +72453,54 @@ public final class Models {
   }
   bitField0_ |= 0x00000002;
         name_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int imageId_ ;
+      /**
+       * <code>optional int32 image_id = 3;</code>
+       *
+       * <pre>
+       * Image id
+       * </pre>
+       */
+      public boolean hasImageId() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional int32 image_id = 3;</code>
+       *
+       * <pre>
+       * Image id
+       * </pre>
+       */
+      public int getImageId() {
+        return imageId_;
+      }
+      /**
+       * <code>optional int32 image_id = 3;</code>
+       *
+       * <pre>
+       * Image id
+       * </pre>
+       */
+      public Builder setImageId(int value) {
+        bitField0_ |= 0x00000004;
+        imageId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 image_id = 3;</code>
+       *
+       * <pre>
+       * Image id
+       * </pre>
+       */
+      public Builder clearImageId() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        imageId_ = 0;
         onChanged();
         return this;
       }
@@ -115577,6 +116636,1260 @@ public final class Models {
     // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.Fingerprint)
   }
 
+  public interface AlarmInfoOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.AlarmInfo)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+     */
+    boolean hasDevice();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+     */
+    mrtech.smarthome.rpc.Models.Device getDevice();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+     */
+    mrtech.smarthome.rpc.Models.DeviceOrBuilder getDeviceOrBuilder();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AlarmType type = 2;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AlarmType type = 2;</code>
+     */
+    mrtech.smarthome.rpc.Models.AlarmType getType();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.AlarmInfo}
+   */
+  public static final class AlarmInfo extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.AlarmInfo)
+      AlarmInfoOrBuilder {
+    // Use AlarmInfo.newBuilder() to construct.
+    private AlarmInfo(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private AlarmInfo(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final AlarmInfo defaultInstance;
+    public static AlarmInfo getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public AlarmInfo getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private AlarmInfo(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              mrtech.smarthome.rpc.Models.Device.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = device_.toBuilder();
+              }
+              device_ = input.readMessage(mrtech.smarthome.rpc.Models.Device.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(device_);
+                device_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.AlarmType value = mrtech.smarthome.rpc.Models.AlarmType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                type_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AlarmInfo_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AlarmInfo_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.AlarmInfo.class, mrtech.smarthome.rpc.Models.AlarmInfo.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<AlarmInfo> PARSER =
+        new com.google.protobuf.AbstractParser<AlarmInfo>() {
+      public AlarmInfo parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AlarmInfo(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AlarmInfo> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int DEVICE_FIELD_NUMBER = 1;
+    private mrtech.smarthome.rpc.Models.Device device_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+     */
+    public boolean hasDevice() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+     */
+    public mrtech.smarthome.rpc.Models.Device getDevice() {
+      return device_;
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+     */
+    public mrtech.smarthome.rpc.Models.DeviceOrBuilder getDeviceOrBuilder() {
+      return device_;
+    }
+
+    public static final int TYPE_FIELD_NUMBER = 2;
+    private mrtech.smarthome.rpc.Models.AlarmType type_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AlarmType type = 2;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.AlarmType type = 2;</code>
+     */
+    public mrtech.smarthome.rpc.Models.AlarmType getType() {
+      return type_;
+    }
+
+    private void initFields() {
+      device_ = mrtech.smarthome.rpc.Models.Device.getDefaultInstance();
+      type_ = mrtech.smarthome.rpc.Models.AlarmType.ALARM_TYPE_PRIMARY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (hasDevice()) {
+        if (!getDevice().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, device_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, type_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, device_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, type_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.AlarmInfo parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.AlarmInfo prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.AlarmInfo}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.AlarmInfo)
+        mrtech.smarthome.rpc.Models.AlarmInfoOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AlarmInfo_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AlarmInfo_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.AlarmInfo.class, mrtech.smarthome.rpc.Models.AlarmInfo.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.AlarmInfo.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getDeviceFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (deviceBuilder_ == null) {
+          device_ = mrtech.smarthome.rpc.Models.Device.getDefaultInstance();
+        } else {
+          deviceBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = mrtech.smarthome.rpc.Models.AlarmType.ALARM_TYPE_PRIMARY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_AlarmInfo_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.AlarmInfo getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.AlarmInfo.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.AlarmInfo build() {
+        mrtech.smarthome.rpc.Models.AlarmInfo result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.AlarmInfo buildPartial() {
+        mrtech.smarthome.rpc.Models.AlarmInfo result = new mrtech.smarthome.rpc.Models.AlarmInfo(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        if (deviceBuilder_ == null) {
+          result.device_ = device_;
+        } else {
+          result.device_ = deviceBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.type_ = type_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.AlarmInfo) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.AlarmInfo)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.AlarmInfo other) {
+        if (other == mrtech.smarthome.rpc.Models.AlarmInfo.getDefaultInstance()) return this;
+        if (other.hasDevice()) {
+          mergeDevice(other.getDevice());
+        }
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (hasDevice()) {
+          if (!getDevice().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.AlarmInfo parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.AlarmInfo) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private mrtech.smarthome.rpc.Models.Device device_ = mrtech.smarthome.rpc.Models.Device.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.Device, mrtech.smarthome.rpc.Models.Device.Builder, mrtech.smarthome.rpc.Models.DeviceOrBuilder> deviceBuilder_;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      public boolean hasDevice() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.Device getDevice() {
+        if (deviceBuilder_ == null) {
+          return device_;
+        } else {
+          return deviceBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      public Builder setDevice(mrtech.smarthome.rpc.Models.Device value) {
+        if (deviceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          device_ = value;
+          onChanged();
+        } else {
+          deviceBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      public Builder setDevice(
+          mrtech.smarthome.rpc.Models.Device.Builder builderForValue) {
+        if (deviceBuilder_ == null) {
+          device_ = builderForValue.build();
+          onChanged();
+        } else {
+          deviceBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      public Builder mergeDevice(mrtech.smarthome.rpc.Models.Device value) {
+        if (deviceBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              device_ != mrtech.smarthome.rpc.Models.Device.getDefaultInstance()) {
+            device_ =
+              mrtech.smarthome.rpc.Models.Device.newBuilder(device_).mergeFrom(value).buildPartial();
+          } else {
+            device_ = value;
+          }
+          onChanged();
+        } else {
+          deviceBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      public Builder clearDevice() {
+        if (deviceBuilder_ == null) {
+          device_ = mrtech.smarthome.rpc.Models.Device.getDefaultInstance();
+          onChanged();
+        } else {
+          deviceBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.Device.Builder getDeviceBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getDeviceFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      public mrtech.smarthome.rpc.Models.DeviceOrBuilder getDeviceOrBuilder() {
+        if (deviceBuilder_ != null) {
+          return deviceBuilder_.getMessageOrBuilder();
+        } else {
+          return device_;
+        }
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Device device = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          mrtech.smarthome.rpc.Models.Device, mrtech.smarthome.rpc.Models.Device.Builder, mrtech.smarthome.rpc.Models.DeviceOrBuilder> 
+          getDeviceFieldBuilder() {
+        if (deviceBuilder_ == null) {
+          deviceBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              mrtech.smarthome.rpc.Models.Device, mrtech.smarthome.rpc.Models.Device.Builder, mrtech.smarthome.rpc.Models.DeviceOrBuilder>(
+                  getDevice(),
+                  getParentForChildren(),
+                  isClean());
+          device_ = null;
+        }
+        return deviceBuilder_;
+      }
+
+      private mrtech.smarthome.rpc.Models.AlarmType type_ = mrtech.smarthome.rpc.Models.AlarmType.ALARM_TYPE_PRIMARY;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AlarmType type = 2;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AlarmType type = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.AlarmType getType() {
+        return type_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AlarmType type = 2;</code>
+       */
+      public Builder setType(mrtech.smarthome.rpc.Models.AlarmType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.AlarmType type = 2;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = mrtech.smarthome.rpc.Models.AlarmType.ALARM_TYPE_PRIMARY;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.AlarmInfo)
+    }
+
+    static {
+      defaultInstance = new AlarmInfo(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.AlarmInfo)
+  }
+
+  public interface ImageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.Image)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    int getId();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Image.Type type = 2;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Image.Type type = 2;</code>
+     */
+    mrtech.smarthome.rpc.Models.Image.Type getType();
+
+    /**
+     * <code>optional bytes data = 3;</code>
+     */
+    boolean hasData();
+    /**
+     * <code>optional bytes data = 3;</code>
+     */
+    com.google.protobuf.ByteString getData();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.Image}
+   */
+  public static final class Image extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.Image)
+      ImageOrBuilder {
+    // Use Image.newBuilder() to construct.
+    private Image(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Image(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Image defaultInstance;
+    public static Image getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Image getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Image(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.Image.Type value = mrtech.smarthome.rpc.Models.Image.Type.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                type_ = value;
+              }
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              data_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_Image_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_Image_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.Image.class, mrtech.smarthome.rpc.Models.Image.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Image> PARSER =
+        new com.google.protobuf.AbstractParser<Image>() {
+      public Image parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Image(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Image> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code mrtech.smarthome.rpc.Image.Type}
+     */
+    public enum Type
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>PNG = 0;</code>
+       */
+      PNG(0, 0),
+      /**
+       * <code>JPEG = 1;</code>
+       */
+      JPEG(1, 1),
+      ;
+
+      /**
+       * <code>PNG = 0;</code>
+       */
+      public static final int PNG_VALUE = 0;
+      /**
+       * <code>JPEG = 1;</code>
+       */
+      public static final int JPEG_VALUE = 1;
+
+
+      public final int getNumber() { return value; }
+
+      public static Type valueOf(int value) {
+        switch (value) {
+          case 0: return PNG;
+          case 1: return JPEG;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
+              public Type findValueByNumber(int number) {
+                return Type.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.Image.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final Type[] VALUES = values();
+
+      public static Type valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private Type(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.Image.Type)
+    }
+
+    private int bitField0_;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    public static final int TYPE_FIELD_NUMBER = 2;
+    private mrtech.smarthome.rpc.Models.Image.Type type_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Image.Type type = 2;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.Image.Type type = 2;</code>
+     */
+    public mrtech.smarthome.rpc.Models.Image.Type getType() {
+      return type_;
+    }
+
+    public static final int DATA_FIELD_NUMBER = 3;
+    private com.google.protobuf.ByteString data_;
+    /**
+     * <code>optional bytes data = 3;</code>
+     */
+    public boolean hasData() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional bytes data = 3;</code>
+     */
+    public com.google.protobuf.ByteString getData() {
+      return data_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+      type_ = mrtech.smarthome.rpc.Models.Image.Type.PNG;
+      data_ = com.google.protobuf.ByteString.EMPTY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, data_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, data_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.Image parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.Image parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.Image prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.Image}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.Image)
+        mrtech.smarthome.rpc.Models.ImageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_Image_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_Image_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.Image.class, mrtech.smarthome.rpc.Models.Image.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.Image.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = mrtech.smarthome.rpc.Models.Image.Type.PNG;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        data_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_Image_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.Image getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.Image.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.Image build() {
+        mrtech.smarthome.rpc.Models.Image result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.Image buildPartial() {
+        mrtech.smarthome.rpc.Models.Image result = new mrtech.smarthome.rpc.Models.Image(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.type_ = type_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.data_ = data_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.Image) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.Image)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.Image other) {
+        if (other == mrtech.smarthome.rpc.Models.Image.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        if (other.hasData()) {
+          setData(other.getData());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.Image parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.Image) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int id_ ;
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.Image.Type type_ = mrtech.smarthome.rpc.Models.Image.Type.PNG;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Image.Type type = 2;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Image.Type type = 2;</code>
+       */
+      public mrtech.smarthome.rpc.Models.Image.Type getType() {
+        return type_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Image.Type type = 2;</code>
+       */
+      public Builder setType(mrtech.smarthome.rpc.Models.Image.Type value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.Image.Type type = 2;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = mrtech.smarthome.rpc.Models.Image.Type.PNG;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes data = 3;</code>
+       */
+      public boolean hasData() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional bytes data = 3;</code>
+       */
+      public com.google.protobuf.ByteString getData() {
+        return data_;
+      }
+      /**
+       * <code>optional bytes data = 3;</code>
+       */
+      public Builder setData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        data_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes data = 3;</code>
+       */
+      public Builder clearData() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        data_ = getDefaultInstance().getData();
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.Image)
+    }
+
+    static {
+      defaultInstance = new Image(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.Image)
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mrtech_smarthome_rpc_SystemConfiguration_descriptor;
   private static
@@ -116017,6 +118330,16 @@ public final class Models {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_mrtech_smarthome_rpc_Fingerprint_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_AlarmInfo_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_AlarmInfo_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_Image_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_Image_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -116085,731 +118408,755 @@ public final class Models {
       "arthome.rpc.EthernetConfiguration\"^\n\013Pho" +
       "neNumber\022\n\n\002id\030\001 \001(\005\022\016\n\006number\030\002 \001(\t\0223\n\004" +
       "type\030\003 \001(\0162%.mrtech.smarthome.rpc.PhoneN" +
-      "umberType\"\323\001\n\021MobilePhoneConfig\0228\n\013event",
+      "umberType\"\347\001\n\021MobilePhoneConfig\0228\n\013event",
       "_level\030\001 \001(\0162#.mrtech.smarthome.rpc.Time" +
       "lineLevel\022\021\n\tallow_sms\030\002 \001(\010\022\025\n\rallow_di" +
       "aling\030\003 \001(\010\022\022\n\nallow_data\030\004 \001(\010\0222\n\007numbe" +
       "rs\030\005 \003(\0132!.mrtech.smarthome.rpc.PhoneNum" +
-      "ber\022\022\n\nenable_nat\030\006 \001(\010\"=\n\014AccountQuery\022" +
-      "\014\n\004page\030\001 \001(\005\022\021\n\tpage_size\030\002 \001(\005\022\014\n\004name" +
-      "\030\003 \001(\t\"\266\001\n\007Account\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002" +
-      " \001(\t\022\017\n\007api_key\030\003 \001(\t\022\025\n\rlast_activity\030\004" +
-      " \001(\005\022\022\n\npassphrase\030\005 \001(\t\022\032\n\022passphrase_n" +
-      "ot_set\030\006 \001(\010\0229\n\raccount_group\030\007 \001(\0162\".mr",
-      "tech.smarthome.rpc.AccountGroup\"\234\001\n\006Devi" +
-      "ce\022\n\n\002id\030\001 \001(\005\022.\n\004type\030\002 \001(\0162 .mrtech.sm" +
-      "arthome.rpc.DeviceType\022\r\n\005alias\030\003 \001(\t\022\020\n" +
-      "\010group_id\030\004 \001(\005\022*\n\005group\030\005 \001(\0132\033.mrtech." +
-      "smarthome.rpc.Group*\t\010\200\002\020\200\200\200\200\002\"\215\004\n\014ZigBe" +
-      "eDevice\022\n\n\002id\030\001 \001(\005\022\017\n\007address\030\002 \001(\005\022\023\n\013" +
-      "mac_address\030\003 \001(\004\022\024\n\014link_quality\030\004 \001(\002\022" +
-      "\020\n\010endpoint\030\005 \001(\005\0221\n\tdevice_id\030\006 \001(\0162\036.m" +
-      "rtech.smarthome.rpc.DeviceId\022\023\n\013zcl_vers" +
-      "ion\030\007 \001(\005\022\033\n\023application_version\030\010 \001(\005\022\025",
-      "\n\rstack_version\030\t \001(\005\022\030\n\020hardware_versio" +
-      "n\030\n \001(\005\022\031\n\021manufacturer_name\030\013 \001(\t\022\030\n\020mo" +
-      "del_identifier\030\014 \001(\t\022\021\n\tdate_code\030\r \001(\t\022" +
-      "7\n\014power_source\030\016 \001(\0162!.mrtech.smarthome" +
-      ".rpc.PowerSource\022\036\n\026secondary_power_sour" +
-      "ce\030\017 \001(\010\022\016\n\006online\030\020 \001(\010*\t\010\200\002\020\200\200\200\200\0022Q\n\006d" +
-      "etail\022\034.mrtech.smarthome.rpc.Device\030\200\002 \001" +
-      "(\0132\".mrtech.smarthome.rpc.ZigBeeDevice\"w" +
-      "\n\014OnOffCluster\022\r\n\005state\030\001 \001(\0102X\n\006detail\022" +
-      "\".mrtech.smarthome.rpc.ZigBeeDevice\030\206\200\004 ",
-      "\001(\0132\".mrtech.smarthome.rpc.OnOffCluster\"" +
-      "\367\002\n\034ElectricalMeasurementCluster\022?\n\020meas" +
-      "urement_type\030\001 \001(\0162%.mrtech.smarthome.rp" +
-      "c.MeasurementType\022\021\n\tfrequency\030\002 \001(\005\022\023\n\013" +
-      "rms_voltage\030\003 \001(\001\022\023\n\013rms_current\030\004 \001(\001\022\024" +
-      "\n\014active_power\030\005 \001(\001\022\026\n\016reactive_power\030\006" +
-      " \001(\005\022\026\n\016apparent_power\030\007 \001(\005\022\024\n\014power_fa" +
-      "ctor\030\010 \001(\005\022\023\n\013overcurrent\030\t \001(\0102h\n\006detai" +
-      "l\022\".mrtech.smarthome.rpc.ZigBeeDevice\030\204\226" +
-      "\004 \001(\01322.mrtech.smarthome.rpc.ElectricalM",
-      "easurementCluster\"\322\001\n\025SimpleMeteringClus" +
-      "ter\022#\n\033current_summation_delivered\030\001 \001(\001" +
-      "\0221\n\004unit\030\002 \001(\0162#.mrtech.smarthome.rpc.Un" +
-      "itOfMeasure2a\n\006detail\022\".mrtech.smarthome" +
-      ".rpc.ZigBeeDevice\030\202\216\004 \001(\0132+.mrtech.smart" +
-      "home.rpc.SimpleMeteringCluster\"\242\001\n\035Tempe" +
-      "ratureMeasurementCluster\022\026\n\016measured_val" +
-      "ue\030\001 \001(\0012i\n\006detail\022\".mrtech.smarthome.rp" +
-      "c.ZigBeeDevice\030\202\210\004 \001(\01323.mrtech.smarthom" +
-      "e.rpc.TemperatureMeasurementCluster\"\231\001\n\020",
-      "SmartLockCluster\022\022\n\nlock_state\030\001 \001(\010\022\023\n\013" +
-      "low_battery\030\002 \001(\0102\\\n\006detail\022\".mrtech.sma" +
-      "rthome.rpc.ZigBeeDevice\030\201\202\010 \001(\0132&.mrtech" +
-      ".smarthome.rpc.SmartLockCluster\"\263\001\n\tSmar" +
-      "tLock\022\n\n\002id\030\001 \001(\005\0221\n\tarm_group\030\002 \001(\0162\036.m" +
-      "rtech.smarthome.rpc.ArmGroup\022\020\n\010bypassed" +
-      "\030\003 \001(\0102U\n\006detail\022\".mrtech.smarthome.rpc." +
-      "ZigBeeDevice\030\200\200\014 \001(\0132\037.mrtech.smarthome." +
-      "rpc.SmartLock\"\336\003\n\007IasZone\022\n\n\002id\030\001 \001(\005\022\021\n" +
-      "\tdevice_id\030\002 \001(\005\022,\n\006device\030\003 \001(\0132\034.mrtec",
-      "h.smarthome.rpc.Device\022,\n\004type\030\004 \001(\0162\036.m" +
-      "rtech.smarthome.rpc.ZoneType\022\025\n\rprimary_" +
-      "alarm\030\005 \001(\010\022\027\n\017secondary_alarm\030\006 \001(\010\022\016\n\006" +
-      "tamper\030\007 \001(\010\022\023\n\013low_battery\030\010 \001(\010\022\032\n\022sup" +
-      "ervision_report\030\t \001(\010\022\026\n\016restore_report\030" +
-      "\n \001(\010\022\017\n\007trouble\030\013 \001(\010\022\023\n\013mains_fault\030\014 " +
-      "\001(\010\022\021\n\ttest_mode\030\r \001(\010\022\026\n\016battery_defect" +
-      "\030\016 \001(\010\022\"\n\032lack_of_supervision_report\030\017 \001" +
-      "(\010\022\025\n\rlast_activity\030\020 \001(\005\022\020\n\010bypassed\030\021 " +
-      "\001(\010\0221\n\tarm_group\030\022 \001(\0162\036.mrtech.smarthom",
-      "e.rpc.ArmGroup\"\264\001\n\020CieConfiguration\022/\n\010a" +
-      "rm_mode\030\001 \001(\0162\035.mrtech.smarthome.rpc.Arm" +
-      "Mode\022\033\n\023supervision_timeout\030\002 \001(\005\022\027\n\017res" +
-      "tore_timeout\030\003 \001(\005\022\023\n\013entry_delay\030\004 \001(\005\022" +
-      "\022\n\nexit_delay\030\005 \001(\005\022\020\n\010passcode\030\006 \001(\t\"\314\001" +
-      "\n\013DeviceQuery\022.\n\004type\030\001 \001(\0162 .mrtech.sma" +
-      "rthome.rpc.DeviceType\022\r\n\005alias\030\002 \001(\t\022\027\n\017" +
-      "filter_by_group\030\003 \001(\010\022\020\n\010group_id\030\004 \001(\005\022" +
-      "\014\n\004page\030\005 \001(\005\022\021\n\tpage_size\030\006 \001(\005\0222\n\ndevi" +
-      "ce_ids\030\007 \003(\0162\036.mrtech.smarthome.rpc.Devi",
-      "ceId\"Z\n\tZoneQuery\022,\n\004type\030\001 \001(\0162\036.mrtech" +
-      ".smarthome.rpc.ZoneType\022\014\n\004page\030\003 \001(\005\022\021\n" +
-      "\tpage_size\030\004 \001(\005\"\242\001\n\010Timeline\022\n\n\002id\030\001 \001(" +
-      "\005\022\021\n\ttimestamp\030\002 \001(\003\0222\n\005level\030\003 \001(\0162#.mr" +
-      "tech.smarthome.rpc.TimelineLevel\0220\n\004type" +
-      "\030\004 \001(\0162\".mrtech.smarthome.rpc.TimelineTy" +
-      "pe\022\021\n\tparameter\030\005 \001(\t\"\321\003\n\014CameraDevice\022\n" +
-      "\n\002id\030\001 \001(\005\022\023\n\013device_name\030\002 \001(\t\022\020\n\010devic" +
-      "eid\030\003 \001(\t\022\022\n\nip_address\030\004 \001(\t\022\014\n\004port\030\005 " +
-      "\001(\005\022\014\n\004user\030\006 \001(\t\022\020\n\010password\030\007 \001(\t\022\020\n\010n",
-      "ew_user\030\010 \001(\t\022\024\n\014new_password\030\t \001(\t\022\021\n\ti" +
-      "s_online\030\n \001(\010\022\034\n\024local_record_enabled\030\013" +
-      " \001(\010\022\020\n\010bypassed\030\014 \001(\010\0221\n\tarm_group\030\r \001(" +
-      "\0162\036.mrtech.smarthome.rpc.ArmGroup\022\024\n\014mot" +
-      "ion_alarm\030\016 \001(\010\022\024\n\014is_connected\030\017 \001(\010\022\021\n" +
-      "\tlast_seen\030\020 \001(\004\022\034\n\024authentication_error" +
-      "\030\021 \001(\0102Q\n\006detail\022\034.mrtech.smarthome.rpc." +
-      "Device\030\201\002 \001(\0132\".mrtech.smarthome.rpc.Cam" +
-      "eraDevice\"\263\001\n\nCameraInfo\0222\n\006status\030\001 \001(\013" +
-      "2\".mrtech.smarthome.rpc.CameraStatus\0220\n\005",
-      "param\030\002 \001(\0132!.mrtech.smarthome.rpc.Camer" +
-      "aParam\022?\n\006record\030\003 \001(\0132/.mrtech.smarthom" +
-      "e.rpc.CameraRecordConfiguration\"\245\003\n\014Came" +
-      "raStatus\022\r\n\005alias\030\001 \001(\t\022\020\n\010deviceid\030\002 \001(" +
-      "\t\022\017\n\007sys_ver\030\003 \001(\t\022\013\n\003now\030\004 \001(\005\022\024\n\014alarm" +
-      "_status\030\005 \001(\005\022\023\n\013upnp_status\030\006 \001(\010\022\021\n\tdn" +
-      "senable\030\007 \001(\010\022\021\n\tosdenable\030\010 \001(\010\022\024\n\014sysw" +
-      "ifi_mode\030\t \001(\010\022\013\n\003mac\030\n \001(\t\022\017\n\007wifimac\030\013" +
-      " \001(\t\022\030\n\020record_sd_status\030\014 \001(\005\022\022\n\ndns_st" +
-      "atus\030\r \001(\005\022\020\n\010internet\030\016 \001(\010\022\021\n\tp2pstatu",
-      "s\030\017 \001(\010\022\022\n\ndevicetype\030\020 \001(\005\022\025\n\rdevicesub" +
-      "type\030\021 \001(\005\022\022\n\nexternwifi\030\022 \001(\005\022\017\n\007encryp" +
-      "t\030\023 \001(\010\022\r\n\005under\030\024 \001(\010\022\017\n\007sdtotal\030\025 \001(\004\022" +
-      "\016\n\006sdfree\030\026 \001(\004\"\227\002\n\013CameraParam\022.\n\004time\030" +
-      "\001 \001(\0132 .mrtech.smarthome.rpc.CameraTime\022" +
-      "4\n\007network\030\002 \001(\0132#.mrtech.smarthome.rpc." +
-      "CameraNetwork\022.\n\004wlan\030\003 \001(\0132 .mrtech.sma" +
-      "rthome.rpc.CameraWlan\0220\n\005alarm\030\004 \001(\0132!.m" +
-      "rtech.smarthome.rpc.CameraAlarm\022@\n\rsnaps" +
-      "hotparam\030\005 \001(\0132).mrtech.smarthome.rpc.Ca",
-      "meraSnapshotParam\"\302\001\n\031CameraRecordConfig" +
-      "uration\022\026\n\016record_enabled\030\001 \001(\010\022\034\n\024recor" +
-      "d_cover_enabled\030\002 \001(\010\022\030\n\020sd_card_capacit" +
-      "y\030\003 \001(\004\0227\n\tsd_status\030\004 \001(\0162$.mrtech.smar" +
-      "thome.rpc.CameraSdStatus\022\034\n\024local_record" +
-      "_enabled\030\005 \001(\010\"w\n\030LocalRecordConfigurati" +
-      "on\022\"\n\032local_record_cover_enabled\030\001 \001(\010\022\032" +
-      "\n\022record_file_length\030\002 \001(\005\022\033\n\023reserved_d" +
-      "isk_space\030\003 \001(\005\"S\n\013CameraAlarm\022\036\n\026motion" +
-      "_detection_armed\030\001 \001(\010\022$\n\034motion_detecti",
-      "on_sensitivity\030\002 \001(\005\"N\n\nCameraTime\022\013\n\003no" +
-      "w\030\001 \001(\005\022\n\n\002tz\030\002 \001(\005\022\023\n\013ntp_enabled\030\003 \001(\010" +
-      "\022\022\n\nntp_server\030\004 \001(\t\"%\n\021CameraSetSnapsho" +
-      "t\022\020\n\010Snapshot\030\001 \001(\t\"\220\006\n\023CameraSnapshotPa" +
-      "ram\022\022\n\ncameratype\030\001 \001(\005\022\022\n\nresolution\030\002 " +
-      "\001(\005\022\025\n\rresolutionsub\030\003 \001(\005\022\030\n\020resolution" +
-      "subsub\030\004 \001(\005\022\017\n\007vbright\030\005 \001(\005\022\021\n\tvcontra" +
-      "st\030\006 \001(\005\022\014\n\004vhue\030\007 \001(\005\022\023\n\013vsaturation\030\010 " +
-      "\001(\005\022\021\n\tOSDEnable\030\t \001(\010\022\014\n\004mode\030\n \001(\005\022\014\n\004" +
-      "flip\030\013 \001(\005\022\020\n\010enc_size\030\014 \001(\005\022\025\n\renc_fram",
-      "erate\030\r \001(\005\022\024\n\014enc_keyframe\030\016 \001(\005\022\021\n\tenc" +
-      "_quant\030\017 \001(\005\022\024\n\014enc_ratemode\030\020 \001(\005\022\023\n\013en" +
-      "c_bitrate\030\021 \001(\005\022\025\n\renc_main_mode\030\022 \001(\005\022\024" +
-      "\n\014sub_enc_size\030\023 \001(\005\022\031\n\021sub_enc_framerat" +
-      "e\030\024 \001(\005\022\030\n\020sub_enc_keyframe\030\025 \001(\005\022\025\n\rsub" +
-      "_enc_quant\030\026 \001(\005\022\030\n\020sub_enc_ratemode\030\027 \001" +
-      "(\005\022\027\n\017sub_enc_bitrate\030\030 \001(\005\022\030\n\020sub_sub_e" +
-      "nc_size\030\031 \001(\005\022\035\n\025sub_sub_enc_framerate\030\032" +
-      " \001(\005\022\034\n\024sub_sub_enc_keyframe\030\033 \001(\005\022\031\n\021su" +
-      "b_sub_enc_quant\030\034 \001(\005\022\034\n\024sub_sub_enc_rat",
-      "emode\030\035 \001(\005\022\033\n\023sub_sub_enc_bitrate\030\036 \001(\005" +
-      "\022\r\n\005speed\030\037 \001(\005\022\r\n\005ircut\030  \001(\005\022\020\n\010involu" +
-      "me\030! \001(\005\022\021\n\toutvolume\030\" \001(\005\022\021\n\taudiotype" +
-      "\030# \001(\005\"\211\001\n\rCameraNetwork\022\024\n\014dhcp_enabled" +
-      "\030\001 \001(\010\022\022\n\nip_address\030\002 \001(\t\022\023\n\013subnet_mas" +
-      "k\030\003 \001(\t\022\017\n\007gateway\030\004 \001(\t\022\014\n\004dns1\030\005 \001(\t\022\014" +
-      "\n\004dns2\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\"\216\003\n\nCameraWla" +
-      "n\022\017\n\007enabled\030\001 \001(\010\022\014\n\004ssid\030\002 \001(\t\0222\n\004mode" +
-      "\030\003 \001(\0162$.mrtech.smarthome.rpc.CameraWlan" +
-      "Mode\022@\n\017encryption_type\030\004 \001(\0162\'.mrtech.s",
-      "marthome.rpc.CameraWlanEncrypt\022E\n\023authen" +
-      "tication_type\030\005 \001(\0162(.mrtech.smarthome.r" +
-      "pc.CameraWlanAuthtype\022A\n\016wep_key_format\030" +
-      "\006 \001(\0162).mrtech.smarthome.rpc.CameraWlanK" +
-      "eyFormat\022\017\n\007wep_key\030\007 \001(\t\022?\n\014wep_key_bit" +
-      "s\030\010 \001(\0162).mrtech.smarthome.rpc.CameraWla" +
-      "nKeyLength\022\017\n\007wpa_psk\030\t \001(\t\"\257\001\n\014CameraWi" +
-      "fiAp\022\014\n\004ssid\030\001 \001(\t\022\013\n\003mac\030\002 \001(\t\022:\n\010secur" +
-      "ity\030\003 \001(\0162(.mrtech.smarthome.rpc.CameraW" +
-      "lanAuthtype\0222\n\004mode\030\004 \001(\0162$.mrtech.smart",
-      "home.rpc.CameraWlanMode\022\024\n\014link_quality\030" +
-      "\005 \001(\002\"\331\001\n\rTimelineQuery\022\r\n\005since\030\001 \001(\003\022\r" +
-      "\n\005until\030\002 \001(\003\0222\n\005level\030\003 \001(\0162#.mrtech.sm" +
-      "arthome.rpc.TimelineLevel\0220\n\004type\030\004 \001(\0162" +
-      "\".mrtech.smarthome.rpc.TimelineType\022\024\n\014f" +
-      "ixed_paging\030\005 \001(\010\022\014\n\004page\030\006 \001(\005\022\021\n\tpage_" +
-      "size\030\007 \001(\005\022\r\n\005param\030\010 \001(\t\"\312\002\n\013ProductInf" +
-      "o\022\022\n\nhw_version\030\001 \001(\t\022\022\n\nsw_version\030\002 \001(" +
-      "\t\022\031\n\021db_schema_version\030\003 \001(\002\022\013\n\003sku\030\004 \001(" +
-      "\t\022\014\n\004imei\030\005 \001(\t\022\020\n\010cloud_id\030\006 \001(\t\022\017\n\007lan",
-      "_mac\030\007 \001(\t\022\020\n\010wlan_mac\030\010 \001(\t\022\023\n\013wlan_5g_" +
-      "mac\030\t \001(\t\022\022\n\nzigbee_mac\030\n \001(\t\022\022\n\nproduct" +
-      "_id\030\013 \001(\t\022\030\n\020manufacture_date\030\014 \001(\t\022\027\n\017r" +
-      "untime_version\030\r \001(\t\022\023\n\013web_version\030\016 \001(" +
-      "\t\022\022\n\nos_version\030\017 \001(\t\022\017\n\007wan_mac\030\020 \001(\t\"\373" +
-      "\001\n\tComponent\022\014\n\004name\030\001 \001(\t\022\027\n\017current_ve" +
-      "rsion\030\002 \001(\t\022\026\n\016latest_version\030\003 \001(\t\022\026\n\016t" +
-      "ime_published\030\004 \001(\005\022\025\n\rfile_checksum\030\005 \001" +
-      "(\t\022?\n\013file_status\030\006 \001(\0162*.mrtech.smartho" +
-      "me.rpc.Component.FileStatus\"?\n\nFileStatu",
-      "s\022\020\n\014NOT_DOWNLOAD\020\000\022\016\n\nDOWNLOADED\020\001\022\017\n\013R" +
-      "E_DOWNLOAD\020\002\"\374\001\n\tOtaStatus\0222\n\tcomponent\030" +
-      "\001 \003(\0132\037.mrtech.smarthome.rpc.Component\022>" +
-      "\n\006status\030\002 \001(\0162..mrtech.smarthome.rpc.Ot" +
-      "aStatus.OtaAgentStatus\022\027\n\017last_check_tim" +
-      "e\030\003 \001(\005\"b\n\016OtaAgentStatus\022\010\n\004IDLE\020\000\022\017\n\013D" +
-      "OWNLOADING\020\001\022\024\n\020READY_TO_INSTALL\020\002\022\n\n\006FA" +
-      "ILED\020\003\022\023\n\017DOWNLOAD_FAILED\020\004\"!\n\005Group\022\n\n\002" +
-      "id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\";\n\nGroupQuery\022\014\n\004" +
-      "name\030\001 \001(\t\022\014\n\004page\030\002 \001(\005\022\021\n\tpage_size\030\003 ",
-      "\001(\005\"P\n\005Scene\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022-" +
-      "\n\007actions\030\003 \003(\0132\034.mrtech.smarthome.rpc.A" +
-      "ction\"\226\001\n\006Action\022\n\n\002id\030\001 \001(\005\022\020\n\010scene_id" +
-      "\030\002 \001(\005\022\017\n\007plan_id\030\003 \001(\005\0220\n\006action\030\004 \001(\0162" +
-      " .mrtech.smarthome.rpc.ActionType\022\022\n\npar" +
-      "ameters\030\005 \001(\t\022\027\n\017execution_order\030\006 \001(\005\";" +
-      "\n\nSceneQuery\022\014\n\004name\030\001 \001(\t\022\014\n\004page\030\002 \001(\005" +
-      "\022\021\n\tpage_size\030\003 \001(\005\":\n\tPlanQuery\022\014\n\004name" +
-      "\030\001 \001(\t\022\014\n\004page\030\002 \001(\005\022\021\n\tpage_size\030\003 \001(\005\"" +
-      "\271\001\n\004Plan\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\025\n\rla",
-      "st_activity\030\003 \001(\005\022\017\n\007enabled\030\004 \001(\010\022,\n\004ty" +
-      "pe\030\005 \001(\0162\036.mrtech.smarthome.rpc.PlanType" +
-      "\022\022\n\nparameters\030\006 \001(\t\022-\n\007actions\030\007 \003(\0132\034." +
-      "mrtech.smarthome.rpc.Action\"\204\004\n\tWanConfi" +
-      "g\022/\n\010wan_mode\030\001 \001(\0162\035.mrtech.smarthome.r" +
-      "pc.WanMode\022\017\n\007account\030\002 \001(\t\022\020\n\010password\030" +
-      "\003 \001(\t\022\022\n\nip_address\030\004 \001(\t\022\023\n\013subnet_mask" +
-      "\030\005 \001(\t\022\017\n\007gateway\030\006 \001(\t\022\022\n\nstatic_dns\030\007 " +
-      "\001(\010\022\023\n\013primary_dns\030\010 \001(\t\022\025\n\rsecondary_dn" +
-      "s\030\t \001(\t\022+\n\004type\030\n \001(\0162\035.mrtech.smarthome",
-      ".rpc.WanType\0225\n\nclone_mode\030\013 \001(\0162!.mrtec" +
-      "h.smarthome.rpc.WanMacClone\022\021\n\tclone_mac" +
-      "\030\014 \001(\t\022\016\n\006domain\030\r \001(\t\022\024\n\014service_name\030\016" +
-      " \001(\t\022\035\n\025enable_dos_protection\030\017 \001(\010\022\022\n\ne" +
-      "nable_dmz\030\020 \001(\010\022\020\n\010dmz_host\030\021 \001(\t\022\031\n\021ena" +
-      "ble_igmp_proxy\030\022 \001(\010\022\013\n\003mtu\030\023 \001(\005\022\013\n\003mru" +
-      "\030\024 \001(\005\022\022\n\nallow_ping\030\025 \001(\010\"\341\002\n\nWlanConfi" +
-      "g\022\014\n\004ssid\030\001 \001(\t\022\026\n\016ssid_broadcast\030\002 \001(\010\022" +
-      ":\n\016operation_mode\030\003 \001(\0162\".mrtech.smartho" +
-      "me.rpc.WirelessMode\0226\n\010security\030\004 \003(\0132$.",
-      "mrtech.smarthome.rpc.EncryptionMode\022\022\n\np" +
-      "assphrase\030\005 \001(\t\022\017\n\007channel\030\006 \001(\005\0229\n\013acce" +
-      "ss_rule\030\007 \001(\0162$.mrtech.smarthome.rpc.Acc" +
-      "essRuleMode\022\017\n\007enabled\030\010 \001(\010\0223\n\nband_wid" +
-      "th\030\t \001(\0162\037.mrtech.smarthome.rpc.BandWidt" +
-      "h\022\023\n\013wps_enabled\030\n \001(\010\"\252\001\n\017GuestWlanConf" +
-      "ig\022\017\n\007enabled\030\001 \001(\010\022\024\n\014local_access\030\002 \001(" +
-      "\010\022\014\n\004ssid\030\003 \001(\t\022\026\n\016ssid_broadcast\030\004 \001(\010\022" +
-      "6\n\010security\030\005 \003(\0132$.mrtech.smarthome.rpc" +
-      ".EncryptionMode\022\022\n\npassphrase\030\006 \001(\t\"\\\n\013S",
-      "ambaConfig\022-\n\004mode\030\001 \001(\0162\037.mrtech.smarth" +
-      "ome.rpc.SambaMode\022\014\n\004user\030\002 \001(\t\022\020\n\010passw" +
-      "ord\030\003 \001(\t\"\303\001\n\rNetworkDevice\022\013\n\003mac\030\001 \001(\t" +
-      "\022\n\n\002ip\030\002 \001(\t\022\017\n\007netbios\030\003 \001(\t\022.\n\004type\030\004 " +
-      "\001(\0162 .mrtech.smarthome.rpc.AccessType\022,\n" +
-      "\004port\030\005 \001(\0162\036.mrtech.smarthome.rpc.WlanP" +
-      "ort\022\023\n\013upload_rate\030\006 \001(\004\022\025\n\rdownload_rat" +
-      "e\030\007 \001(\004\"\247\001\n\023BandwidthTestResult\022\017\n\007testi" +
-      "ng\030\001 \001(\010\022\032\n\022download_bandwidth\030\002 \001(\004\022\030\n\020" +
-      "upload_bandwidth\030\003 \001(\004\022\r\n\005delay\030\004 \001(\005\022\017\n",
-      "\007carrier\030\005 \001(\t\022\020\n\010location\030\006 \001(\t\022\027\n\017serv" +
-      "er_location\030\007 \001(\t\"c\n\007HddInfo\022/\n\006status\030\001" +
-      " \001(\0162\037.mrtech.smarthome.rpc.HddStatus\022\023\n" +
-      "\013total_space\030\002 \001(\004\022\022\n\nused_space\030\003 \001(\004\"|" +
-      "\n\nPortFilter\0227\n\010protocol\030\001 \001(\0162%.mrtech." +
-      "smarthome.rpc.NetworkProtocol\022\022\n\nstart_p" +
-      "ort\030\002 \001(\r\022\020\n\010end_port\030\003 \001(\r\022\017\n\007enabled\030\004" +
-      " \001(\010\"\220\001\n\013PortForward\022\020\n\010wan_port\030\001 \001(\r\022\020" +
-      "\n\010lan_port\030\002 \001(\r\022\023\n\013lan_address\030\003 \001(\t\0227\n" +
-      "\010protocol\030\004 \001(\0162%.mrtech.smarthome.rpc.N",
-      "etworkProtocol\022\017\n\007enabled\030\005 \001(\010\"\200\010\n\013Netw" +
-      "orkInfo\022\026\n\016lan_ip_address\030\001 \001(\t\022\027\n\017lan_s" +
-      "ubnet_mask\030\002 \001(\t\022/\n\010wan_mode\030\003 \001(\0162\035.mrt" +
-      "ech.smarthome.rpc.WanMode\022:\n\020wan_pppoe_s" +
-      "tatus\030\004 \001(\0162 .mrtech.smarthome.rpc.PPPoE" +
-      "State\022\026\n\016wan_ip_address\030\005 \001(\t\022\027\n\017wan_sub" +
-      "net_mask\030\006 \001(\t\022\023\n\013wan_gateway\030\007 \001(\t\022\027\n\017w" +
-      "an_primary_dns\030\010 \001(\t\022\031\n\021wan_secondary_dn" +
-      "s\030\t \001(\t\022/\n\005modem\030\n \001(\0132 .mrtech.smarthom" +
-      "e.rpc.MobileInfo\022\026\n\016wifi_2_4g_ssid\030\013 \001(\t",
-      "\022@\n\022wifi_2_4g_security\030\014 \003(\0132$.mrtech.sm" +
-      "arthome.rpc.EncryptionMode\022\031\n\021wifi_2_4g_" +
-      "channel\030\r \001(\005\022<\n\023wifi_2_4g_bandwidth\030\016 \001" +
-      "(\0162\037.mrtech.smarthome.rpc.BandWidth\022\034\n\024g" +
-      "uest_wifi_2_4g_ssid\030\017 \001(\t\022F\n\030guest_wifi_" +
-      "2_4g_security\030\020 \003(\0132$.mrtech.smarthome.r" +
-      "pc.EncryptionMode\022\026\n\016wifi_5_8g_ssid\030\021 \001(" +
-      "\t\022@\n\022wifi_5_8g_security\030\022 \003(\0132$.mrtech.s" +
-      "marthome.rpc.EncryptionMode\022\031\n\021wifi_5_8g" +
-      "_channel\030\023 \001(\005\022<\n\023wifi_5_8g_bandwidth\030\024 ",
-      "\001(\0162\037.mrtech.smarthome.rpc.BandWidth\022\034\n\024" +
-      "guest_wifi_5_8g_ssid\030\025 \001(\t\022F\n\030guest_wifi" +
-      "_5_8g_security\030\026 \003(\0132$.mrtech.smarthome." +
-      "rpc.EncryptionMode\022\031\n\021wifi_2_4g_enabled\030" +
-      "\027 \001(\010\022\037\n\027guest_wifi_2_4g_enabled\030\030 \001(\010\022\031" +
-      "\n\021wifi_5_8g_enabled\030\031 \001(\010\022\037\n\027guest_wifi_" +
-      "5_8g_enabled\030\032 \001(\010\"\324\001\n\tQosConfig\022\017\n\007enab" +
-      "led\030\001 \001(\010\022+\n\004mode\030\002 \001(\0162\035.mrtech.smartho" +
-      "me.rpc.QosMode\022\025\n\rexclusive_mac\030\003 \001(\t\022\035\n" +
-      "\025max_inbound_bandwidth\030\004 \001(\005\022\036\n\026max_outb",
-      "ound_bandwidth\030\005 \001(\005\0223\n\010priority\030\006 \001(\0162!" +
-      ".mrtech.smarthome.rpc.QosPriority\"S\n\007Qos" +
-      "Rule\0223\n\010priority\030\001 \001(\0162!.mrtech.smarthom" +
-      "e.rpc.QosPriority\022\023\n\013mac_address\030\002 \001(\t\"Q" +
-      "\n\014GroupSummary\022*\n\005group\030\001 \001(\0132\033.mrtech.s" +
-      "marthome.rpc.Group\022\025\n\rdevice_models\030\002 \003(" +
-      "\t\"l\n\007CpuInfo\022\'\n\002id\030\001 \001(\0162\033.mrtech.smarth" +
-      "ome.rpc.CpuId\022\014\n\004user\030\002 \001(\004\022\016\n\006kernel\030\003 " +
-      "\001(\004\022\014\n\004nice\030\004 \001(\004\022\014\n\004idle\030\005 \001(\004\"1\n\nMemor" +
-      "yInfo\022\021\n\ttotal_ram\030\001 \001(\004\022\020\n\010free_ram\030\002 \001",
-      "(\004\"<\n\023InternalStorageInfo\022\022\n\ntotal_size\030" +
-      "\001 \001(\004\022\021\n\tfree_size\030\002 \001(\004\"\257\001\n\nSystemInfo\022" +
-      "*\n\003cpu\030\001 \003(\0132\035.mrtech.smarthome.rpc.CpuI" +
-      "nfo\0220\n\006memory\030\002 \001(\0132 .mrtech.smarthome.r" +
-      "pc.MemoryInfo\022C\n\020internal_storage\030\003 \001(\0132" +
-      ").mrtech.smarthome.rpc.InternalStorageIn" +
-      "fo\"N\n\020DeviceStatistics\022\026\n\016zigbee_devices" +
-      "\030\001 \001(\r\022\021\n\tias_zones\030\002 \001(\r\022\017\n\007cameras\030\003 \001" +
-      "(\r\"\230\001\n\tVpnConfig\022+\n\004type\030\001 \001(\0162\035.mrtech." +
-      "smarthome.rpc.VpnType\022.\n\004pptp\030\002 \001(\0132 .mr",
-      "tech.smarthome.rpc.PptpConfig\022.\n\004l2tp\030\003 " +
-      "\001(\0132 .mrtech.smarthome.rpc.L2tpConfig\"j\n" +
-      "\nPptpConfig\022\017\n\007account\030\001 \001(\t\022\022\n\npassphra" +
-      "se\030\002 \001(\t\022\023\n\013server_host\030\003 \001(\t\022\023\n\013enable_" +
-      "mppe\030\004 \001(\010\022\r\n\005route\030\005 \001(\t\"~\n\nL2tpConfig\022" +
-      "\017\n\007account\030\001 \001(\t\022\022\n\npassphrase\030\002 \001(\t\022\023\n\013" +
-      "server_host\030\003 \001(\t\022\024\n\014enable_ipsec\030\004 \001(\010\022" +
-      "\021\n\tipsec_psk\030\005 \001(\t\022\r\n\005route\030\006 \001(\t\"M\n\016Inf" +
-      "raredOpCode\022\n\n\002id\030\001 \001(\005\022\021\n\tdevice_id\030\002 \001" +
-      "(\005\022\014\n\004name\030\003 \001(\t\022\016\n\006opcode\030\004 \001(\014\"\231\002\n\016Inf",
-      "raredDevice\022\n\n\002id\030\001 \001(\005\0226\n\004type\030\002 \001(\0162(." +
-      "mrtech.smarthome.rpc.InfraredDeviceType\022" +
-      "\022\n\nindex_code\030\003 \001(\r\022\030\n\020ir_controller_id\030" +
-      "\004 \001(\005\0225\n\007opcodes\030\005 \003(\0132$.mrtech.smarthom" +
-      "e.rpc.InfraredOpCode*\t\010\200\002\020\200\200\200\200\0022S\n\006detai" +
-      "l\022\034.mrtech.smarthome.rpc.Device\030\202\002 \001(\0132$" +
-      ".mrtech.smarthome.rpc.InfraredDevice\"\231\001\n" +
-      "\014MatchSession\022\030\n\020ir_controller_id\030\001 \001(\005\022" +
-      "6\n\004type\030\002 \001(\0162(.mrtech.smarthome.rpc.Inf" +
-      "raredDeviceType\0227\n\005level\030\003 \001(\0162(.mrtech.",
-      "smarthome.rpc.InfraredMatchLevel\"\237\004\n\017Inf" +
-      "raredCommand\022F\n\017air_conditioner\030\001 \001(\0132+." +
-      "mrtech.smarthome.rpc.AirConditionerComma" +
-      "ndH\000\022<\n\ndvd_player\030\002 \001(\0162&.mrtech.smarth" +
-      "ome.rpc.DvdPlayerCommandH\000\022B\n\rip_televis" +
-      "ion\030\003 \001(\0162).mrtech.smarthome.rpc.IpTelev" +
-      "isionCommandH\000\022<\n\nsettop_box\030\004 \001(\0162&.mrt" +
-      "ech.smarthome.rpc.SettopBoxCommandH\000\022=\n\n" +
-      "television\030\005 \001(\0162\'.mrtech.smarthome.rpc." +
-      "TelevisionCommandH\000\022@\n\014electric_fan\030\006 \001(",
-      "\0162(.mrtech.smarthome.rpc.ElectricFanComm" +
-      "andH\000\022;\n\tprojector\030\007 \001(\0162&.mrtech.smarth" +
-      "ome.rpc.ProjectorCommandH\000\022;\n\textension\030" +
-      "\010 \001(\0132&.mrtech.smarthome.rpc.ExtensionCo" +
-      "mmandH\000B\t\n\007command\"A\n\020ExtensionCommand\022\023" +
-      "\n\topcode_id\030\001 \001(\005H\000\022\020\n\006opcode\030\002 \001(\014H\000B\006\n" +
-      "\004data\"\306\002\n\025AirConditionerCommand\022\023\n\013tempe" +
-      "rature\030\001 \001(\005\022E\n\014blowing_rate\030\002 \001(\0162/.mrt" +
-      "ech.smarthome.rpc.AirConditionerBlowingR" +
-      "ate\022=\n\010wind_dir\030\003 \001(\0162+.mrtech.smarthome",
-      ".rpc.AirConditionerWindDir\022\025\n\rauto_wind_" +
-      "dir\030\004 \001(\010\022\r\n\005power\030\005 \001(\010\0224\n\003key\030\006 \001(\0162\'." +
-      "mrtech.smarthome.rpc.AirConditionerKey\0226" +
-      "\n\004mode\030\007 \001(\0162(.mrtech.smarthome.rpc.AirC" +
-      "onditionerMode\"\312\001\n\020IrControllerCode\022\034\n\024a" +
-      "ir_conditioner_data\030\001 \003(\014\022\027\n\017dvd_player_" +
-      "data\030\002 \003(\014\022\032\n\022ip_television_data\030\003 \003(\014\022\027" +
-      "\n\017settop_box_data\030\004 \003(\014\022\027\n\017television_da" +
-      "ta\030\005 \003(\014\022\031\n\021electric_fan_data\030\006 \003(\014\022\026\n\016p" +
-      "rojector_data\030\007 \003(\014\"\220\003\n\013IrMatchCode\0229\n\017a",
-      "ir_conditioner\030\001 \002(\0132 .mrtech.smarthome." +
-      "rpc.IrMatchObj\0224\n\ndvd_player\030\002 \002(\0132 .mrt" +
-      "ech.smarthome.rpc.IrMatchObj\0227\n\rip_telev" +
-      "ision\030\003 \002(\0132 .mrtech.smarthome.rpc.IrMat" +
-      "chObj\0224\n\nsettop_box\030\004 \002(\0132 .mrtech.smart" +
-      "home.rpc.IrMatchObj\0224\n\ntelevision\030\005 \002(\0132" +
-      " .mrtech.smarthome.rpc.IrMatchObj\0226\n\014ele" +
-      "ctric_fan\030\006 \002(\0132 .mrtech.smarthome.rpc.I" +
-      "rMatchObj\0223\n\tprojector\030\007 \002(\0132 .mrtech.sm" +
-      "arthome.rpc.IrMatchObj\"\211\001\n\nIrMatchObj\022\022\n",
-      "\nmatch_code\030\001 \003(\014\0228\n\nindex_code\030\002 \003(\0132$." +
-      "mrtech.smarthome.rpc.IndexCodeTable\022-\n\004n" +
-      "ame\030\003 \003(\0132\037.mrtech.smarthome.rpc.NameTab" +
-      "le\"\036\n\016IndexCodeTable\022\014\n\004data\030\001 \003(\r\"-\n\tNa" +
-      "meTable\022\017\n\007ch_name\030\001 \002(\014\022\017\n\007en_name\030\002 \002(" +
-      "\014\"(\n\tBrandList\022\014\n\004name\030\001 \003(\t\022\r\n\005index\030\002 " +
-      "\003(\005\"\206\001\n\013Fingerprint\022\n\n\002id\030\001 \001(\005\022\025\n\rsmart" +
-      "_lock_id\030\002 \001(\005\022\020\n\010local_id\030\003 \001(\005\022\022\n\nacco" +
-      "unt_id\030\004 \001(\005\022.\n\007account\030\005 \001(\0132\035.mrtech.s" +
-      "marthome.rpc.Account*<\n\rSeverityLevel\022\010\n",
-      "\004INFO\020\001\022\013\n\007WARNING\020\002\022\t\n\005ERROR\020\003\022\t\n\005FATAL" +
-      "\020\004*\214\001\n\rBatteryStatus\022\035\n\031BATTERY_STATUS_N" +
-      "O_BATTERY\020\000\022\033\n\027BATTERY_STATUS_CHARGING\020\001" +
-      "\022\036\n\032BATTERY_STATUS_DISCHARGING\020\002\022\037\n\033BATT" +
-      "ERY_STATUS_NOT_CHARGING\020\003*\265\001\n\rServiceSta" +
-      "tus\022\035\n\031SERVICE_STATUS_NO_SERVICE\020\000\022\035\n\031SE" +
-      "RVICE_STATUS_RESTRICTED\020\001\022\030\n\024SERVICE_STA" +
-      "TUS_VALID\020\002\022.\n*SERVICE_STATUS_RESTRICTED" +
-      "_REGIONAL_SERVICE\020\003\022\034\n\030SERVICE_STATUS_HI" +
-      "BERNATE\020\004*\263\001\n\rServiceDomain\022\035\n\031SERVICE_D",
-      "OMAIN_NO_SERVICE\020\000\022\025\n\021SERVICE_DOMAIN_CS\020" +
-      "\001\022\025\n\021SERVICE_DOMAIN_PS\020\002\022\030\n\024SERVICE_DOMA" +
-      "IN_PS_CS\020\003\022!\n\035SERVICE_DOMAIN_NOT_REGISTE" +
-      "RED\020\004\022\030\n\023SERVICE_DOMAIN_CDMA\020\377\001*\237\002\n\rOper" +
-      "ationMode\022\035\n\031OPERATION_MODE_NO_SERVICE\020\000" +
-      "\022\027\n\023OPERATION_MODE_AMPS\020\001\022\027\n\023OPERATION_M" +
-      "ODE_CDMA\020\002\022\033\n\027OPERATION_MODE_GSM_GPRS\020\003\022" +
-      "\026\n\022OPERATION_MODE_HDR\020\004\022\030\n\024OPERATION_MOD" +
-      "E_WCDMA\020\005\022\026\n\022OPERATION_MODE_GPS\020\006\022\034\n\030OPE" +
-      "RATION_MODE_GSM_WCDMA\020\007\022\033\n\027OPERATION_MOD",
-      "E_CDMA_HDR\020\010\022\033\n\027OPERATION_MODE_TD_SCDMA\020" +
-      "\017*\265\001\n\010SimState\022\025\n\021SIM_STATE_INVALID\020\000\022\023\n" +
-      "\017SIM_STATE_VALID\020\001\022\030\n\024SIM_STATE_CS_INVAL" +
-      "ID\020\002\022\030\n\024SIM_STATE_PS_INVALID\020\003\022\033\n\027SIM_ST" +
-      "ATE_PS_CS_INVALID\020\004\022\025\n\020SIM_STATE_ROMSIM\020" +
-      "\360\001\022\025\n\020SIM_STATE_NO_SIM\020\372\001*\205\005\n\020SubOperati" +
-      "onMode\022!\n\035SUB_OPERATION_MODE_NO_SERVICE\020" +
-      "\000\022\032\n\026SUB_OPERATION_MODE_GSM\020\001\022\033\n\027SUB_OPE" +
-      "RATION_MODE_GPRS\020\002\022\033\n\027SUB_OPERATION_MODE" +
-      "_EDGE\020\003\022\034\n\030SUB_OPERATION_MODE_WCDMA\020\004\022\034\n",
-      "\030SUB_OPERATION_MODE_HSDPA\020\005\022\034\n\030SUB_OPERA" +
-      "TION_MODE_HSUPA\020\006\022\"\n\036SUB_OPERATION_MODE_" +
-      "HSUPA_HSDPA\020\007\022\037\n\033SUB_OPERATION_MODE_TD_S" +
-      "CDMA\020\010\022 \n\034SUB_OPERATION_MODE_HSPA_PLUS\020\t" +
-      "\022\035\n\031SUB_OPERATION_MODE_EVDO_0\020\n\022\035\n\031SUB_O" +
-      "PERATION_MODE_EVDO_A\020\013\022\035\n\031SUB_OPERATION_" +
-      "MODE_EVDO_B\020\014\022\"\n\036SUB_OPERATION_MODE_CDMA" +
-      "2000_1X\020\r\022\032\n\026SUB_OPERATION_MODE_UMB\020\016\022\'\n" +
-      "#SUB_OPERATION_MODE_CDMA2000_1X_EVDV\020\017\022\"" +
-      "\n\036SUB_OPERATION_MODE_CDMA2000_3X\020\020\022&\n\"SU",
-      "B_OPERATION_MODE_HSPA_PLUS_64QAM\020\021\022%\n!SU" +
-      "B_OPERATION_MODE_HSPA_PLUS_MIMO\020\022*\321\001\n\014Wi" +
-      "relessMode\022\023\n\017WIRELESS_MODE_B\020\000\022\023\n\017WIREL" +
-      "ESS_MODE_G\020\001\022\023\n\017WIRELESS_MODE_N\020\002\022\024\n\020WIR" +
-      "ELESS_MODE_BG\020\003\022\024\n\020WIRELESS_MODE_NG\020\004\022\025\n" +
-      "\021WIRELESS_MODE_BGN\020\005\022\023\n\017WIRELESS_MODE_A\020" +
-      "\006\022\024\n\020WIRELESS_MODE_AN\020\007\022\024\n\020WIRELESS_MODE" +
-      "_AC\020\010*P\n\nWpaVersion\022\023\n\017WPA_VERSION_WPA\020\000" +
-      "\022\024\n\020WPA_VERSION_WPA2\020\001\022\027\n\023WPA_VERSION_UN" +
-      "KNOWN\020\002*E\n\rKeyManagement\022\026\n\022KEY_MANAGEME",
-      "NT_PSK\020\000\022\034\n\030KEY_MANAGEMENT_IEEE8021X\020\001*H" +
-      "\n\017PhoneNumberType\022\031\n\025PHONE_NUMBER_TYPE_S" +
-      "MS\020\000\022\032\n\026PHONE_NUMBER_TYPE_DIAL\020\001*I\n\014Acco" +
-      "untGroup\022\037\n\033ACCOUNT_GROUP_ADMINISTRATOR\020" +
-      "\000\022\030\n\024ACCOUNT_GROUP_MEMBER\020\001*V\n\nDeviceTyp" +
-      "e\022\026\n\022DEVICE_TYPE_ZIGBEE\020\000\022\026\n\022DEVICE_TYPE" +
-      "_CAMERA\020\001\022\030\n\024DEVICE_TYPE_INFRARED\020\002*\344\001\n\013" +
-      "PowerSource\022\030\n\024POWER_SOURCE_UNKNOWN\020\000\022\036\n" +
-      "\032POWER_SOURCE_MAINS_1_PHASE\020\001\022\036\n\032POWER_S" +
-      "OURCE_MAINS_3_PHASE\020\002\022\030\n\024POWER_SOURCE_BA",
-      "TTERY\020\003\022\023\n\017POWER_SOURCE_DC\020\004\022&\n\"POWER_SO" +
-      "URCE_EMERG_MAINS_CONST_PWR\020\005\022$\n POWER_SO" +
-      "URCE_EMERG_MAINS_XFER_SW\020\006*\245\013\n\010DeviceId\022" +
-      "\033\n\027DEVICE_ID_ON_OFF_SWITCH\020\000\022\"\n\036DEVICE_I" +
-      "D_LEVEL_CONTROL_SWITCH\020\001\022\033\n\027DEVICE_ID_ON" +
-      "_OFF_OUTPUT\020\002\022\'\n#DEVICE_ID_LEVEL_CONTROL" +
-      "LABLE_OUTPUT\020\003\022\034\n\030DEVICE_ID_SCENE_SELECT" +
-      "OR\020\004\022 \n\034DEVICE_ID_CONFIGURATION_TOOL\020\005\022\034" +
-      "\n\030DEVICE_ID_REMOTE_CONTROL\020\006\022 \n\034DEVICE_I" +
-      "D_COMBINED_INTERFACE\020\007\022\034\n\030DEVICE_ID_RANG",
-      "E_EXTENDER\020\010\022 \n\034DEVICE_ID_MAINS_POWER_OU" +
-      "TLET\020\t\022\027\n\023DEVICE_ID_DOOR_LOCK\020\n\022\"\n\036DEVIC" +
-      "E_ID_DOOR_LOCK_CONTROLLER\020\013\022\033\n\027DEVICE_ID" +
-      "_SIMPLE_SENSOR\020\014\022*\n&DEVICE_ID_CONSUMPTIO" +
-      "N_AWARENESS_DEVICE\020\r\022\032\n\026DEVICE_ID_HOME_G" +
-      "ATEWAY\020P\022\030\n\024DEVICE_ID_SMART_PLUG\020Q\022\031\n\025DE" +
-      "VICE_ID_WHITE_GOODS\020R\022\035\n\031DEVICE_ID_METER" +
-      "_INTERFACE\020S\022!\n\035DEVICE_ID_INFRARED_CONTR" +
-      "OLLER\020T\022\032\n\025DEVICE_ID_TEST_DEVICE\020\377\001\022\033\n\026D" +
-      "EVICE_ID_ON_OFF_LIGHT\020\200\002\022\035\n\030DEVICE_ID_DI",
-      "MMABLE_LIGHT\020\201\002\022%\n DEVICE_ID_COLORED_DIM" +
-      "MABLE_LIGHT\020\202\002\022\"\n\035DEVICE_ID_ON_OFF_LIGHT" +
-      "_SWITCH\020\203\002\022\034\n\027DEVICE_ID_DIMMER_SWITCH\020\204\002" +
-      "\022\"\n\035DEVICE_ID_COLOR_DIMMER_SWITCH\020\205\002\022\033\n\026" +
-      "DEVICE_ID_LIGHT_SENSOR\020\206\002\022\037\n\032DEVICE_ID_O" +
-      "CCUPANCY_SENSOR\020\207\002\022\024\n\017DEVICE_ID_SHADE\020\200\004" +
-      "\022\037\n\032DEVICE_ID_SHADE_CONTROLLER\020\201\004\022%\n DEV" +
-      "ICE_ID_WINDOW_COVERING_DEVICE\020\202\004\022)\n$DEVI" +
-      "CE_ID_WINDOW_COVERING_CONTROLLER\020\203\004\022#\n\036D" +
-      "EVICE_ID_HEATING_COOLING_UNIT\020\200\006\022\031\n\024DEVI",
-      "CE_ID_THERMOSTAT\020\201\006\022!\n\034DEVICE_ID_TEMPERA" +
-      "TURE_SENSOR\020\202\006\022\023\n\016DEVICE_ID_PUMP\020\203\006\022\036\n\031D" +
-      "EVICE_ID_PUMP_CONTROLLER\020\204\006\022\036\n\031DEVICE_ID" +
-      "_PRESSURE_SENSOR\020\205\006\022\032\n\025DEVICE_ID_FLOW_SE" +
-      "NSOR\020\206\006\022\034\n\027DEVICE_ID_MINI_SPLIT_AC\020\207\006\022/\n" +
-      "*DEVICE_ID_IAS_CONTROL_INDICATING_EQUIPM" +
-      "ENT\020\200\010\022.\n)DEVICE_ID_IAS_ANCILLARY_CONTRO" +
-      "L_EQUIPMENT\020\201\010\022\027\n\022DEVICE_ID_IAS_ZONE\020\202\010\022" +
-      "!\n\034DEVICE_ID_IAS_WARNING_DEVICE\020\203\010*Z\n\nTa" +
-      "rgetType\022\035\n\031TARGET_TYPE_NOT_SPECIFIED\020\000\022",
-      "\026\n\022TARGET_TYPE_DEVICE\020\001\022\025\n\021TARGET_TYPE_G" +
-      "ROUP\020\002*\300\002\n\017MeasurementType\022\031\n\025MEASUREMEN" +
-      "T_TYPE_NONE\020\000\022\033\n\027MEASUREMENT_TYPE_ACTIVE" +
-      "\020\001\022\035\n\031MEASUREMENT_TYPE_REACTIVE\020\002\022\035\n\031MEA" +
-      "SUREMENT_TYPE_APPARENT\020\004\022\034\n\030MEASUREMENT_" +
-      "TYPE_PHASE_A\020\010\022\034\n\030MEASUREMENT_TYPE_PHASE" +
-      "_B\020\020\022\034\n\030MEASUREMENT_TYPE_PHASE_C\020 \022\027\n\023ME" +
-      "ASUREMENT_TYPE_DC\020@\022\037\n\032MEASUREMENT_TYPE_" +
-      "HARMONICS\020\200\001\022#\n\036MEASUREMENT_TYPE_POWER_Q" +
-      "UALITY\020\200\002*\222\003\n\rUnitOfMeasure\022#\n\037UNIT_OF_M",
-      "EASURE_KILO_WATT_HOURS\020\000\022(\n$UNIT_OF_MEAS" +
-      "URE_CUBIC_METER_PER_HOUR\020\001\022\'\n#UNIT_OF_ME" +
-      "ASURE_CUBIC_FEET_PER_HOUR\020\002\022.\n*UNIT_OF_M" +
-      "EASURE_CENTUM_CUBIC_FEET_PER_HOUR\020\003\022\'\n#U" +
-      "NIT_OF_MEASURE_US_GALLONS_PER_HOUR\020\004\022(\n$" +
-      "UNIT_OF_MEASURE_IMP_GALLONS_PER_HOUR\020\005\022 " +
-      "\n\034UNIT_OF_MEASURE_BTU_PER_HOUR\020\006\022#\n\037UNIT" +
-      "_OF_MEASURE_LITERS_PER_HOUR\020\007\022\035\n\031UNIT_OF" +
-      "_MEASURE_GUAGE_KPA\020\010\022 \n\034UNIT_OF_MEASURE_" +
-      "ABSOLUTE_KPA\020\t*\342\003\n\010ZoneType\022\032\n\026ZONE_TYPE",
-      "_STANDARD_CIE\020\000\022\033\n\027ZONE_TYPE_MOTION_SENS" +
-      "OR\020\r\022\034\n\030ZONE_TYPE_CONTACT_SWITCH\020\025\022\031\n\025ZO" +
-      "NE_TYPE_FIRE_SENSOR\020(\022\032\n\026ZONE_TYPE_WATER" +
-      "_SENSOR\020*\022\030\n\024ZONE_TYPE_GAS_SENSOR\020+\022\'\n#Z" +
-      "ONE_TYPE_PERSONAL_EMERGENCY_DEVICE\020,\022\'\n#" +
-      "ZONE_TYPE_VIBRATION_MOVEMENT_SENSOR\020-\022\035\n" +
-      "\030ZONE_TYPE_REMOTE_CONTROL\020\217\002\022\026\n\021ZONE_TYP" +
-      "E_KEY_FOB\020\225\002\022\025\n\020ZONE_TYPE_KEYPAD\020\235\004\022&\n!Z" +
-      "ONE_TYPE_STANDARD_WARNING_DEVICE\020\245\004\022!\n\034Z" +
-      "ONE_TYPE_GLASS_BREAK_SENSOR\020\246\004\022 \n\033ZONE_T",
-      "YPE_SECURITY_REPEATER\020\251\004\022!\n\033ZONE_TYPE_IN" +
-      "VALID_ZONE_TYPE\020\377\377\003*]\n\010ArmGroup\022\022\n\016ARM_G" +
-      "ROUP_STAY\020\000\022\023\n\017ARM_GROUP_SLEEP\020\001\022\022\n\016ARM_" +
-      "GROUP_BOTH\020\002\022\024\n\020ARM_GROUP_ALWAYS\020\003*X\n\007Ar" +
-      "mMode\022\023\n\017ARM_MODE_DISARM\020\000\022\021\n\rARM_MODE_S" +
-      "TAY\020\001\022\022\n\016ARM_MODE_SLEEP\020\002\022\021\n\rARM_MODE_AW" +
-      "AY\020\003*\371\001\n\013PanelStatus\022\031\n\025PANEL_STATUS_DIS" +
-      "ARMED\020\000\022\033\n\027PANEL_STATUS_ARMED_STAY\020\001\022\034\n\030" +
-      "PANEL_STATUS_ARMED_SLEEP\020\002\022\033\n\027PANEL_STAT" +
-      "US_ARMED_AWAY\020\003\022\033\n\027PANEL_STATUS_EXIT_DEL",
-      "AY\020\004\022\034\n\030PANEL_STATUS_ENTRY_DELAY\020\005\022!\n\035PA" +
-      "NEL_STATUS_NOT_READY_TO_ARM\020\006\022\031\n\025PANEL_S" +
-      "TATUS_IN_ALARM\020\007*\323\001\n\013AlarmStatus\022\031\n\025ALAR" +
-      "M_STATUS_NO_ALARM\020\000\022\030\n\024ALARM_STATUS_BURG" +
-      "LAR\020\001\022\025\n\021ALARM_STATUS_FIRE\020\002\022\032\n\026ALARM_ST" +
-      "ATUS_EMERGENCY\020\003\022\035\n\031ALARM_STATUS_POLICE_" +
-      "PANIC\020\004\022\033\n\027ALARM_STATUS_FIRE_PANIC\020\005\022 \n\034" +
-      "ALARM_STATUS_EMERGENCY_PANIC\020\006*^\n\rTimeli" +
-      "neLevel\022\027\n\023TIMELINE_LEVEL_INFO\020\000\022\032\n\026TIME" +
-      "LINE_LEVEL_WARNING\020\001\022\030\n\024TIMELINE_LEVEL_A",
-      "LARM\020\002*\265\006\n\014TimelineType\022 \n\034TIMELINE_TYPE" +
-      "_SYSTEM_STARTUP\020\000\022\027\n\023TIMELINE_TYPE_ARMED" +
-      "\020\001\022\032\n\026TIMELINE_TYPE_DISARMED\020\002\022&\n\"TIMELI" +
-      "NE_TYPE_IAS_ZONE_BATTERY_LOW\020\003\022 \n\034TIMELI" +
-      "NE_TYPE_IAS_ZONE_ALARM\020\004\022!\n\035TIMELINE_TYP" +
-      "E_IAS_ZONE_TAMPER\020\005\022\"\n\036TIMELINE_TYPE_IAS" +
-      "_ZONE_TROUBLE\020\006\022&\n\"TIMELINE_TYPE_IAS_ZON" +
-      "E_MAINS_FAULT\020\007\0225\n1TIMELINE_TYPE_IAS_ZON" +
-      "E_LACK_OF_SUPERVISION_REPORT\020\010\022)\n%TIMELI" +
-      "NE_TYPE_IAS_ZONE_BATTERY_DEFECT\020\t\022\037\n\033TIM",
-      "ELINE_TYPE_TOGGLE_ON_OFF\020\n\022&\n\"TIMELINE_T" +
-      "YPE_ON_OFF_STATE_CHANGED\020\013\022 \n\034TIMELINE_T" +
-      "YPE_CAMERA_OFFLINE\020\014\022/\n+TIMELINE_TYPE_CA" +
-      "MERA_MOTION_DETECTION_ALARM\020\r\022&\n\"TIMELIN" +
-      "E_TYPE_OVERCURRENT_DETECTED\020\016\022&\n\"TIMELIN" +
-      "E_TYPE_POWER_SOURCE_CHANGED\020\017\022$\n TIMELIN" +
-      "E_TYPE_SYSTEM_BATTERY_LOW\020\020\022\'\n#TIMELINE_" +
-      "TYPE_MOBILE_DATA_CONNECTED\020\021\022(\n$TIMELINE" +
-      "_TYPE_SMART_LOCK_LOW_BATTERY\020\022\022%\n!TIMELI" +
-      "NE_TYPE_SMART_LOCK_UNLOCKED\020\023\022\'\n#TIMELIN",
-      "E_TYPE_FAILED_UNLOCK_ATTEMPT\020\024*\266\001\n\016Camer" +
-      "aSdStatus\022\035\n\031CAMERA_SD_STATUS_NO_EXIST\020\000" +
-      "\022\035\n\031CAMERA_SD_STATUS_INSERTED\020\001\022\036\n\032CAMER" +
-      "A_SD_STATUS_RECORDING\020\002\022%\n!CAMERA_SD_STA" +
-      "TUS_FILESYSTEM_ERROR\020\003\022\037\n\033CAMERA_SD_STAT" +
-      "US_FORMATTING\020\004*H\n\016CameraWlanMode\022\032\n\026CAM" +
-      "ERA_WLAN_MODE_INFRA\020\000\022\032\n\026CAMERA_WLAN_MOD" +
-      "E_ADHOC\020\001*P\n\021CameraWlanEncrypt\022\034\n\030CAMERA" +
-      "_WLAN_ENCRYPT_OPEN\020\000\022\035\n\031CAMERA_WLAN_ENCR" +
-      "YPT_SHARE\020\001*\355\001\n\022CameraWlanAuthtype\022\035\n\031CA",
-      "MERA_WLAN_AUTHTYPE_NONE\020\000\022\034\n\030CAMERA_WLAN" +
-      "_AUTHTYPE_WEP\020\001\022%\n!CAMERA_WLAN_AUTHTYPE_" +
-      "WPA_PSK_TKIP\020\002\022$\n CAMERA_WLAN_AUTHTYPE_W" +
-      "PA_PSK_AES\020\003\022&\n\"CAMERA_WLAN_AUTHTYPE_WPA" +
-      "2_PSK_TKIP\020\004\022%\n!CAMERA_WLAN_AUTHTYPE_WPA" +
-      "2_PSK_AES\020\005*W\n\023CameraWlanKeyFormat\022\036\n\032CA" +
-      "MERA_WLAN_KEY_FORMAT_HEX\020\000\022 \n\034CAMERA_WLA" +
-      "N_KEY_FORMAT_ASCII\020\001*Z\n\023CameraWlanKeyLen" +
-      "gth\022 \n\034CAMERA_WLAN_KEY_LENGTH_64BIT\020\000\022!\n" +
-      "\035CAMERA_WLAN_KEY_LENGTH_128BIT\020\001*@\n\nActi",
-      "onType\022\023\n\017ACTION_TYPE_ARM\020\000\022\035\n\031ACTION_TY" +
-      "PE_TOGGLE_ON_OFF\020\001*3\n\010PlanType\022\023\n\017PLAN_T" +
-      "YPE_TIMER\020\000\022\022\n\016PLAN_TYPE_FAKE\020\001*E\n\007WanMo" +
-      "de\022\022\n\016WAN_MODE_PPPOE\020\000\022\021\n\rWAN_MODE_DHCP\020" +
-      "\001\022\023\n\017WAN_MODE_STATIC\020\002*)\n\007WanPort\022\016\n\nWAN" +
-      "_PORT_1\020\001\022\016\n\nWAN_PORT_2\020\002*3\n\007WanType\022\025\n\021" +
-      "WAN_TYPE_INTERNET\020\000\022\021\n\rWAN_TYPE_AREA\020\001*W" +
-      "\n\013WanMacClone\022\026\n\022WAN_MAC_CLONE_NONE\020\000\022\026\n" +
-      "\022WAN_MAC_CLONE_AUTO\020\001\022\030\n\024WAN_MAC_CLONE_M" +
-      "ANUAL\020\002*,\n\010WlanPort\022\017\n\013WLAN_PORT_1\020\001\022\017\n\013",
-      "WLAN_PORT_2\020\002*_\n\016AccessRuleMode\022\027\n\023ACCES" +
-      "S_RULE_DISABLE\020\000\022\031\n\025ACCESS_RULE_BLACKLIS" +
-      "T\020\001\022\031\n\025ACCESS_RULE_WHITELIST\020\002*G\n\tBandWi" +
-      "dth\022\022\n\016BAND_WIDTH_20M\020\000\022\022\n\016BAND_WIDTH_40" +
-      "M\020\001\022\022\n\016BAND_WIDTH_80M\020\002*P\n\tSambaMode\022\027\n\023" +
-      "SAMBA_MODE_DISABLED\020\000\022\023\n\017SAMBA_MODE_USER" +
-      "\020\001\022\025\n\021SAMBA_MODE_PUBLIC\020\002*=\n\nAccessType\022" +
-      "\025\n\021ACCESS_TYPE_WIRED\020\001\022\030\n\024ACCESS_TYPE_WI" +
-      "RELESS\020\002*6\n\007QosMode\022\023\n\017QOS_MODE_NORMAL\020\001" +
-      "\022\026\n\022QOS_MODE_EXCLUSIVE\020\002*S\n\013AclRuleMode\022",
-      "\024\n\020ACL_RULE_DISABLE\020\000\022\026\n\022ACL_RULE_BLACKL" +
-      "IST\020\001\022\026\n\022ACL_RULE_WHITELIST\020\002*c\n\tHddStat" +
-      "us\022\034\n\030HDD_STATUS_NOT_INSTALLED\020\000\022\036\n\032HDD_" +
-      "STATUS_NOT_INITIALIZED\020\001\022\030\n\024HDD_STATUS_A" +
-      "VAILABLE\020\002*E\n\017NetworkProtocol\022\030\n\024NETWORK" +
-      "_PROTOCOL_TCP\020\000\022\030\n\024NETWORK_PROTOCOL_UDP\020" +
-      "\001*v\n\023SignalStrengthLevel\022\035\n\031SIGNAL_STREN" +
-      "GTH_LEVEL_LOW\020\000\022 \n\034SIGNAL_STRENGTH_LEVEL" +
-      "_MIDDLE\020\001\022\036\n\032SIGNAL_STRENGTH_LEVEL_HIGH\020" +
-      "\002*E\n\nPPPoEState\022\034\n\030PPPOE_STATE_DISCONNEC",
-      "TED\020\000\022\031\n\025PPPOE_STATE_CONNECTED\020\001*\206\001\n\013Qos" +
-      "Priority\022\030\n\024QOS_PRIORITY_HIGHEST\020\000\022\025\n\021QO" +
-      "S_PRIORITY_HIGH\020\001\022\027\n\023QOS_PRIORITY_MEDIUM" +
-      "\020\002\022\024\n\020QOS_PRIORITY_LOW\020\003\022\027\n\023QOS_PRIORITY" +
-      "_LOWEST\020\004*)\n\005CpuId\022\017\n\013CPU_ID_CPU0\020\000\022\017\n\013C" +
-      "PU_ID_CPU1\020\001*B\n\007VpnType\022\021\n\rVPN_TYPE_NONE" +
-      "\020\000\022\021\n\rVPN_TYPE_PPTP\020\001\022\021\n\rVPN_TYPE_L2TP\020\002" +
-      "*r\n\022InfraredMatchLevel\022\034\n\030INFRARED_MATCH" +
-      "_LEVEL_LOW\020\000\022\037\n\033INFRARED_MATCH_LEVEL_MED" +
-      "IUM\020\001\022\035\n\031INFRARED_MATCH_LEVEL_HIGH\020\002*\301\002\n",
-      "\022InfraredDeviceType\022(\n$INFRARED_DEVICE_T" +
-      "YPE_AIR_CONDITIONER\020\000\022#\n\037INFRARED_DEVICE" +
-      "_TYPE_DVD_PLAYER\020\001\022&\n\"INFRARED_DEVICE_TY" +
-      "PE_IP_TELEVISION\020\002\022#\n\037INFRARED_DEVICE_TY" +
-      "PE_SETTOP_BOX\020\003\022#\n\037INFRARED_DEVICE_TYPE_" +
-      "TELEVISION\020\004\022%\n!INFRARED_DEVICE_TYPE_ELE" +
-      "CTRIC_FAN\020\005\022\"\n\036INFRARED_DEVICE_TYPE_PROJ" +
-      "ECTOR\020\006\022\037\n\033INFRARED_DEVICE_TYPE_CUSTOM\020\007" +
-      "*\303\001\n\022InfraredMatchError\022 \n\034INFRARED_MATC" +
-      "H_ERROR_SUCCESS\020\000\022!\n\035INFRARED_MATCH_ERRO",
-      "R_NO_MATCH\020\001\022\"\n\036INFRARED_MATCH_ERROR_CAN" +
-      "CELLED\020\002\022\"\n\036INFRARED_MATCH_ERROR_TIMED_O" +
-      "UT\020\003\022 \n\034INFRARED_MATCH_ERROR_FAILURE\020\004*\270" +
-      "\001\n\031AirConditionerBlowingRate\022%\n!AIR_COND" +
-      "ITIONER_BLOWING_RATE_AUTO\020\000\022$\n AIR_CONDI" +
-      "TIONER_BLOWING_RATE_LOW\020\001\022\'\n#AIR_CONDITI" +
-      "ONER_BLOWING_RATE_MEDIUM\020\002\022%\n!AIR_CONDIT" +
-      "IONER_BLOWING_RATE_HIGH\020\003*\200\001\n\025AirConditi" +
-      "onerWindDir\022\037\n\033AIR_CONDITIONER_WIND_DIR_" +
-      "UP\020\000\022#\n\037AIR_CONDITIONER_WIND_DIR_MIDDLE\020",
-      "\001\022!\n\035AIR_CONDITIONER_WIND_DIR_DOWN\020\002*\210\002\n" +
-      "\021AirConditionerKey\022\035\n\031AIR_CONDITIONER_KE" +
-      "Y_POWER\020\000\022\034\n\030AIR_CONDITIONER_KEY_MODE\020\001\022" +
-      "$\n AIR_CONDITIONER_KEY_BLOWING_RATE\020\002\022\'\n" +
-      "#AIR_CONDITIONER_KEY_MANUAL_WIND_DIR\020\003\022%" +
-      "\n!AIR_CONDITIONER_KEY_AUTO_WIND_DIR\020\004\022\036\n" +
-      "\032AIR_CONDITIONER_KEY_TEMPUP\020\005\022 \n\034AIR_CON" +
-      "DITIONER_KEY_TEMPDOWN\020\006*\257\001\n\022AirCondition" +
-      "erMode\022\035\n\031AIR_CONDITIONER_MODE_AUTO\020\000\022\037\n" +
-      "\033AIR_CONDITIONER_MODE_FREEZE\020\001\022\034\n\030AIR_CO",
-      "NDITIONER_MODE_DRY\020\002\022\034\n\030AIR_CONDITIONER_" +
-      "MODE_FAN\020\003\022\035\n\031AIR_CONDITIONER_MODE_HEAT\020" +
-      "\004*\320\003\n\020DvdPlayerCommand\022\023\n\017DVD_PLAYER_LEF" +
-      "T\020\000\022\021\n\rDVD_PLAYER_UP\020\001\022\021\n\rDVD_PLAYER_OK\020" +
-      "\002\022\023\n\017DVD_PLAYER_DOWN\020\003\022\024\n\020DVD_PLAYER_RIG" +
-      "HT\020\004\022\024\n\020DVD_PLAYER_POWER\020\005\022\023\n\017DVD_PLAYER" +
-      "_MUTE\020\006\022\033\n\027DVD_PLAYER_FAST_REVERSE\020\007\022\023\n\017" +
-      "DVD_PLAYER_PLAY\020\010\022\035\n\031DVD_PLAYER_FAST_FOR" +
-      "WARDED\020\t\022\031\n\025DVD_PLAYER_LAST_PIECE\020\n\022\023\n\017D" +
-      "VD_PLAYER_STOP\020\013\022\031\n\025DVD_PLAYER_NEXT_PIEC",
-      "E\020\014\022\027\n\023DVD_PLAYER_STANDARD\020\r\022\024\n\020DVD_PLAY" +
-      "ER_PAUSE\020\016\022\024\n\020DVD_PLAYER_TITLE\020\017\022\036\n\032DVD_" +
-      "PLAYER_SWITCH_POSITION\020\020\022\023\n\017DVD_PLAYER_M" +
-      "ENU\020\021\022\025\n\021DVD_PLAYER_RETURN\020\022*\333\004\n\023IpTelev" +
-      "isionCommand\022\027\n\023IP_TELEVISION_POWER\020\000\022\026\n" +
-      "\022IP_TELEVISION_MUTE\020\001\022\030\n\024IP_TELEVISION_V" +
-      "OLUME\020\002\022\"\n\036IP_TELEVISION_VOLUME_REDUCTIO" +
-      "N\020\003\022&\n\"IP_TELEVISION_CHANNEL_PLUS_OR_HOM" +
-      "E\020\004\022+\n\'IP_TELEVISION_CHANNEL_REDUCTION_O" +
-      "R_MENU\020\005\022\024\n\020IP_TELEVISION_UP\020\006\022\026\n\022IP_TEL",
-      "EVISION_LEFT\020\007\022\024\n\020IP_TELEVISION_OK\020\010\022\027\n\023" +
-      "IP_TELEVISION_RIGHT\020\t\022\026\n\022IP_TELEVISION_D" +
-      "OWN\020\n\022\037\n\033IP_TELEVISION_PLAY_OR_PAUSE\020\013\022\023" +
-      "\n\017IP_TELEVISION_1\020\014\022\023\n\017IP_TELEVISION_2\020\r" +
-      "\022\023\n\017IP_TELEVISION_3\020\016\022\023\n\017IP_TELEVISION_4" +
-      "\020\017\022\023\n\017IP_TELEVISION_5\020\020\022\023\n\017IP_TELEVISION" +
-      "_6\020\021\022\023\n\017IP_TELEVISION_7\020\022\022\023\n\017IP_TELEVISI" +
-      "ON_8\020\023\022\023\n\017IP_TELEVISION_9\020\024\022\023\n\017IP_TELEVI" +
-      "SION_0\020\025\022\030\n\024IP_TELEVISION_RETURN\020\026*\202\004\n\020S" +
-      "ettopBoxCommand\022\026\n\022SETTOP_BOX_STANDBY\020\000\022",
-      "\020\n\014SETTOP_BOX_1\020\001\022\020\n\014SETTOP_BOX_2\020\002\022\020\n\014S" +
-      "ETTOP_BOX_3\020\003\022\020\n\014SETTOP_BOX_4\020\004\022\020\n\014SETTO" +
-      "P_BOX_5\020\005\022\020\n\014SETTOP_BOX_6\020\006\022\020\n\014SETTOP_BO" +
-      "X_7\020\007\022\020\n\014SETTOP_BOX_8\020\010\022\020\n\014SETTOP_BOX_9\020" +
-      "\t\022\024\n\020SETTOP_BOX_GUIDE\020\n\022\020\n\014SETTOP_BOX_0\020" +
-      "\013\022\025\n\021SETTOP_BOX_RETURN\020\014\022\021\n\rSETTOP_BOX_U" +
-      "P\020\r\022\023\n\017SETTOP_BOX_LEFT\020\016\022\026\n\022SETTOP_BOX_C" +
-      "ONFIRM\020\017\022\024\n\020SETTOP_BOX_RIGHT\020\020\022\023\n\017SETTOP" +
-      "_BOX_DOWN\020\021\022\025\n\021SETTOP_BOX_VOLUME\020\022\022\037\n\033SE" +
-      "TTOP_BOX_VOLUME_REDUCTION\020\023\022\033\n\027SETTOP_BO",
-      "X_CHANNEL_PLUS\020\024\022 \n\034SETTOP_BOX_CHANNEL_R" +
-      "EDUCTION\020\025\022\023\n\017SETTOP_BOX_MENU\020\026*\262\004\n\021Tele" +
-      "visionCommand\022\037\n\033TELEVISION_VOLUME_REDUC" +
-      "TION\020\000\022\033\n\027TELEVISION_CHANNEL_PLUS\020\001\022\023\n\017T" +
-      "ELEVISION_MENU\020\002\022 \n\034TELEVISION_CHANNEL_R" +
-      "EDUCTION\020\003\022\025\n\021TELEVISION_VOLUME\020\004\022\024\n\020TEL" +
-      "EVISION_POWER\020\005\022\023\n\017TELEVISION_MUTE\020\006\022\020\n\014" +
-      "TELEVISION_1\020\007\022\020\n\014TELEVISION_2\020\010\022\020\n\014TELE" +
-      "VISION_3\020\t\022\020\n\014TELEVISION_4\020\n\022\020\n\014TELEVISI" +
-      "ON_5\020\013\022\020\n\014TELEVISION_6\020\014\022\020\n\014TELEVISION_7",
-      "\020\r\022\020\n\014TELEVISION_8\020\016\022\020\n\014TELEVISION_9\020\017\022\032" +
-      "\n\026TELEVISION_COMBINATION\020\020\022\020\n\014TELEVISION" +
-      "_0\020\021\022\024\n\020TELEVISION_AV_TV\020\022\022\025\n\021TELEVISION" +
-      "_RETURN\020\023\022\026\n\022TELEVISION_CONFIRM\020\024\022\021\n\rTEL" +
-      "EVISION_UP\020\025\022\023\n\017TELEVISION_LEFT\020\026\022\024\n\020TEL" +
-      "EVISION_RIGHT\020\027\022\023\n\017TELEVISION_DOWN\020\030*\253\004\n" +
-      "\022ElectricFanCommand\022\027\n\023ELECTRIC_FAN_ON_O" +
-      "FF\020\000\022\036\n\032ELECTRIC_FAN_WIND_VELOCITY\020\001\022\026\n\022" +
-      "ELECTRIC_FAN_SWING\020\002\022\025\n\021ELECTRIC_FAN_MOD" +
-      "E\020\003\022\033\n\027ELECTRIC_FAN_FIXED_TIME\020\004\022\026\n\022ELEC",
-      "TRIC_FAN_LIGHT\020\005\022\026\n\022ELECTRIC_FAN_ANION\020\006" +
-      "\022\022\n\016ELECTRIC_FAN_1\020\007\022\022\n\016ELECTRIC_FAN_2\020\010" +
-      "\022\022\n\016ELECTRIC_FAN_3\020\t\022\022\n\016ELECTRIC_FAN_4\020\n" +
-      "\022\022\n\016ELECTRIC_FAN_5\020\013\022\022\n\016ELECTRIC_FAN_6\020\014" +
-      "\022\022\n\016ELECTRIC_FAN_7\020\r\022\022\n\016ELECTRIC_FAN_8\020\016" +
-      "\022\022\n\016ELECTRIC_FAN_9\020\017\022\026\n\022ELECTRIC_FAN_SLE" +
-      "EP\020\020\022\027\n\023ELECTRIC_FAN_FREEZE\020\021\022\035\n\031ELECTRI" +
-      "C_FAN_BLOWING_RATE\020\022\022\034\n\030ELECTRIC_FAN_BLO" +
-      "WING_LOW\020\023\022\037\n\033ELECTRIC_FAN_BLOWING_MEDIU" +
-      "M\020\024\022\035\n\031ELECTRIC_FAN_BLOWING_HIGH\020\025*\230\004\n\020P",
-      "rojectorCommand\022\026\n\022PROJECTOR_POWER_ON\020\000\022" +
-      "\027\n\023PROJECTOR_POWER_OFF\020\001\022\026\n\022PROJECTOR_CO" +
-      "MPUTER\020\002\022\023\n\017PROJECTOR_VIDEO\020\003\022\033\n\027PROJECT" +
-      "OR_SIGNAL_SOURCE\020\004\022\027\n\023PROJECTOR_ZOOM_PLU" +
-      "S\020\005\022\034\n\030PROJECTOR_ZOOM_REDUCTION\020\006\022\030\n\024PRO" +
-      "JECTOR_IMAGE_PLUS\020\007\022\035\n\031PROJECTOR_IMAGE_R" +
-      "EDUCTION\020\010\022\022\n\016PROJECTOR_MENU\020\t\022\025\n\021PROJEC" +
-      "TOR_CONFIRM\020\n\022\020\n\014PROJECTOR_UP\020\013\022\022\n\016PROJE" +
-      "CTOR_LEFT\020\014\022\023\n\017PROJECTOR_RIGHT\020\r\022\022\n\016PROJ" +
-      "ECTOR_DOWN\020\016\022\022\n\016PROJECTOR_QUIT\020\017\022\024\n\020PROJ",
-      "ECTOR_VOLUME\020\020\022\036\n\032PROJECTOR_VOLUME_REDUC" +
-      "TION\020\021\022\022\n\016PROJECTOR_MUTE\020\022\022\022\n\016PROJECTOR_" +
-      "AUTO\020\023\022\023\n\017PROJECTOR_PAUSE\020\024\022\030\n\024PROJECTOR" +
-      "_BRIGHTNESS\020\025"
+      "ber\022\022\n\nenable_nat\030\006 \001(\010\022\022\n\nprefer_sms\030\007 " +
+      "\001(\010\"=\n\014AccountQuery\022\014\n\004page\030\001 \001(\005\022\021\n\tpag" +
+      "e_size\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\"\310\001\n\007Account\022\n" +
+      "\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\017\n\007api_key\030\003 \001(" +
+      "\t\022\025\n\rlast_activity\030\004 \001(\005\022\022\n\npassphrase\030\005" +
+      " \001(\t\022\032\n\022passphrase_not_set\030\006 \001(\010\0229\n\racco",
+      "unt_group\030\007 \001(\0162\".mrtech.smarthome.rpc.A" +
+      "ccountGroup\022\020\n\010image_id\030\010 \001(\005\"\234\001\n\006Device" +
+      "\022\n\n\002id\030\001 \001(\005\022.\n\004type\030\002 \001(\0162 .mrtech.smar" +
+      "thome.rpc.DeviceType\022\r\n\005alias\030\003 \001(\t\022\020\n\010g" +
+      "roup_id\030\004 \001(\005\022*\n\005group\030\005 \001(\0132\033.mrtech.sm" +
+      "arthome.rpc.Group*\t\010\200\002\020\200\200\200\200\002\"\242\004\n\014ZigBeeD" +
+      "evice\022\n\n\002id\030\001 \001(\005\022\017\n\007address\030\002 \001(\005\022\023\n\013ma" +
+      "c_address\030\003 \001(\004\022\024\n\014link_quality\030\004 \001(\002\022\020\n" +
+      "\010endpoint\030\005 \001(\005\0221\n\tdevice_id\030\006 \001(\0162\036.mrt" +
+      "ech.smarthome.rpc.DeviceId\022\023\n\013zcl_versio",
+      "n\030\007 \001(\005\022\033\n\023application_version\030\010 \001(\005\022\025\n\r" +
+      "stack_version\030\t \001(\005\022\030\n\020hardware_version\030" +
+      "\n \001(\005\022\031\n\021manufacturer_name\030\013 \001(\t\022\030\n\020mode" +
+      "l_identifier\030\014 \001(\t\022\021\n\tdate_code\030\r \001(\t\0227\n" +
+      "\014power_source\030\016 \001(\0162!.mrtech.smarthome.r" +
+      "pc.PowerSource\022\036\n\026secondary_power_source" +
+      "\030\017 \001(\010\022\016\n\006online\030\020 \001(\010\022\023\n\013master_name\030\021 " +
+      "\001(\t*\t\010\200\002\020\200\200\200\200\0022Q\n\006detail\022\034.mrtech.smarth" +
+      "ome.rpc.Device\030\200\002 \001(\0132\".mrtech.smarthome" +
+      ".rpc.ZigBeeDevice\"w\n\014OnOffCluster\022\r\n\005sta",
+      "te\030\001 \001(\0102X\n\006detail\022\".mrtech.smarthome.rp" +
+      "c.ZigBeeDevice\030\206\200\004 \001(\0132\".mrtech.smarthom" +
+      "e.rpc.OnOffCluster\"\367\002\n\034ElectricalMeasure" +
+      "mentCluster\022?\n\020measurement_type\030\001 \001(\0162%." +
+      "mrtech.smarthome.rpc.MeasurementType\022\021\n\t" +
+      "frequency\030\002 \001(\005\022\023\n\013rms_voltage\030\003 \001(\001\022\023\n\013" +
+      "rms_current\030\004 \001(\001\022\024\n\014active_power\030\005 \001(\001\022" +
+      "\026\n\016reactive_power\030\006 \001(\005\022\026\n\016apparent_powe" +
+      "r\030\007 \001(\005\022\024\n\014power_factor\030\010 \001(\005\022\023\n\013overcur" +
+      "rent\030\t \001(\0102h\n\006detail\022\".mrtech.smarthome.",
+      "rpc.ZigBeeDevice\030\204\226\004 \001(\01322.mrtech.smarth" +
+      "ome.rpc.ElectricalMeasurementCluster\"\322\001\n" +
+      "\025SimpleMeteringCluster\022#\n\033current_summat" +
+      "ion_delivered\030\001 \001(\001\0221\n\004unit\030\002 \001(\0162#.mrte" +
+      "ch.smarthome.rpc.UnitOfMeasure2a\n\006detail" +
+      "\022\".mrtech.smarthome.rpc.ZigBeeDevice\030\202\216\004" +
+      " \001(\0132+.mrtech.smarthome.rpc.SimpleMeteri" +
+      "ngCluster\"\242\001\n\035TemperatureMeasurementClus" +
+      "ter\022\026\n\016measured_value\030\001 \001(\0012i\n\006detail\022\"." +
+      "mrtech.smarthome.rpc.ZigBeeDevice\030\202\210\004 \001(",
+      "\01323.mrtech.smarthome.rpc.TemperatureMeas" +
+      "urementCluster\"\231\001\n\020SmartLockCluster\022\022\n\nl" +
+      "ock_state\030\001 \001(\010\022\023\n\013low_battery\030\002 \001(\0102\\\n\006" +
+      "detail\022\".mrtech.smarthome.rpc.ZigBeeDevi" +
+      "ce\030\201\202\010 \001(\0132&.mrtech.smarthome.rpc.SmartL" +
+      "ockCluster\"\263\001\n\tSmartLock\022\n\n\002id\030\001 \001(\005\0221\n\t" +
+      "arm_group\030\002 \001(\0162\036.mrtech.smarthome.rpc.A" +
+      "rmGroup\022\020\n\010bypassed\030\003 \001(\0102U\n\006detail\022\".mr" +
+      "tech.smarthome.rpc.ZigBeeDevice\030\200\200\014 \001(\0132" +
+      "\037.mrtech.smarthome.rpc.SmartLock\"\336\003\n\007Ias",
+      "Zone\022\n\n\002id\030\001 \001(\005\022\021\n\tdevice_id\030\002 \001(\005\022,\n\006d" +
+      "evice\030\003 \001(\0132\034.mrtech.smarthome.rpc.Devic" +
+      "e\022,\n\004type\030\004 \001(\0162\036.mrtech.smarthome.rpc.Z" +
+      "oneType\022\025\n\rprimary_alarm\030\005 \001(\010\022\027\n\017second" +
+      "ary_alarm\030\006 \001(\010\022\016\n\006tamper\030\007 \001(\010\022\023\n\013low_b" +
+      "attery\030\010 \001(\010\022\032\n\022supervision_report\030\t \001(\010" +
+      "\022\026\n\016restore_report\030\n \001(\010\022\017\n\007trouble\030\013 \001(" +
+      "\010\022\023\n\013mains_fault\030\014 \001(\010\022\021\n\ttest_mode\030\r \001(" +
+      "\010\022\026\n\016battery_defect\030\016 \001(\010\022\"\n\032lack_of_sup" +
+      "ervision_report\030\017 \001(\010\022\025\n\rlast_activity\030\020",
+      " \001(\005\022\020\n\010bypassed\030\021 \001(\010\0221\n\tarm_group\030\022 \001(" +
+      "\0162\036.mrtech.smarthome.rpc.ArmGroup\"\264\001\n\020Ci" +
+      "eConfiguration\022/\n\010arm_mode\030\001 \001(\0162\035.mrtec" +
+      "h.smarthome.rpc.ArmMode\022\033\n\023supervision_t" +
+      "imeout\030\002 \001(\005\022\027\n\017restore_timeout\030\003 \001(\005\022\023\n" +
+      "\013entry_delay\030\004 \001(\005\022\022\n\nexit_delay\030\005 \001(\005\022\020" +
+      "\n\010passcode\030\006 \001(\t\"\314\001\n\013DeviceQuery\022.\n\004type" +
+      "\030\001 \001(\0162 .mrtech.smarthome.rpc.DeviceType" +
+      "\022\r\n\005alias\030\002 \001(\t\022\027\n\017filter_by_group\030\003 \001(\010" +
+      "\022\020\n\010group_id\030\004 \001(\005\022\014\n\004page\030\005 \001(\005\022\021\n\tpage",
+      "_size\030\006 \001(\005\0222\n\ndevice_ids\030\007 \003(\0162\036.mrtech" +
+      ".smarthome.rpc.DeviceId\"Z\n\tZoneQuery\022,\n\004" +
+      "type\030\001 \001(\0162\036.mrtech.smarthome.rpc.ZoneTy" +
+      "pe\022\014\n\004page\030\003 \001(\005\022\021\n\tpage_size\030\004 \001(\005\"\242\001\n\010" +
+      "Timeline\022\n\n\002id\030\001 \001(\005\022\021\n\ttimestamp\030\002 \001(\003\022" +
+      "2\n\005level\030\003 \001(\0162#.mrtech.smarthome.rpc.Ti" +
+      "melineLevel\0220\n\004type\030\004 \001(\0162\".mrtech.smart" +
+      "home.rpc.TimelineType\022\021\n\tparameter\030\005 \001(\t" +
+      "\"\321\003\n\014CameraDevice\022\n\n\002id\030\001 \001(\005\022\023\n\013device_" +
+      "name\030\002 \001(\t\022\020\n\010deviceid\030\003 \001(\t\022\022\n\nip_addre",
+      "ss\030\004 \001(\t\022\014\n\004port\030\005 \001(\005\022\014\n\004user\030\006 \001(\t\022\020\n\010" +
+      "password\030\007 \001(\t\022\020\n\010new_user\030\010 \001(\t\022\024\n\014new_" +
+      "password\030\t \001(\t\022\021\n\tis_online\030\n \001(\010\022\034\n\024loc" +
+      "al_record_enabled\030\013 \001(\010\022\020\n\010bypassed\030\014 \001(" +
+      "\010\0221\n\tarm_group\030\r \001(\0162\036.mrtech.smarthome." +
+      "rpc.ArmGroup\022\024\n\014motion_alarm\030\016 \001(\010\022\024\n\014is" +
+      "_connected\030\017 \001(\010\022\021\n\tlast_seen\030\020 \001(\004\022\034\n\024a" +
+      "uthentication_error\030\021 \001(\0102Q\n\006detail\022\034.mr" +
+      "tech.smarthome.rpc.Device\030\201\002 \001(\0132\".mrtec" +
+      "h.smarthome.rpc.CameraDevice\"\263\001\n\nCameraI",
+      "nfo\0222\n\006status\030\001 \001(\0132\".mrtech.smarthome.r" +
+      "pc.CameraStatus\0220\n\005param\030\002 \001(\0132!.mrtech." +
+      "smarthome.rpc.CameraParam\022?\n\006record\030\003 \001(" +
+      "\0132/.mrtech.smarthome.rpc.CameraRecordCon" +
+      "figuration\"\245\003\n\014CameraStatus\022\r\n\005alias\030\001 \001" +
+      "(\t\022\020\n\010deviceid\030\002 \001(\t\022\017\n\007sys_ver\030\003 \001(\t\022\013\n" +
+      "\003now\030\004 \001(\005\022\024\n\014alarm_status\030\005 \001(\005\022\023\n\013upnp" +
+      "_status\030\006 \001(\010\022\021\n\tdnsenable\030\007 \001(\010\022\021\n\tosde" +
+      "nable\030\010 \001(\010\022\024\n\014syswifi_mode\030\t \001(\010\022\013\n\003mac" +
+      "\030\n \001(\t\022\017\n\007wifimac\030\013 \001(\t\022\030\n\020record_sd_sta",
+      "tus\030\014 \001(\005\022\022\n\ndns_status\030\r \001(\005\022\020\n\010interne" +
+      "t\030\016 \001(\010\022\021\n\tp2pstatus\030\017 \001(\010\022\022\n\ndevicetype" +
+      "\030\020 \001(\005\022\025\n\rdevicesubtype\030\021 \001(\005\022\022\n\nexternw" +
+      "ifi\030\022 \001(\005\022\017\n\007encrypt\030\023 \001(\010\022\r\n\005under\030\024 \001(" +
+      "\010\022\017\n\007sdtotal\030\025 \001(\004\022\016\n\006sdfree\030\026 \001(\004\"\227\002\n\013C" +
+      "ameraParam\022.\n\004time\030\001 \001(\0132 .mrtech.smarth" +
+      "ome.rpc.CameraTime\0224\n\007network\030\002 \001(\0132#.mr" +
+      "tech.smarthome.rpc.CameraNetwork\022.\n\004wlan" +
+      "\030\003 \001(\0132 .mrtech.smarthome.rpc.CameraWlan" +
+      "\0220\n\005alarm\030\004 \001(\0132!.mrtech.smarthome.rpc.C",
+      "ameraAlarm\022@\n\rsnapshotparam\030\005 \001(\0132).mrte" +
+      "ch.smarthome.rpc.CameraSnapshotParam\"\302\001\n" +
+      "\031CameraRecordConfiguration\022\026\n\016record_ena" +
+      "bled\030\001 \001(\010\022\034\n\024record_cover_enabled\030\002 \001(\010" +
+      "\022\030\n\020sd_card_capacity\030\003 \001(\004\0227\n\tsd_status\030" +
+      "\004 \001(\0162$.mrtech.smarthome.rpc.CameraSdSta" +
+      "tus\022\034\n\024local_record_enabled\030\005 \001(\010\"w\n\030Loc" +
+      "alRecordConfiguration\022\"\n\032local_record_co" +
+      "ver_enabled\030\001 \001(\010\022\032\n\022record_file_length\030" +
+      "\002 \001(\005\022\033\n\023reserved_disk_space\030\003 \001(\005\"S\n\013Ca",
+      "meraAlarm\022\036\n\026motion_detection_armed\030\001 \001(" +
+      "\010\022$\n\034motion_detection_sensitivity\030\002 \001(\005\"" +
+      "N\n\nCameraTime\022\013\n\003now\030\001 \001(\005\022\n\n\002tz\030\002 \001(\005\022\023" +
+      "\n\013ntp_enabled\030\003 \001(\010\022\022\n\nntp_server\030\004 \001(\t\"" +
+      "%\n\021CameraSetSnapshot\022\020\n\010Snapshot\030\001 \001(\t\"\220" +
+      "\006\n\023CameraSnapshotParam\022\022\n\ncameratype\030\001 \001" +
+      "(\005\022\022\n\nresolution\030\002 \001(\005\022\025\n\rresolutionsub\030" +
+      "\003 \001(\005\022\030\n\020resolutionsubsub\030\004 \001(\005\022\017\n\007vbrig" +
+      "ht\030\005 \001(\005\022\021\n\tvcontrast\030\006 \001(\005\022\014\n\004vhue\030\007 \001(" +
+      "\005\022\023\n\013vsaturation\030\010 \001(\005\022\021\n\tOSDEnable\030\t \001(",
+      "\010\022\014\n\004mode\030\n \001(\005\022\014\n\004flip\030\013 \001(\005\022\020\n\010enc_siz" +
+      "e\030\014 \001(\005\022\025\n\renc_framerate\030\r \001(\005\022\024\n\014enc_ke" +
+      "yframe\030\016 \001(\005\022\021\n\tenc_quant\030\017 \001(\005\022\024\n\014enc_r" +
+      "atemode\030\020 \001(\005\022\023\n\013enc_bitrate\030\021 \001(\005\022\025\n\ren" +
+      "c_main_mode\030\022 \001(\005\022\024\n\014sub_enc_size\030\023 \001(\005\022" +
+      "\031\n\021sub_enc_framerate\030\024 \001(\005\022\030\n\020sub_enc_ke" +
+      "yframe\030\025 \001(\005\022\025\n\rsub_enc_quant\030\026 \001(\005\022\030\n\020s" +
+      "ub_enc_ratemode\030\027 \001(\005\022\027\n\017sub_enc_bitrate" +
+      "\030\030 \001(\005\022\030\n\020sub_sub_enc_size\030\031 \001(\005\022\035\n\025sub_" +
+      "sub_enc_framerate\030\032 \001(\005\022\034\n\024sub_sub_enc_k",
+      "eyframe\030\033 \001(\005\022\031\n\021sub_sub_enc_quant\030\034 \001(\005" +
+      "\022\034\n\024sub_sub_enc_ratemode\030\035 \001(\005\022\033\n\023sub_su" +
+      "b_enc_bitrate\030\036 \001(\005\022\r\n\005speed\030\037 \001(\005\022\r\n\005ir" +
+      "cut\030  \001(\005\022\020\n\010involume\030! \001(\005\022\021\n\toutvolume" +
+      "\030\" \001(\005\022\021\n\taudiotype\030# \001(\005\"\211\001\n\rCameraNetw" +
+      "ork\022\024\n\014dhcp_enabled\030\001 \001(\010\022\022\n\nip_address\030" +
+      "\002 \001(\t\022\023\n\013subnet_mask\030\003 \001(\t\022\017\n\007gateway\030\004 " +
+      "\001(\t\022\014\n\004dns1\030\005 \001(\t\022\014\n\004dns2\030\006 \001(\t\022\014\n\004port\030" +
+      "\007 \001(\005\"\216\003\n\nCameraWlan\022\017\n\007enabled\030\001 \001(\010\022\014\n" +
+      "\004ssid\030\002 \001(\t\0222\n\004mode\030\003 \001(\0162$.mrtech.smart",
+      "home.rpc.CameraWlanMode\022@\n\017encryption_ty" +
+      "pe\030\004 \001(\0162\'.mrtech.smarthome.rpc.CameraWl" +
+      "anEncrypt\022E\n\023authentication_type\030\005 \001(\0162(" +
+      ".mrtech.smarthome.rpc.CameraWlanAuthtype" +
+      "\022A\n\016wep_key_format\030\006 \001(\0162).mrtech.smarth" +
+      "ome.rpc.CameraWlanKeyFormat\022\017\n\007wep_key\030\007" +
+      " \001(\t\022?\n\014wep_key_bits\030\010 \001(\0162).mrtech.smar" +
+      "thome.rpc.CameraWlanKeyLength\022\017\n\007wpa_psk" +
+      "\030\t \001(\t\"\257\001\n\014CameraWifiAp\022\014\n\004ssid\030\001 \001(\t\022\013\n" +
+      "\003mac\030\002 \001(\t\022:\n\010security\030\003 \001(\0162(.mrtech.sm",
+      "arthome.rpc.CameraWlanAuthtype\0222\n\004mode\030\004" +
+      " \001(\0162$.mrtech.smarthome.rpc.CameraWlanMo" +
+      "de\022\024\n\014link_quality\030\005 \001(\002\"\331\001\n\rTimelineQue" +
+      "ry\022\r\n\005since\030\001 \001(\003\022\r\n\005until\030\002 \001(\003\0222\n\005leve" +
+      "l\030\003 \001(\0162#.mrtech.smarthome.rpc.TimelineL" +
+      "evel\0220\n\004type\030\004 \001(\0162\".mrtech.smarthome.rp" +
+      "c.TimelineType\022\024\n\014fixed_paging\030\005 \001(\010\022\014\n\004" +
+      "page\030\006 \001(\005\022\021\n\tpage_size\030\007 \001(\005\022\r\n\005param\030\010" +
+      " \001(\t\"\312\002\n\013ProductInfo\022\022\n\nhw_version\030\001 \001(\t" +
+      "\022\022\n\nsw_version\030\002 \001(\t\022\031\n\021db_schema_versio",
+      "n\030\003 \001(\002\022\013\n\003sku\030\004 \001(\t\022\014\n\004imei\030\005 \001(\t\022\020\n\010cl" +
+      "oud_id\030\006 \001(\t\022\017\n\007lan_mac\030\007 \001(\t\022\020\n\010wlan_ma" +
+      "c\030\010 \001(\t\022\023\n\013wlan_5g_mac\030\t \001(\t\022\022\n\nzigbee_m" +
+      "ac\030\n \001(\t\022\022\n\nproduct_id\030\013 \001(\t\022\030\n\020manufact" +
+      "ure_date\030\014 \001(\t\022\027\n\017runtime_version\030\r \001(\t\022" +
+      "\023\n\013web_version\030\016 \001(\t\022\022\n\nos_version\030\017 \001(\t" +
+      "\022\017\n\007wan_mac\030\020 \001(\t\"\373\001\n\tComponent\022\014\n\004name\030" +
+      "\001 \001(\t\022\027\n\017current_version\030\002 \001(\t\022\026\n\016latest" +
+      "_version\030\003 \001(\t\022\026\n\016time_published\030\004 \001(\005\022\025" +
+      "\n\rfile_checksum\030\005 \001(\t\022?\n\013file_status\030\006 \001",
+      "(\0162*.mrtech.smarthome.rpc.Component.File" +
+      "Status\"?\n\nFileStatus\022\020\n\014NOT_DOWNLOAD\020\000\022\016" +
+      "\n\nDOWNLOADED\020\001\022\017\n\013RE_DOWNLOAD\020\002\"\374\001\n\tOtaS" +
+      "tatus\0222\n\tcomponent\030\001 \003(\0132\037.mrtech.smarth" +
+      "ome.rpc.Component\022>\n\006status\030\002 \001(\0162..mrte" +
+      "ch.smarthome.rpc.OtaStatus.OtaAgentStatu" +
+      "s\022\027\n\017last_check_time\030\003 \001(\005\"b\n\016OtaAgentSt" +
+      "atus\022\010\n\004IDLE\020\000\022\017\n\013DOWNLOADING\020\001\022\024\n\020READY" +
+      "_TO_INSTALL\020\002\022\n\n\006FAILED\020\003\022\023\n\017DOWNLOAD_FA" +
+      "ILED\020\004\"3\n\005Group\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(",
+      "\t\022\020\n\010image_id\030\003 \001(\005\";\n\nGroupQuery\022\014\n\004nam" +
+      "e\030\001 \001(\t\022\014\n\004page\030\002 \001(\005\022\021\n\tpage_size\030\003 \001(\005" +
+      "\"P\n\005Scene\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022-\n\007a" +
+      "ctions\030\003 \003(\0132\034.mrtech.smarthome.rpc.Acti" +
+      "on\"\226\001\n\006Action\022\n\n\002id\030\001 \001(\005\022\020\n\010scene_id\030\002 " +
+      "\001(\005\022\017\n\007plan_id\030\003 \001(\005\0220\n\006action\030\004 \001(\0162 .m" +
+      "rtech.smarthome.rpc.ActionType\022\022\n\nparame" +
+      "ters\030\005 \001(\t\022\027\n\017execution_order\030\006 \001(\005\";\n\nS" +
+      "ceneQuery\022\014\n\004name\030\001 \001(\t\022\014\n\004page\030\002 \001(\005\022\021\n" +
+      "\tpage_size\030\003 \001(\005\":\n\tPlanQuery\022\014\n\004name\030\001 ",
+      "\001(\t\022\014\n\004page\030\002 \001(\005\022\021\n\tpage_size\030\003 \001(\005\"\271\001\n" +
+      "\004Plan\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\025\n\rlast_" +
+      "activity\030\003 \001(\005\022\017\n\007enabled\030\004 \001(\010\022,\n\004type\030" +
+      "\005 \001(\0162\036.mrtech.smarthome.rpc.PlanType\022\022\n" +
+      "\nparameters\030\006 \001(\t\022-\n\007actions\030\007 \003(\0132\034.mrt" +
+      "ech.smarthome.rpc.Action\"\204\004\n\tWanConfig\022/" +
+      "\n\010wan_mode\030\001 \001(\0162\035.mrtech.smarthome.rpc." +
+      "WanMode\022\017\n\007account\030\002 \001(\t\022\020\n\010password\030\003 \001" +
+      "(\t\022\022\n\nip_address\030\004 \001(\t\022\023\n\013subnet_mask\030\005 " +
+      "\001(\t\022\017\n\007gateway\030\006 \001(\t\022\022\n\nstatic_dns\030\007 \001(\010",
+      "\022\023\n\013primary_dns\030\010 \001(\t\022\025\n\rsecondary_dns\030\t" +
+      " \001(\t\022+\n\004type\030\n \001(\0162\035.mrtech.smarthome.rp" +
+      "c.WanType\0225\n\nclone_mode\030\013 \001(\0162!.mrtech.s" +
+      "marthome.rpc.WanMacClone\022\021\n\tclone_mac\030\014 " +
+      "\001(\t\022\016\n\006domain\030\r \001(\t\022\024\n\014service_name\030\016 \001(" +
+      "\t\022\035\n\025enable_dos_protection\030\017 \001(\010\022\022\n\nenab" +
+      "le_dmz\030\020 \001(\010\022\020\n\010dmz_host\030\021 \001(\t\022\031\n\021enable" +
+      "_igmp_proxy\030\022 \001(\010\022\013\n\003mtu\030\023 \001(\005\022\013\n\003mru\030\024 " +
+      "\001(\005\022\022\n\nallow_ping\030\025 \001(\010\"\341\002\n\nWlanConfig\022\014" +
+      "\n\004ssid\030\001 \001(\t\022\026\n\016ssid_broadcast\030\002 \001(\010\022:\n\016",
+      "operation_mode\030\003 \001(\0162\".mrtech.smarthome." +
+      "rpc.WirelessMode\0226\n\010security\030\004 \003(\0132$.mrt" +
+      "ech.smarthome.rpc.EncryptionMode\022\022\n\npass" +
+      "phrase\030\005 \001(\t\022\017\n\007channel\030\006 \001(\005\0229\n\013access_" +
+      "rule\030\007 \001(\0162$.mrtech.smarthome.rpc.Access" +
+      "RuleMode\022\017\n\007enabled\030\010 \001(\010\0223\n\nband_width\030" +
+      "\t \001(\0162\037.mrtech.smarthome.rpc.BandWidth\022\023" +
+      "\n\013wps_enabled\030\n \001(\010\"\252\001\n\017GuestWlanConfig\022" +
+      "\017\n\007enabled\030\001 \001(\010\022\024\n\014local_access\030\002 \001(\010\022\014" +
+      "\n\004ssid\030\003 \001(\t\022\026\n\016ssid_broadcast\030\004 \001(\010\0226\n\010",
+      "security\030\005 \003(\0132$.mrtech.smarthome.rpc.En" +
+      "cryptionMode\022\022\n\npassphrase\030\006 \001(\t\"\\\n\013Samb" +
+      "aConfig\022-\n\004mode\030\001 \001(\0162\037.mrtech.smarthome" +
+      ".rpc.SambaMode\022\014\n\004user\030\002 \001(\t\022\020\n\010password" +
+      "\030\003 \001(\t\"\303\001\n\rNetworkDevice\022\013\n\003mac\030\001 \001(\t\022\n\n" +
+      "\002ip\030\002 \001(\t\022\017\n\007netbios\030\003 \001(\t\022.\n\004type\030\004 \001(\016" +
+      "2 .mrtech.smarthome.rpc.AccessType\022,\n\004po" +
+      "rt\030\005 \001(\0162\036.mrtech.smarthome.rpc.WlanPort" +
+      "\022\023\n\013upload_rate\030\006 \001(\004\022\025\n\rdownload_rate\030\007" +
+      " \001(\004\"\247\001\n\023BandwidthTestResult\022\017\n\007testing\030",
+      "\001 \001(\010\022\032\n\022download_bandwidth\030\002 \001(\004\022\030\n\020upl" +
+      "oad_bandwidth\030\003 \001(\004\022\r\n\005delay\030\004 \001(\005\022\017\n\007ca" +
+      "rrier\030\005 \001(\t\022\020\n\010location\030\006 \001(\t\022\027\n\017server_" +
+      "location\030\007 \001(\t\"c\n\007HddInfo\022/\n\006status\030\001 \001(" +
+      "\0162\037.mrtech.smarthome.rpc.HddStatus\022\023\n\013to" +
+      "tal_space\030\002 \001(\004\022\022\n\nused_space\030\003 \001(\004\"|\n\nP" +
+      "ortFilter\0227\n\010protocol\030\001 \001(\0162%.mrtech.sma" +
+      "rthome.rpc.NetworkProtocol\022\022\n\nstart_port" +
+      "\030\002 \001(\r\022\020\n\010end_port\030\003 \001(\r\022\017\n\007enabled\030\004 \001(" +
+      "\010\"\220\001\n\013PortForward\022\020\n\010wan_port\030\001 \001(\r\022\020\n\010l",
+      "an_port\030\002 \001(\r\022\023\n\013lan_address\030\003 \001(\t\0227\n\010pr" +
+      "otocol\030\004 \001(\0162%.mrtech.smarthome.rpc.Netw" +
+      "orkProtocol\022\017\n\007enabled\030\005 \001(\010\"\200\010\n\013Network" +
+      "Info\022\026\n\016lan_ip_address\030\001 \001(\t\022\027\n\017lan_subn" +
+      "et_mask\030\002 \001(\t\022/\n\010wan_mode\030\003 \001(\0162\035.mrtech" +
+      ".smarthome.rpc.WanMode\022:\n\020wan_pppoe_stat" +
+      "us\030\004 \001(\0162 .mrtech.smarthome.rpc.PPPoESta" +
+      "te\022\026\n\016wan_ip_address\030\005 \001(\t\022\027\n\017wan_subnet" +
+      "_mask\030\006 \001(\t\022\023\n\013wan_gateway\030\007 \001(\t\022\027\n\017wan_" +
+      "primary_dns\030\010 \001(\t\022\031\n\021wan_secondary_dns\030\t",
+      " \001(\t\022/\n\005modem\030\n \001(\0132 .mrtech.smarthome.r" +
+      "pc.MobileInfo\022\026\n\016wifi_2_4g_ssid\030\013 \001(\t\022@\n" +
+      "\022wifi_2_4g_security\030\014 \003(\0132$.mrtech.smart" +
+      "home.rpc.EncryptionMode\022\031\n\021wifi_2_4g_cha" +
+      "nnel\030\r \001(\005\022<\n\023wifi_2_4g_bandwidth\030\016 \001(\0162" +
+      "\037.mrtech.smarthome.rpc.BandWidth\022\034\n\024gues" +
+      "t_wifi_2_4g_ssid\030\017 \001(\t\022F\n\030guest_wifi_2_4" +
+      "g_security\030\020 \003(\0132$.mrtech.smarthome.rpc." +
+      "EncryptionMode\022\026\n\016wifi_5_8g_ssid\030\021 \001(\t\022@" +
+      "\n\022wifi_5_8g_security\030\022 \003(\0132$.mrtech.smar",
+      "thome.rpc.EncryptionMode\022\031\n\021wifi_5_8g_ch" +
+      "annel\030\023 \001(\005\022<\n\023wifi_5_8g_bandwidth\030\024 \001(\016" +
+      "2\037.mrtech.smarthome.rpc.BandWidth\022\034\n\024gue" +
+      "st_wifi_5_8g_ssid\030\025 \001(\t\022F\n\030guest_wifi_5_" +
+      "8g_security\030\026 \003(\0132$.mrtech.smarthome.rpc" +
+      ".EncryptionMode\022\031\n\021wifi_2_4g_enabled\030\027 \001" +
+      "(\010\022\037\n\027guest_wifi_2_4g_enabled\030\030 \001(\010\022\031\n\021w" +
+      "ifi_5_8g_enabled\030\031 \001(\010\022\037\n\027guest_wifi_5_8" +
+      "g_enabled\030\032 \001(\010\"\324\001\n\tQosConfig\022\017\n\007enabled" +
+      "\030\001 \001(\010\022+\n\004mode\030\002 \001(\0162\035.mrtech.smarthome.",
+      "rpc.QosMode\022\025\n\rexclusive_mac\030\003 \001(\t\022\035\n\025ma" +
+      "x_inbound_bandwidth\030\004 \001(\005\022\036\n\026max_outboun" +
+      "d_bandwidth\030\005 \001(\005\0223\n\010priority\030\006 \001(\0162!.mr" +
+      "tech.smarthome.rpc.QosPriority\"S\n\007QosRul" +
+      "e\0223\n\010priority\030\001 \001(\0162!.mrtech.smarthome.r" +
+      "pc.QosPriority\022\023\n\013mac_address\030\002 \001(\t\"Q\n\014G" +
+      "roupSummary\022*\n\005group\030\001 \001(\0132\033.mrtech.smar" +
+      "thome.rpc.Group\022\025\n\rdevice_models\030\002 \003(\t\"l" +
+      "\n\007CpuInfo\022\'\n\002id\030\001 \001(\0162\033.mrtech.smarthome" +
+      ".rpc.CpuId\022\014\n\004user\030\002 \001(\004\022\016\n\006kernel\030\003 \001(\004",
+      "\022\014\n\004nice\030\004 \001(\004\022\014\n\004idle\030\005 \001(\004\"1\n\nMemoryIn" +
+      "fo\022\021\n\ttotal_ram\030\001 \001(\004\022\020\n\010free_ram\030\002 \001(\004\"" +
+      "<\n\023InternalStorageInfo\022\022\n\ntotal_size\030\001 \001" +
+      "(\004\022\021\n\tfree_size\030\002 \001(\004\"\257\001\n\nSystemInfo\022*\n\003" +
+      "cpu\030\001 \003(\0132\035.mrtech.smarthome.rpc.CpuInfo" +
+      "\0220\n\006memory\030\002 \001(\0132 .mrtech.smarthome.rpc." +
+      "MemoryInfo\022C\n\020internal_storage\030\003 \001(\0132).m" +
+      "rtech.smarthome.rpc.InternalStorageInfo\"" +
+      "N\n\020DeviceStatistics\022\026\n\016zigbee_devices\030\001 " +
+      "\001(\r\022\021\n\tias_zones\030\002 \001(\r\022\017\n\007cameras\030\003 \001(\r\"",
+      "\230\001\n\tVpnConfig\022+\n\004type\030\001 \001(\0162\035.mrtech.sma" +
+      "rthome.rpc.VpnType\022.\n\004pptp\030\002 \001(\0132 .mrtec" +
+      "h.smarthome.rpc.PptpConfig\022.\n\004l2tp\030\003 \001(\013" +
+      "2 .mrtech.smarthome.rpc.L2tpConfig\"j\n\nPp" +
+      "tpConfig\022\017\n\007account\030\001 \001(\t\022\022\n\npassphrase\030" +
+      "\002 \001(\t\022\023\n\013server_host\030\003 \001(\t\022\023\n\013enable_mpp" +
+      "e\030\004 \001(\010\022\r\n\005route\030\005 \001(\t\"~\n\nL2tpConfig\022\017\n\007" +
+      "account\030\001 \001(\t\022\022\n\npassphrase\030\002 \001(\t\022\023\n\013ser" +
+      "ver_host\030\003 \001(\t\022\024\n\014enable_ipsec\030\004 \001(\010\022\021\n\t" +
+      "ipsec_psk\030\005 \001(\t\022\r\n\005route\030\006 \001(\t\"M\n\016Infrar",
+      "edOpCode\022\n\n\002id\030\001 \001(\005\022\021\n\tdevice_id\030\002 \001(\005\022" +
+      "\014\n\004name\030\003 \001(\t\022\016\n\006opcode\030\004 \001(\014\"\231\002\n\016Infrar" +
+      "edDevice\022\n\n\002id\030\001 \001(\005\0226\n\004type\030\002 \001(\0162(.mrt" +
+      "ech.smarthome.rpc.InfraredDeviceType\022\022\n\n" +
+      "index_code\030\003 \001(\r\022\030\n\020ir_controller_id\030\004 \001" +
+      "(\005\0225\n\007opcodes\030\005 \003(\0132$.mrtech.smarthome.r" +
+      "pc.InfraredOpCode*\t\010\200\002\020\200\200\200\200\0022S\n\006detail\022\034" +
+      ".mrtech.smarthome.rpc.Device\030\202\002 \001(\0132$.mr" +
+      "tech.smarthome.rpc.InfraredDevice\"\231\001\n\014Ma" +
+      "tchSession\022\030\n\020ir_controller_id\030\001 \001(\005\0226\n\004",
+      "type\030\002 \001(\0162(.mrtech.smarthome.rpc.Infrar" +
+      "edDeviceType\0227\n\005level\030\003 \001(\0162(.mrtech.sma" +
+      "rthome.rpc.InfraredMatchLevel\"\237\004\n\017Infrar" +
+      "edCommand\022F\n\017air_conditioner\030\001 \001(\0132+.mrt" +
+      "ech.smarthome.rpc.AirConditionerCommandH" +
+      "\000\022<\n\ndvd_player\030\002 \001(\0162&.mrtech.smarthome" +
+      ".rpc.DvdPlayerCommandH\000\022B\n\rip_television" +
+      "\030\003 \001(\0162).mrtech.smarthome.rpc.IpTelevisi" +
+      "onCommandH\000\022<\n\nsettop_box\030\004 \001(\0162&.mrtech" +
+      ".smarthome.rpc.SettopBoxCommandH\000\022=\n\ntel",
+      "evision\030\005 \001(\0162\'.mrtech.smarthome.rpc.Tel" +
+      "evisionCommandH\000\022@\n\014electric_fan\030\006 \001(\0162(" +
+      ".mrtech.smarthome.rpc.ElectricFanCommand" +
+      "H\000\022;\n\tprojector\030\007 \001(\0162&.mrtech.smarthome" +
+      ".rpc.ProjectorCommandH\000\022;\n\textension\030\010 \001" +
+      "(\0132&.mrtech.smarthome.rpc.ExtensionComma" +
+      "ndH\000B\t\n\007command\"A\n\020ExtensionCommand\022\023\n\to" +
+      "pcode_id\030\001 \001(\005H\000\022\020\n\006opcode\030\002 \001(\014H\000B\006\n\004da" +
+      "ta\"\306\002\n\025AirConditionerCommand\022\023\n\013temperat" +
+      "ure\030\001 \001(\005\022E\n\014blowing_rate\030\002 \001(\0162/.mrtech",
+      ".smarthome.rpc.AirConditionerBlowingRate" +
+      "\022=\n\010wind_dir\030\003 \001(\0162+.mrtech.smarthome.rp" +
+      "c.AirConditionerWindDir\022\025\n\rauto_wind_dir" +
+      "\030\004 \001(\010\022\r\n\005power\030\005 \001(\010\0224\n\003key\030\006 \001(\0162\'.mrt" +
+      "ech.smarthome.rpc.AirConditionerKey\0226\n\004m" +
+      "ode\030\007 \001(\0162(.mrtech.smarthome.rpc.AirCond" +
+      "itionerMode\"\312\001\n\020IrControllerCode\022\034\n\024air_" +
+      "conditioner_data\030\001 \003(\014\022\027\n\017dvd_player_dat" +
+      "a\030\002 \003(\014\022\032\n\022ip_television_data\030\003 \003(\014\022\027\n\017s" +
+      "ettop_box_data\030\004 \003(\014\022\027\n\017television_data\030",
+      "\005 \003(\014\022\031\n\021electric_fan_data\030\006 \003(\014\022\026\n\016proj" +
+      "ector_data\030\007 \003(\014\"\220\003\n\013IrMatchCode\0229\n\017air_" +
+      "conditioner\030\001 \002(\0132 .mrtech.smarthome.rpc" +
+      ".IrMatchObj\0224\n\ndvd_player\030\002 \002(\0132 .mrtech" +
+      ".smarthome.rpc.IrMatchObj\0227\n\rip_televisi" +
+      "on\030\003 \002(\0132 .mrtech.smarthome.rpc.IrMatchO" +
+      "bj\0224\n\nsettop_box\030\004 \002(\0132 .mrtech.smarthom" +
+      "e.rpc.IrMatchObj\0224\n\ntelevision\030\005 \002(\0132 .m" +
+      "rtech.smarthome.rpc.IrMatchObj\0226\n\014electr" +
+      "ic_fan\030\006 \002(\0132 .mrtech.smarthome.rpc.IrMa",
+      "tchObj\0223\n\tprojector\030\007 \002(\0132 .mrtech.smart" +
+      "home.rpc.IrMatchObj\"\211\001\n\nIrMatchObj\022\022\n\nma" +
+      "tch_code\030\001 \003(\014\0228\n\nindex_code\030\002 \003(\0132$.mrt" +
+      "ech.smarthome.rpc.IndexCodeTable\022-\n\004name" +
+      "\030\003 \003(\0132\037.mrtech.smarthome.rpc.NameTable\"" +
+      "\036\n\016IndexCodeTable\022\014\n\004data\030\001 \003(\r\"-\n\tNameT" +
+      "able\022\017\n\007ch_name\030\001 \002(\014\022\017\n\007en_name\030\002 \002(\014\"(" +
+      "\n\tBrandList\022\014\n\004name\030\001 \003(\t\022\r\n\005index\030\002 \003(\005" +
+      "\"\206\001\n\013Fingerprint\022\n\n\002id\030\001 \001(\005\022\025\n\rsmart_lo" +
+      "ck_id\030\002 \001(\005\022\020\n\010local_id\030\003 \001(\005\022\022\n\naccount",
+      "_id\030\004 \001(\005\022.\n\007account\030\005 \001(\0132\035.mrtech.smar" +
+      "thome.rpc.Account\"h\n\tAlarmInfo\022,\n\006device" +
+      "\030\001 \001(\0132\034.mrtech.smarthome.rpc.Device\022-\n\004" +
+      "type\030\002 \001(\0162\037.mrtech.smarthome.rpc.AlarmT" +
+      "ype\"l\n\005Image\022\n\n\002id\030\001 \001(\005\022.\n\004type\030\002 \001(\0162 " +
+      ".mrtech.smarthome.rpc.Image.Type\022\014\n\004data" +
+      "\030\003 \001(\014\"\031\n\004Type\022\007\n\003PNG\020\000\022\010\n\004JPEG\020\001*<\n\rSev" +
+      "erityLevel\022\010\n\004INFO\020\001\022\013\n\007WARNING\020\002\022\t\n\005ERR" +
+      "OR\020\003\022\t\n\005FATAL\020\004*\214\001\n\rBatteryStatus\022\035\n\031BAT" +
+      "TERY_STATUS_NO_BATTERY\020\000\022\033\n\027BATTERY_STAT",
+      "US_CHARGING\020\001\022\036\n\032BATTERY_STATUS_DISCHARG" +
+      "ING\020\002\022\037\n\033BATTERY_STATUS_NOT_CHARGING\020\003*\265" +
+      "\001\n\rServiceStatus\022\035\n\031SERVICE_STATUS_NO_SE" +
+      "RVICE\020\000\022\035\n\031SERVICE_STATUS_RESTRICTED\020\001\022\030" +
+      "\n\024SERVICE_STATUS_VALID\020\002\022.\n*SERVICE_STAT" +
+      "US_RESTRICTED_REGIONAL_SERVICE\020\003\022\034\n\030SERV" +
+      "ICE_STATUS_HIBERNATE\020\004*\263\001\n\rServiceDomain" +
+      "\022\035\n\031SERVICE_DOMAIN_NO_SERVICE\020\000\022\025\n\021SERVI" +
+      "CE_DOMAIN_CS\020\001\022\025\n\021SERVICE_DOMAIN_PS\020\002\022\030\n" +
+      "\024SERVICE_DOMAIN_PS_CS\020\003\022!\n\035SERVICE_DOMAI",
+      "N_NOT_REGISTERED\020\004\022\030\n\023SERVICE_DOMAIN_CDM" +
+      "A\020\377\001*\237\002\n\rOperationMode\022\035\n\031OPERATION_MODE" +
+      "_NO_SERVICE\020\000\022\027\n\023OPERATION_MODE_AMPS\020\001\022\027" +
+      "\n\023OPERATION_MODE_CDMA\020\002\022\033\n\027OPERATION_MOD" +
+      "E_GSM_GPRS\020\003\022\026\n\022OPERATION_MODE_HDR\020\004\022\030\n\024" +
+      "OPERATION_MODE_WCDMA\020\005\022\026\n\022OPERATION_MODE" +
+      "_GPS\020\006\022\034\n\030OPERATION_MODE_GSM_WCDMA\020\007\022\033\n\027" +
+      "OPERATION_MODE_CDMA_HDR\020\010\022\033\n\027OPERATION_M" +
+      "ODE_TD_SCDMA\020\017*\265\001\n\010SimState\022\025\n\021SIM_STATE" +
+      "_INVALID\020\000\022\023\n\017SIM_STATE_VALID\020\001\022\030\n\024SIM_S",
+      "TATE_CS_INVALID\020\002\022\030\n\024SIM_STATE_PS_INVALI" +
+      "D\020\003\022\033\n\027SIM_STATE_PS_CS_INVALID\020\004\022\025\n\020SIM_" +
+      "STATE_ROMSIM\020\360\001\022\025\n\020SIM_STATE_NO_SIM\020\372\001*\205" +
+      "\005\n\020SubOperationMode\022!\n\035SUB_OPERATION_MOD" +
+      "E_NO_SERVICE\020\000\022\032\n\026SUB_OPERATION_MODE_GSM" +
+      "\020\001\022\033\n\027SUB_OPERATION_MODE_GPRS\020\002\022\033\n\027SUB_O" +
+      "PERATION_MODE_EDGE\020\003\022\034\n\030SUB_OPERATION_MO" +
+      "DE_WCDMA\020\004\022\034\n\030SUB_OPERATION_MODE_HSDPA\020\005" +
+      "\022\034\n\030SUB_OPERATION_MODE_HSUPA\020\006\022\"\n\036SUB_OP" +
+      "ERATION_MODE_HSUPA_HSDPA\020\007\022\037\n\033SUB_OPERAT",
+      "ION_MODE_TD_SCDMA\020\010\022 \n\034SUB_OPERATION_MOD" +
+      "E_HSPA_PLUS\020\t\022\035\n\031SUB_OPERATION_MODE_EVDO" +
+      "_0\020\n\022\035\n\031SUB_OPERATION_MODE_EVDO_A\020\013\022\035\n\031S" +
+      "UB_OPERATION_MODE_EVDO_B\020\014\022\"\n\036SUB_OPERAT" +
+      "ION_MODE_CDMA2000_1X\020\r\022\032\n\026SUB_OPERATION_" +
+      "MODE_UMB\020\016\022\'\n#SUB_OPERATION_MODE_CDMA200" +
+      "0_1X_EVDV\020\017\022\"\n\036SUB_OPERATION_MODE_CDMA20" +
+      "00_3X\020\020\022&\n\"SUB_OPERATION_MODE_HSPA_PLUS_" +
+      "64QAM\020\021\022%\n!SUB_OPERATION_MODE_HSPA_PLUS_" +
+      "MIMO\020\022*\321\001\n\014WirelessMode\022\023\n\017WIRELESS_MODE",
+      "_B\020\000\022\023\n\017WIRELESS_MODE_G\020\001\022\023\n\017WIRELESS_MO" +
+      "DE_N\020\002\022\024\n\020WIRELESS_MODE_BG\020\003\022\024\n\020WIRELESS" +
+      "_MODE_NG\020\004\022\025\n\021WIRELESS_MODE_BGN\020\005\022\023\n\017WIR" +
+      "ELESS_MODE_A\020\006\022\024\n\020WIRELESS_MODE_AN\020\007\022\024\n\020" +
+      "WIRELESS_MODE_AC\020\010*P\n\nWpaVersion\022\023\n\017WPA_" +
+      "VERSION_WPA\020\000\022\024\n\020WPA_VERSION_WPA2\020\001\022\027\n\023W" +
+      "PA_VERSION_UNKNOWN\020\002*E\n\rKeyManagement\022\026\n" +
+      "\022KEY_MANAGEMENT_PSK\020\000\022\034\n\030KEY_MANAGEMENT_" +
+      "IEEE8021X\020\001*H\n\017PhoneNumberType\022\031\n\025PHONE_" +
+      "NUMBER_TYPE_SMS\020\000\022\032\n\026PHONE_NUMBER_TYPE_D",
+      "IAL\020\001*I\n\014AccountGroup\022\037\n\033ACCOUNT_GROUP_A" +
+      "DMINISTRATOR\020\000\022\030\n\024ACCOUNT_GROUP_MEMBER\020\001" +
+      "*V\n\nDeviceType\022\026\n\022DEVICE_TYPE_ZIGBEE\020\000\022\026" +
+      "\n\022DEVICE_TYPE_CAMERA\020\001\022\030\n\024DEVICE_TYPE_IN" +
+      "FRARED\020\002*\344\001\n\013PowerSource\022\030\n\024POWER_SOURCE" +
+      "_UNKNOWN\020\000\022\036\n\032POWER_SOURCE_MAINS_1_PHASE" +
+      "\020\001\022\036\n\032POWER_SOURCE_MAINS_3_PHASE\020\002\022\030\n\024PO" +
+      "WER_SOURCE_BATTERY\020\003\022\023\n\017POWER_SOURCE_DC\020" +
+      "\004\022&\n\"POWER_SOURCE_EMERG_MAINS_CONST_PWR\020" +
+      "\005\022$\n POWER_SOURCE_EMERG_MAINS_XFER_SW\020\006*",
+      "\245\013\n\010DeviceId\022\033\n\027DEVICE_ID_ON_OFF_SWITCH\020" +
+      "\000\022\"\n\036DEVICE_ID_LEVEL_CONTROL_SWITCH\020\001\022\033\n" +
+      "\027DEVICE_ID_ON_OFF_OUTPUT\020\002\022\'\n#DEVICE_ID_" +
+      "LEVEL_CONTROLLABLE_OUTPUT\020\003\022\034\n\030DEVICE_ID" +
+      "_SCENE_SELECTOR\020\004\022 \n\034DEVICE_ID_CONFIGURA" +
+      "TION_TOOL\020\005\022\034\n\030DEVICE_ID_REMOTE_CONTROL\020" +
+      "\006\022 \n\034DEVICE_ID_COMBINED_INTERFACE\020\007\022\034\n\030D" +
+      "EVICE_ID_RANGE_EXTENDER\020\010\022 \n\034DEVICE_ID_M" +
+      "AINS_POWER_OUTLET\020\t\022\027\n\023DEVICE_ID_DOOR_LO" +
+      "CK\020\n\022\"\n\036DEVICE_ID_DOOR_LOCK_CONTROLLER\020\013",
+      "\022\033\n\027DEVICE_ID_SIMPLE_SENSOR\020\014\022*\n&DEVICE_" +
+      "ID_CONSUMPTION_AWARENESS_DEVICE\020\r\022\032\n\026DEV" +
+      "ICE_ID_HOME_GATEWAY\020P\022\030\n\024DEVICE_ID_SMART" +
+      "_PLUG\020Q\022\031\n\025DEVICE_ID_WHITE_GOODS\020R\022\035\n\031DE" +
+      "VICE_ID_METER_INTERFACE\020S\022!\n\035DEVICE_ID_I" +
+      "NFRARED_CONTROLLER\020T\022\032\n\025DEVICE_ID_TEST_D" +
+      "EVICE\020\377\001\022\033\n\026DEVICE_ID_ON_OFF_LIGHT\020\200\002\022\035\n" +
+      "\030DEVICE_ID_DIMMABLE_LIGHT\020\201\002\022%\n DEVICE_I" +
+      "D_COLORED_DIMMABLE_LIGHT\020\202\002\022\"\n\035DEVICE_ID" +
+      "_ON_OFF_LIGHT_SWITCH\020\203\002\022\034\n\027DEVICE_ID_DIM",
+      "MER_SWITCH\020\204\002\022\"\n\035DEVICE_ID_COLOR_DIMMER_" +
+      "SWITCH\020\205\002\022\033\n\026DEVICE_ID_LIGHT_SENSOR\020\206\002\022\037" +
+      "\n\032DEVICE_ID_OCCUPANCY_SENSOR\020\207\002\022\024\n\017DEVIC" +
+      "E_ID_SHADE\020\200\004\022\037\n\032DEVICE_ID_SHADE_CONTROL" +
+      "LER\020\201\004\022%\n DEVICE_ID_WINDOW_COVERING_DEVI" +
+      "CE\020\202\004\022)\n$DEVICE_ID_WINDOW_COVERING_CONTR" +
+      "OLLER\020\203\004\022#\n\036DEVICE_ID_HEATING_COOLING_UN" +
+      "IT\020\200\006\022\031\n\024DEVICE_ID_THERMOSTAT\020\201\006\022!\n\034DEVI" +
+      "CE_ID_TEMPERATURE_SENSOR\020\202\006\022\023\n\016DEVICE_ID" +
+      "_PUMP\020\203\006\022\036\n\031DEVICE_ID_PUMP_CONTROLLER\020\204\006",
+      "\022\036\n\031DEVICE_ID_PRESSURE_SENSOR\020\205\006\022\032\n\025DEVI" +
+      "CE_ID_FLOW_SENSOR\020\206\006\022\034\n\027DEVICE_ID_MINI_S" +
+      "PLIT_AC\020\207\006\022/\n*DEVICE_ID_IAS_CONTROL_INDI" +
+      "CATING_EQUIPMENT\020\200\010\022.\n)DEVICE_ID_IAS_ANC" +
+      "ILLARY_CONTROL_EQUIPMENT\020\201\010\022\027\n\022DEVICE_ID" +
+      "_IAS_ZONE\020\202\010\022!\n\034DEVICE_ID_IAS_WARNING_DE" +
+      "VICE\020\203\010*Z\n\nTargetType\022\035\n\031TARGET_TYPE_NOT" +
+      "_SPECIFIED\020\000\022\026\n\022TARGET_TYPE_DEVICE\020\001\022\025\n\021" +
+      "TARGET_TYPE_GROUP\020\002*\300\002\n\017MeasurementType\022" +
+      "\031\n\025MEASUREMENT_TYPE_NONE\020\000\022\033\n\027MEASUREMEN",
+      "T_TYPE_ACTIVE\020\001\022\035\n\031MEASUREMENT_TYPE_REAC" +
+      "TIVE\020\002\022\035\n\031MEASUREMENT_TYPE_APPARENT\020\004\022\034\n" +
+      "\030MEASUREMENT_TYPE_PHASE_A\020\010\022\034\n\030MEASUREME" +
+      "NT_TYPE_PHASE_B\020\020\022\034\n\030MEASUREMENT_TYPE_PH" +
+      "ASE_C\020 \022\027\n\023MEASUREMENT_TYPE_DC\020@\022\037\n\032MEAS" +
+      "UREMENT_TYPE_HARMONICS\020\200\001\022#\n\036MEASUREMENT" +
+      "_TYPE_POWER_QUALITY\020\200\002*\222\003\n\rUnitOfMeasure" +
+      "\022#\n\037UNIT_OF_MEASURE_KILO_WATT_HOURS\020\000\022(\n" +
+      "$UNIT_OF_MEASURE_CUBIC_METER_PER_HOUR\020\001\022" +
+      "\'\n#UNIT_OF_MEASURE_CUBIC_FEET_PER_HOUR\020\002",
+      "\022.\n*UNIT_OF_MEASURE_CENTUM_CUBIC_FEET_PE" +
+      "R_HOUR\020\003\022\'\n#UNIT_OF_MEASURE_US_GALLONS_P" +
+      "ER_HOUR\020\004\022(\n$UNIT_OF_MEASURE_IMP_GALLONS" +
+      "_PER_HOUR\020\005\022 \n\034UNIT_OF_MEASURE_BTU_PER_H" +
+      "OUR\020\006\022#\n\037UNIT_OF_MEASURE_LITERS_PER_HOUR" +
+      "\020\007\022\035\n\031UNIT_OF_MEASURE_GUAGE_KPA\020\010\022 \n\034UNI" +
+      "T_OF_MEASURE_ABSOLUTE_KPA\020\t*\342\003\n\010ZoneType" +
+      "\022\032\n\026ZONE_TYPE_STANDARD_CIE\020\000\022\033\n\027ZONE_TYP" +
+      "E_MOTION_SENSOR\020\r\022\034\n\030ZONE_TYPE_CONTACT_S" +
+      "WITCH\020\025\022\031\n\025ZONE_TYPE_FIRE_SENSOR\020(\022\032\n\026ZO",
+      "NE_TYPE_WATER_SENSOR\020*\022\030\n\024ZONE_TYPE_GAS_" +
+      "SENSOR\020+\022\'\n#ZONE_TYPE_PERSONAL_EMERGENCY" +
+      "_DEVICE\020,\022\'\n#ZONE_TYPE_VIBRATION_MOVEMEN" +
+      "T_SENSOR\020-\022\035\n\030ZONE_TYPE_REMOTE_CONTROL\020\217" +
+      "\002\022\026\n\021ZONE_TYPE_KEY_FOB\020\225\002\022\025\n\020ZONE_TYPE_K" +
+      "EYPAD\020\235\004\022&\n!ZONE_TYPE_STANDARD_WARNING_D" +
+      "EVICE\020\245\004\022!\n\034ZONE_TYPE_GLASS_BREAK_SENSOR" +
+      "\020\246\004\022 \n\033ZONE_TYPE_SECURITY_REPEATER\020\251\004\022!\n" +
+      "\033ZONE_TYPE_INVALID_ZONE_TYPE\020\377\377\003*]\n\010ArmG" +
+      "roup\022\022\n\016ARM_GROUP_STAY\020\000\022\023\n\017ARM_GROUP_SL",
+      "EEP\020\001\022\022\n\016ARM_GROUP_BOTH\020\002\022\024\n\020ARM_GROUP_A" +
+      "LWAYS\020\003*X\n\007ArmMode\022\023\n\017ARM_MODE_DISARM\020\000\022" +
+      "\021\n\rARM_MODE_STAY\020\001\022\022\n\016ARM_MODE_SLEEP\020\002\022\021" +
+      "\n\rARM_MODE_AWAY\020\003*\371\001\n\013PanelStatus\022\031\n\025PAN" +
+      "EL_STATUS_DISARMED\020\000\022\033\n\027PANEL_STATUS_ARM" +
+      "ED_STAY\020\001\022\034\n\030PANEL_STATUS_ARMED_SLEEP\020\002\022" +
+      "\033\n\027PANEL_STATUS_ARMED_AWAY\020\003\022\033\n\027PANEL_ST" +
+      "ATUS_EXIT_DELAY\020\004\022\034\n\030PANEL_STATUS_ENTRY_" +
+      "DELAY\020\005\022!\n\035PANEL_STATUS_NOT_READY_TO_ARM" +
+      "\020\006\022\031\n\025PANEL_STATUS_IN_ALARM\020\007*\323\001\n\013AlarmS",
+      "tatus\022\031\n\025ALARM_STATUS_NO_ALARM\020\000\022\030\n\024ALAR" +
+      "M_STATUS_BURGLAR\020\001\022\025\n\021ALARM_STATUS_FIRE\020" +
+      "\002\022\032\n\026ALARM_STATUS_EMERGENCY\020\003\022\035\n\031ALARM_S" +
+      "TATUS_POLICE_PANIC\020\004\022\033\n\027ALARM_STATUS_FIR" +
+      "E_PANIC\020\005\022 \n\034ALARM_STATUS_EMERGENCY_PANI" +
+      "C\020\006*^\n\rTimelineLevel\022\027\n\023TIMELINE_LEVEL_I" +
+      "NFO\020\000\022\032\n\026TIMELINE_LEVEL_WARNING\020\001\022\030\n\024TIM" +
+      "ELINE_LEVEL_ALARM\020\002*\210\007\n\014TimelineType\022 \n\034" +
+      "TIMELINE_TYPE_SYSTEM_STARTUP\020\000\022\027\n\023TIMELI" +
+      "NE_TYPE_ARMED\020\001\022\032\n\026TIMELINE_TYPE_DISARME",
+      "D\020\002\022&\n\"TIMELINE_TYPE_IAS_ZONE_BATTERY_LO" +
+      "W\020\003\022 \n\034TIMELINE_TYPE_IAS_ZONE_ALARM\020\004\022!\n" +
+      "\035TIMELINE_TYPE_IAS_ZONE_TAMPER\020\005\022\"\n\036TIME" +
+      "LINE_TYPE_IAS_ZONE_TROUBLE\020\006\022&\n\"TIMELINE" +
+      "_TYPE_IAS_ZONE_MAINS_FAULT\020\007\0225\n1TIMELINE" +
+      "_TYPE_IAS_ZONE_LACK_OF_SUPERVISION_REPOR" +
+      "T\020\010\022)\n%TIMELINE_TYPE_IAS_ZONE_BATTERY_DE" +
+      "FECT\020\t\022\037\n\033TIMELINE_TYPE_TOGGLE_ON_OFF\020\n\022" +
+      "&\n\"TIMELINE_TYPE_ON_OFF_STATE_CHANGED\020\013\022" +
+      " \n\034TIMELINE_TYPE_CAMERA_OFFLINE\020\014\022/\n+TIM",
+      "ELINE_TYPE_CAMERA_MOTION_DETECTION_ALARM" +
+      "\020\r\022&\n\"TIMELINE_TYPE_OVERCURRENT_DETECTED" +
+      "\020\016\022&\n\"TIMELINE_TYPE_POWER_SOURCE_CHANGED" +
+      "\020\017\022$\n TIMELINE_TYPE_SYSTEM_BATTERY_LOW\020\020" +
+      "\022\'\n#TIMELINE_TYPE_MOBILE_DATA_CONNECTED\020" +
+      "\021\022(\n$TIMELINE_TYPE_SMART_LOCK_LOW_BATTER" +
+      "Y\020\022\022%\n!TIMELINE_TYPE_SMART_LOCK_UNLOCKED" +
+      "\020\023\022\'\n#TIMELINE_TYPE_FAILED_UNLOCK_ATTEMP" +
+      "T\020\024\022)\n%TIMELINE_TYPE_USB_MODEM_STATE_CHA" +
+      "NGED\020\025\022&\n\"TIMELINE_TYPE_CONTROL_WINDOW_C",
+      "OVER\020\026*\266\001\n\016CameraSdStatus\022\035\n\031CAMERA_SD_S" +
+      "TATUS_NO_EXIST\020\000\022\035\n\031CAMERA_SD_STATUS_INS" +
+      "ERTED\020\001\022\036\n\032CAMERA_SD_STATUS_RECORDING\020\002\022" +
+      "%\n!CAMERA_SD_STATUS_FILESYSTEM_ERROR\020\003\022\037" +
+      "\n\033CAMERA_SD_STATUS_FORMATTING\020\004*H\n\016Camer" +
+      "aWlanMode\022\032\n\026CAMERA_WLAN_MODE_INFRA\020\000\022\032\n" +
+      "\026CAMERA_WLAN_MODE_ADHOC\020\001*P\n\021CameraWlanE" +
+      "ncrypt\022\034\n\030CAMERA_WLAN_ENCRYPT_OPEN\020\000\022\035\n\031" +
+      "CAMERA_WLAN_ENCRYPT_SHARE\020\001*\355\001\n\022CameraWl" +
+      "anAuthtype\022\035\n\031CAMERA_WLAN_AUTHTYPE_NONE\020",
+      "\000\022\034\n\030CAMERA_WLAN_AUTHTYPE_WEP\020\001\022%\n!CAMER" +
+      "A_WLAN_AUTHTYPE_WPA_PSK_TKIP\020\002\022$\n CAMERA" +
+      "_WLAN_AUTHTYPE_WPA_PSK_AES\020\003\022&\n\"CAMERA_W" +
+      "LAN_AUTHTYPE_WPA2_PSK_TKIP\020\004\022%\n!CAMERA_W" +
+      "LAN_AUTHTYPE_WPA2_PSK_AES\020\005*W\n\023CameraWla" +
+      "nKeyFormat\022\036\n\032CAMERA_WLAN_KEY_FORMAT_HEX" +
+      "\020\000\022 \n\034CAMERA_WLAN_KEY_FORMAT_ASCII\020\001*Z\n\023" +
+      "CameraWlanKeyLength\022 \n\034CAMERA_WLAN_KEY_L" +
+      "ENGTH_64BIT\020\000\022!\n\035CAMERA_WLAN_KEY_LENGTH_" +
+      "128BIT\020\001*\223\001\n\nActionType\022\023\n\017ACTION_TYPE_A",
+      "RM\020\000\022\035\n\031ACTION_TYPE_TOGGLE_ON_OFF\020\001\022!\n\035A" +
+      "CTION_TYPE_CONTROL_IR_DEVICE\020\002\022.\n*ACTION" +
+      "_TYPE_CONTROL_WINDOW_COVERING_DEVICE\020\003*@" +
+      "\n\013CommandType\022\030\n\024COMMAND_TYPE_BUILTIN\020\000\022" +
+      "\027\n\023COMMAND_TYPE_CUSTOM\020\001*3\n\010PlanType\022\023\n\017" +
+      "PLAN_TYPE_TIMER\020\000\022\022\n\016PLAN_TYPE_FAKE\020\001*E\n" +
+      "\007WanMode\022\022\n\016WAN_MODE_PPPOE\020\000\022\021\n\rWAN_MODE" +
+      "_DHCP\020\001\022\023\n\017WAN_MODE_STATIC\020\002*)\n\007WanPort\022" +
+      "\016\n\nWAN_PORT_1\020\001\022\016\n\nWAN_PORT_2\020\002*3\n\007WanTy" +
+      "pe\022\025\n\021WAN_TYPE_INTERNET\020\000\022\021\n\rWAN_TYPE_AR",
+      "EA\020\001*W\n\013WanMacClone\022\026\n\022WAN_MAC_CLONE_NON" +
+      "E\020\000\022\026\n\022WAN_MAC_CLONE_AUTO\020\001\022\030\n\024WAN_MAC_C" +
+      "LONE_MANUAL\020\002*,\n\010WlanPort\022\017\n\013WLAN_PORT_1" +
+      "\020\001\022\017\n\013WLAN_PORT_2\020\002*_\n\016AccessRuleMode\022\027\n" +
+      "\023ACCESS_RULE_DISABLE\020\000\022\031\n\025ACCESS_RULE_BL" +
+      "ACKLIST\020\001\022\031\n\025ACCESS_RULE_WHITELIST\020\002*G\n\t" +
+      "BandWidth\022\022\n\016BAND_WIDTH_20M\020\000\022\022\n\016BAND_WI" +
+      "DTH_40M\020\001\022\022\n\016BAND_WIDTH_80M\020\002*P\n\tSambaMo" +
+      "de\022\027\n\023SAMBA_MODE_DISABLED\020\000\022\023\n\017SAMBA_MOD" +
+      "E_USER\020\001\022\025\n\021SAMBA_MODE_PUBLIC\020\002*=\n\nAcces",
+      "sType\022\025\n\021ACCESS_TYPE_WIRED\020\001\022\030\n\024ACCESS_T" +
+      "YPE_WIRELESS\020\002*6\n\007QosMode\022\023\n\017QOS_MODE_NO" +
+      "RMAL\020\001\022\026\n\022QOS_MODE_EXCLUSIVE\020\002*S\n\013AclRul" +
+      "eMode\022\024\n\020ACL_RULE_DISABLE\020\000\022\026\n\022ACL_RULE_" +
+      "BLACKLIST\020\001\022\026\n\022ACL_RULE_WHITELIST\020\002*\177\n\tH" +
+      "ddStatus\022\034\n\030HDD_STATUS_NOT_INSTALLED\020\000\022\036" +
+      "\n\032HDD_STATUS_NOT_INITIALIZED\020\001\022\030\n\024HDD_ST" +
+      "ATUS_AVAILABLE\020\002\022\032\n\026HDD_STATUS_UNINSTALL" +
+      "ED\020\003*E\n\017NetworkProtocol\022\030\n\024NETWORK_PROTO" +
+      "COL_TCP\020\000\022\030\n\024NETWORK_PROTOCOL_UDP\020\001*v\n\023S",
+      "ignalStrengthLevel\022\035\n\031SIGNAL_STRENGTH_LE" +
+      "VEL_LOW\020\000\022 \n\034SIGNAL_STRENGTH_LEVEL_MIDDL" +
+      "E\020\001\022\036\n\032SIGNAL_STRENGTH_LEVEL_HIGH\020\002*E\n\nP" +
+      "PPoEState\022\034\n\030PPPOE_STATE_DISCONNECTED\020\000\022" +
+      "\031\n\025PPPOE_STATE_CONNECTED\020\001*\206\001\n\013QosPriori" +
+      "ty\022\030\n\024QOS_PRIORITY_HIGHEST\020\000\022\025\n\021QOS_PRIO" +
+      "RITY_HIGH\020\001\022\027\n\023QOS_PRIORITY_MEDIUM\020\002\022\024\n\020" +
+      "QOS_PRIORITY_LOW\020\003\022\027\n\023QOS_PRIORITY_LOWES" +
+      "T\020\004*)\n\005CpuId\022\017\n\013CPU_ID_CPU0\020\000\022\017\n\013CPU_ID_" +
+      "CPU1\020\001*B\n\007VpnType\022\021\n\rVPN_TYPE_NONE\020\000\022\021\n\r",
+      "VPN_TYPE_PPTP\020\001\022\021\n\rVPN_TYPE_L2TP\020\002*r\n\022In" +
+      "fraredMatchLevel\022\034\n\030INFRARED_MATCH_LEVEL" +
+      "_LOW\020\000\022\037\n\033INFRARED_MATCH_LEVEL_MEDIUM\020\001\022" +
+      "\035\n\031INFRARED_MATCH_LEVEL_HIGH\020\002*\301\002\n\022Infra" +
+      "redDeviceType\022(\n$INFRARED_DEVICE_TYPE_AI" +
+      "R_CONDITIONER\020\000\022#\n\037INFRARED_DEVICE_TYPE_" +
+      "DVD_PLAYER\020\001\022&\n\"INFRARED_DEVICE_TYPE_IP_" +
+      "TELEVISION\020\002\022#\n\037INFRARED_DEVICE_TYPE_SET" +
+      "TOP_BOX\020\003\022#\n\037INFRARED_DEVICE_TYPE_TELEVI" +
+      "SION\020\004\022%\n!INFRARED_DEVICE_TYPE_ELECTRIC_",
+      "FAN\020\005\022\"\n\036INFRARED_DEVICE_TYPE_PROJECTOR\020" +
+      "\006\022\037\n\033INFRARED_DEVICE_TYPE_CUSTOM\020\007*\303\001\n\022I" +
+      "nfraredMatchError\022 \n\034INFRARED_MATCH_ERRO" +
+      "R_SUCCESS\020\000\022!\n\035INFRARED_MATCH_ERROR_NO_M" +
+      "ATCH\020\001\022\"\n\036INFRARED_MATCH_ERROR_CANCELLED" +
+      "\020\002\022\"\n\036INFRARED_MATCH_ERROR_TIMED_OUT\020\003\022 " +
+      "\n\034INFRARED_MATCH_ERROR_FAILURE\020\004*\270\001\n\031Air" +
+      "ConditionerBlowingRate\022%\n!AIR_CONDITIONE" +
+      "R_BLOWING_RATE_AUTO\020\000\022$\n AIR_CONDITIONER" +
+      "_BLOWING_RATE_LOW\020\001\022\'\n#AIR_CONDITIONER_B",
+      "LOWING_RATE_MEDIUM\020\002\022%\n!AIR_CONDITIONER_" +
+      "BLOWING_RATE_HIGH\020\003*\200\001\n\025AirConditionerWi" +
+      "ndDir\022\037\n\033AIR_CONDITIONER_WIND_DIR_UP\020\000\022#" +
+      "\n\037AIR_CONDITIONER_WIND_DIR_MIDDLE\020\001\022!\n\035A" +
+      "IR_CONDITIONER_WIND_DIR_DOWN\020\002*\210\002\n\021AirCo" +
+      "nditionerKey\022\035\n\031AIR_CONDITIONER_KEY_POWE" +
+      "R\020\000\022\034\n\030AIR_CONDITIONER_KEY_MODE\020\001\022$\n AIR" +
+      "_CONDITIONER_KEY_BLOWING_RATE\020\002\022\'\n#AIR_C" +
+      "ONDITIONER_KEY_MANUAL_WIND_DIR\020\003\022%\n!AIR_" +
+      "CONDITIONER_KEY_AUTO_WIND_DIR\020\004\022\036\n\032AIR_C",
+      "ONDITIONER_KEY_TEMPUP\020\005\022 \n\034AIR_CONDITION" +
+      "ER_KEY_TEMPDOWN\020\006*\257\001\n\022AirConditionerMode" +
+      "\022\035\n\031AIR_CONDITIONER_MODE_AUTO\020\000\022\037\n\033AIR_C" +
+      "ONDITIONER_MODE_FREEZE\020\001\022\034\n\030AIR_CONDITIO" +
+      "NER_MODE_DRY\020\002\022\034\n\030AIR_CONDITIONER_MODE_F" +
+      "AN\020\003\022\035\n\031AIR_CONDITIONER_MODE_HEAT\020\004*\320\003\n\020" +
+      "DvdPlayerCommand\022\023\n\017DVD_PLAYER_LEFT\020\000\022\021\n" +
+      "\rDVD_PLAYER_UP\020\001\022\021\n\rDVD_PLAYER_OK\020\002\022\023\n\017D" +
+      "VD_PLAYER_DOWN\020\003\022\024\n\020DVD_PLAYER_RIGHT\020\004\022\024" +
+      "\n\020DVD_PLAYER_POWER\020\005\022\023\n\017DVD_PLAYER_MUTE\020",
+      "\006\022\033\n\027DVD_PLAYER_FAST_REVERSE\020\007\022\023\n\017DVD_PL" +
+      "AYER_PLAY\020\010\022\035\n\031DVD_PLAYER_FAST_FORWARDED" +
+      "\020\t\022\031\n\025DVD_PLAYER_LAST_PIECE\020\n\022\023\n\017DVD_PLA" +
+      "YER_STOP\020\013\022\031\n\025DVD_PLAYER_NEXT_PIECE\020\014\022\027\n" +
+      "\023DVD_PLAYER_STANDARD\020\r\022\024\n\020DVD_PLAYER_PAU" +
+      "SE\020\016\022\024\n\020DVD_PLAYER_TITLE\020\017\022\036\n\032DVD_PLAYER" +
+      "_SWITCH_POSITION\020\020\022\023\n\017DVD_PLAYER_MENU\020\021\022" +
+      "\025\n\021DVD_PLAYER_RETURN\020\022*\333\004\n\023IpTelevisionC" +
+      "ommand\022\027\n\023IP_TELEVISION_POWER\020\000\022\026\n\022IP_TE" +
+      "LEVISION_MUTE\020\001\022\030\n\024IP_TELEVISION_VOLUME\020",
+      "\002\022\"\n\036IP_TELEVISION_VOLUME_REDUCTION\020\003\022&\n" +
+      "\"IP_TELEVISION_CHANNEL_PLUS_OR_HOME\020\004\022+\n" +
+      "\'IP_TELEVISION_CHANNEL_REDUCTION_OR_MENU" +
+      "\020\005\022\024\n\020IP_TELEVISION_UP\020\006\022\026\n\022IP_TELEVISIO" +
+      "N_LEFT\020\007\022\024\n\020IP_TELEVISION_OK\020\010\022\027\n\023IP_TEL" +
+      "EVISION_RIGHT\020\t\022\026\n\022IP_TELEVISION_DOWN\020\n\022" +
+      "\037\n\033IP_TELEVISION_PLAY_OR_PAUSE\020\013\022\023\n\017IP_T" +
+      "ELEVISION_1\020\014\022\023\n\017IP_TELEVISION_2\020\r\022\023\n\017IP" +
+      "_TELEVISION_3\020\016\022\023\n\017IP_TELEVISION_4\020\017\022\023\n\017" +
+      "IP_TELEVISION_5\020\020\022\023\n\017IP_TELEVISION_6\020\021\022\023",
+      "\n\017IP_TELEVISION_7\020\022\022\023\n\017IP_TELEVISION_8\020\023" +
+      "\022\023\n\017IP_TELEVISION_9\020\024\022\023\n\017IP_TELEVISION_0" +
+      "\020\025\022\030\n\024IP_TELEVISION_RETURN\020\026*\202\004\n\020SettopB" +
+      "oxCommand\022\026\n\022SETTOP_BOX_STANDBY\020\000\022\020\n\014SET" +
+      "TOP_BOX_1\020\001\022\020\n\014SETTOP_BOX_2\020\002\022\020\n\014SETTOP_" +
+      "BOX_3\020\003\022\020\n\014SETTOP_BOX_4\020\004\022\020\n\014SETTOP_BOX_" +
+      "5\020\005\022\020\n\014SETTOP_BOX_6\020\006\022\020\n\014SETTOP_BOX_7\020\007\022" +
+      "\020\n\014SETTOP_BOX_8\020\010\022\020\n\014SETTOP_BOX_9\020\t\022\024\n\020S" +
+      "ETTOP_BOX_GUIDE\020\n\022\020\n\014SETTOP_BOX_0\020\013\022\025\n\021S" +
+      "ETTOP_BOX_RETURN\020\014\022\021\n\rSETTOP_BOX_UP\020\r\022\023\n",
+      "\017SETTOP_BOX_LEFT\020\016\022\026\n\022SETTOP_BOX_CONFIRM" +
+      "\020\017\022\024\n\020SETTOP_BOX_RIGHT\020\020\022\023\n\017SETTOP_BOX_D" +
+      "OWN\020\021\022\025\n\021SETTOP_BOX_VOLUME\020\022\022\037\n\033SETTOP_B" +
+      "OX_VOLUME_REDUCTION\020\023\022\033\n\027SETTOP_BOX_CHAN" +
+      "NEL_PLUS\020\024\022 \n\034SETTOP_BOX_CHANNEL_REDUCTI" +
+      "ON\020\025\022\023\n\017SETTOP_BOX_MENU\020\026*\262\004\n\021Television" +
+      "Command\022\037\n\033TELEVISION_VOLUME_REDUCTION\020\000" +
+      "\022\033\n\027TELEVISION_CHANNEL_PLUS\020\001\022\023\n\017TELEVIS" +
+      "ION_MENU\020\002\022 \n\034TELEVISION_CHANNEL_REDUCTI" +
+      "ON\020\003\022\025\n\021TELEVISION_VOLUME\020\004\022\024\n\020TELEVISIO",
+      "N_POWER\020\005\022\023\n\017TELEVISION_MUTE\020\006\022\020\n\014TELEVI" +
+      "SION_1\020\007\022\020\n\014TELEVISION_2\020\010\022\020\n\014TELEVISION" +
+      "_3\020\t\022\020\n\014TELEVISION_4\020\n\022\020\n\014TELEVISION_5\020\013" +
+      "\022\020\n\014TELEVISION_6\020\014\022\020\n\014TELEVISION_7\020\r\022\020\n\014" +
+      "TELEVISION_8\020\016\022\020\n\014TELEVISION_9\020\017\022\032\n\026TELE" +
+      "VISION_COMBINATION\020\020\022\020\n\014TELEVISION_0\020\021\022\024" +
+      "\n\020TELEVISION_AV_TV\020\022\022\025\n\021TELEVISION_RETUR" +
+      "N\020\023\022\026\n\022TELEVISION_CONFIRM\020\024\022\021\n\rTELEVISIO" +
+      "N_UP\020\025\022\023\n\017TELEVISION_LEFT\020\026\022\024\n\020TELEVISIO" +
+      "N_RIGHT\020\027\022\023\n\017TELEVISION_DOWN\020\030*\253\004\n\022Elect",
+      "ricFanCommand\022\027\n\023ELECTRIC_FAN_ON_OFF\020\000\022\036" +
+      "\n\032ELECTRIC_FAN_WIND_VELOCITY\020\001\022\026\n\022ELECTR" +
+      "IC_FAN_SWING\020\002\022\025\n\021ELECTRIC_FAN_MODE\020\003\022\033\n" +
+      "\027ELECTRIC_FAN_FIXED_TIME\020\004\022\026\n\022ELECTRIC_F" +
+      "AN_LIGHT\020\005\022\026\n\022ELECTRIC_FAN_ANION\020\006\022\022\n\016EL" +
+      "ECTRIC_FAN_1\020\007\022\022\n\016ELECTRIC_FAN_2\020\010\022\022\n\016EL" +
+      "ECTRIC_FAN_3\020\t\022\022\n\016ELECTRIC_FAN_4\020\n\022\022\n\016EL" +
+      "ECTRIC_FAN_5\020\013\022\022\n\016ELECTRIC_FAN_6\020\014\022\022\n\016EL" +
+      "ECTRIC_FAN_7\020\r\022\022\n\016ELECTRIC_FAN_8\020\016\022\022\n\016EL" +
+      "ECTRIC_FAN_9\020\017\022\026\n\022ELECTRIC_FAN_SLEEP\020\020\022\027",
+      "\n\023ELECTRIC_FAN_FREEZE\020\021\022\035\n\031ELECTRIC_FAN_" +
+      "BLOWING_RATE\020\022\022\034\n\030ELECTRIC_FAN_BLOWING_L" +
+      "OW\020\023\022\037\n\033ELECTRIC_FAN_BLOWING_MEDIUM\020\024\022\035\n" +
+      "\031ELECTRIC_FAN_BLOWING_HIGH\020\025*\230\004\n\020Project" +
+      "orCommand\022\026\n\022PROJECTOR_POWER_ON\020\000\022\027\n\023PRO" +
+      "JECTOR_POWER_OFF\020\001\022\026\n\022PROJECTOR_COMPUTER" +
+      "\020\002\022\023\n\017PROJECTOR_VIDEO\020\003\022\033\n\027PROJECTOR_SIG" +
+      "NAL_SOURCE\020\004\022\027\n\023PROJECTOR_ZOOM_PLUS\020\005\022\034\n" +
+      "\030PROJECTOR_ZOOM_REDUCTION\020\006\022\030\n\024PROJECTOR" +
+      "_IMAGE_PLUS\020\007\022\035\n\031PROJECTOR_IMAGE_REDUCTI",
+      "ON\020\010\022\022\n\016PROJECTOR_MENU\020\t\022\025\n\021PROJECTOR_CO" +
+      "NFIRM\020\n\022\020\n\014PROJECTOR_UP\020\013\022\022\n\016PROJECTOR_L" +
+      "EFT\020\014\022\023\n\017PROJECTOR_RIGHT\020\r\022\022\n\016PROJECTOR_" +
+      "DOWN\020\016\022\022\n\016PROJECTOR_QUIT\020\017\022\024\n\020PROJECTOR_" +
+      "VOLUME\020\020\022\036\n\032PROJECTOR_VOLUME_REDUCTION\020\021" +
+      "\022\022\n\016PROJECTOR_MUTE\020\022\022\022\n\016PROJECTOR_AUTO\020\023" +
+      "\022\023\n\017PROJECTOR_PAUSE\020\024\022\030\n\024PROJECTOR_BRIGH" +
+      "TNESS\020\025*\274\002\n\tAlarmType\022\026\n\022ALARM_TYPE_PRIM" +
+      "ARY\020\001\022\030\n\024ALARM_TYPE_SECONDARY\020\002\022\025\n\021ALARM" +
+      "_TYPE_TAMPER\020\004\022\032\n\026ALARM_TYPE_LOW_BATTERY",
+      "\020\010\022\026\n\022ALARM_TYPE_TROUBLE\020@\022\033\n\026ALARM_TYPE" +
+      "_MAINS_FAULT\020\200\001\022\036\n\031ALARM_TYPE_BATTERY_DE" +
+      "FECT\020\200\004\022+\n%ALARM_TYPE_LACK_OF_SUPERVISIO" +
+      "N_REPORT\020\200\200\004\022\037\n\031ALARM_TYPE_CAMERA_OFFLIN" +
+      "E\020\201\200\004\022\'\n!ALARM_TYPE_CAMERA_MOTION_DETECT" +
+      "ED\020\202\200\004*n\n\021WindowCoverAction\022\034\n\030WINDOW_CO" +
+      "VER_ACTION_OPEN\020\000\022\035\n\031WINDOW_COVER_ACTION" +
+      "_CLOSE\020\001\022\034\n\030WINDOW_COVER_ACTION_STOP\020\002"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -116912,7 +119259,7 @@ public final class Models {
     internal_static_mrtech_smarthome_rpc_MobilePhoneConfig_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_MobilePhoneConfig_descriptor,
-        new java.lang.String[] { "EventLevel", "AllowSms", "AllowDialing", "AllowData", "Numbers", "EnableNat", });
+        new java.lang.String[] { "EventLevel", "AllowSms", "AllowDialing", "AllowData", "Numbers", "EnableNat", "PreferSms", });
     internal_static_mrtech_smarthome_rpc_AccountQuery_descriptor =
       getDescriptor().getMessageTypes().get(15);
     internal_static_mrtech_smarthome_rpc_AccountQuery_fieldAccessorTable = new
@@ -116924,7 +119271,7 @@ public final class Models {
     internal_static_mrtech_smarthome_rpc_Account_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_Account_descriptor,
-        new java.lang.String[] { "Id", "Name", "ApiKey", "LastActivity", "Passphrase", "PassphraseNotSet", "AccountGroup", });
+        new java.lang.String[] { "Id", "Name", "ApiKey", "LastActivity", "Passphrase", "PassphraseNotSet", "AccountGroup", "ImageId", });
     internal_static_mrtech_smarthome_rpc_Device_descriptor =
       getDescriptor().getMessageTypes().get(17);
     internal_static_mrtech_smarthome_rpc_Device_fieldAccessorTable = new
@@ -116936,7 +119283,7 @@ public final class Models {
     internal_static_mrtech_smarthome_rpc_ZigBeeDevice_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_ZigBeeDevice_descriptor,
-        new java.lang.String[] { "Id", "Address", "MacAddress", "LinkQuality", "Endpoint", "DeviceId", "ZclVersion", "ApplicationVersion", "StackVersion", "HardwareVersion", "ManufacturerName", "ModelIdentifier", "DateCode", "PowerSource", "SecondaryPowerSource", "Online", });
+        new java.lang.String[] { "Id", "Address", "MacAddress", "LinkQuality", "Endpoint", "DeviceId", "ZclVersion", "ApplicationVersion", "StackVersion", "HardwareVersion", "ManufacturerName", "ModelIdentifier", "DateCode", "PowerSource", "SecondaryPowerSource", "Online", "MasterName", });
     internal_static_mrtech_smarthome_rpc_OnOffCluster_descriptor =
       getDescriptor().getMessageTypes().get(19);
     internal_static_mrtech_smarthome_rpc_OnOffCluster_fieldAccessorTable = new
@@ -117110,7 +119457,7 @@ public final class Models {
     internal_static_mrtech_smarthome_rpc_Group_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_Group_descriptor,
-        new java.lang.String[] { "Id", "Name", });
+        new java.lang.String[] { "Id", "Name", "ImageId", });
     internal_static_mrtech_smarthome_rpc_GroupQuery_descriptor =
       getDescriptor().getMessageTypes().get(48);
     internal_static_mrtech_smarthome_rpc_GroupQuery_fieldAccessorTable = new
@@ -117351,6 +119698,18 @@ public final class Models {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_Fingerprint_descriptor,
         new java.lang.String[] { "Id", "SmartLockId", "LocalId", "AccountId", "Account", });
+    internal_static_mrtech_smarthome_rpc_AlarmInfo_descriptor =
+      getDescriptor().getMessageTypes().get(88);
+    internal_static_mrtech_smarthome_rpc_AlarmInfo_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_AlarmInfo_descriptor,
+        new java.lang.String[] { "Device", "Type", });
+    internal_static_mrtech_smarthome_rpc_Image_descriptor =
+      getDescriptor().getMessageTypes().get(89);
+    internal_static_mrtech_smarthome_rpc_Image_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_Image_descriptor,
+        new java.lang.String[] { "Id", "Type", "Data", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
