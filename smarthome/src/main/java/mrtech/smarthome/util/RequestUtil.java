@@ -1055,12 +1055,11 @@ public class RequestUtil {
         return requestBuilder.build();
     }
 
-    public static Request sendIrCommand(int id, Models.InfraredCommand command) {
+    public static Request sendIrCommand(int id, Models.InfraredCommand command,boolean repetitive) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SEND_IR_COMMAND);
         requestBuilder.setRequestId(RequestType.SEND_IR_COMMAND_VALUE + createId());
-
-        requestBuilder.setExtension(Messages.SendIrCommandRequest.request, Messages.SendIrCommandRequest.newBuilder().setId(id).setCommand(command).build());
+        requestBuilder.setExtension(Messages.SendIrCommandRequest.request, Messages.SendIrCommandRequest.newBuilder().setRepetitive(repetitive).setId(id).setCommand(command).build());
 
         return requestBuilder.build();
     }
@@ -1096,7 +1095,6 @@ public class RequestUtil {
         requestBuilder.setRequestId(RequestType.COLLECT_DIAGNOSTIC_INFO_VALUE + createId());
         return requestBuilder.build();
     }
-
 
 
 }

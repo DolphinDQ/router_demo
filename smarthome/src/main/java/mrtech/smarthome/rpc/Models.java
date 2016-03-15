@@ -16,6 +16,7 @@ public final class Models {
     registry.add(mrtech.smarthome.rpc.Models.SmartLock.detail);
     registry.add(mrtech.smarthome.rpc.Models.CameraDevice.detail);
     registry.add(mrtech.smarthome.rpc.Models.InfraredDevice.detail);
+    registry.add(mrtech.smarthome.rpc.Models.LocalNetworkDevice.detail);
   }
   /**
    * Protobuf enum {@code mrtech.smarthome.rpc.SeverityLevel}
@@ -1547,6 +1548,10 @@ public final class Models {
      * </pre>
      */
     DEVICE_TYPE_INFRARED(2, 2),
+    /**
+     * <code>DEVICE_TYPE_LOCAL_NETWORK = 3;</code>
+     */
+    DEVICE_TYPE_LOCAL_NETWORK(3, 3),
     ;
 
     /**
@@ -1573,6 +1578,10 @@ public final class Models {
      * </pre>
      */
     public static final int DEVICE_TYPE_INFRARED_VALUE = 2;
+    /**
+     * <code>DEVICE_TYPE_LOCAL_NETWORK = 3;</code>
+     */
+    public static final int DEVICE_TYPE_LOCAL_NETWORK_VALUE = 3;
 
 
     public final int getNumber() { return value; }
@@ -1582,6 +1591,7 @@ public final class Models {
         case 0: return DEVICE_TYPE_ZIGBEE;
         case 1: return DEVICE_TYPE_CAMERA;
         case 2: return DEVICE_TYPE_INFRARED;
+        case 3: return DEVICE_TYPE_LOCAL_NETWORK;
         default: return null;
       }
     }
@@ -9603,6 +9613,197 @@ public final class Models {
     }
 
     // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.WindowCoverAction)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.DeviceClass}
+   */
+  public enum DeviceClass
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>DEVICE_CLASS_UNKNOWN = 0;</code>
+     */
+    DEVICE_CLASS_UNKNOWN(0, 0),
+    ;
+
+    /**
+     * <code>DEVICE_CLASS_UNKNOWN = 0;</code>
+     */
+    public static final int DEVICE_CLASS_UNKNOWN_VALUE = 0;
+
+
+    public final int getNumber() { return value; }
+
+    public static DeviceClass valueOf(int value) {
+      switch (value) {
+        case 0: return DEVICE_CLASS_UNKNOWN;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<DeviceClass>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<DeviceClass>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<DeviceClass>() {
+            public DeviceClass findValueByNumber(int number) {
+              return DeviceClass.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(67);
+    }
+
+    private static final DeviceClass[] VALUES = values();
+
+    public static DeviceClass valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private DeviceClass(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.DeviceClass)
+  }
+
+  /**
+   * Protobuf enum {@code mrtech.smarthome.rpc.NetworkType}
+   */
+  public enum NetworkType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>NETWORK_TYPE_UNKNOWN = 0;</code>
+     */
+    NETWORK_TYPE_UNKNOWN(0, 0),
+    /**
+     * <code>NETWORK_TYPE_LAN = 1;</code>
+     */
+    NETWORK_TYPE_LAN(1, 1),
+    /**
+     * <code>NETWORK_TYPE_WLAN_24GHZ = 2;</code>
+     */
+    NETWORK_TYPE_WLAN_24GHZ(2, 2),
+    /**
+     * <code>NETWORK_TYPE_WLAN_24GHZ_GUEST = 3;</code>
+     */
+    NETWORK_TYPE_WLAN_24GHZ_GUEST(3, 3),
+    /**
+     * <code>NETWORK_TYPE_WLAN_58GHZ = 4;</code>
+     */
+    NETWORK_TYPE_WLAN_58GHZ(4, 4),
+    /**
+     * <code>NETWORK_TYPE_WLAN_58GHZ_GUEST = 5;</code>
+     */
+    NETWORK_TYPE_WLAN_58GHZ_GUEST(5, 5),
+    ;
+
+    /**
+     * <code>NETWORK_TYPE_UNKNOWN = 0;</code>
+     */
+    public static final int NETWORK_TYPE_UNKNOWN_VALUE = 0;
+    /**
+     * <code>NETWORK_TYPE_LAN = 1;</code>
+     */
+    public static final int NETWORK_TYPE_LAN_VALUE = 1;
+    /**
+     * <code>NETWORK_TYPE_WLAN_24GHZ = 2;</code>
+     */
+    public static final int NETWORK_TYPE_WLAN_24GHZ_VALUE = 2;
+    /**
+     * <code>NETWORK_TYPE_WLAN_24GHZ_GUEST = 3;</code>
+     */
+    public static final int NETWORK_TYPE_WLAN_24GHZ_GUEST_VALUE = 3;
+    /**
+     * <code>NETWORK_TYPE_WLAN_58GHZ = 4;</code>
+     */
+    public static final int NETWORK_TYPE_WLAN_58GHZ_VALUE = 4;
+    /**
+     * <code>NETWORK_TYPE_WLAN_58GHZ_GUEST = 5;</code>
+     */
+    public static final int NETWORK_TYPE_WLAN_58GHZ_GUEST_VALUE = 5;
+
+
+    public final int getNumber() { return value; }
+
+    public static NetworkType valueOf(int value) {
+      switch (value) {
+        case 0: return NETWORK_TYPE_UNKNOWN;
+        case 1: return NETWORK_TYPE_LAN;
+        case 2: return NETWORK_TYPE_WLAN_24GHZ;
+        case 3: return NETWORK_TYPE_WLAN_24GHZ_GUEST;
+        case 4: return NETWORK_TYPE_WLAN_58GHZ;
+        case 5: return NETWORK_TYPE_WLAN_58GHZ_GUEST;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<NetworkType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<NetworkType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<NetworkType>() {
+            public NetworkType findValueByNumber(int number) {
+              return NetworkType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.getDescriptor().getEnumTypes().get(68);
+    }
+
+    private static final NetworkType[] VALUES = values();
+
+    public static NetworkType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private NetworkType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:mrtech.smarthome.rpc.NetworkType)
   }
 
   public interface SystemConfigurationOrBuilder extends
@@ -117890,6 +118091,1659 @@ public final class Models {
     // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.Image)
   }
 
+  public interface LocalNetworkDeviceOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mrtech.smarthome.rpc.LocalNetworkDevice)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional int32 id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the device stored in database.
+     * </pre>
+     */
+    boolean hasId();
+    /**
+     * <code>optional int32 id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the device stored in database.
+     * </pre>
+     */
+    int getId();
+
+    /**
+     * <code>optional bytes mac_address = 2;</code>
+     *
+     * <pre>
+     * 48 bit Media Access Control address of the device.
+     * </pre>
+     */
+    boolean hasMacAddress();
+    /**
+     * <code>optional bytes mac_address = 2;</code>
+     *
+     * <pre>
+     * 48 bit Media Access Control address of the device.
+     * </pre>
+     */
+    com.google.protobuf.ByteString getMacAddress();
+
+    /**
+     * <code>repeated bytes ip_address = 3;</code>
+     *
+     * <pre>
+     * IP Addresses that associated with the device.
+     * </pre>
+     */
+    java.util.List<com.google.protobuf.ByteString> getIpAddressList();
+    /**
+     * <code>repeated bytes ip_address = 3;</code>
+     *
+     * <pre>
+     * IP Addresses that associated with the device.
+     * </pre>
+     */
+    int getIpAddressCount();
+    /**
+     * <code>repeated bytes ip_address = 3;</code>
+     *
+     * <pre>
+     * IP Addresses that associated with the device.
+     * </pre>
+     */
+    com.google.protobuf.ByteString getIpAddress(int index);
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.NetworkType network_type = 4;</code>
+     *
+     * <pre>
+     * How is the device accessing the network.
+     * </pre>
+     */
+    boolean hasNetworkType();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.NetworkType network_type = 4;</code>
+     *
+     * <pre>
+     * How is the device accessing the network.
+     * </pre>
+     */
+    mrtech.smarthome.rpc.Models.NetworkType getNetworkType();
+
+    /**
+     * <code>optional .mrtech.smarthome.rpc.DeviceClass class = 5;</code>
+     *
+     * <pre>
+     * Reserved for future use.
+     * </pre>
+     */
+    boolean hasClass_();
+    /**
+     * <code>optional .mrtech.smarthome.rpc.DeviceClass class = 5;</code>
+     *
+     * <pre>
+     * Reserved for future use.
+     * </pre>
+     */
+    mrtech.smarthome.rpc.Models.DeviceClass getClass_();
+
+    /**
+     * <code>optional uint64 tx_bytes = 6;</code>
+     *
+     * <pre>
+     * Total transmitted traffic amount (bytes).
+     * </pre>
+     */
+    boolean hasTxBytes();
+    /**
+     * <code>optional uint64 tx_bytes = 6;</code>
+     *
+     * <pre>
+     * Total transmitted traffic amount (bytes).
+     * </pre>
+     */
+    long getTxBytes();
+
+    /**
+     * <code>optional uint64 rx_bytes = 7;</code>
+     *
+     * <pre>
+     * Total received traffic amount (bytes).
+     * </pre>
+     */
+    boolean hasRxBytes();
+    /**
+     * <code>optional uint64 rx_bytes = 7;</code>
+     *
+     * <pre>
+     * Total received traffic amount (bytes).
+     * </pre>
+     */
+    long getRxBytes();
+
+    /**
+     * <code>optional uint32 tx_rate = 8;</code>
+     *
+     * <pre>
+     * Average TX rate (bits per second).
+     * </pre>
+     */
+    boolean hasTxRate();
+    /**
+     * <code>optional uint32 tx_rate = 8;</code>
+     *
+     * <pre>
+     * Average TX rate (bits per second).
+     * </pre>
+     */
+    int getTxRate();
+
+    /**
+     * <code>optional uint32 rx_rate = 9;</code>
+     *
+     * <pre>
+     * Average RX rate (bits per second).
+     * </pre>
+     */
+    boolean hasRxRate();
+    /**
+     * <code>optional uint32 rx_rate = 9;</code>
+     *
+     * <pre>
+     * Average RX rate (bits per second).
+     * </pre>
+     */
+    int getRxRate();
+
+    /**
+     * <code>optional uint64 first_seen = 10;</code>
+     *
+     * <pre>
+     * UNIX timestamp (milliseconds resolution) when the device was discovered.
+     * </pre>
+     */
+    boolean hasFirstSeen();
+    /**
+     * <code>optional uint64 first_seen = 10;</code>
+     *
+     * <pre>
+     * UNIX timestamp (milliseconds resolution) when the device was discovered.
+     * </pre>
+     */
+    long getFirstSeen();
+
+    /**
+     * <code>optional uint64 last_seen = 11;</code>
+     *
+     * <pre>
+     * UNIX timestamp (milliseconds resolution) the device had its last transmission.
+     * </pre>
+     */
+    boolean hasLastSeen();
+    /**
+     * <code>optional uint64 last_seen = 11;</code>
+     *
+     * <pre>
+     * UNIX timestamp (milliseconds resolution) the device had its last transmission.
+     * </pre>
+     */
+    long getLastSeen();
+  }
+  /**
+   * Protobuf type {@code mrtech.smarthome.rpc.LocalNetworkDevice}
+   */
+  public static final class LocalNetworkDevice extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mrtech.smarthome.rpc.LocalNetworkDevice)
+      LocalNetworkDeviceOrBuilder {
+    // Use LocalNetworkDevice.newBuilder() to construct.
+    private LocalNetworkDevice(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private LocalNetworkDevice(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final LocalNetworkDevice defaultInstance;
+    public static LocalNetworkDevice getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public LocalNetworkDevice getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private LocalNetworkDevice(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              macAddress_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                ipAddress_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              ipAddress_.add(input.readBytes());
+              break;
+            }
+            case 32: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.NetworkType value = mrtech.smarthome.rpc.Models.NetworkType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(4, rawValue);
+              } else {
+                bitField0_ |= 0x00000004;
+                networkType_ = value;
+              }
+              break;
+            }
+            case 40: {
+              int rawValue = input.readEnum();
+              mrtech.smarthome.rpc.Models.DeviceClass value = mrtech.smarthome.rpc.Models.DeviceClass.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(5, rawValue);
+              } else {
+                bitField0_ |= 0x00000008;
+                class__ = value;
+              }
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000010;
+              txBytes_ = input.readUInt64();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000020;
+              rxBytes_ = input.readUInt64();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000040;
+              txRate_ = input.readUInt32();
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000080;
+              rxRate_ = input.readUInt32();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000100;
+              firstSeen_ = input.readUInt64();
+              break;
+            }
+            case 88: {
+              bitField0_ |= 0x00000200;
+              lastSeen_ = input.readUInt64();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          ipAddress_ = java.util.Collections.unmodifiableList(ipAddress_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              mrtech.smarthome.rpc.Models.LocalNetworkDevice.class, mrtech.smarthome.rpc.Models.LocalNetworkDevice.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<LocalNetworkDevice> PARSER =
+        new com.google.protobuf.AbstractParser<LocalNetworkDevice>() {
+      public LocalNetworkDevice parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new LocalNetworkDevice(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<LocalNetworkDevice> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>optional int32 id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the device stored in database.
+     * </pre>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int32 id = 1;</code>
+     *
+     * <pre>
+     * Unique identifier of the device stored in database.
+     * </pre>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    public static final int MAC_ADDRESS_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString macAddress_;
+    /**
+     * <code>optional bytes mac_address = 2;</code>
+     *
+     * <pre>
+     * 48 bit Media Access Control address of the device.
+     * </pre>
+     */
+    public boolean hasMacAddress() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional bytes mac_address = 2;</code>
+     *
+     * <pre>
+     * 48 bit Media Access Control address of the device.
+     * </pre>
+     */
+    public com.google.protobuf.ByteString getMacAddress() {
+      return macAddress_;
+    }
+
+    public static final int IP_ADDRESS_FIELD_NUMBER = 3;
+    private java.util.List<com.google.protobuf.ByteString> ipAddress_;
+    /**
+     * <code>repeated bytes ip_address = 3;</code>
+     *
+     * <pre>
+     * IP Addresses that associated with the device.
+     * </pre>
+     */
+    public java.util.List<com.google.protobuf.ByteString>
+        getIpAddressList() {
+      return ipAddress_;
+    }
+    /**
+     * <code>repeated bytes ip_address = 3;</code>
+     *
+     * <pre>
+     * IP Addresses that associated with the device.
+     * </pre>
+     */
+    public int getIpAddressCount() {
+      return ipAddress_.size();
+    }
+    /**
+     * <code>repeated bytes ip_address = 3;</code>
+     *
+     * <pre>
+     * IP Addresses that associated with the device.
+     * </pre>
+     */
+    public com.google.protobuf.ByteString getIpAddress(int index) {
+      return ipAddress_.get(index);
+    }
+
+    public static final int NETWORK_TYPE_FIELD_NUMBER = 4;
+    private mrtech.smarthome.rpc.Models.NetworkType networkType_;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.NetworkType network_type = 4;</code>
+     *
+     * <pre>
+     * How is the device accessing the network.
+     * </pre>
+     */
+    public boolean hasNetworkType() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.NetworkType network_type = 4;</code>
+     *
+     * <pre>
+     * How is the device accessing the network.
+     * </pre>
+     */
+    public mrtech.smarthome.rpc.Models.NetworkType getNetworkType() {
+      return networkType_;
+    }
+
+    public static final int CLASS_FIELD_NUMBER = 5;
+    private mrtech.smarthome.rpc.Models.DeviceClass class__;
+    /**
+     * <code>optional .mrtech.smarthome.rpc.DeviceClass class = 5;</code>
+     *
+     * <pre>
+     * Reserved for future use.
+     * </pre>
+     */
+    public boolean hasClass_() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .mrtech.smarthome.rpc.DeviceClass class = 5;</code>
+     *
+     * <pre>
+     * Reserved for future use.
+     * </pre>
+     */
+    public mrtech.smarthome.rpc.Models.DeviceClass getClass_() {
+      return class__;
+    }
+
+    public static final int TX_BYTES_FIELD_NUMBER = 6;
+    private long txBytes_;
+    /**
+     * <code>optional uint64 tx_bytes = 6;</code>
+     *
+     * <pre>
+     * Total transmitted traffic amount (bytes).
+     * </pre>
+     */
+    public boolean hasTxBytes() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional uint64 tx_bytes = 6;</code>
+     *
+     * <pre>
+     * Total transmitted traffic amount (bytes).
+     * </pre>
+     */
+    public long getTxBytes() {
+      return txBytes_;
+    }
+
+    public static final int RX_BYTES_FIELD_NUMBER = 7;
+    private long rxBytes_;
+    /**
+     * <code>optional uint64 rx_bytes = 7;</code>
+     *
+     * <pre>
+     * Total received traffic amount (bytes).
+     * </pre>
+     */
+    public boolean hasRxBytes() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional uint64 rx_bytes = 7;</code>
+     *
+     * <pre>
+     * Total received traffic amount (bytes).
+     * </pre>
+     */
+    public long getRxBytes() {
+      return rxBytes_;
+    }
+
+    public static final int TX_RATE_FIELD_NUMBER = 8;
+    private int txRate_;
+    /**
+     * <code>optional uint32 tx_rate = 8;</code>
+     *
+     * <pre>
+     * Average TX rate (bits per second).
+     * </pre>
+     */
+    public boolean hasTxRate() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional uint32 tx_rate = 8;</code>
+     *
+     * <pre>
+     * Average TX rate (bits per second).
+     * </pre>
+     */
+    public int getTxRate() {
+      return txRate_;
+    }
+
+    public static final int RX_RATE_FIELD_NUMBER = 9;
+    private int rxRate_;
+    /**
+     * <code>optional uint32 rx_rate = 9;</code>
+     *
+     * <pre>
+     * Average RX rate (bits per second).
+     * </pre>
+     */
+    public boolean hasRxRate() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional uint32 rx_rate = 9;</code>
+     *
+     * <pre>
+     * Average RX rate (bits per second).
+     * </pre>
+     */
+    public int getRxRate() {
+      return rxRate_;
+    }
+
+    public static final int FIRST_SEEN_FIELD_NUMBER = 10;
+    private long firstSeen_;
+    /**
+     * <code>optional uint64 first_seen = 10;</code>
+     *
+     * <pre>
+     * UNIX timestamp (milliseconds resolution) when the device was discovered.
+     * </pre>
+     */
+    public boolean hasFirstSeen() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional uint64 first_seen = 10;</code>
+     *
+     * <pre>
+     * UNIX timestamp (milliseconds resolution) when the device was discovered.
+     * </pre>
+     */
+    public long getFirstSeen() {
+      return firstSeen_;
+    }
+
+    public static final int LAST_SEEN_FIELD_NUMBER = 11;
+    private long lastSeen_;
+    /**
+     * <code>optional uint64 last_seen = 11;</code>
+     *
+     * <pre>
+     * UNIX timestamp (milliseconds resolution) the device had its last transmission.
+     * </pre>
+     */
+    public boolean hasLastSeen() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional uint64 last_seen = 11;</code>
+     *
+     * <pre>
+     * UNIX timestamp (milliseconds resolution) the device had its last transmission.
+     * </pre>
+     */
+    public long getLastSeen() {
+      return lastSeen_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+      macAddress_ = com.google.protobuf.ByteString.EMPTY;
+      ipAddress_ = java.util.Collections.emptyList();
+      networkType_ = mrtech.smarthome.rpc.Models.NetworkType.NETWORK_TYPE_UNKNOWN;
+      class__ = mrtech.smarthome.rpc.Models.DeviceClass.DEVICE_CLASS_UNKNOWN;
+      txBytes_ = 0L;
+      rxBytes_ = 0L;
+      txRate_ = 0;
+      rxRate_ = 0;
+      firstSeen_ = 0L;
+      lastSeen_ = 0L;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, macAddress_);
+      }
+      for (int i = 0; i < ipAddress_.size(); i++) {
+        output.writeBytes(3, ipAddress_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeEnum(4, networkType_.getNumber());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeEnum(5, class__.getNumber());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeUInt64(6, txBytes_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeUInt64(7, rxBytes_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeUInt32(8, txRate_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeUInt32(9, rxRate_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeUInt64(10, firstSeen_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeUInt64(11, lastSeen_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, macAddress_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < ipAddress_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(ipAddress_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getIpAddressList().size();
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(4, networkType_.getNumber());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(5, class__.getNumber());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(6, txBytes_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(7, rxBytes_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(8, txRate_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(9, rxRate_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(10, firstSeen_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(11, lastSeen_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static mrtech.smarthome.rpc.Models.LocalNetworkDevice parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(mrtech.smarthome.rpc.Models.LocalNetworkDevice prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mrtech.smarthome.rpc.LocalNetworkDevice}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mrtech.smarthome.rpc.LocalNetworkDevice)
+        mrtech.smarthome.rpc.Models.LocalNetworkDeviceOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                mrtech.smarthome.rpc.Models.LocalNetworkDevice.class, mrtech.smarthome.rpc.Models.LocalNetworkDevice.Builder.class);
+      }
+
+      // Construct using mrtech.smarthome.rpc.Models.LocalNetworkDevice.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        macAddress_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        ipAddress_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        networkType_ = mrtech.smarthome.rpc.Models.NetworkType.NETWORK_TYPE_UNKNOWN;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        class__ = mrtech.smarthome.rpc.Models.DeviceClass.DEVICE_CLASS_UNKNOWN;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        txBytes_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        rxBytes_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        txRate_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        rxRate_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        firstSeen_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        lastSeen_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000400);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return mrtech.smarthome.rpc.Models.internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_descriptor;
+      }
+
+      public mrtech.smarthome.rpc.Models.LocalNetworkDevice getDefaultInstanceForType() {
+        return mrtech.smarthome.rpc.Models.LocalNetworkDevice.getDefaultInstance();
+      }
+
+      public mrtech.smarthome.rpc.Models.LocalNetworkDevice build() {
+        mrtech.smarthome.rpc.Models.LocalNetworkDevice result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mrtech.smarthome.rpc.Models.LocalNetworkDevice buildPartial() {
+        mrtech.smarthome.rpc.Models.LocalNetworkDevice result = new mrtech.smarthome.rpc.Models.LocalNetworkDevice(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.macAddress_ = macAddress_;
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          ipAddress_ = java.util.Collections.unmodifiableList(ipAddress_);
+          bitField0_ = (bitField0_ & ~0x00000004);
+        }
+        result.ipAddress_ = ipAddress_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.networkType_ = networkType_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.class__ = class__;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.txBytes_ = txBytes_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.rxBytes_ = rxBytes_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.txRate_ = txRate_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.rxRate_ = rxRate_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.firstSeen_ = firstSeen_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.lastSeen_ = lastSeen_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof mrtech.smarthome.rpc.Models.LocalNetworkDevice) {
+          return mergeFrom((mrtech.smarthome.rpc.Models.LocalNetworkDevice)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(mrtech.smarthome.rpc.Models.LocalNetworkDevice other) {
+        if (other == mrtech.smarthome.rpc.Models.LocalNetworkDevice.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasMacAddress()) {
+          setMacAddress(other.getMacAddress());
+        }
+        if (!other.ipAddress_.isEmpty()) {
+          if (ipAddress_.isEmpty()) {
+            ipAddress_ = other.ipAddress_;
+            bitField0_ = (bitField0_ & ~0x00000004);
+          } else {
+            ensureIpAddressIsMutable();
+            ipAddress_.addAll(other.ipAddress_);
+          }
+          onChanged();
+        }
+        if (other.hasNetworkType()) {
+          setNetworkType(other.getNetworkType());
+        }
+        if (other.hasClass_()) {
+          setClass_(other.getClass_());
+        }
+        if (other.hasTxBytes()) {
+          setTxBytes(other.getTxBytes());
+        }
+        if (other.hasRxBytes()) {
+          setRxBytes(other.getRxBytes());
+        }
+        if (other.hasTxRate()) {
+          setTxRate(other.getTxRate());
+        }
+        if (other.hasRxRate()) {
+          setRxRate(other.getRxRate());
+        }
+        if (other.hasFirstSeen()) {
+          setFirstSeen(other.getFirstSeen());
+        }
+        if (other.hasLastSeen()) {
+          setLastSeen(other.getLastSeen());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        mrtech.smarthome.rpc.Models.LocalNetworkDevice parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mrtech.smarthome.rpc.Models.LocalNetworkDevice) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int id_ ;
+      /**
+       * <code>optional int32 id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the device stored in database.
+       * </pre>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the device stored in database.
+       * </pre>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the device stored in database.
+       * </pre>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       *
+       * <pre>
+       * Unique identifier of the device stored in database.
+       * </pre>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString macAddress_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes mac_address = 2;</code>
+       *
+       * <pre>
+       * 48 bit Media Access Control address of the device.
+       * </pre>
+       */
+      public boolean hasMacAddress() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional bytes mac_address = 2;</code>
+       *
+       * <pre>
+       * 48 bit Media Access Control address of the device.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString getMacAddress() {
+        return macAddress_;
+      }
+      /**
+       * <code>optional bytes mac_address = 2;</code>
+       *
+       * <pre>
+       * 48 bit Media Access Control address of the device.
+       * </pre>
+       */
+      public Builder setMacAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        macAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes mac_address = 2;</code>
+       *
+       * <pre>
+       * 48 bit Media Access Control address of the device.
+       * </pre>
+       */
+      public Builder clearMacAddress() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        macAddress_ = getDefaultInstance().getMacAddress();
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.google.protobuf.ByteString> ipAddress_ = java.util.Collections.emptyList();
+      private void ensureIpAddressIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          ipAddress_ = new java.util.ArrayList<com.google.protobuf.ByteString>(ipAddress_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+      /**
+       * <code>repeated bytes ip_address = 3;</code>
+       *
+       * <pre>
+       * IP Addresses that associated with the device.
+       * </pre>
+       */
+      public java.util.List<com.google.protobuf.ByteString>
+          getIpAddressList() {
+        return java.util.Collections.unmodifiableList(ipAddress_);
+      }
+      /**
+       * <code>repeated bytes ip_address = 3;</code>
+       *
+       * <pre>
+       * IP Addresses that associated with the device.
+       * </pre>
+       */
+      public int getIpAddressCount() {
+        return ipAddress_.size();
+      }
+      /**
+       * <code>repeated bytes ip_address = 3;</code>
+       *
+       * <pre>
+       * IP Addresses that associated with the device.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString getIpAddress(int index) {
+        return ipAddress_.get(index);
+      }
+      /**
+       * <code>repeated bytes ip_address = 3;</code>
+       *
+       * <pre>
+       * IP Addresses that associated with the device.
+       * </pre>
+       */
+      public Builder setIpAddress(
+          int index, com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureIpAddressIsMutable();
+        ipAddress_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes ip_address = 3;</code>
+       *
+       * <pre>
+       * IP Addresses that associated with the device.
+       * </pre>
+       */
+      public Builder addIpAddress(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureIpAddressIsMutable();
+        ipAddress_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes ip_address = 3;</code>
+       *
+       * <pre>
+       * IP Addresses that associated with the device.
+       * </pre>
+       */
+      public Builder addAllIpAddress(
+          java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
+        ensureIpAddressIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, ipAddress_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated bytes ip_address = 3;</code>
+       *
+       * <pre>
+       * IP Addresses that associated with the device.
+       * </pre>
+       */
+      public Builder clearIpAddress() {
+        ipAddress_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.NetworkType networkType_ = mrtech.smarthome.rpc.Models.NetworkType.NETWORK_TYPE_UNKNOWN;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.NetworkType network_type = 4;</code>
+       *
+       * <pre>
+       * How is the device accessing the network.
+       * </pre>
+       */
+      public boolean hasNetworkType() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.NetworkType network_type = 4;</code>
+       *
+       * <pre>
+       * How is the device accessing the network.
+       * </pre>
+       */
+      public mrtech.smarthome.rpc.Models.NetworkType getNetworkType() {
+        return networkType_;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.NetworkType network_type = 4;</code>
+       *
+       * <pre>
+       * How is the device accessing the network.
+       * </pre>
+       */
+      public Builder setNetworkType(mrtech.smarthome.rpc.Models.NetworkType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000008;
+        networkType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.NetworkType network_type = 4;</code>
+       *
+       * <pre>
+       * How is the device accessing the network.
+       * </pre>
+       */
+      public Builder clearNetworkType() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        networkType_ = mrtech.smarthome.rpc.Models.NetworkType.NETWORK_TYPE_UNKNOWN;
+        onChanged();
+        return this;
+      }
+
+      private mrtech.smarthome.rpc.Models.DeviceClass class__ = mrtech.smarthome.rpc.Models.DeviceClass.DEVICE_CLASS_UNKNOWN;
+      /**
+       * <code>optional .mrtech.smarthome.rpc.DeviceClass class = 5;</code>
+       *
+       * <pre>
+       * Reserved for future use.
+       * </pre>
+       */
+      public boolean hasClass_() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.DeviceClass class = 5;</code>
+       *
+       * <pre>
+       * Reserved for future use.
+       * </pre>
+       */
+      public mrtech.smarthome.rpc.Models.DeviceClass getClass_() {
+        return class__;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.DeviceClass class = 5;</code>
+       *
+       * <pre>
+       * Reserved for future use.
+       * </pre>
+       */
+      public Builder setClass_(mrtech.smarthome.rpc.Models.DeviceClass value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000010;
+        class__ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .mrtech.smarthome.rpc.DeviceClass class = 5;</code>
+       *
+       * <pre>
+       * Reserved for future use.
+       * </pre>
+       */
+      public Builder clearClass_() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        class__ = mrtech.smarthome.rpc.Models.DeviceClass.DEVICE_CLASS_UNKNOWN;
+        onChanged();
+        return this;
+      }
+
+      private long txBytes_ ;
+      /**
+       * <code>optional uint64 tx_bytes = 6;</code>
+       *
+       * <pre>
+       * Total transmitted traffic amount (bytes).
+       * </pre>
+       */
+      public boolean hasTxBytes() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional uint64 tx_bytes = 6;</code>
+       *
+       * <pre>
+       * Total transmitted traffic amount (bytes).
+       * </pre>
+       */
+      public long getTxBytes() {
+        return txBytes_;
+      }
+      /**
+       * <code>optional uint64 tx_bytes = 6;</code>
+       *
+       * <pre>
+       * Total transmitted traffic amount (bytes).
+       * </pre>
+       */
+      public Builder setTxBytes(long value) {
+        bitField0_ |= 0x00000020;
+        txBytes_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 tx_bytes = 6;</code>
+       *
+       * <pre>
+       * Total transmitted traffic amount (bytes).
+       * </pre>
+       */
+      public Builder clearTxBytes() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        txBytes_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long rxBytes_ ;
+      /**
+       * <code>optional uint64 rx_bytes = 7;</code>
+       *
+       * <pre>
+       * Total received traffic amount (bytes).
+       * </pre>
+       */
+      public boolean hasRxBytes() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional uint64 rx_bytes = 7;</code>
+       *
+       * <pre>
+       * Total received traffic amount (bytes).
+       * </pre>
+       */
+      public long getRxBytes() {
+        return rxBytes_;
+      }
+      /**
+       * <code>optional uint64 rx_bytes = 7;</code>
+       *
+       * <pre>
+       * Total received traffic amount (bytes).
+       * </pre>
+       */
+      public Builder setRxBytes(long value) {
+        bitField0_ |= 0x00000040;
+        rxBytes_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 rx_bytes = 7;</code>
+       *
+       * <pre>
+       * Total received traffic amount (bytes).
+       * </pre>
+       */
+      public Builder clearRxBytes() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        rxBytes_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private int txRate_ ;
+      /**
+       * <code>optional uint32 tx_rate = 8;</code>
+       *
+       * <pre>
+       * Average TX rate (bits per second).
+       * </pre>
+       */
+      public boolean hasTxRate() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional uint32 tx_rate = 8;</code>
+       *
+       * <pre>
+       * Average TX rate (bits per second).
+       * </pre>
+       */
+      public int getTxRate() {
+        return txRate_;
+      }
+      /**
+       * <code>optional uint32 tx_rate = 8;</code>
+       *
+       * <pre>
+       * Average TX rate (bits per second).
+       * </pre>
+       */
+      public Builder setTxRate(int value) {
+        bitField0_ |= 0x00000080;
+        txRate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint32 tx_rate = 8;</code>
+       *
+       * <pre>
+       * Average TX rate (bits per second).
+       * </pre>
+       */
+      public Builder clearTxRate() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        txRate_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int rxRate_ ;
+      /**
+       * <code>optional uint32 rx_rate = 9;</code>
+       *
+       * <pre>
+       * Average RX rate (bits per second).
+       * </pre>
+       */
+      public boolean hasRxRate() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional uint32 rx_rate = 9;</code>
+       *
+       * <pre>
+       * Average RX rate (bits per second).
+       * </pre>
+       */
+      public int getRxRate() {
+        return rxRate_;
+      }
+      /**
+       * <code>optional uint32 rx_rate = 9;</code>
+       *
+       * <pre>
+       * Average RX rate (bits per second).
+       * </pre>
+       */
+      public Builder setRxRate(int value) {
+        bitField0_ |= 0x00000100;
+        rxRate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint32 rx_rate = 9;</code>
+       *
+       * <pre>
+       * Average RX rate (bits per second).
+       * </pre>
+       */
+      public Builder clearRxRate() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        rxRate_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private long firstSeen_ ;
+      /**
+       * <code>optional uint64 first_seen = 10;</code>
+       *
+       * <pre>
+       * UNIX timestamp (milliseconds resolution) when the device was discovered.
+       * </pre>
+       */
+      public boolean hasFirstSeen() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional uint64 first_seen = 10;</code>
+       *
+       * <pre>
+       * UNIX timestamp (milliseconds resolution) when the device was discovered.
+       * </pre>
+       */
+      public long getFirstSeen() {
+        return firstSeen_;
+      }
+      /**
+       * <code>optional uint64 first_seen = 10;</code>
+       *
+       * <pre>
+       * UNIX timestamp (milliseconds resolution) when the device was discovered.
+       * </pre>
+       */
+      public Builder setFirstSeen(long value) {
+        bitField0_ |= 0x00000200;
+        firstSeen_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 first_seen = 10;</code>
+       *
+       * <pre>
+       * UNIX timestamp (milliseconds resolution) when the device was discovered.
+       * </pre>
+       */
+      public Builder clearFirstSeen() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        firstSeen_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long lastSeen_ ;
+      /**
+       * <code>optional uint64 last_seen = 11;</code>
+       *
+       * <pre>
+       * UNIX timestamp (milliseconds resolution) the device had its last transmission.
+       * </pre>
+       */
+      public boolean hasLastSeen() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional uint64 last_seen = 11;</code>
+       *
+       * <pre>
+       * UNIX timestamp (milliseconds resolution) the device had its last transmission.
+       * </pre>
+       */
+      public long getLastSeen() {
+        return lastSeen_;
+      }
+      /**
+       * <code>optional uint64 last_seen = 11;</code>
+       *
+       * <pre>
+       * UNIX timestamp (milliseconds resolution) the device had its last transmission.
+       * </pre>
+       */
+      public Builder setLastSeen(long value) {
+        bitField0_ |= 0x00000400;
+        lastSeen_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 last_seen = 11;</code>
+       *
+       * <pre>
+       * UNIX timestamp (milliseconds resolution) the device had its last transmission.
+       * </pre>
+       */
+      public Builder clearLastSeen() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        lastSeen_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mrtech.smarthome.rpc.LocalNetworkDevice)
+    }
+
+    static {
+      defaultInstance = new LocalNetworkDevice(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mrtech.smarthome.rpc.LocalNetworkDevice)
+    public static final int DETAIL_FIELD_NUMBER = 259;
+    /**
+     * <code>extend .mrtech.smarthome.rpc.Device { ... }</code>
+     */
+    public static final
+      com.google.protobuf.GeneratedMessage.GeneratedExtension<
+        mrtech.smarthome.rpc.Models.Device,
+        mrtech.smarthome.rpc.Models.LocalNetworkDevice> detail = com.google.protobuf.GeneratedMessage
+            .newMessageScopedGeneratedExtension(
+          mrtech.smarthome.rpc.Models.LocalNetworkDevice.getDefaultInstance(),
+          0,
+          mrtech.smarthome.rpc.Models.LocalNetworkDevice.class,
+          mrtech.smarthome.rpc.Models.LocalNetworkDevice.getDefaultInstance());
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mrtech_smarthome_rpc_SystemConfiguration_descriptor;
   private static
@@ -118340,6 +120194,11 @@ public final class Models {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_mrtech_smarthome_rpc_Image_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -118795,368 +120654,385 @@ public final class Models {
       "type\030\002 \001(\0162\037.mrtech.smarthome.rpc.AlarmT" +
       "ype\"l\n\005Image\022\n\n\002id\030\001 \001(\005\022.\n\004type\030\002 \001(\0162 " +
       ".mrtech.smarthome.rpc.Image.Type\022\014\n\004data" +
-      "\030\003 \001(\014\"\031\n\004Type\022\007\n\003PNG\020\000\022\010\n\004JPEG\020\001*<\n\rSev" +
-      "erityLevel\022\010\n\004INFO\020\001\022\013\n\007WARNING\020\002\022\t\n\005ERR" +
-      "OR\020\003\022\t\n\005FATAL\020\004*\214\001\n\rBatteryStatus\022\035\n\031BAT" +
-      "TERY_STATUS_NO_BATTERY\020\000\022\033\n\027BATTERY_STAT",
-      "US_CHARGING\020\001\022\036\n\032BATTERY_STATUS_DISCHARG" +
-      "ING\020\002\022\037\n\033BATTERY_STATUS_NOT_CHARGING\020\003*\265" +
-      "\001\n\rServiceStatus\022\035\n\031SERVICE_STATUS_NO_SE" +
-      "RVICE\020\000\022\035\n\031SERVICE_STATUS_RESTRICTED\020\001\022\030" +
-      "\n\024SERVICE_STATUS_VALID\020\002\022.\n*SERVICE_STAT" +
-      "US_RESTRICTED_REGIONAL_SERVICE\020\003\022\034\n\030SERV" +
-      "ICE_STATUS_HIBERNATE\020\004*\263\001\n\rServiceDomain" +
-      "\022\035\n\031SERVICE_DOMAIN_NO_SERVICE\020\000\022\025\n\021SERVI" +
-      "CE_DOMAIN_CS\020\001\022\025\n\021SERVICE_DOMAIN_PS\020\002\022\030\n" +
-      "\024SERVICE_DOMAIN_PS_CS\020\003\022!\n\035SERVICE_DOMAI",
-      "N_NOT_REGISTERED\020\004\022\030\n\023SERVICE_DOMAIN_CDM" +
-      "A\020\377\001*\237\002\n\rOperationMode\022\035\n\031OPERATION_MODE" +
-      "_NO_SERVICE\020\000\022\027\n\023OPERATION_MODE_AMPS\020\001\022\027" +
-      "\n\023OPERATION_MODE_CDMA\020\002\022\033\n\027OPERATION_MOD" +
-      "E_GSM_GPRS\020\003\022\026\n\022OPERATION_MODE_HDR\020\004\022\030\n\024" +
-      "OPERATION_MODE_WCDMA\020\005\022\026\n\022OPERATION_MODE" +
-      "_GPS\020\006\022\034\n\030OPERATION_MODE_GSM_WCDMA\020\007\022\033\n\027" +
-      "OPERATION_MODE_CDMA_HDR\020\010\022\033\n\027OPERATION_M" +
-      "ODE_TD_SCDMA\020\017*\265\001\n\010SimState\022\025\n\021SIM_STATE" +
-      "_INVALID\020\000\022\023\n\017SIM_STATE_VALID\020\001\022\030\n\024SIM_S",
-      "TATE_CS_INVALID\020\002\022\030\n\024SIM_STATE_PS_INVALI" +
-      "D\020\003\022\033\n\027SIM_STATE_PS_CS_INVALID\020\004\022\025\n\020SIM_" +
-      "STATE_ROMSIM\020\360\001\022\025\n\020SIM_STATE_NO_SIM\020\372\001*\205" +
-      "\005\n\020SubOperationMode\022!\n\035SUB_OPERATION_MOD" +
-      "E_NO_SERVICE\020\000\022\032\n\026SUB_OPERATION_MODE_GSM" +
-      "\020\001\022\033\n\027SUB_OPERATION_MODE_GPRS\020\002\022\033\n\027SUB_O" +
-      "PERATION_MODE_EDGE\020\003\022\034\n\030SUB_OPERATION_MO" +
-      "DE_WCDMA\020\004\022\034\n\030SUB_OPERATION_MODE_HSDPA\020\005" +
-      "\022\034\n\030SUB_OPERATION_MODE_HSUPA\020\006\022\"\n\036SUB_OP" +
-      "ERATION_MODE_HSUPA_HSDPA\020\007\022\037\n\033SUB_OPERAT",
-      "ION_MODE_TD_SCDMA\020\010\022 \n\034SUB_OPERATION_MOD" +
-      "E_HSPA_PLUS\020\t\022\035\n\031SUB_OPERATION_MODE_EVDO" +
-      "_0\020\n\022\035\n\031SUB_OPERATION_MODE_EVDO_A\020\013\022\035\n\031S" +
-      "UB_OPERATION_MODE_EVDO_B\020\014\022\"\n\036SUB_OPERAT" +
-      "ION_MODE_CDMA2000_1X\020\r\022\032\n\026SUB_OPERATION_" +
-      "MODE_UMB\020\016\022\'\n#SUB_OPERATION_MODE_CDMA200" +
-      "0_1X_EVDV\020\017\022\"\n\036SUB_OPERATION_MODE_CDMA20" +
-      "00_3X\020\020\022&\n\"SUB_OPERATION_MODE_HSPA_PLUS_" +
-      "64QAM\020\021\022%\n!SUB_OPERATION_MODE_HSPA_PLUS_" +
-      "MIMO\020\022*\321\001\n\014WirelessMode\022\023\n\017WIRELESS_MODE",
-      "_B\020\000\022\023\n\017WIRELESS_MODE_G\020\001\022\023\n\017WIRELESS_MO" +
-      "DE_N\020\002\022\024\n\020WIRELESS_MODE_BG\020\003\022\024\n\020WIRELESS" +
-      "_MODE_NG\020\004\022\025\n\021WIRELESS_MODE_BGN\020\005\022\023\n\017WIR" +
-      "ELESS_MODE_A\020\006\022\024\n\020WIRELESS_MODE_AN\020\007\022\024\n\020" +
-      "WIRELESS_MODE_AC\020\010*P\n\nWpaVersion\022\023\n\017WPA_" +
-      "VERSION_WPA\020\000\022\024\n\020WPA_VERSION_WPA2\020\001\022\027\n\023W" +
-      "PA_VERSION_UNKNOWN\020\002*E\n\rKeyManagement\022\026\n" +
-      "\022KEY_MANAGEMENT_PSK\020\000\022\034\n\030KEY_MANAGEMENT_" +
-      "IEEE8021X\020\001*H\n\017PhoneNumberType\022\031\n\025PHONE_" +
-      "NUMBER_TYPE_SMS\020\000\022\032\n\026PHONE_NUMBER_TYPE_D",
-      "IAL\020\001*I\n\014AccountGroup\022\037\n\033ACCOUNT_GROUP_A" +
-      "DMINISTRATOR\020\000\022\030\n\024ACCOUNT_GROUP_MEMBER\020\001" +
-      "*V\n\nDeviceType\022\026\n\022DEVICE_TYPE_ZIGBEE\020\000\022\026" +
-      "\n\022DEVICE_TYPE_CAMERA\020\001\022\030\n\024DEVICE_TYPE_IN" +
-      "FRARED\020\002*\344\001\n\013PowerSource\022\030\n\024POWER_SOURCE" +
-      "_UNKNOWN\020\000\022\036\n\032POWER_SOURCE_MAINS_1_PHASE" +
-      "\020\001\022\036\n\032POWER_SOURCE_MAINS_3_PHASE\020\002\022\030\n\024PO" +
-      "WER_SOURCE_BATTERY\020\003\022\023\n\017POWER_SOURCE_DC\020" +
-      "\004\022&\n\"POWER_SOURCE_EMERG_MAINS_CONST_PWR\020" +
-      "\005\022$\n POWER_SOURCE_EMERG_MAINS_XFER_SW\020\006*",
-      "\245\013\n\010DeviceId\022\033\n\027DEVICE_ID_ON_OFF_SWITCH\020" +
-      "\000\022\"\n\036DEVICE_ID_LEVEL_CONTROL_SWITCH\020\001\022\033\n" +
-      "\027DEVICE_ID_ON_OFF_OUTPUT\020\002\022\'\n#DEVICE_ID_" +
-      "LEVEL_CONTROLLABLE_OUTPUT\020\003\022\034\n\030DEVICE_ID" +
-      "_SCENE_SELECTOR\020\004\022 \n\034DEVICE_ID_CONFIGURA" +
-      "TION_TOOL\020\005\022\034\n\030DEVICE_ID_REMOTE_CONTROL\020" +
-      "\006\022 \n\034DEVICE_ID_COMBINED_INTERFACE\020\007\022\034\n\030D" +
-      "EVICE_ID_RANGE_EXTENDER\020\010\022 \n\034DEVICE_ID_M" +
-      "AINS_POWER_OUTLET\020\t\022\027\n\023DEVICE_ID_DOOR_LO" +
-      "CK\020\n\022\"\n\036DEVICE_ID_DOOR_LOCK_CONTROLLER\020\013",
-      "\022\033\n\027DEVICE_ID_SIMPLE_SENSOR\020\014\022*\n&DEVICE_" +
-      "ID_CONSUMPTION_AWARENESS_DEVICE\020\r\022\032\n\026DEV" +
-      "ICE_ID_HOME_GATEWAY\020P\022\030\n\024DEVICE_ID_SMART" +
-      "_PLUG\020Q\022\031\n\025DEVICE_ID_WHITE_GOODS\020R\022\035\n\031DE" +
-      "VICE_ID_METER_INTERFACE\020S\022!\n\035DEVICE_ID_I" +
-      "NFRARED_CONTROLLER\020T\022\032\n\025DEVICE_ID_TEST_D" +
-      "EVICE\020\377\001\022\033\n\026DEVICE_ID_ON_OFF_LIGHT\020\200\002\022\035\n" +
-      "\030DEVICE_ID_DIMMABLE_LIGHT\020\201\002\022%\n DEVICE_I" +
-      "D_COLORED_DIMMABLE_LIGHT\020\202\002\022\"\n\035DEVICE_ID" +
-      "_ON_OFF_LIGHT_SWITCH\020\203\002\022\034\n\027DEVICE_ID_DIM",
-      "MER_SWITCH\020\204\002\022\"\n\035DEVICE_ID_COLOR_DIMMER_" +
-      "SWITCH\020\205\002\022\033\n\026DEVICE_ID_LIGHT_SENSOR\020\206\002\022\037" +
-      "\n\032DEVICE_ID_OCCUPANCY_SENSOR\020\207\002\022\024\n\017DEVIC" +
-      "E_ID_SHADE\020\200\004\022\037\n\032DEVICE_ID_SHADE_CONTROL" +
-      "LER\020\201\004\022%\n DEVICE_ID_WINDOW_COVERING_DEVI" +
-      "CE\020\202\004\022)\n$DEVICE_ID_WINDOW_COVERING_CONTR" +
-      "OLLER\020\203\004\022#\n\036DEVICE_ID_HEATING_COOLING_UN" +
-      "IT\020\200\006\022\031\n\024DEVICE_ID_THERMOSTAT\020\201\006\022!\n\034DEVI" +
-      "CE_ID_TEMPERATURE_SENSOR\020\202\006\022\023\n\016DEVICE_ID" +
-      "_PUMP\020\203\006\022\036\n\031DEVICE_ID_PUMP_CONTROLLER\020\204\006",
-      "\022\036\n\031DEVICE_ID_PRESSURE_SENSOR\020\205\006\022\032\n\025DEVI" +
-      "CE_ID_FLOW_SENSOR\020\206\006\022\034\n\027DEVICE_ID_MINI_S" +
-      "PLIT_AC\020\207\006\022/\n*DEVICE_ID_IAS_CONTROL_INDI" +
-      "CATING_EQUIPMENT\020\200\010\022.\n)DEVICE_ID_IAS_ANC" +
-      "ILLARY_CONTROL_EQUIPMENT\020\201\010\022\027\n\022DEVICE_ID" +
-      "_IAS_ZONE\020\202\010\022!\n\034DEVICE_ID_IAS_WARNING_DE" +
-      "VICE\020\203\010*Z\n\nTargetType\022\035\n\031TARGET_TYPE_NOT" +
-      "_SPECIFIED\020\000\022\026\n\022TARGET_TYPE_DEVICE\020\001\022\025\n\021" +
-      "TARGET_TYPE_GROUP\020\002*\300\002\n\017MeasurementType\022" +
-      "\031\n\025MEASUREMENT_TYPE_NONE\020\000\022\033\n\027MEASUREMEN",
-      "T_TYPE_ACTIVE\020\001\022\035\n\031MEASUREMENT_TYPE_REAC" +
-      "TIVE\020\002\022\035\n\031MEASUREMENT_TYPE_APPARENT\020\004\022\034\n" +
-      "\030MEASUREMENT_TYPE_PHASE_A\020\010\022\034\n\030MEASUREME" +
-      "NT_TYPE_PHASE_B\020\020\022\034\n\030MEASUREMENT_TYPE_PH" +
-      "ASE_C\020 \022\027\n\023MEASUREMENT_TYPE_DC\020@\022\037\n\032MEAS" +
-      "UREMENT_TYPE_HARMONICS\020\200\001\022#\n\036MEASUREMENT" +
-      "_TYPE_POWER_QUALITY\020\200\002*\222\003\n\rUnitOfMeasure" +
-      "\022#\n\037UNIT_OF_MEASURE_KILO_WATT_HOURS\020\000\022(\n" +
-      "$UNIT_OF_MEASURE_CUBIC_METER_PER_HOUR\020\001\022" +
-      "\'\n#UNIT_OF_MEASURE_CUBIC_FEET_PER_HOUR\020\002",
-      "\022.\n*UNIT_OF_MEASURE_CENTUM_CUBIC_FEET_PE" +
-      "R_HOUR\020\003\022\'\n#UNIT_OF_MEASURE_US_GALLONS_P" +
-      "ER_HOUR\020\004\022(\n$UNIT_OF_MEASURE_IMP_GALLONS" +
-      "_PER_HOUR\020\005\022 \n\034UNIT_OF_MEASURE_BTU_PER_H" +
-      "OUR\020\006\022#\n\037UNIT_OF_MEASURE_LITERS_PER_HOUR" +
-      "\020\007\022\035\n\031UNIT_OF_MEASURE_GUAGE_KPA\020\010\022 \n\034UNI" +
-      "T_OF_MEASURE_ABSOLUTE_KPA\020\t*\342\003\n\010ZoneType" +
-      "\022\032\n\026ZONE_TYPE_STANDARD_CIE\020\000\022\033\n\027ZONE_TYP" +
-      "E_MOTION_SENSOR\020\r\022\034\n\030ZONE_TYPE_CONTACT_S" +
-      "WITCH\020\025\022\031\n\025ZONE_TYPE_FIRE_SENSOR\020(\022\032\n\026ZO",
-      "NE_TYPE_WATER_SENSOR\020*\022\030\n\024ZONE_TYPE_GAS_" +
-      "SENSOR\020+\022\'\n#ZONE_TYPE_PERSONAL_EMERGENCY" +
-      "_DEVICE\020,\022\'\n#ZONE_TYPE_VIBRATION_MOVEMEN" +
-      "T_SENSOR\020-\022\035\n\030ZONE_TYPE_REMOTE_CONTROL\020\217" +
-      "\002\022\026\n\021ZONE_TYPE_KEY_FOB\020\225\002\022\025\n\020ZONE_TYPE_K" +
-      "EYPAD\020\235\004\022&\n!ZONE_TYPE_STANDARD_WARNING_D" +
-      "EVICE\020\245\004\022!\n\034ZONE_TYPE_GLASS_BREAK_SENSOR" +
-      "\020\246\004\022 \n\033ZONE_TYPE_SECURITY_REPEATER\020\251\004\022!\n" +
-      "\033ZONE_TYPE_INVALID_ZONE_TYPE\020\377\377\003*]\n\010ArmG" +
-      "roup\022\022\n\016ARM_GROUP_STAY\020\000\022\023\n\017ARM_GROUP_SL",
-      "EEP\020\001\022\022\n\016ARM_GROUP_BOTH\020\002\022\024\n\020ARM_GROUP_A" +
-      "LWAYS\020\003*X\n\007ArmMode\022\023\n\017ARM_MODE_DISARM\020\000\022" +
-      "\021\n\rARM_MODE_STAY\020\001\022\022\n\016ARM_MODE_SLEEP\020\002\022\021" +
-      "\n\rARM_MODE_AWAY\020\003*\371\001\n\013PanelStatus\022\031\n\025PAN" +
-      "EL_STATUS_DISARMED\020\000\022\033\n\027PANEL_STATUS_ARM" +
-      "ED_STAY\020\001\022\034\n\030PANEL_STATUS_ARMED_SLEEP\020\002\022" +
-      "\033\n\027PANEL_STATUS_ARMED_AWAY\020\003\022\033\n\027PANEL_ST" +
-      "ATUS_EXIT_DELAY\020\004\022\034\n\030PANEL_STATUS_ENTRY_" +
-      "DELAY\020\005\022!\n\035PANEL_STATUS_NOT_READY_TO_ARM" +
-      "\020\006\022\031\n\025PANEL_STATUS_IN_ALARM\020\007*\323\001\n\013AlarmS",
-      "tatus\022\031\n\025ALARM_STATUS_NO_ALARM\020\000\022\030\n\024ALAR" +
-      "M_STATUS_BURGLAR\020\001\022\025\n\021ALARM_STATUS_FIRE\020" +
-      "\002\022\032\n\026ALARM_STATUS_EMERGENCY\020\003\022\035\n\031ALARM_S" +
-      "TATUS_POLICE_PANIC\020\004\022\033\n\027ALARM_STATUS_FIR" +
-      "E_PANIC\020\005\022 \n\034ALARM_STATUS_EMERGENCY_PANI" +
-      "C\020\006*^\n\rTimelineLevel\022\027\n\023TIMELINE_LEVEL_I" +
-      "NFO\020\000\022\032\n\026TIMELINE_LEVEL_WARNING\020\001\022\030\n\024TIM" +
-      "ELINE_LEVEL_ALARM\020\002*\210\007\n\014TimelineType\022 \n\034" +
-      "TIMELINE_TYPE_SYSTEM_STARTUP\020\000\022\027\n\023TIMELI" +
-      "NE_TYPE_ARMED\020\001\022\032\n\026TIMELINE_TYPE_DISARME",
-      "D\020\002\022&\n\"TIMELINE_TYPE_IAS_ZONE_BATTERY_LO" +
-      "W\020\003\022 \n\034TIMELINE_TYPE_IAS_ZONE_ALARM\020\004\022!\n" +
-      "\035TIMELINE_TYPE_IAS_ZONE_TAMPER\020\005\022\"\n\036TIME" +
-      "LINE_TYPE_IAS_ZONE_TROUBLE\020\006\022&\n\"TIMELINE" +
-      "_TYPE_IAS_ZONE_MAINS_FAULT\020\007\0225\n1TIMELINE" +
-      "_TYPE_IAS_ZONE_LACK_OF_SUPERVISION_REPOR" +
-      "T\020\010\022)\n%TIMELINE_TYPE_IAS_ZONE_BATTERY_DE" +
-      "FECT\020\t\022\037\n\033TIMELINE_TYPE_TOGGLE_ON_OFF\020\n\022" +
-      "&\n\"TIMELINE_TYPE_ON_OFF_STATE_CHANGED\020\013\022" +
-      " \n\034TIMELINE_TYPE_CAMERA_OFFLINE\020\014\022/\n+TIM",
-      "ELINE_TYPE_CAMERA_MOTION_DETECTION_ALARM" +
-      "\020\r\022&\n\"TIMELINE_TYPE_OVERCURRENT_DETECTED" +
-      "\020\016\022&\n\"TIMELINE_TYPE_POWER_SOURCE_CHANGED" +
-      "\020\017\022$\n TIMELINE_TYPE_SYSTEM_BATTERY_LOW\020\020" +
-      "\022\'\n#TIMELINE_TYPE_MOBILE_DATA_CONNECTED\020" +
-      "\021\022(\n$TIMELINE_TYPE_SMART_LOCK_LOW_BATTER" +
-      "Y\020\022\022%\n!TIMELINE_TYPE_SMART_LOCK_UNLOCKED" +
-      "\020\023\022\'\n#TIMELINE_TYPE_FAILED_UNLOCK_ATTEMP" +
-      "T\020\024\022)\n%TIMELINE_TYPE_USB_MODEM_STATE_CHA" +
-      "NGED\020\025\022&\n\"TIMELINE_TYPE_CONTROL_WINDOW_C",
-      "OVER\020\026*\266\001\n\016CameraSdStatus\022\035\n\031CAMERA_SD_S" +
-      "TATUS_NO_EXIST\020\000\022\035\n\031CAMERA_SD_STATUS_INS" +
-      "ERTED\020\001\022\036\n\032CAMERA_SD_STATUS_RECORDING\020\002\022" +
-      "%\n!CAMERA_SD_STATUS_FILESYSTEM_ERROR\020\003\022\037" +
-      "\n\033CAMERA_SD_STATUS_FORMATTING\020\004*H\n\016Camer" +
-      "aWlanMode\022\032\n\026CAMERA_WLAN_MODE_INFRA\020\000\022\032\n" +
-      "\026CAMERA_WLAN_MODE_ADHOC\020\001*P\n\021CameraWlanE" +
-      "ncrypt\022\034\n\030CAMERA_WLAN_ENCRYPT_OPEN\020\000\022\035\n\031" +
-      "CAMERA_WLAN_ENCRYPT_SHARE\020\001*\355\001\n\022CameraWl" +
-      "anAuthtype\022\035\n\031CAMERA_WLAN_AUTHTYPE_NONE\020",
-      "\000\022\034\n\030CAMERA_WLAN_AUTHTYPE_WEP\020\001\022%\n!CAMER" +
-      "A_WLAN_AUTHTYPE_WPA_PSK_TKIP\020\002\022$\n CAMERA" +
-      "_WLAN_AUTHTYPE_WPA_PSK_AES\020\003\022&\n\"CAMERA_W" +
-      "LAN_AUTHTYPE_WPA2_PSK_TKIP\020\004\022%\n!CAMERA_W" +
-      "LAN_AUTHTYPE_WPA2_PSK_AES\020\005*W\n\023CameraWla" +
-      "nKeyFormat\022\036\n\032CAMERA_WLAN_KEY_FORMAT_HEX" +
-      "\020\000\022 \n\034CAMERA_WLAN_KEY_FORMAT_ASCII\020\001*Z\n\023" +
-      "CameraWlanKeyLength\022 \n\034CAMERA_WLAN_KEY_L" +
-      "ENGTH_64BIT\020\000\022!\n\035CAMERA_WLAN_KEY_LENGTH_" +
-      "128BIT\020\001*\223\001\n\nActionType\022\023\n\017ACTION_TYPE_A",
-      "RM\020\000\022\035\n\031ACTION_TYPE_TOGGLE_ON_OFF\020\001\022!\n\035A" +
-      "CTION_TYPE_CONTROL_IR_DEVICE\020\002\022.\n*ACTION" +
-      "_TYPE_CONTROL_WINDOW_COVERING_DEVICE\020\003*@" +
-      "\n\013CommandType\022\030\n\024COMMAND_TYPE_BUILTIN\020\000\022" +
-      "\027\n\023COMMAND_TYPE_CUSTOM\020\001*3\n\010PlanType\022\023\n\017" +
-      "PLAN_TYPE_TIMER\020\000\022\022\n\016PLAN_TYPE_FAKE\020\001*E\n" +
-      "\007WanMode\022\022\n\016WAN_MODE_PPPOE\020\000\022\021\n\rWAN_MODE" +
-      "_DHCP\020\001\022\023\n\017WAN_MODE_STATIC\020\002*)\n\007WanPort\022" +
-      "\016\n\nWAN_PORT_1\020\001\022\016\n\nWAN_PORT_2\020\002*3\n\007WanTy" +
-      "pe\022\025\n\021WAN_TYPE_INTERNET\020\000\022\021\n\rWAN_TYPE_AR",
-      "EA\020\001*W\n\013WanMacClone\022\026\n\022WAN_MAC_CLONE_NON" +
-      "E\020\000\022\026\n\022WAN_MAC_CLONE_AUTO\020\001\022\030\n\024WAN_MAC_C" +
-      "LONE_MANUAL\020\002*,\n\010WlanPort\022\017\n\013WLAN_PORT_1" +
-      "\020\001\022\017\n\013WLAN_PORT_2\020\002*_\n\016AccessRuleMode\022\027\n" +
-      "\023ACCESS_RULE_DISABLE\020\000\022\031\n\025ACCESS_RULE_BL" +
-      "ACKLIST\020\001\022\031\n\025ACCESS_RULE_WHITELIST\020\002*G\n\t" +
-      "BandWidth\022\022\n\016BAND_WIDTH_20M\020\000\022\022\n\016BAND_WI" +
-      "DTH_40M\020\001\022\022\n\016BAND_WIDTH_80M\020\002*P\n\tSambaMo" +
-      "de\022\027\n\023SAMBA_MODE_DISABLED\020\000\022\023\n\017SAMBA_MOD" +
-      "E_USER\020\001\022\025\n\021SAMBA_MODE_PUBLIC\020\002*=\n\nAcces",
-      "sType\022\025\n\021ACCESS_TYPE_WIRED\020\001\022\030\n\024ACCESS_T" +
-      "YPE_WIRELESS\020\002*6\n\007QosMode\022\023\n\017QOS_MODE_NO" +
-      "RMAL\020\001\022\026\n\022QOS_MODE_EXCLUSIVE\020\002*S\n\013AclRul" +
-      "eMode\022\024\n\020ACL_RULE_DISABLE\020\000\022\026\n\022ACL_RULE_" +
-      "BLACKLIST\020\001\022\026\n\022ACL_RULE_WHITELIST\020\002*\177\n\tH" +
-      "ddStatus\022\034\n\030HDD_STATUS_NOT_INSTALLED\020\000\022\036" +
-      "\n\032HDD_STATUS_NOT_INITIALIZED\020\001\022\030\n\024HDD_ST" +
-      "ATUS_AVAILABLE\020\002\022\032\n\026HDD_STATUS_UNINSTALL" +
-      "ED\020\003*E\n\017NetworkProtocol\022\030\n\024NETWORK_PROTO" +
-      "COL_TCP\020\000\022\030\n\024NETWORK_PROTOCOL_UDP\020\001*v\n\023S",
-      "ignalStrengthLevel\022\035\n\031SIGNAL_STRENGTH_LE" +
-      "VEL_LOW\020\000\022 \n\034SIGNAL_STRENGTH_LEVEL_MIDDL" +
-      "E\020\001\022\036\n\032SIGNAL_STRENGTH_LEVEL_HIGH\020\002*E\n\nP" +
-      "PPoEState\022\034\n\030PPPOE_STATE_DISCONNECTED\020\000\022" +
-      "\031\n\025PPPOE_STATE_CONNECTED\020\001*\206\001\n\013QosPriori" +
-      "ty\022\030\n\024QOS_PRIORITY_HIGHEST\020\000\022\025\n\021QOS_PRIO" +
-      "RITY_HIGH\020\001\022\027\n\023QOS_PRIORITY_MEDIUM\020\002\022\024\n\020" +
-      "QOS_PRIORITY_LOW\020\003\022\027\n\023QOS_PRIORITY_LOWES" +
-      "T\020\004*)\n\005CpuId\022\017\n\013CPU_ID_CPU0\020\000\022\017\n\013CPU_ID_" +
-      "CPU1\020\001*B\n\007VpnType\022\021\n\rVPN_TYPE_NONE\020\000\022\021\n\r",
-      "VPN_TYPE_PPTP\020\001\022\021\n\rVPN_TYPE_L2TP\020\002*r\n\022In" +
-      "fraredMatchLevel\022\034\n\030INFRARED_MATCH_LEVEL" +
-      "_LOW\020\000\022\037\n\033INFRARED_MATCH_LEVEL_MEDIUM\020\001\022" +
-      "\035\n\031INFRARED_MATCH_LEVEL_HIGH\020\002*\301\002\n\022Infra" +
-      "redDeviceType\022(\n$INFRARED_DEVICE_TYPE_AI" +
-      "R_CONDITIONER\020\000\022#\n\037INFRARED_DEVICE_TYPE_" +
-      "DVD_PLAYER\020\001\022&\n\"INFRARED_DEVICE_TYPE_IP_" +
-      "TELEVISION\020\002\022#\n\037INFRARED_DEVICE_TYPE_SET" +
-      "TOP_BOX\020\003\022#\n\037INFRARED_DEVICE_TYPE_TELEVI" +
-      "SION\020\004\022%\n!INFRARED_DEVICE_TYPE_ELECTRIC_",
-      "FAN\020\005\022\"\n\036INFRARED_DEVICE_TYPE_PROJECTOR\020" +
-      "\006\022\037\n\033INFRARED_DEVICE_TYPE_CUSTOM\020\007*\303\001\n\022I" +
-      "nfraredMatchError\022 \n\034INFRARED_MATCH_ERRO" +
-      "R_SUCCESS\020\000\022!\n\035INFRARED_MATCH_ERROR_NO_M" +
-      "ATCH\020\001\022\"\n\036INFRARED_MATCH_ERROR_CANCELLED" +
-      "\020\002\022\"\n\036INFRARED_MATCH_ERROR_TIMED_OUT\020\003\022 " +
-      "\n\034INFRARED_MATCH_ERROR_FAILURE\020\004*\270\001\n\031Air" +
-      "ConditionerBlowingRate\022%\n!AIR_CONDITIONE" +
-      "R_BLOWING_RATE_AUTO\020\000\022$\n AIR_CONDITIONER" +
-      "_BLOWING_RATE_LOW\020\001\022\'\n#AIR_CONDITIONER_B",
-      "LOWING_RATE_MEDIUM\020\002\022%\n!AIR_CONDITIONER_" +
-      "BLOWING_RATE_HIGH\020\003*\200\001\n\025AirConditionerWi" +
-      "ndDir\022\037\n\033AIR_CONDITIONER_WIND_DIR_UP\020\000\022#" +
-      "\n\037AIR_CONDITIONER_WIND_DIR_MIDDLE\020\001\022!\n\035A" +
-      "IR_CONDITIONER_WIND_DIR_DOWN\020\002*\210\002\n\021AirCo" +
-      "nditionerKey\022\035\n\031AIR_CONDITIONER_KEY_POWE" +
-      "R\020\000\022\034\n\030AIR_CONDITIONER_KEY_MODE\020\001\022$\n AIR" +
-      "_CONDITIONER_KEY_BLOWING_RATE\020\002\022\'\n#AIR_C" +
-      "ONDITIONER_KEY_MANUAL_WIND_DIR\020\003\022%\n!AIR_" +
-      "CONDITIONER_KEY_AUTO_WIND_DIR\020\004\022\036\n\032AIR_C",
-      "ONDITIONER_KEY_TEMPUP\020\005\022 \n\034AIR_CONDITION" +
-      "ER_KEY_TEMPDOWN\020\006*\257\001\n\022AirConditionerMode" +
-      "\022\035\n\031AIR_CONDITIONER_MODE_AUTO\020\000\022\037\n\033AIR_C" +
-      "ONDITIONER_MODE_FREEZE\020\001\022\034\n\030AIR_CONDITIO" +
-      "NER_MODE_DRY\020\002\022\034\n\030AIR_CONDITIONER_MODE_F" +
-      "AN\020\003\022\035\n\031AIR_CONDITIONER_MODE_HEAT\020\004*\320\003\n\020" +
-      "DvdPlayerCommand\022\023\n\017DVD_PLAYER_LEFT\020\000\022\021\n" +
-      "\rDVD_PLAYER_UP\020\001\022\021\n\rDVD_PLAYER_OK\020\002\022\023\n\017D" +
-      "VD_PLAYER_DOWN\020\003\022\024\n\020DVD_PLAYER_RIGHT\020\004\022\024" +
-      "\n\020DVD_PLAYER_POWER\020\005\022\023\n\017DVD_PLAYER_MUTE\020",
-      "\006\022\033\n\027DVD_PLAYER_FAST_REVERSE\020\007\022\023\n\017DVD_PL" +
-      "AYER_PLAY\020\010\022\035\n\031DVD_PLAYER_FAST_FORWARDED" +
-      "\020\t\022\031\n\025DVD_PLAYER_LAST_PIECE\020\n\022\023\n\017DVD_PLA" +
-      "YER_STOP\020\013\022\031\n\025DVD_PLAYER_NEXT_PIECE\020\014\022\027\n" +
-      "\023DVD_PLAYER_STANDARD\020\r\022\024\n\020DVD_PLAYER_PAU" +
-      "SE\020\016\022\024\n\020DVD_PLAYER_TITLE\020\017\022\036\n\032DVD_PLAYER" +
-      "_SWITCH_POSITION\020\020\022\023\n\017DVD_PLAYER_MENU\020\021\022" +
-      "\025\n\021DVD_PLAYER_RETURN\020\022*\333\004\n\023IpTelevisionC" +
-      "ommand\022\027\n\023IP_TELEVISION_POWER\020\000\022\026\n\022IP_TE" +
-      "LEVISION_MUTE\020\001\022\030\n\024IP_TELEVISION_VOLUME\020",
-      "\002\022\"\n\036IP_TELEVISION_VOLUME_REDUCTION\020\003\022&\n" +
-      "\"IP_TELEVISION_CHANNEL_PLUS_OR_HOME\020\004\022+\n" +
-      "\'IP_TELEVISION_CHANNEL_REDUCTION_OR_MENU" +
-      "\020\005\022\024\n\020IP_TELEVISION_UP\020\006\022\026\n\022IP_TELEVISIO" +
-      "N_LEFT\020\007\022\024\n\020IP_TELEVISION_OK\020\010\022\027\n\023IP_TEL" +
-      "EVISION_RIGHT\020\t\022\026\n\022IP_TELEVISION_DOWN\020\n\022" +
-      "\037\n\033IP_TELEVISION_PLAY_OR_PAUSE\020\013\022\023\n\017IP_T" +
-      "ELEVISION_1\020\014\022\023\n\017IP_TELEVISION_2\020\r\022\023\n\017IP" +
-      "_TELEVISION_3\020\016\022\023\n\017IP_TELEVISION_4\020\017\022\023\n\017" +
-      "IP_TELEVISION_5\020\020\022\023\n\017IP_TELEVISION_6\020\021\022\023",
-      "\n\017IP_TELEVISION_7\020\022\022\023\n\017IP_TELEVISION_8\020\023" +
-      "\022\023\n\017IP_TELEVISION_9\020\024\022\023\n\017IP_TELEVISION_0" +
-      "\020\025\022\030\n\024IP_TELEVISION_RETURN\020\026*\202\004\n\020SettopB" +
-      "oxCommand\022\026\n\022SETTOP_BOX_STANDBY\020\000\022\020\n\014SET" +
-      "TOP_BOX_1\020\001\022\020\n\014SETTOP_BOX_2\020\002\022\020\n\014SETTOP_" +
-      "BOX_3\020\003\022\020\n\014SETTOP_BOX_4\020\004\022\020\n\014SETTOP_BOX_" +
-      "5\020\005\022\020\n\014SETTOP_BOX_6\020\006\022\020\n\014SETTOP_BOX_7\020\007\022" +
-      "\020\n\014SETTOP_BOX_8\020\010\022\020\n\014SETTOP_BOX_9\020\t\022\024\n\020S" +
-      "ETTOP_BOX_GUIDE\020\n\022\020\n\014SETTOP_BOX_0\020\013\022\025\n\021S" +
-      "ETTOP_BOX_RETURN\020\014\022\021\n\rSETTOP_BOX_UP\020\r\022\023\n",
-      "\017SETTOP_BOX_LEFT\020\016\022\026\n\022SETTOP_BOX_CONFIRM" +
-      "\020\017\022\024\n\020SETTOP_BOX_RIGHT\020\020\022\023\n\017SETTOP_BOX_D" +
-      "OWN\020\021\022\025\n\021SETTOP_BOX_VOLUME\020\022\022\037\n\033SETTOP_B" +
-      "OX_VOLUME_REDUCTION\020\023\022\033\n\027SETTOP_BOX_CHAN" +
-      "NEL_PLUS\020\024\022 \n\034SETTOP_BOX_CHANNEL_REDUCTI" +
-      "ON\020\025\022\023\n\017SETTOP_BOX_MENU\020\026*\262\004\n\021Television" +
-      "Command\022\037\n\033TELEVISION_VOLUME_REDUCTION\020\000" +
-      "\022\033\n\027TELEVISION_CHANNEL_PLUS\020\001\022\023\n\017TELEVIS" +
-      "ION_MENU\020\002\022 \n\034TELEVISION_CHANNEL_REDUCTI" +
-      "ON\020\003\022\025\n\021TELEVISION_VOLUME\020\004\022\024\n\020TELEVISIO",
-      "N_POWER\020\005\022\023\n\017TELEVISION_MUTE\020\006\022\020\n\014TELEVI" +
-      "SION_1\020\007\022\020\n\014TELEVISION_2\020\010\022\020\n\014TELEVISION" +
-      "_3\020\t\022\020\n\014TELEVISION_4\020\n\022\020\n\014TELEVISION_5\020\013" +
-      "\022\020\n\014TELEVISION_6\020\014\022\020\n\014TELEVISION_7\020\r\022\020\n\014" +
-      "TELEVISION_8\020\016\022\020\n\014TELEVISION_9\020\017\022\032\n\026TELE" +
-      "VISION_COMBINATION\020\020\022\020\n\014TELEVISION_0\020\021\022\024" +
-      "\n\020TELEVISION_AV_TV\020\022\022\025\n\021TELEVISION_RETUR" +
-      "N\020\023\022\026\n\022TELEVISION_CONFIRM\020\024\022\021\n\rTELEVISIO" +
-      "N_UP\020\025\022\023\n\017TELEVISION_LEFT\020\026\022\024\n\020TELEVISIO" +
-      "N_RIGHT\020\027\022\023\n\017TELEVISION_DOWN\020\030*\253\004\n\022Elect",
-      "ricFanCommand\022\027\n\023ELECTRIC_FAN_ON_OFF\020\000\022\036" +
-      "\n\032ELECTRIC_FAN_WIND_VELOCITY\020\001\022\026\n\022ELECTR" +
-      "IC_FAN_SWING\020\002\022\025\n\021ELECTRIC_FAN_MODE\020\003\022\033\n" +
-      "\027ELECTRIC_FAN_FIXED_TIME\020\004\022\026\n\022ELECTRIC_F" +
-      "AN_LIGHT\020\005\022\026\n\022ELECTRIC_FAN_ANION\020\006\022\022\n\016EL" +
-      "ECTRIC_FAN_1\020\007\022\022\n\016ELECTRIC_FAN_2\020\010\022\022\n\016EL" +
-      "ECTRIC_FAN_3\020\t\022\022\n\016ELECTRIC_FAN_4\020\n\022\022\n\016EL" +
-      "ECTRIC_FAN_5\020\013\022\022\n\016ELECTRIC_FAN_6\020\014\022\022\n\016EL" +
-      "ECTRIC_FAN_7\020\r\022\022\n\016ELECTRIC_FAN_8\020\016\022\022\n\016EL" +
-      "ECTRIC_FAN_9\020\017\022\026\n\022ELECTRIC_FAN_SLEEP\020\020\022\027",
-      "\n\023ELECTRIC_FAN_FREEZE\020\021\022\035\n\031ELECTRIC_FAN_" +
-      "BLOWING_RATE\020\022\022\034\n\030ELECTRIC_FAN_BLOWING_L" +
-      "OW\020\023\022\037\n\033ELECTRIC_FAN_BLOWING_MEDIUM\020\024\022\035\n" +
-      "\031ELECTRIC_FAN_BLOWING_HIGH\020\025*\230\004\n\020Project" +
-      "orCommand\022\026\n\022PROJECTOR_POWER_ON\020\000\022\027\n\023PRO" +
-      "JECTOR_POWER_OFF\020\001\022\026\n\022PROJECTOR_COMPUTER" +
-      "\020\002\022\023\n\017PROJECTOR_VIDEO\020\003\022\033\n\027PROJECTOR_SIG" +
-      "NAL_SOURCE\020\004\022\027\n\023PROJECTOR_ZOOM_PLUS\020\005\022\034\n" +
-      "\030PROJECTOR_ZOOM_REDUCTION\020\006\022\030\n\024PROJECTOR" +
-      "_IMAGE_PLUS\020\007\022\035\n\031PROJECTOR_IMAGE_REDUCTI",
-      "ON\020\010\022\022\n\016PROJECTOR_MENU\020\t\022\025\n\021PROJECTOR_CO" +
-      "NFIRM\020\n\022\020\n\014PROJECTOR_UP\020\013\022\022\n\016PROJECTOR_L" +
-      "EFT\020\014\022\023\n\017PROJECTOR_RIGHT\020\r\022\022\n\016PROJECTOR_" +
-      "DOWN\020\016\022\022\n\016PROJECTOR_QUIT\020\017\022\024\n\020PROJECTOR_" +
-      "VOLUME\020\020\022\036\n\032PROJECTOR_VOLUME_REDUCTION\020\021" +
-      "\022\022\n\016PROJECTOR_MUTE\020\022\022\022\n\016PROJECTOR_AUTO\020\023" +
-      "\022\023\n\017PROJECTOR_PAUSE\020\024\022\030\n\024PROJECTOR_BRIGH" +
-      "TNESS\020\025*\274\002\n\tAlarmType\022\026\n\022ALARM_TYPE_PRIM" +
-      "ARY\020\001\022\030\n\024ALARM_TYPE_SECONDARY\020\002\022\025\n\021ALARM" +
-      "_TYPE_TAMPER\020\004\022\032\n\026ALARM_TYPE_LOW_BATTERY",
-      "\020\010\022\026\n\022ALARM_TYPE_TROUBLE\020@\022\033\n\026ALARM_TYPE" +
-      "_MAINS_FAULT\020\200\001\022\036\n\031ALARM_TYPE_BATTERY_DE" +
-      "FECT\020\200\004\022+\n%ALARM_TYPE_LACK_OF_SUPERVISIO" +
-      "N_REPORT\020\200\200\004\022\037\n\031ALARM_TYPE_CAMERA_OFFLIN" +
-      "E\020\201\200\004\022\'\n!ALARM_TYPE_CAMERA_MOTION_DETECT" +
-      "ED\020\202\200\004*n\n\021WindowCoverAction\022\034\n\030WINDOW_CO" +
-      "VER_ACTION_OPEN\020\000\022\035\n\031WINDOW_COVER_ACTION" +
-      "_CLOSE\020\001\022\034\n\030WINDOW_COVER_ACTION_STOP\020\002"
+      "\030\003 \001(\014\"\031\n\004Type\022\007\n\003PNG\020\000\022\010\n\004JPEG\020\001\"\372\002\n\022Lo" +
+      "calNetworkDevice\022\n\n\002id\030\001 \001(\005\022\023\n\013mac_addr" +
+      "ess\030\002 \001(\014\022\022\n\nip_address\030\003 \003(\014\0227\n\014network" +
+      "_type\030\004 \001(\0162!.mrtech.smarthome.rpc.Netwo",
+      "rkType\0220\n\005class\030\005 \001(\0162!.mrtech.smarthome" +
+      ".rpc.DeviceClass\022\020\n\010tx_bytes\030\006 \001(\004\022\020\n\010rx" +
+      "_bytes\030\007 \001(\004\022\017\n\007tx_rate\030\010 \001(\r\022\017\n\007rx_rate" +
+      "\030\t \001(\r\022\022\n\nfirst_seen\030\n \001(\004\022\021\n\tlast_seen\030" +
+      "\013 \001(\0042W\n\006detail\022\034.mrtech.smarthome.rpc.D" +
+      "evice\030\203\002 \001(\0132(.mrtech.smarthome.rpc.Loca" +
+      "lNetworkDevice*<\n\rSeverityLevel\022\010\n\004INFO\020" +
+      "\001\022\013\n\007WARNING\020\002\022\t\n\005ERROR\020\003\022\t\n\005FATAL\020\004*\214\001\n" +
+      "\rBatteryStatus\022\035\n\031BATTERY_STATUS_NO_BATT" +
+      "ERY\020\000\022\033\n\027BATTERY_STATUS_CHARGING\020\001\022\036\n\032BA",
+      "TTERY_STATUS_DISCHARGING\020\002\022\037\n\033BATTERY_ST" +
+      "ATUS_NOT_CHARGING\020\003*\265\001\n\rServiceStatus\022\035\n" +
+      "\031SERVICE_STATUS_NO_SERVICE\020\000\022\035\n\031SERVICE_" +
+      "STATUS_RESTRICTED\020\001\022\030\n\024SERVICE_STATUS_VA" +
+      "LID\020\002\022.\n*SERVICE_STATUS_RESTRICTED_REGIO" +
+      "NAL_SERVICE\020\003\022\034\n\030SERVICE_STATUS_HIBERNAT" +
+      "E\020\004*\263\001\n\rServiceDomain\022\035\n\031SERVICE_DOMAIN_" +
+      "NO_SERVICE\020\000\022\025\n\021SERVICE_DOMAIN_CS\020\001\022\025\n\021S" +
+      "ERVICE_DOMAIN_PS\020\002\022\030\n\024SERVICE_DOMAIN_PS_" +
+      "CS\020\003\022!\n\035SERVICE_DOMAIN_NOT_REGISTERED\020\004\022",
+      "\030\n\023SERVICE_DOMAIN_CDMA\020\377\001*\237\002\n\rOperationM" +
+      "ode\022\035\n\031OPERATION_MODE_NO_SERVICE\020\000\022\027\n\023OP" +
+      "ERATION_MODE_AMPS\020\001\022\027\n\023OPERATION_MODE_CD" +
+      "MA\020\002\022\033\n\027OPERATION_MODE_GSM_GPRS\020\003\022\026\n\022OPE" +
+      "RATION_MODE_HDR\020\004\022\030\n\024OPERATION_MODE_WCDM" +
+      "A\020\005\022\026\n\022OPERATION_MODE_GPS\020\006\022\034\n\030OPERATION" +
+      "_MODE_GSM_WCDMA\020\007\022\033\n\027OPERATION_MODE_CDMA" +
+      "_HDR\020\010\022\033\n\027OPERATION_MODE_TD_SCDMA\020\017*\265\001\n\010" +
+      "SimState\022\025\n\021SIM_STATE_INVALID\020\000\022\023\n\017SIM_S" +
+      "TATE_VALID\020\001\022\030\n\024SIM_STATE_CS_INVALID\020\002\022\030",
+      "\n\024SIM_STATE_PS_INVALID\020\003\022\033\n\027SIM_STATE_PS" +
+      "_CS_INVALID\020\004\022\025\n\020SIM_STATE_ROMSIM\020\360\001\022\025\n\020" +
+      "SIM_STATE_NO_SIM\020\372\001*\205\005\n\020SubOperationMode" +
+      "\022!\n\035SUB_OPERATION_MODE_NO_SERVICE\020\000\022\032\n\026S" +
+      "UB_OPERATION_MODE_GSM\020\001\022\033\n\027SUB_OPERATION" +
+      "_MODE_GPRS\020\002\022\033\n\027SUB_OPERATION_MODE_EDGE\020" +
+      "\003\022\034\n\030SUB_OPERATION_MODE_WCDMA\020\004\022\034\n\030SUB_O" +
+      "PERATION_MODE_HSDPA\020\005\022\034\n\030SUB_OPERATION_M" +
+      "ODE_HSUPA\020\006\022\"\n\036SUB_OPERATION_MODE_HSUPA_" +
+      "HSDPA\020\007\022\037\n\033SUB_OPERATION_MODE_TD_SCDMA\020\010",
+      "\022 \n\034SUB_OPERATION_MODE_HSPA_PLUS\020\t\022\035\n\031SU" +
+      "B_OPERATION_MODE_EVDO_0\020\n\022\035\n\031SUB_OPERATI" +
+      "ON_MODE_EVDO_A\020\013\022\035\n\031SUB_OPERATION_MODE_E" +
+      "VDO_B\020\014\022\"\n\036SUB_OPERATION_MODE_CDMA2000_1" +
+      "X\020\r\022\032\n\026SUB_OPERATION_MODE_UMB\020\016\022\'\n#SUB_O" +
+      "PERATION_MODE_CDMA2000_1X_EVDV\020\017\022\"\n\036SUB_" +
+      "OPERATION_MODE_CDMA2000_3X\020\020\022&\n\"SUB_OPER" +
+      "ATION_MODE_HSPA_PLUS_64QAM\020\021\022%\n!SUB_OPER" +
+      "ATION_MODE_HSPA_PLUS_MIMO\020\022*\321\001\n\014Wireless" +
+      "Mode\022\023\n\017WIRELESS_MODE_B\020\000\022\023\n\017WIRELESS_MO",
+      "DE_G\020\001\022\023\n\017WIRELESS_MODE_N\020\002\022\024\n\020WIRELESS_" +
+      "MODE_BG\020\003\022\024\n\020WIRELESS_MODE_NG\020\004\022\025\n\021WIREL" +
+      "ESS_MODE_BGN\020\005\022\023\n\017WIRELESS_MODE_A\020\006\022\024\n\020W" +
+      "IRELESS_MODE_AN\020\007\022\024\n\020WIRELESS_MODE_AC\020\010*" +
+      "P\n\nWpaVersion\022\023\n\017WPA_VERSION_WPA\020\000\022\024\n\020WP" +
+      "A_VERSION_WPA2\020\001\022\027\n\023WPA_VERSION_UNKNOWN\020" +
+      "\002*E\n\rKeyManagement\022\026\n\022KEY_MANAGEMENT_PSK" +
+      "\020\000\022\034\n\030KEY_MANAGEMENT_IEEE8021X\020\001*H\n\017Phon" +
+      "eNumberType\022\031\n\025PHONE_NUMBER_TYPE_SMS\020\000\022\032" +
+      "\n\026PHONE_NUMBER_TYPE_DIAL\020\001*I\n\014AccountGro",
+      "up\022\037\n\033ACCOUNT_GROUP_ADMINISTRATOR\020\000\022\030\n\024A" +
+      "CCOUNT_GROUP_MEMBER\020\001*u\n\nDeviceType\022\026\n\022D" +
+      "EVICE_TYPE_ZIGBEE\020\000\022\026\n\022DEVICE_TYPE_CAMER" +
+      "A\020\001\022\030\n\024DEVICE_TYPE_INFRARED\020\002\022\035\n\031DEVICE_" +
+      "TYPE_LOCAL_NETWORK\020\003*\344\001\n\013PowerSource\022\030\n\024" +
+      "POWER_SOURCE_UNKNOWN\020\000\022\036\n\032POWER_SOURCE_M" +
+      "AINS_1_PHASE\020\001\022\036\n\032POWER_SOURCE_MAINS_3_P" +
+      "HASE\020\002\022\030\n\024POWER_SOURCE_BATTERY\020\003\022\023\n\017POWE" +
+      "R_SOURCE_DC\020\004\022&\n\"POWER_SOURCE_EMERG_MAIN" +
+      "S_CONST_PWR\020\005\022$\n POWER_SOURCE_EMERG_MAIN",
+      "S_XFER_SW\020\006*\245\013\n\010DeviceId\022\033\n\027DEVICE_ID_ON" +
+      "_OFF_SWITCH\020\000\022\"\n\036DEVICE_ID_LEVEL_CONTROL" +
+      "_SWITCH\020\001\022\033\n\027DEVICE_ID_ON_OFF_OUTPUT\020\002\022\'" +
+      "\n#DEVICE_ID_LEVEL_CONTROLLABLE_OUTPUT\020\003\022" +
+      "\034\n\030DEVICE_ID_SCENE_SELECTOR\020\004\022 \n\034DEVICE_" +
+      "ID_CONFIGURATION_TOOL\020\005\022\034\n\030DEVICE_ID_REM" +
+      "OTE_CONTROL\020\006\022 \n\034DEVICE_ID_COMBINED_INTE" +
+      "RFACE\020\007\022\034\n\030DEVICE_ID_RANGE_EXTENDER\020\010\022 \n" +
+      "\034DEVICE_ID_MAINS_POWER_OUTLET\020\t\022\027\n\023DEVIC" +
+      "E_ID_DOOR_LOCK\020\n\022\"\n\036DEVICE_ID_DOOR_LOCK_",
+      "CONTROLLER\020\013\022\033\n\027DEVICE_ID_SIMPLE_SENSOR\020" +
+      "\014\022*\n&DEVICE_ID_CONSUMPTION_AWARENESS_DEV" +
+      "ICE\020\r\022\032\n\026DEVICE_ID_HOME_GATEWAY\020P\022\030\n\024DEV" +
+      "ICE_ID_SMART_PLUG\020Q\022\031\n\025DEVICE_ID_WHITE_G" +
+      "OODS\020R\022\035\n\031DEVICE_ID_METER_INTERFACE\020S\022!\n" +
+      "\035DEVICE_ID_INFRARED_CONTROLLER\020T\022\032\n\025DEVI" +
+      "CE_ID_TEST_DEVICE\020\377\001\022\033\n\026DEVICE_ID_ON_OFF" +
+      "_LIGHT\020\200\002\022\035\n\030DEVICE_ID_DIMMABLE_LIGHT\020\201\002" +
+      "\022%\n DEVICE_ID_COLORED_DIMMABLE_LIGHT\020\202\002\022" +
+      "\"\n\035DEVICE_ID_ON_OFF_LIGHT_SWITCH\020\203\002\022\034\n\027D",
+      "EVICE_ID_DIMMER_SWITCH\020\204\002\022\"\n\035DEVICE_ID_C" +
+      "OLOR_DIMMER_SWITCH\020\205\002\022\033\n\026DEVICE_ID_LIGHT" +
+      "_SENSOR\020\206\002\022\037\n\032DEVICE_ID_OCCUPANCY_SENSOR" +
+      "\020\207\002\022\024\n\017DEVICE_ID_SHADE\020\200\004\022\037\n\032DEVICE_ID_S" +
+      "HADE_CONTROLLER\020\201\004\022%\n DEVICE_ID_WINDOW_C" +
+      "OVERING_DEVICE\020\202\004\022)\n$DEVICE_ID_WINDOW_CO" +
+      "VERING_CONTROLLER\020\203\004\022#\n\036DEVICE_ID_HEATIN" +
+      "G_COOLING_UNIT\020\200\006\022\031\n\024DEVICE_ID_THERMOSTA" +
+      "T\020\201\006\022!\n\034DEVICE_ID_TEMPERATURE_SENSOR\020\202\006\022" +
+      "\023\n\016DEVICE_ID_PUMP\020\203\006\022\036\n\031DEVICE_ID_PUMP_C",
+      "ONTROLLER\020\204\006\022\036\n\031DEVICE_ID_PRESSURE_SENSO" +
+      "R\020\205\006\022\032\n\025DEVICE_ID_FLOW_SENSOR\020\206\006\022\034\n\027DEVI" +
+      "CE_ID_MINI_SPLIT_AC\020\207\006\022/\n*DEVICE_ID_IAS_" +
+      "CONTROL_INDICATING_EQUIPMENT\020\200\010\022.\n)DEVIC" +
+      "E_ID_IAS_ANCILLARY_CONTROL_EQUIPMENT\020\201\010\022" +
+      "\027\n\022DEVICE_ID_IAS_ZONE\020\202\010\022!\n\034DEVICE_ID_IA" +
+      "S_WARNING_DEVICE\020\203\010*Z\n\nTargetType\022\035\n\031TAR" +
+      "GET_TYPE_NOT_SPECIFIED\020\000\022\026\n\022TARGET_TYPE_" +
+      "DEVICE\020\001\022\025\n\021TARGET_TYPE_GROUP\020\002*\300\002\n\017Meas" +
+      "urementType\022\031\n\025MEASUREMENT_TYPE_NONE\020\000\022\033",
+      "\n\027MEASUREMENT_TYPE_ACTIVE\020\001\022\035\n\031MEASUREME" +
+      "NT_TYPE_REACTIVE\020\002\022\035\n\031MEASUREMENT_TYPE_A" +
+      "PPARENT\020\004\022\034\n\030MEASUREMENT_TYPE_PHASE_A\020\010\022" +
+      "\034\n\030MEASUREMENT_TYPE_PHASE_B\020\020\022\034\n\030MEASURE" +
+      "MENT_TYPE_PHASE_C\020 \022\027\n\023MEASUREMENT_TYPE_" +
+      "DC\020@\022\037\n\032MEASUREMENT_TYPE_HARMONICS\020\200\001\022#\n" +
+      "\036MEASUREMENT_TYPE_POWER_QUALITY\020\200\002*\222\003\n\rU" +
+      "nitOfMeasure\022#\n\037UNIT_OF_MEASURE_KILO_WAT" +
+      "T_HOURS\020\000\022(\n$UNIT_OF_MEASURE_CUBIC_METER" +
+      "_PER_HOUR\020\001\022\'\n#UNIT_OF_MEASURE_CUBIC_FEE",
+      "T_PER_HOUR\020\002\022.\n*UNIT_OF_MEASURE_CENTUM_C" +
+      "UBIC_FEET_PER_HOUR\020\003\022\'\n#UNIT_OF_MEASURE_" +
+      "US_GALLONS_PER_HOUR\020\004\022(\n$UNIT_OF_MEASURE" +
+      "_IMP_GALLONS_PER_HOUR\020\005\022 \n\034UNIT_OF_MEASU" +
+      "RE_BTU_PER_HOUR\020\006\022#\n\037UNIT_OF_MEASURE_LIT" +
+      "ERS_PER_HOUR\020\007\022\035\n\031UNIT_OF_MEASURE_GUAGE_" +
+      "KPA\020\010\022 \n\034UNIT_OF_MEASURE_ABSOLUTE_KPA\020\t*" +
+      "\342\003\n\010ZoneType\022\032\n\026ZONE_TYPE_STANDARD_CIE\020\000" +
+      "\022\033\n\027ZONE_TYPE_MOTION_SENSOR\020\r\022\034\n\030ZONE_TY" +
+      "PE_CONTACT_SWITCH\020\025\022\031\n\025ZONE_TYPE_FIRE_SE",
+      "NSOR\020(\022\032\n\026ZONE_TYPE_WATER_SENSOR\020*\022\030\n\024ZO" +
+      "NE_TYPE_GAS_SENSOR\020+\022\'\n#ZONE_TYPE_PERSON" +
+      "AL_EMERGENCY_DEVICE\020,\022\'\n#ZONE_TYPE_VIBRA" +
+      "TION_MOVEMENT_SENSOR\020-\022\035\n\030ZONE_TYPE_REMO" +
+      "TE_CONTROL\020\217\002\022\026\n\021ZONE_TYPE_KEY_FOB\020\225\002\022\025\n" +
+      "\020ZONE_TYPE_KEYPAD\020\235\004\022&\n!ZONE_TYPE_STANDA" +
+      "RD_WARNING_DEVICE\020\245\004\022!\n\034ZONE_TYPE_GLASS_" +
+      "BREAK_SENSOR\020\246\004\022 \n\033ZONE_TYPE_SECURITY_RE" +
+      "PEATER\020\251\004\022!\n\033ZONE_TYPE_INVALID_ZONE_TYPE" +
+      "\020\377\377\003*]\n\010ArmGroup\022\022\n\016ARM_GROUP_STAY\020\000\022\023\n\017",
+      "ARM_GROUP_SLEEP\020\001\022\022\n\016ARM_GROUP_BOTH\020\002\022\024\n" +
+      "\020ARM_GROUP_ALWAYS\020\003*X\n\007ArmMode\022\023\n\017ARM_MO" +
+      "DE_DISARM\020\000\022\021\n\rARM_MODE_STAY\020\001\022\022\n\016ARM_MO" +
+      "DE_SLEEP\020\002\022\021\n\rARM_MODE_AWAY\020\003*\371\001\n\013PanelS" +
+      "tatus\022\031\n\025PANEL_STATUS_DISARMED\020\000\022\033\n\027PANE" +
+      "L_STATUS_ARMED_STAY\020\001\022\034\n\030PANEL_STATUS_AR" +
+      "MED_SLEEP\020\002\022\033\n\027PANEL_STATUS_ARMED_AWAY\020\003" +
+      "\022\033\n\027PANEL_STATUS_EXIT_DELAY\020\004\022\034\n\030PANEL_S" +
+      "TATUS_ENTRY_DELAY\020\005\022!\n\035PANEL_STATUS_NOT_" +
+      "READY_TO_ARM\020\006\022\031\n\025PANEL_STATUS_IN_ALARM\020",
+      "\007*\323\001\n\013AlarmStatus\022\031\n\025ALARM_STATUS_NO_ALA" +
+      "RM\020\000\022\030\n\024ALARM_STATUS_BURGLAR\020\001\022\025\n\021ALARM_" +
+      "STATUS_FIRE\020\002\022\032\n\026ALARM_STATUS_EMERGENCY\020" +
+      "\003\022\035\n\031ALARM_STATUS_POLICE_PANIC\020\004\022\033\n\027ALAR" +
+      "M_STATUS_FIRE_PANIC\020\005\022 \n\034ALARM_STATUS_EM" +
+      "ERGENCY_PANIC\020\006*^\n\rTimelineLevel\022\027\n\023TIME" +
+      "LINE_LEVEL_INFO\020\000\022\032\n\026TIMELINE_LEVEL_WARN" +
+      "ING\020\001\022\030\n\024TIMELINE_LEVEL_ALARM\020\002*\210\007\n\014Time" +
+      "lineType\022 \n\034TIMELINE_TYPE_SYSTEM_STARTUP" +
+      "\020\000\022\027\n\023TIMELINE_TYPE_ARMED\020\001\022\032\n\026TIMELINE_",
+      "TYPE_DISARMED\020\002\022&\n\"TIMELINE_TYPE_IAS_ZON" +
+      "E_BATTERY_LOW\020\003\022 \n\034TIMELINE_TYPE_IAS_ZON" +
+      "E_ALARM\020\004\022!\n\035TIMELINE_TYPE_IAS_ZONE_TAMP" +
+      "ER\020\005\022\"\n\036TIMELINE_TYPE_IAS_ZONE_TROUBLE\020\006" +
+      "\022&\n\"TIMELINE_TYPE_IAS_ZONE_MAINS_FAULT\020\007" +
+      "\0225\n1TIMELINE_TYPE_IAS_ZONE_LACK_OF_SUPER" +
+      "VISION_REPORT\020\010\022)\n%TIMELINE_TYPE_IAS_ZON" +
+      "E_BATTERY_DEFECT\020\t\022\037\n\033TIMELINE_TYPE_TOGG" +
+      "LE_ON_OFF\020\n\022&\n\"TIMELINE_TYPE_ON_OFF_STAT" +
+      "E_CHANGED\020\013\022 \n\034TIMELINE_TYPE_CAMERA_OFFL",
+      "INE\020\014\022/\n+TIMELINE_TYPE_CAMERA_MOTION_DET" +
+      "ECTION_ALARM\020\r\022&\n\"TIMELINE_TYPE_OVERCURR" +
+      "ENT_DETECTED\020\016\022&\n\"TIMELINE_TYPE_POWER_SO" +
+      "URCE_CHANGED\020\017\022$\n TIMELINE_TYPE_SYSTEM_B" +
+      "ATTERY_LOW\020\020\022\'\n#TIMELINE_TYPE_MOBILE_DAT" +
+      "A_CONNECTED\020\021\022(\n$TIMELINE_TYPE_SMART_LOC" +
+      "K_LOW_BATTERY\020\022\022%\n!TIMELINE_TYPE_SMART_L" +
+      "OCK_UNLOCKED\020\023\022\'\n#TIMELINE_TYPE_FAILED_U" +
+      "NLOCK_ATTEMPT\020\024\022)\n%TIMELINE_TYPE_USB_MOD" +
+      "EM_STATE_CHANGED\020\025\022&\n\"TIMELINE_TYPE_CONT",
+      "ROL_WINDOW_COVER\020\026*\266\001\n\016CameraSdStatus\022\035\n" +
+      "\031CAMERA_SD_STATUS_NO_EXIST\020\000\022\035\n\031CAMERA_S" +
+      "D_STATUS_INSERTED\020\001\022\036\n\032CAMERA_SD_STATUS_" +
+      "RECORDING\020\002\022%\n!CAMERA_SD_STATUS_FILESYST" +
+      "EM_ERROR\020\003\022\037\n\033CAMERA_SD_STATUS_FORMATTIN" +
+      "G\020\004*H\n\016CameraWlanMode\022\032\n\026CAMERA_WLAN_MOD" +
+      "E_INFRA\020\000\022\032\n\026CAMERA_WLAN_MODE_ADHOC\020\001*P\n" +
+      "\021CameraWlanEncrypt\022\034\n\030CAMERA_WLAN_ENCRYP" +
+      "T_OPEN\020\000\022\035\n\031CAMERA_WLAN_ENCRYPT_SHARE\020\001*" +
+      "\355\001\n\022CameraWlanAuthtype\022\035\n\031CAMERA_WLAN_AU",
+      "THTYPE_NONE\020\000\022\034\n\030CAMERA_WLAN_AUTHTYPE_WE" +
+      "P\020\001\022%\n!CAMERA_WLAN_AUTHTYPE_WPA_PSK_TKIP" +
+      "\020\002\022$\n CAMERA_WLAN_AUTHTYPE_WPA_PSK_AES\020\003" +
+      "\022&\n\"CAMERA_WLAN_AUTHTYPE_WPA2_PSK_TKIP\020\004" +
+      "\022%\n!CAMERA_WLAN_AUTHTYPE_WPA2_PSK_AES\020\005*" +
+      "W\n\023CameraWlanKeyFormat\022\036\n\032CAMERA_WLAN_KE" +
+      "Y_FORMAT_HEX\020\000\022 \n\034CAMERA_WLAN_KEY_FORMAT" +
+      "_ASCII\020\001*Z\n\023CameraWlanKeyLength\022 \n\034CAMER" +
+      "A_WLAN_KEY_LENGTH_64BIT\020\000\022!\n\035CAMERA_WLAN" +
+      "_KEY_LENGTH_128BIT\020\001*\223\001\n\nActionType\022\023\n\017A",
+      "CTION_TYPE_ARM\020\000\022\035\n\031ACTION_TYPE_TOGGLE_O" +
+      "N_OFF\020\001\022!\n\035ACTION_TYPE_CONTROL_IR_DEVICE" +
+      "\020\002\022.\n*ACTION_TYPE_CONTROL_WINDOW_COVERIN" +
+      "G_DEVICE\020\003*@\n\013CommandType\022\030\n\024COMMAND_TYP" +
+      "E_BUILTIN\020\000\022\027\n\023COMMAND_TYPE_CUSTOM\020\001*3\n\010" +
+      "PlanType\022\023\n\017PLAN_TYPE_TIMER\020\000\022\022\n\016PLAN_TY" +
+      "PE_FAKE\020\001*E\n\007WanMode\022\022\n\016WAN_MODE_PPPOE\020\000" +
+      "\022\021\n\rWAN_MODE_DHCP\020\001\022\023\n\017WAN_MODE_STATIC\020\002" +
+      "*)\n\007WanPort\022\016\n\nWAN_PORT_1\020\001\022\016\n\nWAN_PORT_" +
+      "2\020\002*3\n\007WanType\022\025\n\021WAN_TYPE_INTERNET\020\000\022\021\n",
+      "\rWAN_TYPE_AREA\020\001*W\n\013WanMacClone\022\026\n\022WAN_M" +
+      "AC_CLONE_NONE\020\000\022\026\n\022WAN_MAC_CLONE_AUTO\020\001\022" +
+      "\030\n\024WAN_MAC_CLONE_MANUAL\020\002*,\n\010WlanPort\022\017\n" +
+      "\013WLAN_PORT_1\020\001\022\017\n\013WLAN_PORT_2\020\002*_\n\016Acces" +
+      "sRuleMode\022\027\n\023ACCESS_RULE_DISABLE\020\000\022\031\n\025AC" +
+      "CESS_RULE_BLACKLIST\020\001\022\031\n\025ACCESS_RULE_WHI" +
+      "TELIST\020\002*G\n\tBandWidth\022\022\n\016BAND_WIDTH_20M\020" +
+      "\000\022\022\n\016BAND_WIDTH_40M\020\001\022\022\n\016BAND_WIDTH_80M\020" +
+      "\002*P\n\tSambaMode\022\027\n\023SAMBA_MODE_DISABLED\020\000\022" +
+      "\023\n\017SAMBA_MODE_USER\020\001\022\025\n\021SAMBA_MODE_PUBLI",
+      "C\020\002*=\n\nAccessType\022\025\n\021ACCESS_TYPE_WIRED\020\001" +
+      "\022\030\n\024ACCESS_TYPE_WIRELESS\020\002*6\n\007QosMode\022\023\n" +
+      "\017QOS_MODE_NORMAL\020\001\022\026\n\022QOS_MODE_EXCLUSIVE" +
+      "\020\002*S\n\013AclRuleMode\022\024\n\020ACL_RULE_DISABLE\020\000\022" +
+      "\026\n\022ACL_RULE_BLACKLIST\020\001\022\026\n\022ACL_RULE_WHIT" +
+      "ELIST\020\002*\177\n\tHddStatus\022\034\n\030HDD_STATUS_NOT_I" +
+      "NSTALLED\020\000\022\036\n\032HDD_STATUS_NOT_INITIALIZED" +
+      "\020\001\022\030\n\024HDD_STATUS_AVAILABLE\020\002\022\032\n\026HDD_STAT" +
+      "US_UNINSTALLED\020\003*E\n\017NetworkProtocol\022\030\n\024N" +
+      "ETWORK_PROTOCOL_TCP\020\000\022\030\n\024NETWORK_PROTOCO",
+      "L_UDP\020\001*v\n\023SignalStrengthLevel\022\035\n\031SIGNAL" +
+      "_STRENGTH_LEVEL_LOW\020\000\022 \n\034SIGNAL_STRENGTH" +
+      "_LEVEL_MIDDLE\020\001\022\036\n\032SIGNAL_STRENGTH_LEVEL" +
+      "_HIGH\020\002*E\n\nPPPoEState\022\034\n\030PPPOE_STATE_DIS" +
+      "CONNECTED\020\000\022\031\n\025PPPOE_STATE_CONNECTED\020\001*\206" +
+      "\001\n\013QosPriority\022\030\n\024QOS_PRIORITY_HIGHEST\020\000" +
+      "\022\025\n\021QOS_PRIORITY_HIGH\020\001\022\027\n\023QOS_PRIORITY_" +
+      "MEDIUM\020\002\022\024\n\020QOS_PRIORITY_LOW\020\003\022\027\n\023QOS_PR" +
+      "IORITY_LOWEST\020\004*)\n\005CpuId\022\017\n\013CPU_ID_CPU0\020" +
+      "\000\022\017\n\013CPU_ID_CPU1\020\001*B\n\007VpnType\022\021\n\rVPN_TYP",
+      "E_NONE\020\000\022\021\n\rVPN_TYPE_PPTP\020\001\022\021\n\rVPN_TYPE_" +
+      "L2TP\020\002*r\n\022InfraredMatchLevel\022\034\n\030INFRARED" +
+      "_MATCH_LEVEL_LOW\020\000\022\037\n\033INFRARED_MATCH_LEV" +
+      "EL_MEDIUM\020\001\022\035\n\031INFRARED_MATCH_LEVEL_HIGH" +
+      "\020\002*\301\002\n\022InfraredDeviceType\022(\n$INFRARED_DE" +
+      "VICE_TYPE_AIR_CONDITIONER\020\000\022#\n\037INFRARED_" +
+      "DEVICE_TYPE_DVD_PLAYER\020\001\022&\n\"INFRARED_DEV" +
+      "ICE_TYPE_IP_TELEVISION\020\002\022#\n\037INFRARED_DEV" +
+      "ICE_TYPE_SETTOP_BOX\020\003\022#\n\037INFRARED_DEVICE" +
+      "_TYPE_TELEVISION\020\004\022%\n!INFRARED_DEVICE_TY",
+      "PE_ELECTRIC_FAN\020\005\022\"\n\036INFRARED_DEVICE_TYP" +
+      "E_PROJECTOR\020\006\022\037\n\033INFRARED_DEVICE_TYPE_CU" +
+      "STOM\020\007*\303\001\n\022InfraredMatchError\022 \n\034INFRARE" +
+      "D_MATCH_ERROR_SUCCESS\020\000\022!\n\035INFRARED_MATC" +
+      "H_ERROR_NO_MATCH\020\001\022\"\n\036INFRARED_MATCH_ERR" +
+      "OR_CANCELLED\020\002\022\"\n\036INFRARED_MATCH_ERROR_T" +
+      "IMED_OUT\020\003\022 \n\034INFRARED_MATCH_ERROR_FAILU" +
+      "RE\020\004*\270\001\n\031AirConditionerBlowingRate\022%\n!AI" +
+      "R_CONDITIONER_BLOWING_RATE_AUTO\020\000\022$\n AIR" +
+      "_CONDITIONER_BLOWING_RATE_LOW\020\001\022\'\n#AIR_C",
+      "ONDITIONER_BLOWING_RATE_MEDIUM\020\002\022%\n!AIR_" +
+      "CONDITIONER_BLOWING_RATE_HIGH\020\003*\200\001\n\025AirC" +
+      "onditionerWindDir\022\037\n\033AIR_CONDITIONER_WIN" +
+      "D_DIR_UP\020\000\022#\n\037AIR_CONDITIONER_WIND_DIR_M" +
+      "IDDLE\020\001\022!\n\035AIR_CONDITIONER_WIND_DIR_DOWN" +
+      "\020\002*\210\002\n\021AirConditionerKey\022\035\n\031AIR_CONDITIO" +
+      "NER_KEY_POWER\020\000\022\034\n\030AIR_CONDITIONER_KEY_M" +
+      "ODE\020\001\022$\n AIR_CONDITIONER_KEY_BLOWING_RAT" +
+      "E\020\002\022\'\n#AIR_CONDITIONER_KEY_MANUAL_WIND_D" +
+      "IR\020\003\022%\n!AIR_CONDITIONER_KEY_AUTO_WIND_DI",
+      "R\020\004\022\036\n\032AIR_CONDITIONER_KEY_TEMPUP\020\005\022 \n\034A" +
+      "IR_CONDITIONER_KEY_TEMPDOWN\020\006*\257\001\n\022AirCon" +
+      "ditionerMode\022\035\n\031AIR_CONDITIONER_MODE_AUT" +
+      "O\020\000\022\037\n\033AIR_CONDITIONER_MODE_FREEZE\020\001\022\034\n\030" +
+      "AIR_CONDITIONER_MODE_DRY\020\002\022\034\n\030AIR_CONDIT" +
+      "IONER_MODE_FAN\020\003\022\035\n\031AIR_CONDITIONER_MODE" +
+      "_HEAT\020\004*\320\003\n\020DvdPlayerCommand\022\023\n\017DVD_PLAY" +
+      "ER_LEFT\020\000\022\021\n\rDVD_PLAYER_UP\020\001\022\021\n\rDVD_PLAY" +
+      "ER_OK\020\002\022\023\n\017DVD_PLAYER_DOWN\020\003\022\024\n\020DVD_PLAY" +
+      "ER_RIGHT\020\004\022\024\n\020DVD_PLAYER_POWER\020\005\022\023\n\017DVD_",
+      "PLAYER_MUTE\020\006\022\033\n\027DVD_PLAYER_FAST_REVERSE" +
+      "\020\007\022\023\n\017DVD_PLAYER_PLAY\020\010\022\035\n\031DVD_PLAYER_FA" +
+      "ST_FORWARDED\020\t\022\031\n\025DVD_PLAYER_LAST_PIECE\020" +
+      "\n\022\023\n\017DVD_PLAYER_STOP\020\013\022\031\n\025DVD_PLAYER_NEX" +
+      "T_PIECE\020\014\022\027\n\023DVD_PLAYER_STANDARD\020\r\022\024\n\020DV" +
+      "D_PLAYER_PAUSE\020\016\022\024\n\020DVD_PLAYER_TITLE\020\017\022\036" +
+      "\n\032DVD_PLAYER_SWITCH_POSITION\020\020\022\023\n\017DVD_PL" +
+      "AYER_MENU\020\021\022\025\n\021DVD_PLAYER_RETURN\020\022*\333\004\n\023I" +
+      "pTelevisionCommand\022\027\n\023IP_TELEVISION_POWE" +
+      "R\020\000\022\026\n\022IP_TELEVISION_MUTE\020\001\022\030\n\024IP_TELEVI",
+      "SION_VOLUME\020\002\022\"\n\036IP_TELEVISION_VOLUME_RE" +
+      "DUCTION\020\003\022&\n\"IP_TELEVISION_CHANNEL_PLUS_" +
+      "OR_HOME\020\004\022+\n\'IP_TELEVISION_CHANNEL_REDUC" +
+      "TION_OR_MENU\020\005\022\024\n\020IP_TELEVISION_UP\020\006\022\026\n\022" +
+      "IP_TELEVISION_LEFT\020\007\022\024\n\020IP_TELEVISION_OK" +
+      "\020\010\022\027\n\023IP_TELEVISION_RIGHT\020\t\022\026\n\022IP_TELEVI" +
+      "SION_DOWN\020\n\022\037\n\033IP_TELEVISION_PLAY_OR_PAU" +
+      "SE\020\013\022\023\n\017IP_TELEVISION_1\020\014\022\023\n\017IP_TELEVISI" +
+      "ON_2\020\r\022\023\n\017IP_TELEVISION_3\020\016\022\023\n\017IP_TELEVI" +
+      "SION_4\020\017\022\023\n\017IP_TELEVISION_5\020\020\022\023\n\017IP_TELE",
+      "VISION_6\020\021\022\023\n\017IP_TELEVISION_7\020\022\022\023\n\017IP_TE" +
+      "LEVISION_8\020\023\022\023\n\017IP_TELEVISION_9\020\024\022\023\n\017IP_" +
+      "TELEVISION_0\020\025\022\030\n\024IP_TELEVISION_RETURN\020\026" +
+      "*\202\004\n\020SettopBoxCommand\022\026\n\022SETTOP_BOX_STAN" +
+      "DBY\020\000\022\020\n\014SETTOP_BOX_1\020\001\022\020\n\014SETTOP_BOX_2\020" +
+      "\002\022\020\n\014SETTOP_BOX_3\020\003\022\020\n\014SETTOP_BOX_4\020\004\022\020\n" +
+      "\014SETTOP_BOX_5\020\005\022\020\n\014SETTOP_BOX_6\020\006\022\020\n\014SET" +
+      "TOP_BOX_7\020\007\022\020\n\014SETTOP_BOX_8\020\010\022\020\n\014SETTOP_" +
+      "BOX_9\020\t\022\024\n\020SETTOP_BOX_GUIDE\020\n\022\020\n\014SETTOP_" +
+      "BOX_0\020\013\022\025\n\021SETTOP_BOX_RETURN\020\014\022\021\n\rSETTOP",
+      "_BOX_UP\020\r\022\023\n\017SETTOP_BOX_LEFT\020\016\022\026\n\022SETTOP" +
+      "_BOX_CONFIRM\020\017\022\024\n\020SETTOP_BOX_RIGHT\020\020\022\023\n\017" +
+      "SETTOP_BOX_DOWN\020\021\022\025\n\021SETTOP_BOX_VOLUME\020\022" +
+      "\022\037\n\033SETTOP_BOX_VOLUME_REDUCTION\020\023\022\033\n\027SET" +
+      "TOP_BOX_CHANNEL_PLUS\020\024\022 \n\034SETTOP_BOX_CHA" +
+      "NNEL_REDUCTION\020\025\022\023\n\017SETTOP_BOX_MENU\020\026*\262\004" +
+      "\n\021TelevisionCommand\022\037\n\033TELEVISION_VOLUME" +
+      "_REDUCTION\020\000\022\033\n\027TELEVISION_CHANNEL_PLUS\020" +
+      "\001\022\023\n\017TELEVISION_MENU\020\002\022 \n\034TELEVISION_CHA" +
+      "NNEL_REDUCTION\020\003\022\025\n\021TELEVISION_VOLUME\020\004\022",
+      "\024\n\020TELEVISION_POWER\020\005\022\023\n\017TELEVISION_MUTE" +
+      "\020\006\022\020\n\014TELEVISION_1\020\007\022\020\n\014TELEVISION_2\020\010\022\020" +
+      "\n\014TELEVISION_3\020\t\022\020\n\014TELEVISION_4\020\n\022\020\n\014TE" +
+      "LEVISION_5\020\013\022\020\n\014TELEVISION_6\020\014\022\020\n\014TELEVI" +
+      "SION_7\020\r\022\020\n\014TELEVISION_8\020\016\022\020\n\014TELEVISION" +
+      "_9\020\017\022\032\n\026TELEVISION_COMBINATION\020\020\022\020\n\014TELE" +
+      "VISION_0\020\021\022\024\n\020TELEVISION_AV_TV\020\022\022\025\n\021TELE" +
+      "VISION_RETURN\020\023\022\026\n\022TELEVISION_CONFIRM\020\024\022" +
+      "\021\n\rTELEVISION_UP\020\025\022\023\n\017TELEVISION_LEFT\020\026\022" +
+      "\024\n\020TELEVISION_RIGHT\020\027\022\023\n\017TELEVISION_DOWN",
+      "\020\030*\253\004\n\022ElectricFanCommand\022\027\n\023ELECTRIC_FA" +
+      "N_ON_OFF\020\000\022\036\n\032ELECTRIC_FAN_WIND_VELOCITY" +
+      "\020\001\022\026\n\022ELECTRIC_FAN_SWING\020\002\022\025\n\021ELECTRIC_F" +
+      "AN_MODE\020\003\022\033\n\027ELECTRIC_FAN_FIXED_TIME\020\004\022\026" +
+      "\n\022ELECTRIC_FAN_LIGHT\020\005\022\026\n\022ELECTRIC_FAN_A" +
+      "NION\020\006\022\022\n\016ELECTRIC_FAN_1\020\007\022\022\n\016ELECTRIC_F" +
+      "AN_2\020\010\022\022\n\016ELECTRIC_FAN_3\020\t\022\022\n\016ELECTRIC_F" +
+      "AN_4\020\n\022\022\n\016ELECTRIC_FAN_5\020\013\022\022\n\016ELECTRIC_F" +
+      "AN_6\020\014\022\022\n\016ELECTRIC_FAN_7\020\r\022\022\n\016ELECTRIC_F" +
+      "AN_8\020\016\022\022\n\016ELECTRIC_FAN_9\020\017\022\026\n\022ELECTRIC_F",
+      "AN_SLEEP\020\020\022\027\n\023ELECTRIC_FAN_FREEZE\020\021\022\035\n\031E" +
+      "LECTRIC_FAN_BLOWING_RATE\020\022\022\034\n\030ELECTRIC_F" +
+      "AN_BLOWING_LOW\020\023\022\037\n\033ELECTRIC_FAN_BLOWING" +
+      "_MEDIUM\020\024\022\035\n\031ELECTRIC_FAN_BLOWING_HIGH\020\025" +
+      "*\230\004\n\020ProjectorCommand\022\026\n\022PROJECTOR_POWER" +
+      "_ON\020\000\022\027\n\023PROJECTOR_POWER_OFF\020\001\022\026\n\022PROJEC" +
+      "TOR_COMPUTER\020\002\022\023\n\017PROJECTOR_VIDEO\020\003\022\033\n\027P" +
+      "ROJECTOR_SIGNAL_SOURCE\020\004\022\027\n\023PROJECTOR_ZO" +
+      "OM_PLUS\020\005\022\034\n\030PROJECTOR_ZOOM_REDUCTION\020\006\022" +
+      "\030\n\024PROJECTOR_IMAGE_PLUS\020\007\022\035\n\031PROJECTOR_I",
+      "MAGE_REDUCTION\020\010\022\022\n\016PROJECTOR_MENU\020\t\022\025\n\021" +
+      "PROJECTOR_CONFIRM\020\n\022\020\n\014PROJECTOR_UP\020\013\022\022\n" +
+      "\016PROJECTOR_LEFT\020\014\022\023\n\017PROJECTOR_RIGHT\020\r\022\022" +
+      "\n\016PROJECTOR_DOWN\020\016\022\022\n\016PROJECTOR_QUIT\020\017\022\024" +
+      "\n\020PROJECTOR_VOLUME\020\020\022\036\n\032PROJECTOR_VOLUME" +
+      "_REDUCTION\020\021\022\022\n\016PROJECTOR_MUTE\020\022\022\022\n\016PROJ" +
+      "ECTOR_AUTO\020\023\022\023\n\017PROJECTOR_PAUSE\020\024\022\030\n\024PRO" +
+      "JECTOR_BRIGHTNESS\020\025*\274\002\n\tAlarmType\022\026\n\022ALA" +
+      "RM_TYPE_PRIMARY\020\001\022\030\n\024ALARM_TYPE_SECONDAR" +
+      "Y\020\002\022\025\n\021ALARM_TYPE_TAMPER\020\004\022\032\n\026ALARM_TYPE",
+      "_LOW_BATTERY\020\010\022\026\n\022ALARM_TYPE_TROUBLE\020@\022\033" +
+      "\n\026ALARM_TYPE_MAINS_FAULT\020\200\001\022\036\n\031ALARM_TYP" +
+      "E_BATTERY_DEFECT\020\200\004\022+\n%ALARM_TYPE_LACK_O" +
+      "F_SUPERVISION_REPORT\020\200\200\004\022\037\n\031ALARM_TYPE_C" +
+      "AMERA_OFFLINE\020\201\200\004\022\'\n!ALARM_TYPE_CAMERA_M" +
+      "OTION_DETECTED\020\202\200\004*n\n\021WindowCoverAction\022" +
+      "\034\n\030WINDOW_COVER_ACTION_OPEN\020\000\022\035\n\031WINDOW_" +
+      "COVER_ACTION_CLOSE\020\001\022\034\n\030WINDOW_COVER_ACT" +
+      "ION_STOP\020\002*\'\n\013DeviceClass\022\030\n\024DEVICE_CLAS" +
+      "S_UNKNOWN\020\000*\275\001\n\013NetworkType\022\030\n\024NETWORK_T",
+      "YPE_UNKNOWN\020\000\022\024\n\020NETWORK_TYPE_LAN\020\001\022\033\n\027N" +
+      "ETWORK_TYPE_WLAN_24GHZ\020\002\022!\n\035NETWORK_TYPE" +
+      "_WLAN_24GHZ_GUEST\020\003\022\033\n\027NETWORK_TYPE_WLAN" +
+      "_58GHZ\020\004\022!\n\035NETWORK_TYPE_WLAN_58GHZ_GUES" +
+      "T\020\005"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -119710,6 +121586,12 @@ public final class Models {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mrtech_smarthome_rpc_Image_descriptor,
         new java.lang.String[] { "Id", "Type", "Data", });
+    internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_descriptor =
+      getDescriptor().getMessageTypes().get(90);
+    internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mrtech_smarthome_rpc_LocalNetworkDevice_descriptor,
+        new java.lang.String[] { "Id", "MacAddress", "IpAddress", "NetworkType", "Class_", "TxBytes", "RxBytes", "TxRate", "RxRate", "FirstSeen", "LastSeen", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

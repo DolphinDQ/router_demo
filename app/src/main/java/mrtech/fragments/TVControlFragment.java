@@ -27,7 +27,7 @@ public class TVControlFragment extends Fragment {
     private Router mRouter;
     private Models.InfraredDevice mInfraredDevice;
     private CommunicationManager mCommunicationManager;
-    private AsyncTask<Object, Object, Object> mLongClick;
+    private AsyncTask<Void, Void, Void> mLongClick;
 
     public static TVControlFragment newInstance(Router router, Models.Device device) {
         final TVControlFragment fragment = new TVControlFragment();
@@ -85,7 +85,8 @@ public class TVControlFragment extends Fragment {
 
     private void stop() {
         if (mLongClick != null) {
-            mLongClick.cancel(false);
+            Toast.makeText(getActivity(), "取消长按...", Toast.LENGTH_SHORT).show();
+            mLongClick.cancel(true);
             mLongClick = null;
         }
     }
@@ -98,32 +99,40 @@ public class TVControlFragment extends Fragment {
             public boolean onLongClick(View v) {
 //                ((NotificationManager) getActivity().getSystemService(Activity.NOTIFICATION_SERVICE)).notify(0,);
                 Toast.makeText(getActivity(), "开始长按...", Toast.LENGTH_SHORT).show();
-                mLongClick = new AsyncTask<Object, Object, Object>() {
+                stop();
+                mLongClick = new AsyncTask<Void, Void, Void>() {
+                    boolean isStop = false;
+
                     @Override
-                    protected Object doInBackground(Object[] params) {
-                        stop();
-                        boolean isStop = false;
+                    protected void onCancelled() {
+                        isStop = true;
+                        super.onCancelled();
+                    }
+
+                    @Override
+                    protected Void doInBackground(Void[] params) {
                         do {
                             try {
-                                sendCommand(command);
-                                Thread.sleep(500);
+                                sendCommand(command, true);
+                                Thread.sleep(3000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                                 isStop = true;
                             }
-                        } while (isStop);
+                        } while (!isStop);
+                        sendCommand(null, false);
                         return null;
                     }
-                };
 
+                };
+                mLongClick.execute();
                 return false;
             }
         });
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction()==MotionEvent.ACTION_UP){
-                    Toast.makeText(getActivity(), "取消长按...", Toast.LENGTH_SHORT).show();
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     stop();
                 }
                 return false;
@@ -132,7 +141,7 @@ public class TVControlFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendCommand(command);
+                sendCommand(command, false);
             }
         });
     }
@@ -160,24 +169,26 @@ public class TVControlFragment extends Fragment {
         mCommunicationManager = mRouter.getRouterSession().getCommunicationManager();
     }
 
-    public void sendCommand(final Models.TelevisionCommand command) {
+    public void sendCommand(final Models.TelevisionCommand command, boolean repetitive) {
+
         final Messages.Request request = RequestUtil
-                .sendIrCommand(mInfraredDevice.getId(), Models.InfraredCommand.newBuilder().setTelevision(command).build());
-        mCommunicationManager.postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
-            @Override
-            public void call(Messages.Response response, final Throwable throwable) {
-                new Handler(getContext().getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (throwable != null) {
-                            Toast.makeText(getContext(), command + "操作失败" + throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getContext(), command + "操作成功", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
+                .sendIrCommand(mInfraredDevice.getId(), Models.InfraredCommand.newBuilder().setTelevision(command).build(), repetitive);
+        mCommunicationManager.postRequestAsync(request, null);
+//            mCommunicationManager.postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
+//            @Override
+//            public void call(Messages.Response response, final Throwable throwable) {
+//                new Handler(getContext().getMainLooper()).post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (throwable != null) {
+////                            Toast.makeText(getContext(), command + "操作失败" + throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                        } else {
+////                            Toast.makeText(getContext(), command + "操作成功", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//            }
+//        });
     }
 
 

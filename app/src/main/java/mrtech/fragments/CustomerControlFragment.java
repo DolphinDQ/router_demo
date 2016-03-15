@@ -28,7 +28,6 @@ public class CustomerControlFragment extends Fragment {
     private Models.Device mDevice;
     private Models.InfraredDevice mInfraredDevice;
     private CommunicationManager mCommunicationManager;
-    private boolean mCodeTime;
 
 
     public static CustomerControlFragment newInstance(Router router, Models.Device device) {
@@ -62,9 +61,6 @@ public class CustomerControlFragment extends Fragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
-
                         new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected void onPreExecute() {
@@ -89,7 +85,7 @@ public class CustomerControlFragment extends Fragment {
 
                         final Messages.Request request = RequestUtil
                                 .sendIrCommand(opCode.getDeviceId(), Models.InfraredCommand.newBuilder()
-                                        .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(opCode.getId())).build());
+                                        .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(opCode.getId())).build(),false);
                         mCommunicationManager.postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
                             @Override
                             public void call(Messages.Response response, final Throwable throwable) {
