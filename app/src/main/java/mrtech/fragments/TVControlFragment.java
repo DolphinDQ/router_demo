@@ -1,12 +1,10 @@
 package mrtech.fragments;
 
-import android.app.Activity;
-import android.app.NotificationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +17,6 @@ import mrtech.smarthome.router.Router;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.RequestUtil;
-import rx.functions.Action2;
 
 public class TVControlFragment extends Fragment {
 
@@ -83,7 +80,7 @@ public class TVControlFragment extends Fragment {
         binding(Models.TelevisionCommand.TELEVISION_VOLUME_REDUCTION, R.id.volumeMinus);
     }
 
-    private void stop() {
+    private void stopRepetitive() {
         if (mLongClick != null) {
             Toast.makeText(getActivity(), "取消长按...", Toast.LENGTH_SHORT).show();
             mLongClick.cancel(true);
@@ -91,49 +88,51 @@ public class TVControlFragment extends Fragment {
         }
     }
 
+    private void startRepetitive(final Models.TelevisionCommand command) {
+        Toast.makeText(getActivity(), "开始长按...", Toast.LENGTH_SHORT).show();
+        stopRepetitive();
+        mLongClick = new AsyncTask<Void, Void, Void>() {
+            boolean isStop = false;
+
+            @Override
+            protected void onCancelled() {
+                isStop = true;
+                super.onCancelled();
+            }
+
+            @Override
+            protected Void doInBackground(Void[] params) {
+                do {
+                    try {
+                        sendCommand(command, true);
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        isStop = true;
+                    }
+                } while (!isStop);
+                sendCommand(null, false);
+                return null;
+            }
+
+        };
+        mLongClick.execute();
+    }
+
 
     public void binding(final Models.TelevisionCommand command, @IdRes int res) {
         final View view = getView().findViewById(res);
-        view.setOnLongClickListener(new View.OnLongClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-//                ((NotificationManager) getActivity().getSystemService(Activity.NOTIFICATION_SERVICE)).notify(0,);
-                Toast.makeText(getActivity(), "开始长按...", Toast.LENGTH_SHORT).show();
-                stop();
-                mLongClick = new AsyncTask<Void, Void, Void>() {
-                    boolean isStop = false;
-
-                    @Override
-                    protected void onCancelled() {
-                        isStop = true;
-                        super.onCancelled();
-                    }
-
-                    @Override
-                    protected Void doInBackground(Void[] params) {
-                        do {
-                            try {
-                                sendCommand(command, true);
-                                Thread.sleep(3000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                isStop = true;
-                            }
-                        } while (!isStop);
-                        sendCommand(null, false);
-                        return null;
-                    }
-
-                };
-                mLongClick.execute();
-                return false;
+            public void onClick(View v) {
+                startRepetitive(command);
             }
         });
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    stop();
+                if (event.getAction() != MotionEvent.ACTION_DOWN && event.getAction() != MotionEvent.ACTION_MOVE) {
+                    stopRepetitive();
                 }
                 return false;
             }

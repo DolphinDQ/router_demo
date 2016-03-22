@@ -59,7 +59,7 @@ class RouterClient implements RouterSession {
         mRouter = router;
         mIPCManager = IPCManager.createNewManager();
         mCommunicationManager = new RouterCommunicationManager(this);
-        mCameraManager = new RouterCameraDataManager( mCommunicationManager);
+        mCameraManager = new RouterCameraDataManager(mCommunicationManager);
         setRouterStatus(RouterStatus.INITIAL);
     }
 
@@ -234,7 +234,7 @@ class RouterClient implements RouterSession {
             case API_AUTH_SUCCESS:
             case API_UNAUTHORIZED:
                 disconnect();
-                if (mCheckStatusTask != null){
+                if (mCheckStatusTask != null) {
                     trace("trying recheck status...");
                     mCheckStatusTask.interrupt();
                 }
@@ -329,27 +329,27 @@ class RouterClient implements RouterSession {
 
         @Override
         public void run() {
+            if (running) return;
             currentThread = Thread.currentThread();
             currentThread.setName("checkRouterStatus:" + mContext);
             decodeSN();
             do {
-                int delay = 0;
+                int delay;
                 try {
                     running = true;
                     delay = checkRouterStatus();
+                    if (delay < 0) {
+                        destroy();
+                        break;
+                    }
+                    running = false;
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    trace(Thread.currentThread().getName() + " wakeup!");
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     running = false;
-                    try {
-                        if (delay < 0) {
-                            destroy();
-                            break;
-                        }
-                        Thread.sleep(delay);
-                    } catch (InterruptedException e) {
-                        trace(Thread.currentThread().getName() + " wakeup!");
-                    }
                 }
             } while (initialized);
         }

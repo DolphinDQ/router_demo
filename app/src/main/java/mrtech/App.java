@@ -122,8 +122,8 @@ public class App extends SmartHomeApp {
                                 @Override
                                 public void run() {
                                     if (throwable != null) {
-                                        throwable.printStackTrace();
-                                        Toast.makeText(App.this, router.getName() + "加载摄像头失败。" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                        //throwable.printStackTrace();
+                                        Toast.makeText(App.this, router.getName() + "加载摄像头失败。" , Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(App.this, router.getName() + "加载摄像头完毕。", Toast.LENGTH_SHORT).show();
                                     }

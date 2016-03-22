@@ -38,17 +38,17 @@ public class RouterSettingsActivity extends AppCompatActivity {
             stateChangedHandle = routerManager
                     .getEventManager()
                     .subscribeRouterStatusChangedEvent(new Action1<Router>() {
-                @Override
-                public void call(final Router router) {
-                    new Handler(getMainLooper()).post(new Runnable() {
                         @Override
-                        public void run() {
-                            if (routerArrayAdapter != null)
-                                routerArrayAdapter.notifyDataSetChanged();
+                        public void call(final Router router) {
+                            new Handler(getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (routerArrayAdapter != null)
+                                        routerArrayAdapter.notifyDataSetChanged();
+                                }
+                            });
                         }
                     });
-                }
-            });
         initView();
     }
 
@@ -137,7 +137,6 @@ public class RouterSettingsActivity extends AppCompatActivity {
 //                        }
 //                    });
 //                }
-//
 //            }
 //        });
         findViewById(R.id.get_data_btn).setVisibility(View.GONE);
@@ -167,6 +166,7 @@ public class RouterSettingsActivity extends AppCompatActivity {
     }
 
     private void addRouter(String sn) {
+        if (sn == null || sn.equals("")) return;
         routerManager.addRouter(new Router("路由器", sn));
     }
 

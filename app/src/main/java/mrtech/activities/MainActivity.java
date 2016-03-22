@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity {
         initInfraredControl();
         initRouterConfigControl();
         initLocks();
-         mDownLoadLog=(TextView)findViewById(R.id.download_txt);
+        mDownLoadLog = (TextView) findViewById(R.id.download_txt);
         findViewById(R.id.user_report_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity {
                                         case DATA:
                                             //TODO 获取数据
                                             final byte[] bytes = streamMultiplexingUnit.getData().toByteArray();
-                                            show("下载数据:"+bytes.length);
+                                            show("下载数据:" + bytes.length);
                                             for (byte b : bytes) {
                                                 data.add(b);
                                             }
@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity {
         if (data == null || data.size() == 0) {
             show("数据采集失败，请重新尝试下载...");
         } else {
-            show("获取到数据:" + data.size() / (1024 ) + "KB");
+            show("获取到数据:" + data.size() / (1024) + "KB");
             final Date date = new Date(System.currentTimeMillis());
             final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_MM_ss");
             String file = "/sdcard/MR088_Info_" + simpleDateFormat.format(date) + ".bak";
@@ -204,7 +204,7 @@ public class MainActivity extends BaseActivity {
                 fout = new FileOutputStream(file, false);
                 byte[] bytes = new byte[data.size()];
                 for (int i = 0; i < data.size(); i++) {
-                    bytes[i]=data.get(i);
+                    bytes[i] = data.get(i);
                 }
                 fout.write(bytes);
                 fout.close();
@@ -238,7 +238,7 @@ public class MainActivity extends BaseActivity {
                     final Models.InfraredOpCode infraredOpCode = mIFDev.getExtension(Models.InfraredDevice.detail).getOpcodesList().get(0);
                     final Messages.Request request = RequestUtil
                             .sendIrCommand(infraredOpCode.getDeviceId(), Models.InfraredCommand.newBuilder()
-                                    .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(infraredOpCode.getId())).build(),false);
+                                    .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(infraredOpCode.getId())).build(), false);
                     mCurrentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
                         @Override
                         public void call(Messages.Response response, final Throwable throwable) {
@@ -597,6 +597,7 @@ public class MainActivity extends BaseActivity {
         mCurrentRouter.getRouterSession().getCommunicationManager().postRequestToQueue(request, new Action1<Messages.Response>() {
                     @Override
                     public void call(Messages.Response response) {
+                        if (response == null) return;
                         final Messages.QueryDeviceResponse extension = response.getExtension(Messages.QueryDeviceResponse.response);
                         if (extension == null) return;
                         mInfraredDeviceList = extension.getResultsList();

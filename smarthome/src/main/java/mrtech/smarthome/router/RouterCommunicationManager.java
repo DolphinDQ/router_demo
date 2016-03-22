@@ -123,7 +123,6 @@ class RouterCommunicationManager implements CommunicationManager {
     }
 
     public void init(SSLSocket socket) {
-        destroy();
         destroyed = false;
         this.socket = socket;
         mPostTask = new Thread(new RequestQueuePostTask());
@@ -247,7 +246,7 @@ class RouterCommunicationManager implements CommunicationManager {
                 try {
                     Thread.sleep(delay);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             } while (retryTimes-- > 0);
             throw new TimeoutException(mClient + "request " + requestId + " timeout...");
@@ -370,13 +369,14 @@ class RouterCommunicationManager implements CommunicationManager {
     }
 
     public void flushRequestQueue() {
-        if (mPostTask != null)
+        if (mPostTask != null) {
             mPostTask.interrupt();
+        }
     }
 
     public void destroy() {
-        if (destroyed)
-            destroyed = true;
+        if (destroyed) return;
+        destroyed = true;
         flushRequestQueue();
         if (mReadTask != null) {
             mReadTask.interrupt();
@@ -393,7 +393,8 @@ class RouterCommunicationManager implements CommunicationManager {
         postRequestToQueue(RequestUtil.setEvent(mEventTypes.toArray(new Messages.Event.EventType[mEventTypes.size()])), new Action1<Messages.Response>() {
             @Override
             public void call(Messages.Response response) {
-                if (response.getErrorCode() != Messages.Response.ErrorCode.SUCCESS) postEvents();
+                if (response != null && response.getErrorCode() != Messages.Response.ErrorCode.SUCCESS)
+                    postEvents();
             }
         });
     }
@@ -425,7 +426,7 @@ class RouterCommunicationManager implements CommunicationManager {
         public void run() {
             Thread.currentThread().setName(mClient + " RequestQueuePostTask");
             trace(mClient + " start post task...");
-            while (mClient.isConnected()) {
+            while (mClient.isConnected() && !destroyed) {
                 if (mPostQueue.size() > 0 && mClient.isAuthenticated()) {
                     for (final Messages.Request request : getRequestQueue()) {
                         try {
@@ -433,7 +434,8 @@ class RouterCommunicationManager implements CommunicationManager {
                             final Action1<Messages.Response> remove = mPostQueue.remove(request);
                             if (remove != null) remove.call(response);
                         } catch (TimeoutException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
+                            trace("队列请求超时" + request);
                         }
                     }
                     continue;
@@ -441,6 +443,7 @@ class RouterCommunicationManager implements CommunicationManager {
                 try {
                     Thread.sleep(1000 * 3600);
                 } catch (InterruptedException e) {
+                    trace("Request queue task wake up..");
                     //线程醒来。进入下一轮循环。
                 }
             }
@@ -452,14 +455,14 @@ class RouterCommunicationManager implements CommunicationManager {
         public void run() {
             Thread.currentThread().setName(mClient + " SocketListeningTask");
             final SSLSocket sslSocket = socket;
-            while (mClient.isConnected()) {
+            while (mClient.isConnected() && !destroyed) {
                 try {
                     Messages.Callback callback = pullCallback(sslSocket);
                     if (callback == null) continue;
                     trace(mClient + " callback packet :" + callback);
                     subjectCallback.onNext(callback);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     trace(mClient + " read stream error");
                     mClient.reconnect();
                     break;
