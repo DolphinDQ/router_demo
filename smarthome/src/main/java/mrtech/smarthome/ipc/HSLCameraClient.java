@@ -121,7 +121,7 @@ class HSLCameraClient implements IPCContext {
 
     private void disconnect() {
         if (mHandle > 0) {
-            DeviceSDK.closeDevice(mHandle);
+            //DeviceSDK.closeDevice(mHandle);
             DeviceSDK.destoryDevice(mHandle);
             mHandle = 0;
         }

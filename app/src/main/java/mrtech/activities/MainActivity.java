@@ -528,6 +528,7 @@ public class MainActivity extends BaseActivity {
         mRouterConfigBtn.setEnabled(hasRouter);
         if (hasRouter) {
             RouterListItemData src = router.getUserData(RouterListItemData.class);
+            if (src == null) return;
             src.setActive(true);
             setCameraBtnState();
             setInfraredControlBtnState();

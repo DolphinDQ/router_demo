@@ -5,7 +5,6 @@ import android.util.Log;
 import com.stream.NewAllStreamParser;
 
 import mrtech.smarthome.BuildConfig;
-import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.router.Models.*;
 
 import java.io.IOException;
@@ -35,7 +34,6 @@ class RouterClient implements RouterSession {
             Log.d(RouterClient.class.getName(), msg);
     }
 
-    private final IPCManager mIPCManager;
     private final Router mRouter;
     private final RouterManager mManager;
     private final String mSN;
@@ -57,7 +55,6 @@ class RouterClient implements RouterSession {
         mSN = router.getSn();
         mP2PHandle = p2pHandle;
         mRouter = router;
-        mIPCManager = IPCManager.createNewManager();
         mCommunicationManager = new RouterCommunicationManager(this);
         mCameraManager = new RouterCameraDataManager(mCommunicationManager);
         setRouterStatus(RouterStatus.INITIAL);
@@ -71,9 +68,7 @@ class RouterClient implements RouterSession {
     public void init() {
         if (initialized) return;
         initialized = true;
-        mIPCManager.removeAll();
         setRouterStatus(RouterStatus.INITIALIZED);
-
         mCheckStatusTask = new CheckStatusTask();
         new Thread(mCheckStatusTask).start();
     }
@@ -217,7 +212,7 @@ class RouterClient implements RouterSession {
             @Override
             public void run() {
                 removePort();
-                mIPCManager.removeAll();
+                mCameraManager.getIPCManager().removeAll();
                 mCommunicationManager.destroy();
                 mCheckStatusTask.interrupt();
                 setRouterStatus(RouterStatus.INITIAL);

@@ -218,6 +218,14 @@ class HSLEventReceiver {
     public void showNotification(String message, BluetoothClass.Device device, int nType) {
     }
 
+    public void CallBack_RecordFileListV2(long UserID, String param)
+    {
+
+    }
+    public void CallBack_RecordPicture(long UserID, byte[] buff, int len)
+    {
+    }
+
 //    void setDeviceStatusListener(DeviceStatusListener listener) {
 //        deviceStatusListener = listener;
 //    }
@@ -303,5 +311,7 @@ class HSLEventReceiver {
     public IPCEventManager createEventManager(final Long userId) {
         return new HSLEventManager(userId);
     }
+
+
 }
 

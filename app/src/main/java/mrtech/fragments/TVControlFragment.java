@@ -122,10 +122,12 @@ public class TVControlFragment extends Fragment {
 
     public void binding(final Models.TelevisionCommand command, @IdRes int res) {
         final View view = getView().findViewById(res);
-        view.setOnClickListener(new View.OnClickListener() {
+        view.setLongClickable(true);
+        view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 startRepetitive(command);
+                return false;
             }
         });
         view.setOnTouchListener(new View.OnTouchListener() {
