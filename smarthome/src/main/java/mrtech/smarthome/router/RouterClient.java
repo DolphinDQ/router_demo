@@ -4,7 +4,8 @@ import android.util.Log;
 
 import com.stream.NewAllStreamParser;
 
-import mrtech.smarthome.BuildConfig;
+import mrtech.smarthome.SmartHomeApp;
+import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.router.Models.*;
 
 import java.io.IOException;
@@ -30,7 +31,7 @@ class RouterClient implements RouterSession {
     private CheckStatusTask mCheckStatusTask;
 
     private static void trace(String msg) {
-        if (BuildConfig.DEBUG)
+        if (SmartHomeApp.DEBUG)
             Log.d(RouterClient.class.getName(), msg);
     }
 
@@ -69,6 +70,7 @@ class RouterClient implements RouterSession {
         if (initialized) return;
         initialized = true;
         setRouterStatus(RouterStatus.INITIALIZED);
+
         mCheckStatusTask = new CheckStatusTask();
         new Thread(mCheckStatusTask).start();
     }
@@ -148,19 +150,24 @@ class RouterClient implements RouterSession {
     }
 
     public void disconnect() {
-        if (socket != null) {
-            if (!socket.isClosed()) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    trace(mContext + "socket close failed..");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (socket != null) {
+                    if (!socket.isClosed()) {
+                        try {
+                            socket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            trace(mContext + "socket close failed..");
+                        }
+                    }
+                    socket = null;
+                    authenticated = false;
+                    setRouterStatus(RouterStatus.ROUTER_DISCONNECTED);
                 }
             }
-            socket = null;
-            authenticated = false;
-            setRouterStatus(RouterStatus.ROUTER_DISCONNECTED);
-        }
+        }).start();
     }
 
     public boolean connect() {
@@ -222,18 +229,10 @@ class RouterClient implements RouterSession {
 
     @Override
     public void reconnect() {
-        switch (getRouterStatus()) {
-            case ROUTER_CONNECTED:
-            case ROUTER_DISCONNECTED:
-            case API_AUTH:
-            case API_AUTH_SUCCESS:
-            case API_UNAUTHORIZED:
-                disconnect();
-                if (mCheckStatusTask != null) {
-                    trace("trying recheck status...");
-                    mCheckStatusTask.interrupt();
-                }
-                break;
+        disconnect();
+        if (mCheckStatusTask != null) {
+            trace("trying recheck status...");
+            mCheckStatusTask.interrupt();
         }
     }
 
@@ -286,16 +285,33 @@ class RouterClient implements RouterSession {
     private class CheckStatusTask implements Runnable {
 
         private Thread currentThread;
+        /**
+         * 重连次数。
+         */
+        private int times = 0;
+        /**
+         * 每次重连延迟。
+         */
+        private int reconnectDelay = 5000;
 
-        private void keepAlive() {
-            if (!isAuthenticated()) return;
-            trace(mContext + " keep alive..");
-            try {
-                mCommunicationManager.postRequest(RequestUtil.getKeepAliveRequest());
-            } catch (TimeoutException e) {
-                trace("keep alive failed!!");
-                disconnect();
+
+        private int keepAlive() {
+            if (isAuthenticated()) {
+                trace(mContext + " keep alive..");
+                try {
+                    Messages.Response response = mCommunicationManager.postRequest(RequestUtil.getKeepAliveRequest());
+                    if (response != null && response.getErrorCode() == Messages.Response.ErrorCode.SUCCESS) {
+                        times = 0;//重置重连次数。
+                        return ROUTER_KEEP_ALIVE_DELAY;
+                    }
+                } catch (TimeoutException e) {
+                    trace("keep alive failed!!");
+//                disconnect();
+                }
             }
+            int  ret = times * reconnectDelay;
+            if (times < 24) times++; //每次重连不成功延迟5秒，直到2分钟。
+            return ret;
         }
 
         private int checkRouterStatus() {
@@ -307,12 +323,12 @@ class RouterClient implements RouterSession {
                     if (!connect()) return ROUTER_RECONNECTION_DELAY;
                 if (!isAuthenticated())
                     if (!authenticate()) return ROUTER_AUTH_DELAY;
-                keepAlive();
+                return keepAlive();
             } catch (Exception ex) {
-                ex.printStackTrace();
                 trace(mContext + " check status failed.." + ex.getMessage());
+                ex.printStackTrace();
             }
-            return ROUTER_KEEP_ALIVE_DELAY;
+            return -1;
         }
 
         private boolean running;

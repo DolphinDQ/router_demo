@@ -5,28 +5,28 @@ import rx.functions.Action1;
 import mrtech.smarthome.ipc.Models.*;
 
 /**
- * Created by sphynx on 2015/12/8.
+ * IPC事件管理器
  */
 public interface IPCEventManager {
 
     /**
-     * 订阅IPC状态。
-     * @param callback IPC状态发送变化时回调。
-     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）。
+     * 订阅IPC状态
+     * @param callback IPC状态发送变化时回调
+     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）
      */
     Subscription subscribeCameraStatus(Action1<IPCStateChanged> callback);
 
     /**
-     *订阅IPC音频帧。
-     * @param callback 接收到音频帧时回调。
-     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）。
+     * 订阅IPC音频帧
+     * @param callback 接收到音频帧时回调
+     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）
      */
     Subscription subscribeIPCAudioFrame(Action1<IPCAudioFrame> callback);
 
     /**
-     * 订阅IPC视频帧。
-     * @param callback 接收到视频侦时回调。
-     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）。
+     * 订阅IPC视频帧
+     * @param callback 接收到视频侦时回调
+     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）
      */
     Subscription subscribeIPCVideoFrame(Action1<IPCVideoFrame> callback);
 

@@ -1,12 +1,17 @@
 package mrtech.smarthome.auth.Models;
 
 /**
- * Created by sphynx on 2015/12/29.
+ * 接口回调
  */
 public class ApiCallback<T> extends ApiCallbackBase {
+
+    private T Data;
+
+    /**
+     * 获取数据
+     * @return 数据
+     */
     public T getData() {
         return Data;
     }
-
-    private T Data;
 }

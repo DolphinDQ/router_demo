@@ -1,22 +1,13 @@
 package mrtech.smarthome.ipc;
 
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
 import hsl.p2pipcam.nativecaller.NativeCaller;
@@ -25,21 +16,24 @@ import hsl.p2pipcam.util.CustomAudioRecorder;
 import hsl.p2pipcam.util.CustomBuffer;
 import hsl.p2pipcam.util.CustomBufferData;
 import hsl.p2pipcam.util.CustomBufferHead;
-import mrtech.smarthome.BuildConfig;
-import mrtech.smarthome.ipc.Models.*;
+import mrtech.smarthome.SmartHomeApp;
+import mrtech.smarthome.ipc.Models.IPCAudioFrame;
+import mrtech.smarthome.ipc.Models.IPCStatus;
+import mrtech.smarthome.ipc.Models.PictureData;
+import mrtech.smarthome.ipc.Models.RenderContext;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
- * Created by sphynx on 2015/12/8.
+ * IPC播放器
  */
 class HSLPlayer implements IPCPlayer {
     private Subscription subscribeAudioHandler;
 
     private static void trace(String msg) {
-        if (BuildConfig.DEBUG)
+        if (SmartHomeApp.DEBUG)
             Log.d(HSLPlayer.class.getName(), msg);
     }
 
@@ -56,7 +50,11 @@ class HSLPlayer implements IPCPlayer {
     private PublishSubject<IPCamera> subjectPlayingCameraChanged = PublishSubject.create();
     private PublishSubject<PictureData> subjectPicture = PublishSubject.create();
 
-
+    /**
+     * IPC播放器
+     * @param renderer 视频渲染器
+     * @param manager IPC管理器
+     */
     public HSLPlayer(VideoRenderer renderer, IPCManager manager) {
 
         mRenderer = renderer;
@@ -134,7 +132,10 @@ class HSLPlayer implements IPCPlayer {
             subscribeAudioHandler.unsubscribe();
     }
 
-
+    /**
+     * 播放IPC视频
+     * @param cam 指定IPC
+     */
     @Override
     public void play(IPCamera cam) {
         if (cam == null) return;
@@ -185,20 +186,32 @@ class HSLPlayer implements IPCPlayer {
         }
     }
 
+    /**
+     * 播放IPC视频
+     * @param deviceId 设备ID
+     */
     @Override
     public void play(String deviceId) {
         play(mManager.getCamera(deviceId));
     }
 
+    /**
+     * 获取正在播放的IPC
+     * @return 正在播放的IPC
+     */
     @Override
     public IPCamera getPlayingCamera() {
         return playingCamera;
     }
 
+    /**
+     * 获取IPC列表
+     * @return IPC列表
+     */
     @Override
     public IPCamera[] getPlayList() {
         List<IPCamera> cameraList = mManager.getCameraList();
-        ArrayList<IPCamera> cameras = new ArrayList<IPCamera>();
+        ArrayList<IPCamera> cameras = new ArrayList<>();
         for (IPCamera cam : cameraList) {
             if (cam.getIpcContext().getStatus() == IPCStatus.CONNECTED) {
                 cameras.add(cam);
@@ -207,6 +220,9 @@ class HSLPlayer implements IPCPlayer {
         return cameras.toArray(new IPCamera[cameras.size()]);
     }
 
+    /**
+     * 停止播放视频
+     */
     @Override
     public void stop() {
         if (playingCamera != null) {
@@ -381,6 +397,7 @@ class HSLPlayer implements IPCPlayer {
      * Created by sphynx on 2015/12/1.
      */
     public interface RenderListener {
+
         void initComplete(int size, int width, int height);
 
         void takePicture(byte[] imageBuffer, int width, int height);

@@ -7,8 +7,7 @@ import hsl.p2pipcam.nativecaller.DeviceSDK;
 import mrtech.smarthome.BuildConfig;
 
 /**
- * HSLCameraController
- * Created by sphynx on 2015/12/8.
+ * IPC控制器
  */
 class HSLCameraController implements IPCController {
     private static void trace(String msg) {
@@ -24,6 +23,10 @@ class HSLCameraController implements IPCController {
 
     private final IPCamera mCurrent;
 
+    /**
+     * IPC控制器对象
+     * @param camera 要控制的IPC对象
+     */
     public HSLCameraController(IPCamera camera) {
         mCurrent = camera;
     }
@@ -54,26 +57,42 @@ class HSLCameraController implements IPCController {
         }
     }
 
+    /**
+     * IPC向上转
+     */
     @Override
     public void ptzUp() {
         ptzControl(0);
     }
 
+    /**
+     * IPC向下转
+     */
     @Override
     public void ptzDown() {
         ptzControl(2);
     }
 
+    /**
+     * 获取控制器当前控制的IPC对象
+     * @return 当前控制的IPC对象
+     */
     @Override
     public IPCamera getCurrent() {
         return mCurrent;
     }
 
+    /**
+     * IPC向左转
+     */
     @Override
     public void ptzLeft() {
         ptzControl(4);
     }
 
+    /**
+     * IPC向右转
+     */
     @Override
     public void ptzRight() {
         ptzControl(6);

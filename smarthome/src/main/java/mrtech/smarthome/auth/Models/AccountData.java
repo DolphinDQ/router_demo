@@ -1,7 +1,7 @@
 package mrtech.smarthome.auth.Models;
 
 /**
- * Created by sphynx on 2015/12/30.
+ * 帐号信息
  */
 public class AccountData {
     private int ID ;

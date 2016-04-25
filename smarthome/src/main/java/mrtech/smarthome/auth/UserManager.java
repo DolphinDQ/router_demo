@@ -33,8 +33,7 @@ import rx.functions.Action2;
 import rx.subjects.BehaviorSubject;
 
 /**
- * 用户管理器。管理用户登录信息。
- * Created by sphynx on 2015/12/29.
+ * 用户管理器，管理用户登录信息
  */
 public class UserManager {
     private final RouterManager mRouterManager;
@@ -74,30 +73,41 @@ public class UserManager {
         return String.format(body, accessToken, Constants.apiKey, Constants.apiSecret);
     }
 
+    /**
+     *
+     */
     public final static MediaType MEDIA_TYPE_URLENCODED = MediaType.parse("application/x-www-form-urlencoded");
-
+    /**
+     *
+     */
     public final static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
-
+    /**
+     *
+     */
     public final static OkHttpClient httpclient = new OkHttpClient();
-
+    /**
+     *
+     */
     public final static Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
+    /**
+     * 获取实例对象
+     * @return 用户管理器
+     */
     public static UserManager getInstance() {
         return ourInstance;
     }
 
     /**
-     * 获取当期模块是否登录。
-     *
-     * @return
+     * 获取当期模块是否登录
+     * @return 登录状态
      */
     public boolean isLogin() {
         return config.getToken() != null && System.currentTimeMillis() < (config.getLoginTime() + config.getToken().getExpiresIn() * 1000);
     }
 
     /**
-     * 获取配置文件。
-     *
+     * 获取配置文件
      * @return 配置文件对象
      */
     public AuthConfig getConfig() {
@@ -111,7 +121,7 @@ public class UserManager {
     }
 
     /**
-     * 用户管理模块初始化。
+     * 用户管理模块初始化
      */
     public void init(Context context) {
         if (context == null) throw new IllegalArgumentException("context can not be null.");
@@ -155,6 +165,11 @@ public class UserManager {
         }
     }
 
+    /**
+     * 上传路由器信息
+     * @param router 路由器对象
+     * @param callback 异常信息回调
+     */
     public void uploadRouter(final Router router, final Action1<Throwable> callback) {
         try {
             final RouterCloudData data = new RouterCloudData(router.getName(), router.getSn());
@@ -229,6 +244,12 @@ public class UserManager {
         subjectConfigChanged.onNext(config);
     }
 
+    /**
+     * 用户登录
+     * @param account 用户帐号
+     * @param password 登录密码
+     * @param callback 异常信息回调
+     */
     public void logon(final String account, final String password, final Action1<Throwable> callback) {
         final Request request = new Request.Builder()
                 .url(getLogonUrl())
@@ -260,11 +281,10 @@ public class UserManager {
 
     /**
      * 执行API请求方法。实现自动重新登录功能。（如果已经缓存账户密码：config.getAutoLogin()==true）
-     *
-     * @param callbackType 回调类型类。
-     * @param request      API请求，可以使用createApiRequestBuilder方法创建。
-     * @param callback     请求回调方法。
-     * @param <T>          回调数据类型。
+     * @param callbackType 回调类型类
+     * @param request API请求，可以使用createApiRequestBuilder方法创建
+     * @param callback 请求回调方法
+     * @param <T> 回调数据类型
      */
     public <T> void executeApiRequest(TypeToken<ApiCallback<T>> callbackType, Request request, Action1<ApiCallback<T>> callback) {
         executeApiRequest(callbackType.getType(), request, callback);
@@ -329,12 +349,11 @@ public class UserManager {
     }
 
     /**
-     * 发送指定请求。并且回调指定结构的数据。
-     *
-     * @param callbackType 回调结构的类型。
-     * @param request      HTTP请求。
-     * @param callback     请求回调方法。
-     * @param <T>          回调结构类型。
+     * 发送指定请求。并且回调指定结构的数据
+     * @param callbackType 回调结构的类型
+     * @param request HTTP请求
+     * @param callback 请求回调方法
+     * @param <T> 回调结构类型
      */
     @SuppressWarnings("unchecked")
     public <T> void executeRequest(final Type callbackType, final Request request, final Action2<T, Throwable> callback) {
@@ -359,19 +378,18 @@ public class UserManager {
     }
 
     /**
-     * @param cls      回调结构的类型。
-     * @param request  HTTP请求。
-     * @param callback 请求回调方法。
-     * @param <T>      回调结构类型。
+     * @param cls 回调结构的类型
+     * @param request HTTP请求
+     * @param callback 请求回调方法
+     * @param <T> 回调结构类型
      */
     public <T> void executeRequest(final Class<T> cls, final Request request, final Action2<T, Throwable> callback) {
         executeRequest((Type) cls, request, callback);
     }
 
     /**
-     * 登出。
-     *
-     * @param callback 回调为null表示操作成功。
+     * 登出
+     * @param callback 回调为null表示操作成功
      */
     public void logoff(final Action1<Throwable> callback) {
         final AccessToken token = config.getToken();
@@ -397,10 +415,9 @@ public class UserManager {
     }
 
     /**
-     * 创建API访问构造器，注：需要登录后才能创建。
-     *
-     * @param url 接口url，参考Constants.ServerUrl类。
-     * @return API请求构造器。
+     * 创建API访问构造器，注：需要登录后才能创建
+     * @param url 接口url，参考Constants.ServerUrl类
+     * @return API请求构造器
      */
     public Request.Builder createApiRequestBuilder(String url) throws AuthenticatorException {
         final AccessToken token = config.getToken();
@@ -415,13 +432,12 @@ public class UserManager {
     }
 
     /**
-     * 执行同步路由器任务。
+     * 执行同步路由器任务
      * 执行算法：
      * 1、下载云端路由器配置列表；
      * 2、将路由器配置项ID，对应赋值到RouterManager列表中Router.Source中。
      * 3、遍历RouterManager路由器列表，将为获取到Source的路由器配置上传至云端。
-     *
-     * @param callback 执行结果回调。
+     * @param callback 执行结果回调
      */
     public void syncRouterList(final Action1<Throwable> callback) {
         try {
@@ -461,9 +477,8 @@ public class UserManager {
     }
 
     /**
-     * 尝试上传本地路由器信息。
-     *
-     * @param callback 回调null为成功。
+     * 尝试上传本地路由器信息
+     * @param callback 回调null为成功
      */
     public void tryUploadRouterList(final Action1<Throwable> callback) {
         for (Router router : mRouterManager.getRouterList()) {
@@ -477,10 +492,9 @@ public class UserManager {
     }
 
     /**
-     * 订阅配置文件变化事件。
-     *
-     * @param callback
-     * @return
+     * 订阅配置文件变化事件
+     * @param callback 回调验证信息
+     * @return 订阅事件信息
      */
     public Subscription subscribeConfigChanged(Action1<AuthConfig> callback) {
         return subjectConfigChanged.subscribe(callback);

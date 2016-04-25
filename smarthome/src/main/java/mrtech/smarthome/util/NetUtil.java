@@ -30,12 +30,19 @@ import javax.net.ssl.X509TrustManager;
 /**
  * @author CJ
  * @version 1.0
- * @date 2015年4月9日 下午10:22:26
+ * @date 2015/4/9 22:22:26
  */
 public final class NetUtil {
 
+    /**
+     * 创建Socket连接
+     * @param ip 连接IP
+     * @param port 连接端口
+     * @return SSLSocket
+     * @throws Exception
+     */
     public static SSLSocket createSocket(String ip, int port) throws Exception {
-        SSLSocket s = null;
+        SSLSocket s;
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         ByteArrayInputStream bain = new ByteArrayInputStream(Base64.decode(Constants.PRIVATE_CODE, Base64.DEFAULT));
         X509Certificate cert = (X509Certificate) cf.generateCertificate(bain);
@@ -55,12 +62,10 @@ public final class NetUtil {
         private X509Certificate cert;
 
         public SmartHomeX509TrustManager(X509Certificate[] trusted, X509Certificate cert) {
-            anchors = new HashSet<TrustAnchor>();
+            anchors = new HashSet<>();
             this.cert = cert;
-            if (anchors != null) {
-                for (X509Certificate certTemp : trusted) {
-                    anchors.add(new TrustAnchor(certTemp, null));
-                }
+            for (X509Certificate certTemp : trusted) {
+                anchors.add(new TrustAnchor(certTemp, null));
             }
         }
 
@@ -73,8 +78,8 @@ public final class NetUtil {
         @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType)
                 throws CertificateException {
-            CertPathValidator certPathValidator = null;
-            PKIXParameters parameters = null;
+            CertPathValidator certPathValidator;
+            PKIXParameters parameters;
             CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
             CertPath path = certFactory.generateCertPath(Arrays.asList(chain));
             try {

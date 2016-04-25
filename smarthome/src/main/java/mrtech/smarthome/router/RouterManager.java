@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import mrtech.smarthome.BuildConfig;
+import mrtech.smarthome.SmartHomeApp;
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
@@ -32,7 +32,7 @@ import rx.subjects.PublishSubject;
 public class RouterManager {
 
     private static void trace(String msg) {
-        if (BuildConfig.DEBUG)
+        if (SmartHomeApp.DEBUG)
             Log.d(RouterManager.class.getName(), msg);
     }
 
@@ -43,9 +43,8 @@ public class RouterManager {
     private static RouterManager ourInstance = new RouterManager();
 
     /**
-     * 创建路由器管理单例对象。
-     *
-     * @return
+     * 创建路由器管理单例对象
+     * @return 路由器管理对象
      */
     public static RouterManager getInstance() {
         return ourInstance;
@@ -73,7 +72,7 @@ public class RouterManager {
     }
 
     private static void initErrorMessageMap() {
-        errorMessageMap = new HashMap<Messages.Response.ErrorCode, String>();
+        errorMessageMap = new HashMap<>();
         errorMessageMap.put(Messages.Response.ErrorCode.SUCCESS, "成功");
         errorMessageMap.put(Messages.Response.ErrorCode.UNKNOWN_PROTOCOL, "未知协议。");
         errorMessageMap.put(Messages.Response.ErrorCode.UNSUPPORTED_VERSION, "版本不支持。");
@@ -138,10 +137,9 @@ public class RouterManager {
     }
 
     /**
-     * 获取路由器通讯错误码解释文本。
-     *
-     * @param errorCode
-     * @return
+     * 获取路由器通讯错误码解释文本
+     * @param errorCode 错误编码
+     * @return 错误编码解释文本
      */
     public static String getErrorMessage(Messages.Response.ErrorCode errorCode) {
         String errorMessage = errorMessageMap.get(errorCode);
@@ -152,10 +150,10 @@ public class RouterManager {
 
     /**
      * 路由管理器初始化：
-     * 1.IPCManager，IPC管理模块。
-     * 2.SugarContext，数据库插件。
-     * 3.ProtoBuf数据对象，路由器通讯对象。
-     * 4.P2P组件，路由器连接组件。
+     * 1.IPCManager，IPC管理模块
+     * 2.SugarContext，数据库插件
+     * 3.ProtoBuf数据对象，路由器通讯对象
+     * 4.P2P组件，路由器连接组件
      */
     public static void init(Context context) {
         IPCManager.init();
@@ -172,7 +170,7 @@ public class RouterManager {
     }
 
     /**
-     * 销毁管理器。
+     * 销毁管理器
      */
     public static void destroy() {
         SugarContext.terminate();
@@ -183,11 +181,10 @@ public class RouterManager {
     }
 
     /**
-     * 刷新路由器列表，在本地缓存重新加载路由器列表。
+     * 刷新路由器列表，在本地缓存重新加载路由器列表
      */
     public void loadRouters() {
         final Iterator<RouterConfig> all = SugarRecord.findAll(RouterConfig.class);
-        if (all != null)
             while (all.hasNext()) {
                 final RouterConfig next = all.next();
                 if (next != null)
@@ -196,11 +193,10 @@ public class RouterManager {
     }
 
     /**
-     * 添加路由器后，管理器会自动连接路由器，获取基础信息，并保持通讯连接。
-     * 连接成功的路由器，将会被缓存在本地数据库，同时上传至用户云端数据（如果用户已登录）。
-     * 相同路由器无法重复添加。
-     *
-     * @param router Router对象，可以直接new构造对象，构造对象需要路由器序列号，与路由器名称。相同序列号视为相同路由器。
+     * 添加路由器后，管理器会自动连接路由器，获取基础信息，并保持通讯连接
+     * 连接成功的路由器，将会被缓存在本地数据库，同时上传至用户云端数据（如果用户已登录）
+     * 相同路由器无法重复添加
+     * @param router Router对象，可以直接new构造对象，构造对象需要路由器序列号，与路由器名称。相同序列号视为相同路由器
      */
     public void addRouter(final Router router) {
         if (router == null || router.getSn() == null || getRouter(router.getSn()) != null) return;
@@ -225,27 +221,25 @@ public class RouterManager {
     }
 
     /**
-     * 删除一台路由器。默认不删除数据库缓存路由器信息。
-     * 如果用户已经登录，则会同步删除云端数据。
-     *
-     * @param router 路由器对象。路由器对象可以通过，getRouterList或getRouter获得。
+     * 删除一台路由器。默认不删除数据库缓存路由器信息
+     * 如果用户已经登录，则会同步删除云端数据
+     * @param router 路由器对象。路由器对象可以通过，getRouterList或getRouter获得
      */
     public void removeRouter(Router router) {
         removeRouter(router, false);
     }
 
     /**
-     * 删除一台路由器。
-     *
-     * @param router      路由器对象。路由器对象可以通过，getRouterList或getRouter获得。
-     * @param removeCache 指定是否不删除数据库缓存路由器信息。true为删除。
+     * 删除一台路由器
+     * @param router 路由器对象。路由器对象可以通过，getRouterList或getRouter获得
+     * @param removeCache 指定是否不删除数据库缓存路由器信息。true为删除
      */
     public void removeRouter(final Router router, boolean removeCache) {
         if (router == null) return;
         if (mRouters.remove(router)) {
             ((RouterClient) router.getRouterSession()).destroy();
             if (removeCache) {
-                SugarRecord.deleteAll(RouterConfig.class, "sn = ?", new String(router.getConfig().getSn()));
+                SugarRecord.deleteAll(RouterConfig.class, "sn = ?", router.getConfig().getSn());
                 subjectRouterCreate.onNext(new RouterCallback<Boolean>() {
                     @Override
                     public Router getRouter() {
@@ -262,10 +256,9 @@ public class RouterManager {
     }
 
     /**
-     * 获取指定路由器，即通过路由器序列号获取对应的路由器。
-     *
-     * @param sn 路由器序列码。
-     * @return 路由器对象。
+     * 获取指定路由器，即通过路由器序列号获取对应的路由器
+     * @param sn 路由器序列码
+     * @return 路由器对象
      */
     public Router getRouter(String sn) {
         if (sn != null)
@@ -277,19 +270,17 @@ public class RouterManager {
     }
 
     /**
-     * 获取当前路由器列表。
-     *
-     * @return 路由器列表。（源列表对象，请勿执行增删操作。可以做为ArrayAdapter的源数据)
+     * 获取当前路由器列表
+     * @return 路由器列表（源列表对象，请勿执行增删操作。可以做为ArrayAdapter的源数据)
      */
     public List<Router> getRouterList() {
         return mRouters;
     }
 
     /**
-     * 获取指定类型的路由器列表。
-     *
-     * @param valid 路由器是否可以通讯。true为可以正常通讯。（
-     * @return
+     * 获取指定类型的路由器列表
+     * @param valid 路由器是否可以通讯。true为可以正常通讯
+     * @return 路由器列表
      */
     List<Router> getRouterList(boolean valid) {
         ArrayList<Router> routers = new ArrayList<>();
@@ -302,9 +293,8 @@ public class RouterManager {
     }
 
     /**
-     * 清除当期添加的所有路由器。不清除缓存信息，管理器中所有路由器将会断开连接，并删除。调用loadRouters可以恢复。
-     *
-     * @param removeCache 是否清楚缓存信息。
+     * 清除当期添加的所有路由器。不清除缓存信息，管理器中所有路由器将会断开连接，并删除。调用loadRouters可以恢复
+     * @param removeCache 是否清楚缓存信息
      */
     public void removeAllRouters(boolean removeCache) {
         final Router[] routers = getRouterList().toArray(new Router[getRouterList().size()]);
@@ -314,20 +304,18 @@ public class RouterManager {
     }
 
     /**
-     * 获取事件管理器。所有已经连接的路由器事件将会，被汇总到事件管理器统一发布。
-     * 如果需要订阅当个路由器的事件，可以在回调事件中筛选 或者 在指定路由器的RouterSession，CommunicationManager对象中订阅事件。
-     *
-     * @return 事件管理器。
+     * 获取事件管理器。所有已经连接的路由器事件将会，被汇总到事件管理器统一发布
+     * 如果需要订阅当个路由器的事件，可以在回调事件中筛选 或者 在指定路由器的RouterSession，CommunicationManager对象中订阅事件
+     * @return 事件管理器
      */
     public EventManager getEventManager() {
         return mEventManager;
     }
 
     /**
-     * 订阅路由器添加/删除事件。即getRouterList()发生变化就会回调。
-     *
-     * @param callback 回调参数中Data空则无意义，true则添加，false则删除。
-     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）。
+     * 订阅路由器添加/删除事件。即getRouterList()发生变化就会回调
+     * @param callback 回调参数中Data空则无意义，true则添加，false则删除
+     * @return 订阅句柄，句柄在事件不再使用时候，必须执行反订阅（即unsubscribe）
      */
     public Subscription subscribeRouterCreateEvent(Action1<RouterCallback<Boolean>> callback) {
         return subjectRouterCreate.subscribe(callback);

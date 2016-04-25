@@ -2,10 +2,11 @@ package mrtech.smarthome.router;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import mrtech.smarthome.BuildConfig;
+import mrtech.smarthome.SmartHomeApp;
 import mrtech.smarthome.router.Models.*;
 import mrtech.smarthome.ipc.IPCManager;
 import mrtech.smarthome.ipc.IPCamera;
@@ -20,7 +21,7 @@ import rx.functions.Action2;
 class RouterCameraDataManager implements CameraDataManager {
 
     private static void trace(String msg) {
-        if (BuildConfig.DEBUG)
+        if (SmartHomeApp.DEBUG)
             Log.d(RouterCameraDataManager.class.getName(), msg);
     }
 
@@ -52,13 +53,15 @@ class RouterCameraDataManager implements CameraDataManager {
                         if (result != null && result.size() > 0) {
                             try {
                                 mIPCManager.removeAll();
+                                List<IPCamera> cameras= new ArrayList<>();
                                 for (mrtech.smarthome.rpc.Models.Device device : result) {
                                     final mrtech.smarthome.rpc.Models.CameraDevice cameraDevice = device.getExtension(mrtech.smarthome.rpc.Models.CameraDevice.detail);
                                     if (cameraDevice == null || device.getType() != mrtech.smarthome.rpc.Models.DeviceType.DEVICE_TYPE_CAMERA) {
                                         throw new IllegalArgumentException("device must be type of camera");
                                     }
-                                    mIPCManager.addCamera(new IPCamera(device, cameraDevice.getDeviceid(), cameraDevice.getUser(), cameraDevice.getPassword()));
+                                    cameras.add(new IPCamera(device, cameraDevice.getDeviceid(), cameraDevice.getUser(), cameraDevice.getPassword()));
                                 }
+                                mIPCManager.addCamera(cameras.toArray(new IPCamera[cameras.size()]));
                             } catch (Exception e) {
                                 throwable = e;
                             }
@@ -73,6 +76,7 @@ class RouterCameraDataManager implements CameraDataManager {
             if (exception != null) exception.call(ex);
         }
     }
+
 
     @Override
     public void saveCamera(final mrtech.smarthome.rpc.Models.Device device, final Action1<Throwable> result) {

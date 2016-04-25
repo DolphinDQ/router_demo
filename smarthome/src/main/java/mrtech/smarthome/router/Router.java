@@ -31,10 +31,9 @@ public class Router {
 
 
     /**
-     * 构建路由器对象。
-     *
-     * @param name 路由器初始化名称。
-     * @param sn   路由器序列码。
+     * 构建路由器对象
+     * @param name 路由器初始化名称
+     * @param sn 路由器序列码
      */
     public Router(String name, String sn) {
         if (sn == null || sn.equals(""))
@@ -44,18 +43,16 @@ public class Router {
     }
 
     /**
-     * 获取路由器序列码。
-     *
-     * @return sn 序列码。
+     * 获取路由器序列码
+     * @return sn 序列码
      */
     public String getSn() {
         return sn;
     }
 
     /**
-     * 获取路由器名称，如果路由器已经连接则返回路由器名称，如果未连接则返回对象初始化名称。
-     *
-     * @return
+     * 获取路由器名称，如果路由器已经连接则返回路由器名称，如果未连接则返回对象初始化名称
+     * @return 路由器名称
      */
     public String getName() {
         final RouterSession routerSession = getRouterSession();
@@ -83,20 +80,18 @@ public class Router {
     }
 
     /**
-     * 获取用户数据，通过setUserData方法可以设置指定对象到Router数据列表。使用此方法可以将数据取出。
-     *
-     * @return 用户数据。
+     * 获取用户数据，通过setUserData方法可以设置指定对象到Router数据列表。使用此方法可以将数据取出
+     * @return 用户数据
      */
     public Object getUserData(String key) {
         return userData.get(key);
     }
 
     /**
-     * 获取用户数据，通过setUserData方法可以设置指定对象到Router数据列表。使用此方法可以将数据取出。
-     *
-     * @param cls 指定要存储的类型。
-     * @param <T> 指定类型。
-     * @return 要获取的数据。
+     * 获取用户数据，通过setUserData方法可以设置指定对象到Router数据列表。使用此方法可以将数据取出
+     * @param cls 指定要存储的类型
+     * @param <T> 指定类型
+     * @return 要获取的数据
      */
     @SuppressWarnings("unchecked")
     public <T> T getUserData(Class<T> cls) {
@@ -104,22 +99,20 @@ public class Router {
     }
 
     /**
-     * 设置指定数据到路由器数据列表中，即绑定数据。（用于绑定UI数据或数据库数据）
-     * 使用类的名称作为数据的key。
-     *
-     * @param cls    指定要存储的类型。
-     * @param source 需要绑定的数据。
-     * @param <T>    指定类型。
+     * 设置指定数据到路由器数据列表中，即绑定数据（用于绑定UI数据或数据库数据）
+     * 使用类的名称作为数据的key
+     * @param cls 指定要存储的类型
+     * @param source 需要绑定的数据
+     * @param <T> 指定类型
      */
     public <T> void setUserData(Class<T> cls, @Nullable T source) {
         setUserData(cls.getName(), source);
     }
 
     /**
-     * 设置指定数据到路由器数据列表中，即绑定数据。（用于绑定UI数据或数据库数据）
-     *
-     * @param key    数据指定的key，key是唯一，重复key会互相覆盖。
-     * @param source 需要绑定的数据，如果source为null则删除指定key的数据对象。
+     * 设置指定数据到路由器数据列表中，即绑定数据（用于绑定UI数据或数据库数据）
+     * @param key 数据指定的key，key是唯一，重复key会互相覆盖
+     * @param source 需要绑定的数据，如果source为null则删除指定key的数据对象
      */
     public void setUserData(String key, @Nullable Object source) {
         if (userData.containsKey(key))
@@ -129,9 +122,8 @@ public class Router {
     }
 
     /**
-     * 获取路由器配置文件。
-     *
-     * @return 配置文件。
+     * 获取路由器配置文件
+     * @return 配置文件
      */
     public RouterConfig getConfig() {
         if (config == null) loadConfig();
@@ -158,6 +150,10 @@ public class Router {
         this.routerSession = routerSession;
     }
 
+    /**
+     * 显示路由器序列码
+     * @return 路由器序列码
+     */
     @Override
     public String toString() {
         return "Router:" + sn;

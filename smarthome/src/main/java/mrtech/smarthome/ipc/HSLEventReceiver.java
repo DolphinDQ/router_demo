@@ -3,7 +3,7 @@ package mrtech.smarthome.ipc;
 import android.bluetooth.BluetoothClass;
 import android.util.Log;
 
-import mrtech.smarthome.BuildConfig;
+import mrtech.smarthome.SmartHomeApp;
 import mrtech.smarthome.ipc.Models.IPCAlarm;
 import mrtech.smarthome.ipc.Models.IPCAudioFrame;
 import mrtech.smarthome.ipc.Models.IPCGetParameter;
@@ -22,7 +22,7 @@ import rx.subjects.PublishSubject;
  */
 class HSLEventReceiver {
     private static void trace(String msg) {
-        if (BuildConfig.DEBUG)
+        if (SmartHomeApp.DEBUG)
             Log.d(IPCManager.class.getName(), msg);
     }
 
@@ -311,7 +311,5 @@ class HSLEventReceiver {
     public IPCEventManager createEventManager(final Long userId) {
         return new HSLEventManager(userId);
     }
-
-
 }
 

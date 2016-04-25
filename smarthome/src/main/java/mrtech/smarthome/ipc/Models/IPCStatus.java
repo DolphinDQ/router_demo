@@ -2,7 +2,7 @@ package mrtech.smarthome.ipc.Models;
 
 
 /**
- * Created by sphynx on 2015/12/8.
+ * IPC状态类型
  */
 public enum IPCStatus {
     /**
@@ -56,10 +56,14 @@ public enum IPCStatus {
 
     private final String description;
 
-    private IPCStatus(String description) {
+    IPCStatus(String description) {
         this.description = description;
     }
 
+    /**
+     * 显示描述信息
+     * @return 描述信息
+     */
     @Override
     public String toString() {
         return description;

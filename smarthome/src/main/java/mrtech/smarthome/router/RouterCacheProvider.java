@@ -9,7 +9,7 @@ import com.squareup.okhttp.Route;
 
 import java.util.List;
 
-import mrtech.smarthome.BuildConfig;
+import mrtech.smarthome.SmartHomeApp;
 import mrtech.smarthome.router.Models.CommunicationManager;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
@@ -24,7 +24,7 @@ class RouterCacheProvider {
 
     private static void trace(String msg) {
 
-        if (BuildConfig.DEBUG)
+        if (SmartHomeApp.DEBUG)
             Log.d(RouterCacheProvider.class.getName(), msg);
     }
 

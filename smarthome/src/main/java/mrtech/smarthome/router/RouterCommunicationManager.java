@@ -15,7 +15,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLSocket;
 
-import mrtech.smarthome.BuildConfig;
+import mrtech.smarthome.SmartHomeApp;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
 import rx.Observer;
@@ -31,7 +31,7 @@ import rx.subjects.PublishSubject;
  */
 class RouterCommunicationManager implements CommunicationManager {
     private static void trace(String msg) {
-        if (BuildConfig.DEBUG)
+        if (SmartHomeApp.DEBUG)
             Log.d(RouterCommunicationManager.class.getName(), msg);
     }
 
@@ -125,10 +125,14 @@ class RouterCommunicationManager implements CommunicationManager {
     public void init(SSLSocket socket) {
         destroyed = false;
         this.socket = socket;
-        mPostTask = new Thread(new RequestQueuePostTask());
-        mPostTask.start();
-        mReadTask = new Thread(new SocketListeningTask());
-        mReadTask.start();
+        if (mPostTask == null) {
+            mPostTask = new Thread(new RequestQueuePostTask());
+            mPostTask.start();
+        }
+        if (mReadTask == null) {
+            mReadTask = new Thread(new SocketListeningTask());
+            mReadTask.start();
+        }
     }
 
     @Override
@@ -378,9 +382,11 @@ class RouterCommunicationManager implements CommunicationManager {
         if (destroyed) return;
         destroyed = true;
         flushRequestQueue();
+        mPostTask = null;
         if (mReadTask != null) {
             mReadTask.interrupt();
         }
+        mReadTask = null;
     }
 
     private void postEvents() {

@@ -7,7 +7,7 @@ import com.orm.dsl.Table;
 import mrtech.smarthome.router.Models.DataEntityBase;
 
 /**
- * 路由器配置对象。
+ * 路由器配置对象
  * Created by sphynx on 2015/12/23.
  */
 @Table
@@ -25,16 +25,16 @@ public class RouterConfig extends DataEntityBase {
     }
 
     /**
-     * 获取路由器序列码。
-     * @return 序列码。
+     * 获取路由器序列码
+     * @return 序列码
      */
     public String getSn() {
         return sn;
     }
 
     /**
-     * 获取路由器缓存的名称。
-     * @return 路由器名称。
+     * 获取路由器缓存的名称
+     * @return 路由器名称
      */
     public String getName() {
         return name;

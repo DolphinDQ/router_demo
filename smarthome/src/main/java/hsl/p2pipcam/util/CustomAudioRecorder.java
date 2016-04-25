@@ -44,7 +44,7 @@ public class CustomAudioRecorder {
 				recordThread.join();
 
 			} catch (Exception e) {
-				// TODO: handle exception
+				//  handle exception
 			}
 		}
 	}
@@ -76,7 +76,7 @@ public class CustomAudioRecorder {
 	}
 
 	public boolean initRecorder() {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		m_in_buf_size = AudioRecord.getMinBufferSize(8000,
 				AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT);

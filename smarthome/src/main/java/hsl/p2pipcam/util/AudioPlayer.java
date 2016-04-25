@@ -13,7 +13,7 @@ public class AudioPlayer{
 	private AudioTrack m_AudioTrack = null;
 	
 	public AudioPlayer(CustomBuffer buffer) {
-		// TODO Auto-generated constructor stub
+		// Auto-generated constructor stub
 		audioBuffer = buffer;
 	}
 	
@@ -83,7 +83,7 @@ public class AudioPlayer{
 						Thread.sleep(10);
 						continue;
 					} catch (Exception e) {
-						// TODO: handle exception
+						// handle exception
 						m_AudioTrack.stop();
 						return;
 					}					

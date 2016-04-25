@@ -1,8 +1,7 @@
 package mrtech.smarthome.auth.Models;
 
-
 /**
- * Created by sphynx on 2015/12/30.
+ * 用户详细信息
  */
 public class UserDetail {
     private UserData UserData;

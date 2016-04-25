@@ -22,10 +22,18 @@ public enum RouterStatus {
 
     private final String description;
 
+    /**
+     * 路由状态描述
+     * @param description 状态描述
+     */
     RouterStatus(String description) {
         this.description = description;
     }
 
+    /**
+     * 显示描述信息
+     * @return 描述信息
+     */
     @Override
     public String toString() {
         return description;
