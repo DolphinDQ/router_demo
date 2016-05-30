@@ -77,7 +77,6 @@ class RouterCameraDataManager implements CameraDataManager {
         }
     }
 
-
     @Override
     public void saveCamera(final mrtech.smarthome.rpc.Models.Device device, final Action1<Throwable> result) {
         mCommunicationManager.postRequestAsync(RequestUtil.saveCamera(device),

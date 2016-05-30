@@ -1,3 +1,4 @@
+/sugar/build
 *.iml
 .gradle
 /local.properties

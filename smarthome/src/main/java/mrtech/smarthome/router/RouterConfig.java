@@ -1,8 +1,7 @@
 package mrtech.smarthome.router;
 
 
-import com.orm.SugarRecord;
-import com.orm.dsl.Table;
+import com.orm.annotation.Table;
 
 import mrtech.smarthome.router.Models.DataEntityBase;
 

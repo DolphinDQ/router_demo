@@ -21,4 +21,10 @@ public interface PictureData {
      * @return 视频截图的高度
      */
     int getHeight();
+
+    /**
+     * 获取RGB565截图缓存
+     * @return 截图数据
+     */
+    byte[] getRGB565Buffer();
 }

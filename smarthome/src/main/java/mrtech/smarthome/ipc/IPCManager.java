@@ -20,8 +20,9 @@ import rx.subjects.PublishSubject;
 public class IPCManager {
     private static IPCManager ourInstance = new IPCManager();
     private static boolean isInit;
-    private final ArrayList<IPCamera> mCameras = new ArrayList<>();
     private static final HSLEventReceiver hslEventController = new HSLEventReceiver();
+    private final ArrayList<IPCamera> mCameras = new ArrayList<>();
+    private final Object mCameraLocker = new Object();
     private PublishSubject<List<IPCamera>> mCameraListChanged = PublishSubject.create();
 
     private static void trace(String msg) {
@@ -84,12 +85,14 @@ public class IPCManager {
      */
     public void addCamera(IPCamera... cameras) {
         if (cameras == null || cameras.length == 0) return;
-        for (IPCamera cam : cameras) {
-            if (getCamera(cam.getDeviceId()) == null) {
-                final HSLCameraClient ipcContext = new HSLCameraClient(this, cam);
-                cam.setIpcContext(ipcContext);
-                mCameras.add(cam);
-                ipcContext.init();
+        synchronized (mCameraLocker) {
+            for (IPCamera cam : cameras) {
+                if (getCamera(cam.getDeviceId()) == null) {
+                    final HSLCameraClient ipcContext = new HSLCameraClient(this, cam);
+                    cam.setIpcContext(ipcContext);
+                    mCameras.add(cam);
+                    ipcContext.init();
+                }
             }
         }
         mCameraListChanged.onNext(mCameras);
@@ -112,8 +115,10 @@ public class IPCManager {
     public void removeCamera(IPCamera cam) {
         if (cam == null) return;
         cam.getIpcContext().destroy();
-        mCameras.remove(cam);
-        mCameraListChanged.onNext(mCameras);
+        synchronized (mCameraLocker) {
+            mCameras.remove(cam);
+            mCameraListChanged.onNext(mCameras);
+        }
     }
 
     /**
@@ -121,11 +126,19 @@ public class IPCManager {
      */
     public void removeAll() {
         IPCamera[] cameraList = mCameras.toArray(new IPCamera[mCameras.size()]);
-        for (IPCamera camera : cameraList) {
-            camera.getIpcContext().destroy();
-            mCameras.remove(camera);
+        synchronized (mCameraLocker) {
+            for (IPCamera camera : cameraList) {
+                camera.getIpcContext().destroy();
+                mCameras.remove(camera);
+            }
         }
         mCameraListChanged.onNext(mCameras);
+    }
+
+    private IPCamera[] getCameraCopy() {
+        synchronized (mCameraLocker) {
+            return mCameras.toArray(new IPCamera[mCameras.size()]);
+        }
     }
 
 //    public void removeCamera(String deviceId) {
@@ -154,7 +167,8 @@ public class IPCManager {
      * @return 指定IPC对象，如果找不到返回null
      */
     public IPCamera getCamera(String deviceId) {
-        for (IPCamera cam : mCameras) {
+        final IPCamera[] cameraCopy = getCameraCopy();
+        for (IPCamera cam : cameraCopy) {
             if (cam.getDeviceId().equals(deviceId))
                 return cam;
         }
@@ -168,8 +182,9 @@ public class IPCManager {
      * @return 指定IPC对象，如果找不到返回null
      */
     public IPCamera getCamera(long handle) {
-        for (IPCamera cam : mCameras) {
-            if (cam.getIpcContext().getHandle() == handle) {
+        final IPCamera[] cameraCopy = getCameraCopy();
+        for (IPCamera cam : cameraCopy) {
+            if (cam.getIpcContext().getCameraId() == handle) {
                 return cam;
             }
         }
@@ -215,7 +230,7 @@ public class IPCManager {
     public IPCEventManager createEventManager(@Nullable IPCamera camera) {
         return camera == null
                 ? hslEventController.createEventManager(null)
-                : hslEventController.createEventManager(camera.getIpcContext().getHandle());
+                : hslEventController.createEventManager(camera.getIpcContext().getCameraId());
     }
 
 }

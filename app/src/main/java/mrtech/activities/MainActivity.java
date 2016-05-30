@@ -238,7 +238,7 @@ public class MainActivity extends BaseActivity {
                     final Models.InfraredOpCode infraredOpCode = mIFDev.getExtension(Models.InfraredDevice.detail).getOpcodesList().get(0);
                     final Messages.Request request = RequestUtil
                             .sendIrCommand(infraredOpCode.getDeviceId(), Models.InfraredCommand.newBuilder()
-                                    .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(infraredOpCode.getId())).build(), false);
+                                    .setExtension(Models.ExtensionCommand.newBuilder().setOpcodeId(infraredOpCode.getId())).build(),false);
                     mCurrentRouter.getRouterSession().getCommunicationManager().postRequestAsync(request, new Action2<Messages.Response, Throwable>() {
                         @Override
                         public void call(Messages.Response response, final Throwable throwable) {

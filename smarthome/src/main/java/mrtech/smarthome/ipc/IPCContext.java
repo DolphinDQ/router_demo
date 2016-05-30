@@ -11,11 +11,11 @@ public interface IPCContext {
      * 获取IPC连接句柄
      * @return 连接句柄
      */
-    long getHandle();
+    long getCameraId();
 
     /**
      * IPC当前状态
-     * @return 100 success
+     * @return IPCStatus
      */
     IPCStatus getStatus();
 

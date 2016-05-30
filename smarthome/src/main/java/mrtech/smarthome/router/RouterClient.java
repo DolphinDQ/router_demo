@@ -1,5 +1,7 @@
 package mrtech.smarthome.router;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.stream.NewAllStreamParser;
@@ -150,11 +152,11 @@ class RouterClient implements RouterSession {
     }
 
     public void disconnect() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (socket != null) {
-                    if (!socket.isClosed()) {
+        if (socket != null) {
+            if (!socket.isClosed()) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
                         try {
                             socket.close();
                         } catch (IOException e) {
@@ -162,12 +164,12 @@ class RouterClient implements RouterSession {
                             trace(mContext + "socket close failed..");
                         }
                     }
-                    socket = null;
-                    authenticated = false;
-                    setRouterStatus(RouterStatus.ROUTER_DISCONNECTED);
-                }
+                });
             }
-        }).start();
+            socket = null;
+            authenticated = false;
+            setRouterStatus(RouterStatus.ROUTER_DISCONNECTED);
+        }
     }
 
     public boolean connect() {
@@ -279,7 +281,12 @@ class RouterClient implements RouterSession {
     private void setRouterStatus(RouterStatus routerStatus) {
         trace(mContext + " status changed to:" + routerStatus);
         mContext.routerStatus = routerStatus;
-        subjectRouterStatusChanged.onNext(mRouter);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                subjectRouterStatusChanged.onNext(mRouter);
+            }
+        });
     }
 
     private class CheckStatusTask implements Runnable {
@@ -309,7 +316,7 @@ class RouterClient implements RouterSession {
 //                disconnect();
                 }
             }
-            int  ret = times * reconnectDelay;
+            int ret = times * reconnectDelay;
             if (times < 24) times++; //每次重连不成功延迟5秒，直到2分钟。
             return ret;
         }

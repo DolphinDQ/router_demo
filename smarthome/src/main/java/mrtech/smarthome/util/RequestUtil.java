@@ -107,6 +107,7 @@ import mrtech.smarthome.rpc.Models.ZoneQuery;
 public final class RequestUtil {
     static Character id = 0;
     final static Object object = new Object();
+
     static int createId() {
         synchronized (object) {
             return id++ << 16;
@@ -115,16 +116,18 @@ public final class RequestUtil {
 
     /**
      * 获取请求类型的值
+     *
      * @param callback 请求消息的相应回调
      * @return 请求类型的值
      */
     public static int getRequestTypeValue(Messages.Response callback) {
         int requestId = callback.getRequestId();
-        return requestId << 16 >> 16;
+        return requestId & 0xffff;
     }
 
     /**
      * 获取验证请求
+     *
      * @param apiKey 验证密钥
      * @return 验证请求
      */
@@ -159,6 +162,7 @@ public final class RequestUtil {
 
     /**
      * 获取路由器保持连接的请求
+     *
      * @return 路由器保持连接的请求
      */
     public static Request getKeepAliveRequest() {
@@ -170,6 +174,7 @@ public final class RequestUtil {
 
     /**
      * 获取查询路由器系统日志的请求
+     *
      * @param query 系统日志查询条件
      * @return 查询系统日志的请求
      */
@@ -187,6 +192,7 @@ public final class RequestUtil {
 
     /**
      * 获取查询时间轴信息的请求
+     *
      * @param query 时间轴查询条件
      * @return 查询时间轴信息的请求
      */
@@ -204,6 +210,7 @@ public final class RequestUtil {
 
     /**
      * 获取查询设备列表的请求
+     *
      * @param query 设备列表的查询条件
      * @return 查询设备列表的请求
      */
@@ -221,6 +228,7 @@ public final class RequestUtil {
 
     /**
      * 获取查询分组列表的请求
+     *
      * @param groupQuery 分组列表的查询条件
      * @return 查询分组列表的请求
      */
@@ -238,9 +246,9 @@ public final class RequestUtil {
     }
 
 
-
     /**
      * 获取查询情景模式列表的请求
+     *
      * @param query 情景模式列表的查询条件
      * @return 查询情景模式列表的请求
      */
@@ -259,6 +267,7 @@ public final class RequestUtil {
 
     /**
      * 获取查询摄像头列表的请求
+     *
      * @return 查询摄像头列表的请求
      */
     public static Request searchCamera() {
@@ -270,6 +279,7 @@ public final class RequestUtil {
 
     /**
      * 获取一键匹配设备的请求
+     *
      * @return 一键匹配设备的请求
      */
     public static Request getOneKeyMatch() {
@@ -281,6 +291,7 @@ public final class RequestUtil {
 
     /**
      * 获取创建分组的请求
+     *
      * @param groupName 要创建的分组名称
      * @return 创建分组的请求
      */
@@ -298,8 +309,9 @@ public final class RequestUtil {
 
     /**
      * 获取修改分组名称的请求
+     *
      * @param groupId 要修改的分组ID
-     * @param name 修改后的分组名称
+     * @param name    修改后的分组名称
      * @return 修改分组名称的请求
      */
     public static Request updateGroup(int groupId, String name) {
@@ -317,6 +329,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除分组的请求
+     *
      * @param group 要删除的分组ID
      * @return 删除分组的请求
      */
@@ -335,8 +348,9 @@ public final class RequestUtil {
 
     /**
      * 获取设置设备别名的请求
+     *
      * @param deviceId 要设置别名的设备ID
-     * @param alias 设备别名
+     * @param alias    设备别名
      * @return 设置设备别名的请求
      */
     public static Request setDeviceAlias(int deviceId, String alias) {
@@ -352,6 +366,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除设备的请求
+     *
      * @param deviceId 要删除的设备ID
      * @return 删除设备的请求
      */
@@ -366,6 +381,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除设备的请求
+     *
      * @param deviceIds 要删除的设备的ID列表
      * @return 批量删除设备的请求
      */
@@ -380,6 +396,7 @@ public final class RequestUtil {
 
     /**
      * 获取添加摄像头的请求
+     *
      * @param device 要添加的摄像头对象
      * @return 添加摄像头的请求
      */
@@ -395,9 +412,10 @@ public final class RequestUtil {
 
     /**
      * 获取设备切换状态的请求
-     * @param onOff 开或关的状态
+     *
+     * @param onOff      开或关的状态
      * @param targetType 执行切换操作的设备类型
-     * @param targetId 执行切换操作的设备ID
+     * @param targetId   执行切换操作的设备ID
      * @return 设备切换状态的请求
      */
     public static Request toggleOnOff(boolean onOff, TargetType targetType, int targetId) {
@@ -420,6 +438,7 @@ public final class RequestUtil {
 
     /**
      * 获取设备切换状态的请求
+     *
      * @param toggleOnOffRequest 设备状态切换
      * @return 设备切换状态的请求
      */
@@ -435,8 +454,9 @@ public final class RequestUtil {
 
     /**
      * 获取设备加入或移动到指定分组的请求
+     *
      * @param deviceId 要加入或移动到指定分组的设备ID
-     * @param groupId 设备要加入或移动到的目标分组ID
+     * @param groupId  设备要加入或移动到的目标分组ID
      * @return 设备加入或移动到指定分组的请求
      */
     public static Request setGroup(int deviceId, int groupId) {
@@ -456,8 +476,9 @@ public final class RequestUtil {
 
     /**
      * 获取多个设备加入或移动到指定分组的请求
+     *
      * @param deviceIds 要加入或移动到指定分组的设备ID列表
-     * @param groupId 设备要加入或移动到的目标分组ID
+     * @param groupId   设备要加入或移动到的目标分组ID
      * @return 多个设备加入或移动到指定分组的请求
      */
     public static Request setGroup(List<Integer> deviceIds, int groupId) {
@@ -488,6 +509,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除情景模式的请求
+     *
      * @param sceneId 要删除的情景模式ID
      * @return 删除情景模式的请求
      */
@@ -503,6 +525,7 @@ public final class RequestUtil {
 
     /**
      * 获取查询防区的请求
+     *
      * @param zoneQuery 防区的查询条件
      * @return 查询防区的请求
      */
@@ -520,6 +543,7 @@ public final class RequestUtil {
      * 订阅路由器事件的请求，每次登录都要重新订阅
      * 重新设置订阅事件后会覆盖上一次的设置
      * 取消所有事件订阅可将EventType为Null
+     *
      * @param eventTypes 要订阅的事件组
      * @return 路由器事件的请求
      */
@@ -539,6 +563,7 @@ public final class RequestUtil {
 
     /**
      * 获取触发情景模式的请求
+     *
      * @param sceneId 要触发的情景模式ID
      * @return 触发情景模式的请求
      */
@@ -553,8 +578,9 @@ public final class RequestUtil {
 
     /**
      * 获取创建情景模式的请求
+     *
      * @param sceneName 要创建的情景模式的名称
-     * @param actions 激活情景模式时要执行的操作
+     * @param actions   激活情景模式时要执行的操作
      * @return 创建情景模式的请求
      */
     public static Request createScene(String sceneName, List<Action> actions) {
@@ -573,6 +599,7 @@ public final class RequestUtil {
 
     /**
      * 获取广域网配置信息的请求
+     *
      * @param wanPort 要获取配置信息的广域网端口
      * @return 获取广域网配置信息的请求
      */
@@ -586,7 +613,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置广域网配置信息的请求
-     * @param wanPort 要设置配置信息的广域网端口
+     *
+     * @param wanPort   要设置配置信息的广域网端口
      * @param wanConfig 要设置的广域网配置信息
      * @return 设置广域网配置信息的请求
      */
@@ -600,6 +628,7 @@ public final class RequestUtil {
 
     /**
      * 获取无线局域网配置信息的请求
+     *
      * @param wlanPort 要获取配置信息的无线局域网端口
      * @return 获取无线局域网配置信息的请求
      */
@@ -613,6 +642,7 @@ public final class RequestUtil {
 
     /**
      * 获取无线局域网接入点列表的请求
+     *
      * @return 获取无线局域网接入点列表的请求
      */
     public static Request getWlanAccessPoint() {
@@ -624,7 +654,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置无线局域网配置信息的请求
-     * @param wlanPort 要设置配置信息的无线局域网端口
+     *
+     * @param wlanPort   要设置配置信息的无线局域网端口
      * @param wlanConfig 要设置的无线局域网配置信息
      * @return 设置无线局域网配置信息的请求
      */
@@ -639,6 +670,7 @@ public final class RequestUtil {
     /**
      * 获取无线局域网连接点列表的请求
      * 包括2.4G网络、2.4G访客网络、5G网络、5G访客网络连接点
+     *
      * @param wlanPort 要获取连接点列表的无线局域网端口
      * @return 获取无线局域网连接点列表的请求
      */
@@ -654,6 +686,7 @@ public final class RequestUtil {
 
     /**
      * 获取启动布防模式的请求
+     *
      * @param armMode 布防模式
      * @return 启动布防模式的请求
      */
@@ -668,7 +701,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置布防模式的请求
-     * @param zoneIds 防区ID列表
+     *
+     * @param zoneIds  防区ID列表
      * @param armGroup 防护模式
      * @return 设置布防模式的请求
      */
@@ -683,10 +717,9 @@ public final class RequestUtil {
     }
 
 
-
-
     /**
      * 获取设备列表的请求
+     *
      * @param devices 设备ID列表
      * @return 获取设备列表的请求
      */
@@ -702,6 +735,7 @@ public final class RequestUtil {
 
     /**
      * 获取更新情景模式的请求
+     *
      * @param scene 情景模式对象
      * @return 更新情景模式的请求
      */
@@ -717,6 +751,7 @@ public final class RequestUtil {
 
     /**
      * 获取广域网速率的请求
+     *
      * @param wanPort 广域网端口
      * @return 获取广域网速率的请求
      */
@@ -732,6 +767,7 @@ public final class RequestUtil {
 
     /**
      * 获取终端设备的请求
+     *
      * @return 获取终端设备的请求
      */
     public static Request getNetWorkDevice() {
@@ -745,6 +781,7 @@ public final class RequestUtil {
 
     /**
      * 获取访问控制列表的规则模式的请求
+     *
      * @return 获取访问控制列表的规则模式的请求
      */
     public static Request getAclRuleMode() {
@@ -755,8 +792,11 @@ public final class RequestUtil {
     }
 
 
+
+
     /**
      * 获取互联网访问控制列表的规则的请求
+     *
      * @return 获取互联网访问控制列表的规则的请求
      */
     public static Request getInternetAclRules() {
@@ -769,6 +809,7 @@ public final class RequestUtil {
 
     /**
      * 获取设置互联网访问控制列表的规则的请求
+     *
      * @param macs 终端设备MAC地址列表
      * @return 设置互联网访问控制列表的规则的请求
      */
@@ -784,6 +825,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除互联网访问控制列表的规则的请求
+     *
      * @param mac 终端设备MAC地址
      * @return 删除互联网访问控制列表的规则的请求
      */
@@ -799,6 +841,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除互联网访问控制列表的规则的请求
+     *
      * @param macs 终端设备MAC地址列表
      * @return 删除互联网访问控制列表的规则的请求
      */
@@ -814,6 +857,7 @@ public final class RequestUtil {
 
     /**
      * 获取共享访问控制列表的规则的请求
+     *
      * @return 获取共享访问控制列表的规则的请求
      */
     public static Request getSambaAclRules() {
@@ -826,6 +870,7 @@ public final class RequestUtil {
 
     /**
      * 获取设置共享访问控制列表的规则的请求
+     *
      * @param macs 终端设备MAC地址列表
      * @return 设置共享访问控制列表的规则的请求
      */
@@ -841,6 +886,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除共享访问控制列表的规则的请求
+     *
      * @param macs 终端设备MAC地址列表
      * @return 删除共享访问控制列表的规则的请求
      */
@@ -856,6 +902,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除共享访问控制列表的规则的请求
+     *
      * @param macs 终端设备MAC地址
      * @return 删除共享访问控制列表的规则的请求
      */
@@ -871,6 +918,7 @@ public final class RequestUtil {
 
     /**
      * 获取以太网配置的请求
+     *
      * @return 以太网配置的请求
      */
     public static Request getEthernetConfig() {
@@ -883,6 +931,7 @@ public final class RequestUtil {
 
     /**
      * 获取摄像头信息的请求
+     *
      * @param deviceId 摄像头ID
      * @return 获取摄像头信息的请求
      */
@@ -896,7 +945,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置摄像头录像配置的请求
-     * @param deviceId 摄像头ID
+     *
+     * @param deviceId                  摄像头ID
      * @param cameraRecordConfiguration 摄像头录像配置
      * @return 设置摄像头录像配置的请求
      */
@@ -912,6 +962,7 @@ public final class RequestUtil {
 
     /**
      * 获取访客网络配置的请求
+     *
      * @param wlanPort 访客网络的端口
      * @return 获取访客网络配置的请求
      */
@@ -926,7 +977,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置访客网络配置的请求
-     * @param wlanPort 访客网络的端口
+     *
+     * @param wlanPort        访客网络的端口
      * @param guestWlanConfig 访客网络配置
      * @return 设置访客网络配置的请求
      */
@@ -942,6 +994,7 @@ public final class RequestUtil {
 
     /**
      * 获取硬盘信息的请求
+     *
      * @return 获取硬盘信息的请求
      */
     public static Request getHDDInfo() {
@@ -954,6 +1007,7 @@ public final class RequestUtil {
 
     /**
      * 获取初始化硬盘的请求
+     *
      * @return 初始化硬盘的请求
      */
     public static Request initializeHDD() {
@@ -966,6 +1020,7 @@ public final class RequestUtil {
 
     /**
      * 获取移除硬盘的请求
+     *
      * @return 移除硬盘的请求
      */
     public static Request removeHDD() {
@@ -978,6 +1033,7 @@ public final class RequestUtil {
 
     /**
      * 获取重启路由器的请求
+     *
      * @return 获取重启路由器的请求
      */
     public static Request reboot() {
@@ -990,6 +1046,7 @@ public final class RequestUtil {
 
     /**
      * 获取路由器信息的请求
+     *
      * @return 获取路由器信息的请求
      */
     public static Request getProductInfo() {
@@ -1002,6 +1059,7 @@ public final class RequestUtil {
 
     /**
      * 获取系统配置的请求
+     *
      * @return 获取系统配置的请求
      */
     public static Request getSysConfig() {
@@ -1014,6 +1072,7 @@ public final class RequestUtil {
 
     /**
      * 获取设置系统配置的请求
+     *
      * @param systemConfiguration 系统配置
      * @return 设置系统配置的请求
      */
@@ -1029,6 +1088,7 @@ public final class RequestUtil {
 
     /**
      * 获取查询计划任务的请求
+     *
      * @param planQuery 计划任务查询条件
      * @return 查询计划任务的请求
      */
@@ -1044,6 +1104,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除计划任务的请求
+     *
      * @param planId 计划任务ID
      * @return 删除计划任务的请求
      */
@@ -1059,6 +1120,7 @@ public final class RequestUtil {
 
     /**
      * 获取改变计划任务开关状态的请求
+     *
      * @param planId 计划任务ID
      * @param enable 开关状态
      * @return 改变计划任务开关状态的请求
@@ -1075,7 +1137,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置计划任务启动时要执行的操作的请求
-     * @param planId 计划任务ID
+     *
+     * @param planId  计划任务ID
      * @param actions 计划任务启动时要执行的操作
      * @return 设置计划任务启动时要执行的操作的请求
      */
@@ -1091,6 +1154,7 @@ public final class RequestUtil {
 
     /**
      * 获取创建计划任务的请求
+     *
      * @param plan 计划任务对象
      * @return 创建计划任务的请求
      */
@@ -1106,6 +1170,7 @@ public final class RequestUtil {
 
     /**
      * 获取删除计划任务的请求
+     *
      * @param planIds 要删除的计划任务ID列表
      * @return 删除计划任务的请求
      */
@@ -1121,6 +1186,7 @@ public final class RequestUtil {
 
     /**
      * 获取修改计划任务的请求
+     *
      * @param plan 计划任务对象
      * @return 修改计划任务的请求
      */
@@ -1136,6 +1202,7 @@ public final class RequestUtil {
 
     /**
      * 获取改变PPPOE连接状态的请求
+     *
      * @param isConnect PPPOE连接状态
      * @return 改变PPPOE连接状态的请求
      */
@@ -1151,6 +1218,7 @@ public final class RequestUtil {
 
     /**
      * 获取添加ZigBee设备倒计时的请求
+     *
      * @return 获取添加ZigBee设备倒计时的请求
      */
     public static Request getEzmodeCountDown() {
@@ -1163,6 +1231,7 @@ public final class RequestUtil {
 
     /**
      * 获取Qos模式的请求
+     *
      * @return 获取Qos模式的请求
      */
     public static Request getQosMode() {
@@ -1175,6 +1244,7 @@ public final class RequestUtil {
 
     /**
      * 获取设置Qos模式的请求
+     *
      * @param qosMode Qos模式
      * @return 设置Qos模式的请求
      */
@@ -1190,6 +1260,7 @@ public final class RequestUtil {
 
     /**
      * 获取被设置为急速模式的设备的MAC地址的请求
+     *
      * @return 获取被设置为急速模式的设备的MAC地址的请求
      */
     public static Request getQosExclusiveModeMac() {
@@ -1202,6 +1273,7 @@ public final class RequestUtil {
 
     /**
      * 获取将指定设备设置为急速模式的请求
+     *
      * @param mac 要设置为急速模式的设备的MAC地址
      * @return 将指定设备设置为急速模式的请求
      */
@@ -1216,6 +1288,7 @@ public final class RequestUtil {
 
     /**
      * 获取是否开始测试网络带宽的请求
+     *
      * @param isStart 是否开始测试的状态
      * @return 是否开始测试网络带宽的请求
      */
@@ -1230,6 +1303,7 @@ public final class RequestUtil {
 
     /**
      * 获取网络带宽测试结果的请求
+     *
      * @return 获取网络带宽测试结果的请求
      */
     public static Request bandwidthTestResult() {
@@ -1242,6 +1316,7 @@ public final class RequestUtil {
 
     /**
      * 获取无线信号强度等级的请求
+     *
      * @return 获取无线信号强度等级的请求
      */
     public static Request getSignalStrengthLevel() {
@@ -1254,6 +1329,7 @@ public final class RequestUtil {
 
     /**
      * 获取设置无线信号强度等级的请求
+     *
      * @param signalStrengthLevel 无线信号强度等级
      * @return 设置无线信号强度等级的请求
      */
@@ -1268,6 +1344,7 @@ public final class RequestUtil {
 
     /**
      * 获取QosVPN设置的请求
+     *
      * @return 获取QosVPN设置的请求
      */
     public static Request getQosVpnConfig() {
@@ -1280,6 +1357,7 @@ public final class RequestUtil {
 
     /**
      * 获取设置QosVPN的请求
+     *
      * @param qosVpnConfigRequest QosVPN设置
      * @return 设置QosVPN的请求
      */
@@ -1295,6 +1373,7 @@ public final class RequestUtil {
 
     /**
      * 获取摄像头搜索到的路由器Wifi列表的请求
+     *
      * @param deviceId 摄像头ID
      * @return 获取摄像头搜索到的路由器Wifi列表的请求
      */
@@ -1310,8 +1389,9 @@ public final class RequestUtil {
 
     /**
      * 获取设置无线局域网和访客网络配置的请求
-     * @param wlanPort 无线局域网的端口
-     * @param wlanConfig 无线局域网配置
+     *
+     * @param wlanPort        无线局域网的端口
+     * @param wlanConfig      无线局域网配置
      * @param guestWlanConfig 访客网络配置
      * @return 设置无线局域网和访客网络配置的请求
      */
@@ -1327,6 +1407,7 @@ public final class RequestUtil {
 
     /**
      * 获取无线局域网和访客网络配置的请求
+     *
      * @param wlanPort 无线局域网的端口
      * @return 获取无线局域网和访客网络配置的请求
      */
@@ -1342,6 +1423,7 @@ public final class RequestUtil {
 
     /**
      * 获取检查更新的请求，检查是否有更新
+     *
      * @return 获取检查更新的请求
      */
     public static Request checkUpdate() {
@@ -1354,6 +1436,7 @@ public final class RequestUtil {
 
     /**
      * 获取更新状态的请求，如更新版本号
+     *
      * @return 获取更新状态的请求
      */
     public static Request getOtaStatus() {
@@ -1367,6 +1450,7 @@ public final class RequestUtil {
 
     /**
      * 获取检查是否可以进行更新的请求
+     *
      * @return 检查是否可以进行更新的请求
      */
     public static Request ready2Update() {
@@ -1379,6 +1463,7 @@ public final class RequestUtil {
 
     /**
      * 获取安装更新的请求
+     *
      * @return 安装更新的请求
      */
     public static Request installUpdate() {
@@ -1391,7 +1476,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置摄像头无线局域网连接的请求
-     * @param deviceId 摄像头ID
+     *
+     * @param deviceId   摄像头ID
      * @param cameraWlan 摄像头连接的无线局域网
      * @return 设置摄像头无线局域网连接的请求
      */
@@ -1407,6 +1493,7 @@ public final class RequestUtil {
 
     /**
      * 获取安全设置的请求，包括进入延迟报警时间、离开延迟报警时间、报警周期等
+     *
      * @return 获取安全设置的请求
      */
     public static Request getCieConfig() {
@@ -1419,6 +1506,7 @@ public final class RequestUtil {
 
     /**
      * 获取移动网络信息的请求
+     *
      * @return 获取移动网络信息的请求
      */
     public static Request getMobileInfo() {
@@ -1432,7 +1520,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置联系电话配置的请求
-     * @param mobilePhoneConfig  联系电话配置
+     *
+     * @param mobilePhoneConfig 联系电话配置
      * @return 设置联系电话的请求
      */
     public static Request setMobilePhoneConfig(MobilePhoneConfig mobilePhoneConfig) {
@@ -1446,6 +1535,7 @@ public final class RequestUtil {
 
     /**
      * 获取联系电话配置的请求
+     *
      * @return 获取联系电话配置的请求
      */
     public static Request getMobilePhoneConfig() {
@@ -1458,6 +1548,7 @@ public final class RequestUtil {
 
     /**
      * 获取电池电量信息的请求
+     *
      * @return 获取电池电量信息的请求
      */
     public static Request getBatteryInfo() {
@@ -1470,7 +1561,8 @@ public final class RequestUtil {
 
     /**
      * 获取设置设备旁路的请求
-     * @param ids 要设置旁路的设备ID列表
+     *
+     * @param ids      要设置旁路的设备ID列表
      * @param isCancel 是否旁路的状态
      * @return 设置设备旁路的请求
      */
@@ -1486,6 +1578,7 @@ public final class RequestUtil {
 
     /**
      * 获取无线局域网接入规则的请求
+     *
      * @param port 无线局域网的端口
      * @return 获取无线局域网接入规则的请求
      */
@@ -1501,6 +1594,7 @@ public final class RequestUtil {
 
     /**
      * 获取设置无线局域网接入规则的请求
+     *
      * @param port 无线局域网的接口
      * @param macs 终端设备的MAC地址列表
      * @return 设置无线局域网接入规则的请求
@@ -1517,6 +1611,7 @@ public final class RequestUtil {
 
     /**
      * 获取设置无线局域网接入规则的请求
+     *
      * @param port 无线局域网的接口
      * @param macs 终端设备的MAC地址
      * @return 设置无线局域网接入规则的请求
@@ -1537,18 +1632,18 @@ public final class RequestUtil {
      * @param command 要执行的命令
      * @return 发送红外命令的请求
      */
-    public static Request sendIrCommand(int id, Models.InfraredCommand command) {
+    public static Request sendIrCommand(int id, Models.InfraredCommand command,boolean repetitive) {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.SEND_IR_COMMAND);
         requestBuilder.setRequestId(RequestType.SEND_IR_COMMAND_VALUE + createId());
-
-        requestBuilder.setExtension(Messages.SendIrCommandRequest.request, Messages.SendIrCommandRequest.newBuilder().setId(id).setCommand(command).build());
+        requestBuilder.setExtension(Messages.SendIrCommandRequest.request, Messages.SendIrCommandRequest.newBuilder().setRepetitive(repetitive).setId(id).setCommand(command).build());
 
         return requestBuilder.build();
     }
 
     /**
      * 获取解锁门锁的请求
+     *
      * @param deviceId 门锁设备ID
      * @return 解锁门锁的请求
      */
@@ -1577,7 +1672,7 @@ public final class RequestUtil {
     }
 
 
-    public  static Request collectDiagnosticInfo(){
+    public static Request collectDiagnosticInfo() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.COLLECT_DIAGNOSTIC_INFO);
         requestBuilder.setRequestId(RequestType.COLLECT_DIAGNOSTIC_INFO_VALUE + createId());
@@ -1585,11 +1680,17 @@ public final class RequestUtil {
     }
 
 
-
-    public static Request stopWarning(){
+    public static Request stopWarning() {
         Request.Builder requestBuilder = Request.newBuilder();
         requestBuilder.setType(RequestType.STOP_WARNING);
         requestBuilder.setRequestId(RequestType.STOP_WARNING_VALUE + createId());
+        return requestBuilder.build();
+    }
+
+    public  static Request getActiveAlarms(){
+        Request.Builder requestBuilder = Request.newBuilder();
+        requestBuilder.setType(RequestType.GET_ACTIVE_ALARMS);
+        requestBuilder.setRequestId(RequestType.GET_ACTIVE_ALARMS_VALUE + createId());
         return requestBuilder.build();
     }
 

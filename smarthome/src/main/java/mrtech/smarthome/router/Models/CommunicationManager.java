@@ -1,8 +1,8 @@
 package mrtech.smarthome.router.Models;
 
 
+
 import java.util.Collection;
-import java.util.concurrent.TimeoutException;
 
 import mrtech.smarthome.rpc.Messages;
 import rx.Subscription;
@@ -13,6 +13,9 @@ import rx.functions.Action2;
  * 路由通讯管理。实现用户与路由器的通讯功能
  */
 public interface CommunicationManager {
+    /**
+     * 请求默认超时时间。毫秒。
+     */
     int ROUTER_REQUEST_TIMEOUT = 5000;
 
     /**
@@ -23,10 +26,10 @@ public interface CommunicationManager {
     void postRequestAsync(Messages.Request request, Action2<Messages.Response, Throwable> callback);
 
     /**
-     * 异步向路由器发送请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT
+     * 异步向路由器发送请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT，缓存数据可以使用CacheProvider获取。默认以RequestType为标识。
      * @param request 路由器请求信息。可以通过RequestUtil创建
      * @param callback 请求回调，回调throwable对象如果不等于null，即表示当前请求存在错误
-     * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器
+     * @param cache 是否启用缓存。true开启缓存区，并且优先使用缓存区中数据，缓存区无数据才发出网络请求。false直接发送网络请求，请求 成功 且 RequestType已开启缓存区 则更新该缓存区。
      */
     void postRequestAsync(Messages.Request request, Action2<Messages.Response, Throwable> callback, boolean cache);
 
@@ -39,49 +42,50 @@ public interface CommunicationManager {
     void postRequestAsync(Messages.Request request, Action2<Messages.Response, Throwable> callback, int timeout);
 
     /**
-     * 异步向路由器发送请求
+     * 异步向路由器发送请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT，缓存数据可以使用CacheProvider获取。默认以RequestType为标识。
      * @param request 路由器请求信息。可以通过RequestUtil创建
      * @param callback 请求回调，回调throwable对象如果不等于null，即表示当前请求存在错误
      * @param timeout 请求超时，毫秒
-     * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器
+     * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器,默认以RequestType类型缓存。
      */
     void postRequestAsync(Messages.Request request, Action2<Messages.Response, Throwable> callback, int timeout, boolean cache);
 
-    /**
-     * 向路由器发送一个请求。默认不启用缓存
-     * @param request 路由器请求信息。可以通过RequestUtil创建
-     * @param timeout 超时时间。毫秒
-     * @return 请求回调
-     * @throws TimeoutException
-     */
-    Messages.Response postRequest(Messages.Request request, int timeout) throws TimeoutException;
 
-    /**
-     * 向路由器发送一个请求
-     * @param request 路由器请求信息。可以通过RequestUtil创建
-     * @param timeout 超时时间。毫秒
-     * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器
-     * @return 请求回调
-     * @throws TimeoutException
-     */
-    Messages.Response postRequest(Messages.Request request, int timeout, boolean cache) throws TimeoutException;
-
-    /**
-     * 向路由器发送一个请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT,不启用缓存
-     * @param request 路由器请求信息。可以通过RequestUtil创建
-     * @return 请求回调
-     * @throws TimeoutException
-     */
-    Messages.Response postRequest(Messages.Request request) throws TimeoutException;
-
-    /**
-     * 向路由器发送一个请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT
-     * @param request 路由器请求信息。可以通过RequestUtil创建
-     * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器
-     * @return 请求回调
-     * @throws TimeoutException
-     */
-    Messages.Response postRequest(Messages.Request request, boolean cache) throws TimeoutException;
+//    /**
+//     * 向路由器发送一个请求。默认不启用缓存
+//     * @param request 路由器请求信息。可以通过RequestUtil创建
+//     * @param timeout 超时时间。毫秒
+//     * @return 请求回调
+//     * @throws TimeoutException
+//     */
+//    Messages.Response postRequest(Messages.Request request, int timeout) throws TimeoutException;
+//
+//    /**
+//     * 向路由器发送一个请求
+//     * @param request 路由器请求信息。可以通过RequestUtil创建
+//     * @param timeout 超时时间。毫秒
+//     * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器
+//     * @return 请求回调
+//     * @throws TimeoutException
+//     */
+//    Messages.Response postRequest(Messages.Request request, int timeout, boolean cache) throws TimeoutException;
+//
+//    /**
+//     * 向路由器发送一个请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT,不启用缓存
+//     * @param request 路由器请求信息。可以通过RequestUtil创建
+//     * @return 请求回调
+//     * @throws TimeoutException
+//     */
+//    Messages.Response postRequest(Messages.Request request) throws TimeoutException;
+//
+//    /**
+//     * 向路由器发送一个请求，默认请求超时为 RouterSession.ROUTER_REQUEST_TIMEOUT
+//     * @param request 路由器请求信息。可以通过RequestUtil创建
+//     * @param cache 是否启用缓存。true启用缓存，则首次发送会网络请求给服务器
+//     * @return 请求回调
+//     * @throws TimeoutException
+//     */
+//    Messages.Response postRequest(Messages.Request request, boolean cache) throws TimeoutException;
 
     /**
      * 订阅指定流。即路由器发送数据流。

@@ -1,7 +1,7 @@
 package mrtech.smarthome.router.Models;
 
 
-import com.orm.dsl.Table;
+import com.orm.annotation.Table;
 
 /**
  * 数据实体基类

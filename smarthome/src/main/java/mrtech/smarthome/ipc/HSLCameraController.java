@@ -44,9 +44,9 @@ class HSLCameraController implements IPCController {
                     synchronized (HSLCameraController.this) {
                         try {
                             trace("ptz command:" + cmd);
-                            DeviceSDK.ptzControl(mCurrent.getIpcContext().getHandle(), cmd);
+                            DeviceSDK.ptzControl(mCurrent.getIpcContext().getCameraId(), cmd);
                             Thread.sleep(PTZ_CMD_DELAY);
-                            DeviceSDK.ptzControl(mCurrent.getIpcContext().getHandle(), cmd + 1);
+                            DeviceSDK.ptzControl(mCurrent.getIpcContext().getCameraId(), cmd + 1);
                         } catch (Exception ex) {
                             trace("ptz control error", ex);
                         }

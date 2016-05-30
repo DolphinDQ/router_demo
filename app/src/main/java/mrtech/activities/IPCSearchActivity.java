@@ -24,6 +24,7 @@ import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.rpc.Models;
 import mrtech.smarthome.util.RequestUtil;
 import rx.functions.Action1;
+import rx.functions.Action2;
 
 public class IPCSearchActivity extends BaseActivity {
 
@@ -100,44 +101,39 @@ public class IPCSearchActivity extends BaseActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int itemId = item.getItemId();
         if (itemId == R.id.action_search_camera) {
-            new AsyncTask<Void, Void, List<Models.Device>>() {
+            Toast.makeText(IPCSearchActivity.this, "开始搜索摄像头...", Toast.LENGTH_SHORT).show();
+            item.setEnabled(false);
+            mCommunicationManager.postRequestAsync(RequestUtil.searchCamera(), new Action2<Messages.Response, Throwable>() {
                 @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                    Toast.makeText(IPCSearchActivity.this, "开始搜索摄像头...", Toast.LENGTH_SHORT).show();
-                    item.setEnabled(false);
-                }
+                public void call(Messages.Response response, Throwable throwable) {
+                    if (response != null && response.getErrorCode() == Messages.Response.ErrorCode.SUCCESS) {
+                        final List<Models.Device> devices = response.getExtension(Messages.SearchCameraResponse.response)
+                                .getDevicesList();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                @Override
-                protected List<Models.Device> doInBackground(Void... params) {
-                    try {
-                        final Messages.Response response = mCommunicationManager.postRequest(RequestUtil.searchCamera());
-                        if (response != null && response.getErrorCode() == Messages.Response.ErrorCode.SUCCESS) {
-                            return response.getExtension(Messages.SearchCameraResponse.response)
-                                    .getDevicesList();
-                        }
-                    } catch (TimeoutException e) {
-                        e.printStackTrace();
+                                if (devices != null) {
+                                    cameraDeviceArrayAdapter.clear();
+                                    cameraDeviceArrayAdapter.addAll(devices);
+                                    Toast.makeText(IPCSearchActivity.this, "搜索完毕。", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(IPCSearchActivity.this, "没找到摄像头。", Toast.LENGTH_SHORT).show();
+                                }
+                                item.setEnabled(true);
+
+                            }
+                        });
                     }
-                    return null;
                 }
-
-                @Override
-                protected void onPostExecute(List<Models.Device> devices) {
-                    if (devices != null) {
-                        cameraDeviceArrayAdapter.clear();
-                        cameraDeviceArrayAdapter.addAll(devices);
-                        Toast.makeText(IPCSearchActivity.this, "搜索完毕。", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Toast.makeText(IPCSearchActivity.this, "没找到摄像头。", Toast.LENGTH_SHORT).show();
-                    }
-                    item.setEnabled(true);
-                }
-            }.execute();
+            });
             return true;
         }
-        return super.onOptionsItemSelected(item);
+
+        return super.
+
+                onOptionsItemSelected(item);
+
     }
 
     private void initView() {

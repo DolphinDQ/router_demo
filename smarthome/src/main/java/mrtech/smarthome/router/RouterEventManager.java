@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import mrtech.smarthome.BuildConfig;
+import mrtech.smarthome.SmartHomeApp;
 import mrtech.smarthome.router.Models.*;
 import mrtech.smarthome.rpc.Messages;
 import mrtech.smarthome.util.RequestUtil;
 import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Action2;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
@@ -23,7 +24,7 @@ import rx.subjects.PublishSubject;
 class RouterEventManager implements EventManager {
 
     private static void trace(String msg) {
-        if (BuildConfig.DEBUG)
+        if (SmartHomeApp.DEBUG)
             Log.d(RouterEventManager.class.getName(), msg);
     }
 
@@ -67,8 +68,8 @@ class RouterEventManager implements EventManager {
                 if (timestamp >= config.getLastUpdateTime()) {
                     config.setLastUpdateTime(timestamp + 1); // 最后更新时间为最后报警的时间+1秒
                     trace("last update time update to :" + timestamp);
-                    timelineRouterCallback.getRouter().saveConfig();
-                    trace("last update time save completed!");
+                    timelineRouterCallback.getRouter().saveConfig(5);//延迟5秒迁入数据库，减轻主线程压力。
+//                    trace("last update time save completed!");
                 }
             }
         });
@@ -156,6 +157,7 @@ class RouterEventManager implements EventManager {
                     public Router getRouter() {
                         return client.getRouter();
                     }
+
                     @Override
                     public Messages.Event getData() {
                         return event;
@@ -186,37 +188,38 @@ class RouterEventManager implements EventManager {
 
 
     private void queryTimeline(final Router router) {
-        try {
-            final RouterConfig config = router.getConfig();
-            long since = config.getLastUpdateTime();
-            trace("query time line since:" + since);
-            final Messages.Response response = router.getRouterSession()
-                    .getCommunicationManager()
-                    .postRequest(RequestUtil.getTimeline(mrtech.smarthome.rpc.Models.TimelineQuery
-                            .newBuilder()
-                            .setPageSize(100)
-                            .setPage(0)
-                            .setSince(since)
-                            .setLevel(mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_ALARM)
-                            .build()));
-            if (response != null && response.getErrorCode() == Messages.Response.ErrorCode.SUCCESS) {
-                final List<mrtech.smarthome.rpc.Models.Timeline> resultsList = response.getExtension(Messages.QueryTimelineResponse.response).getResultsList();
-                for (final mrtech.smarthome.rpc.Models.Timeline timeline : resultsList) {
-                    subjectTimeLine.onNext(new RouterCallback<mrtech.smarthome.rpc.Models.Timeline>() {
-                        @Override
-                        public Router getRouter() {
-                            return router;
+        final RouterConfig config = router.getConfig();
+        long since = config.getLastUpdateTime();
+        trace("query time line since:" + since);
+        router.getRouterSession()
+                .getCommunicationManager()
+                .postRequestAsync(RequestUtil.getTimeline(mrtech.smarthome.rpc.Models.TimelineQuery
+                        .newBuilder()
+                        .setPageSize(10)
+                        .setPage(0)
+                        .setSince(since)
+                        .setLevel(mrtech.smarthome.rpc.Models.TimelineLevel.TIMELINE_LEVEL_ALARM)
+                        .build()), new Action2<Messages.Response, Throwable>() {
+                    @Override
+                    public void call(Messages.Response response, Throwable throwable) {
+                        if (response != null && response.getErrorCode() == Messages.Response.ErrorCode.SUCCESS) {
+                            final List<mrtech.smarthome.rpc.Models.Timeline> resultsList = response.getExtension(Messages.QueryTimelineResponse.response).getResultsList();
+                            for (final mrtech.smarthome.rpc.Models.Timeline timeline : resultsList) {
+                                subjectTimeLine.onNext(new RouterCallback<mrtech.smarthome.rpc.Models.Timeline>() {
+                                    @Override
+                                    public Router getRouter() {
+                                        return router;
+                                    }
+                                    @Override
+                                    public mrtech.smarthome.rpc.Models.Timeline getData() {
+                                        return timeline;
+                                    }
+                                });
+                            }
+                        }else {
+                            trace("拉取离线报警失败。");
                         }
-
-                        @Override
-                        public mrtech.smarthome.rpc.Models.Timeline getData() {
-                            return timeline;
-                        }
-                    });
-                }
-            }
-        } catch (TimeoutException e) {
-        }
+                    }
+                });
     }
-
 }

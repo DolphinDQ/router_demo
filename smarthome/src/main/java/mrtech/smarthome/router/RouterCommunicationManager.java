@@ -52,6 +52,7 @@ class RouterCommunicationManager implements CommunicationManager {
     private final ArrayList<Messages.Event.EventType> mEventTypes;
     private final ConcurrentHashMap<Integer, Messages.Response> mResponseMap;
     private boolean destroyed;
+    private boolean mPostTaskForceStop;
     private SSLSocket socket;
     private Thread mPostTask;
     private Thread mReadTask;
@@ -123,16 +124,13 @@ class RouterCommunicationManager implements CommunicationManager {
     }
 
     public void init(SSLSocket socket) {
-        destroyed = false;
         this.socket = socket;
-        if (mPostTask == null) {
-            mPostTask = new Thread(new RequestQueuePostTask());
-            mPostTask.start();
-        }
-        if (mReadTask == null) {
-            mReadTask = new Thread(new SocketListeningTask());
-            mReadTask.start();
-        }
+        mPostTask = new Thread(new RequestQueuePostTask());
+        mPostTask.start();
+        mReadTask = new Thread(new SocketListeningTask());
+        mReadTask.start();
+        destroyed = false;
+
     }
 
     @Override
@@ -152,15 +150,20 @@ class RouterCommunicationManager implements CommunicationManager {
 
     @Override
     public void postRequestAsync(final Messages.Request request, final Action2<Messages.Response, Throwable> callback, int timeout, boolean cache) {
-        if (request != null && mClient.isConnected()) {
-            if (callback != null) {
-                if (cache && mRouterCacheProvider != null) {
-                    final Messages.Response response = mRouterCacheProvider.getResponseCache(request.getType());
-                    if (response != null) {
-                        callback.call(response, null);
-                        return;
-                    }
+        assert request != null;
+        if (mRouterCacheProvider != null) {
+            if (cache) {
+                final Messages.Response response = mRouterCacheProvider.getResponseCache(request);
+                if (response != null)  {
+                    callback.call(response, null);
+                    return;
                 }
+            }
+            mRouterCacheProvider.setNewCache(request);
+        }
+        if (mClient.isConnected()) {
+            if (callback != null) {
+
                 getSubjectResponse().timeout(timeout, TimeUnit.MILLISECONDS).first(new Func1<Messages.Response, Boolean>() {
                     @Override
                     public Boolean call(Messages.Response resp) {
@@ -224,17 +227,20 @@ class RouterCommunicationManager implements CommunicationManager {
         }
     }
 
-    @Override
+    //    @Override
     public Messages.Response postRequest(Messages.Request request, int timeout) throws TimeoutException {
         return postRequest(request, timeout, false);
     }
 
-    @Override
+    //    @Override
     public Messages.Response postRequest(Messages.Request request, int timeout, boolean cache) throws TimeoutException {
         if (request == null) return null;
-        if (cache && mRouterCacheProvider != null) {
-            final Messages.Response response = mRouterCacheProvider.getResponseCache(request.getType());
-            if (response != null) return response;
+        if (mRouterCacheProvider != null) {
+            if (cache) {
+                final Messages.Response response = mRouterCacheProvider.getResponseCache(request);
+                if (response != null) return response;
+            }
+            mRouterCacheProvider.setNewCache(request);
         }
         if (!mClient.isConnected()) return null;
         mSubscribeMap.put(request.getRequestId(), request);
@@ -259,12 +265,12 @@ class RouterCommunicationManager implements CommunicationManager {
         }
     }
 
-    @Override
+    //    @Override
     public Messages.Response postRequest(Messages.Request request) throws TimeoutException {
         return postRequest(request, ROUTER_REQUEST_TIMEOUT);
     }
 
-    @Override
+    //    @Override
     public Messages.Response postRequest(Messages.Request request, boolean cache) throws TimeoutException {
         return postRequest(request, ROUTER_REQUEST_TIMEOUT, cache);
     }
@@ -332,7 +338,7 @@ class RouterCommunicationManager implements CommunicationManager {
         if (!mPostQueue.containsKey(request)) {
             mPostQueue.put(request, callback);
         }
-        flushRequestQueue();
+        flushRequestQueue(false);
     }
 
     @Override
@@ -372,8 +378,9 @@ class RouterCommunicationManager implements CommunicationManager {
         return getSubjectResponse().subscribe(callback);
     }
 
-    public void flushRequestQueue() {
+    public void flushRequestQueue(boolean forceStop) {
         if (mPostTask != null) {
+            mPostTaskForceStop = forceStop;
             mPostTask.interrupt();
         }
     }
@@ -381,7 +388,7 @@ class RouterCommunicationManager implements CommunicationManager {
     public void destroy() {
         if (destroyed) return;
         destroyed = true;
-        flushRequestQueue();
+        flushRequestQueue(true);
         mPostTask = null;
         if (mReadTask != null) {
             mReadTask.interrupt();
@@ -392,7 +399,7 @@ class RouterCommunicationManager implements CommunicationManager {
     private void postEvents() {
         for (Messages.Request request : getRequestQueue()) {
             if (request.getType() == Messages.Request.RequestType.SET_EVENTS) {
-                flushRequestQueue();
+                flushRequestQueue(false);
                 return;
             }
         }
@@ -452,7 +459,11 @@ class RouterCommunicationManager implements CommunicationManager {
                     trace("Request queue task wake up..");
                     //线程醒来。进入下一轮循环。
                 }
+                if (mPostTaskForceStop) {
+                    break;
+                }
             }
+            mPostTaskForceStop = false;
         }
     }
 
@@ -463,14 +474,20 @@ class RouterCommunicationManager implements CommunicationManager {
             final SSLSocket sslSocket = socket;
             while (mClient.isConnected() && !destroyed) {
                 try {
-                    Messages.Callback callback = pullCallback(sslSocket);
+                   final   Messages.Callback callback = pullCallback(sslSocket);
                     if (callback == null) continue;
                     trace(mClient + " callback packet :" + callback);
-                    subjectCallback.onNext(callback);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Thread.currentThread().setName(mClient + " Publisher data");
+                            subjectCallback.onNext(callback);
+                        }
+                    }).start();
                 } catch (IOException e) {
                     //e.printStackTrace();
                     trace(mClient + " read stream error");
-                    mClient.reconnect();
+                    flushRequestQueue(true);
                     break;
                 }
             }

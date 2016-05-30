@@ -6,7 +6,7 @@ package mrtech.smarthome.auth.Models;
 public class AccessToken {
 
     private String access_token;
-    private int expires_in;
+    private long expires_in;
     private String token_type;
 
     /**
@@ -21,7 +21,7 @@ public class AccessToken {
      * 获取令牌过期时间，单位为秒
      * @return 过期时间
      */
-    public int getExpiresIn() {
+    public long getExpiresIn() {
         return expires_in;
     }
 

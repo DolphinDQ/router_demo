@@ -145,7 +145,7 @@ class HSLCameraClient implements IPCContext {
             public void run() {
                 IPCamera cam = mIPCamera;
                 trace("linking camera :" + cam);
-                if (getHandle() == 0) {
+                if (getCameraId() == 0) {
                     long handle = DeviceSDK.createDevice(cam.getUserName(), cam.getPassword(), "", 0, cam.getDeviceId(), 1);
                     trace("create camera " + cam + "->" + handle);
                     if (handle > 0) {
@@ -173,7 +173,7 @@ class HSLCameraClient implements IPCContext {
 
 
     @Override
-    public long getHandle() {
+    public long getCameraId() {
         return mHandle;
     }
 

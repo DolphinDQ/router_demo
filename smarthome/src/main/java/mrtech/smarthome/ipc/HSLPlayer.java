@@ -6,7 +6,11 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import hsl.p2pipcam.nativecaller.DeviceSDK;
@@ -52,8 +56,9 @@ class HSLPlayer implements IPCPlayer {
 
     /**
      * IPC播放器
+     *
      * @param renderer 视频渲染器
-     * @param manager IPC管理器
+     * @param manager  IPC管理器
      */
     public HSLPlayer(VideoRenderer renderer, IPCManager manager) {
 
@@ -100,6 +105,14 @@ class HSLPlayer implements IPCPlayer {
                     public int getHeight() {
                         return height;
                     }
+
+                    @Override
+                    public byte[] getRGB565Buffer() {
+//                        return decodeYUV420SPrgb565(imageBuffer, width, height);
+                        byte[] rgb = new byte[width * height * 3];
+                        DeviceSDK.YUV420ToRGB565(imageBuffer, rgb, width, height);
+                        return rgb;
+                    }
                 });
             }
         });
@@ -134,6 +147,7 @@ class HSLPlayer implements IPCPlayer {
 
     /**
      * 播放IPC视频
+     *
      * @param cam 指定IPC
      */
     @Override
@@ -182,12 +196,13 @@ class HSLPlayer implements IPCPlayer {
                     }
                     return null;
                 }
-            }.execute(cam.getIpcContext().getHandle());
+            }.execute(cam.getIpcContext().getCameraId());
         }
     }
 
     /**
      * 播放IPC视频
+     *
      * @param deviceId 设备ID
      */
     @Override
@@ -197,6 +212,7 @@ class HSLPlayer implements IPCPlayer {
 
     /**
      * 获取正在播放的IPC
+     *
      * @return 正在播放的IPC
      */
     @Override
@@ -206,6 +222,7 @@ class HSLPlayer implements IPCPlayer {
 
     /**
      * 获取IPC列表
+     *
      * @return IPC列表
      */
     @Override
@@ -228,7 +245,7 @@ class HSLPlayer implements IPCPlayer {
         if (playingCamera != null) {
             setAudioSwitch(false);
             setTalkSwitch(false);
-            DeviceSDK.stopPlayStream(playingCamera.getIpcContext().getHandle());
+            DeviceSDK.stopPlayStream(playingCamera.getIpcContext().getCameraId());
             ((HSLCameraClient) playingCamera.getIpcContext()).setIsPlaying(false);
             playingCamera = null;
         }
@@ -239,7 +256,7 @@ class HSLPlayer implements IPCPlayer {
         IPCamera cam = getPlayingCamera();
         if (cam == null) return;
         synchronized (HSLPlayer.this) {
-            long user = cam.getIpcContext().getHandle();
+            long user = cam.getIpcContext().getCameraId();
             if (audioSwitch == on) return;
             trace("set audio :" + on);
             if (audioSwitch = on) {
@@ -271,6 +288,7 @@ class HSLPlayer implements IPCPlayer {
         subjectPicture.first().subscribe(new Action1<PictureData>() {
             @Override
             public void call(PictureData pictureData) {
+
                 callback.call(pictureData);
             }
         });
@@ -313,7 +331,7 @@ class HSLPlayer implements IPCPlayer {
         if (talkSwitch == on) return;
         IPCamera cam = getPlayingCamera();
         if (cam == null) return;
-        long userid = cam.getIpcContext().getHandle();
+        long userid = cam.getIpcContext().getCameraId();
         synchronized (HSLPlayer.this) {
             trace("set talk :" + on);
             if (talkSwitch = on) {
@@ -344,7 +362,7 @@ class HSLPlayer implements IPCPlayer {
         try {
             obj.put("param", 5);
             obj.put("value", reversed ? 3 : 1);
-            NativeCaller.SetParam(playingCamera.getIpcContext().getHandle(), 0x2026, obj.toString());
+            NativeCaller.SetParam(playingCamera.getIpcContext().getCameraId(), 0x2026, obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -357,7 +375,7 @@ class HSLPlayer implements IPCPlayer {
         try {
             obj.put("param", 5);
             obj.put("value", reversed ? 2 : 0);
-            NativeCaller.SetParam(playingCamera.getIpcContext().getHandle(), 0x2026, obj.toString());
+            NativeCaller.SetParam(playingCamera.getIpcContext().getCameraId(), 0x2026, obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -369,7 +387,7 @@ class HSLPlayer implements IPCPlayer {
 //        public void callBackAudioData(long userID, byte[] pcm, int size) {
 //            IPCamera cam = getPlayingCamera();
 //            if (cam == null) return;
-//            if (userID == cam.getIpcContext().getHandle()) {
+//            if (userID == cam.getIpcContext().getCameraId()) {
 //                CustomBufferHead head = new CustomBufferHead();
 //                CustomBufferData data = new CustomBufferData();
 //                head.length = size;
@@ -388,7 +406,7 @@ class HSLPlayer implements IPCPlayer {
         public void AudioRecordData(byte[] data, int len) {
             IPCamera cam = getPlayingCamera();
             if (cam == null || len <= 0) return;
-            DeviceSDK.SendTalkData(cam.getIpcContext().getHandle(), data, len);
+            DeviceSDK.SendTalkData(cam.getIpcContext().getCameraId(), data, len);
         }
     }
 
