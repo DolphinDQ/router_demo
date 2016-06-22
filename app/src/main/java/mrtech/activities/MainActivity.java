@@ -290,7 +290,7 @@ public class MainActivity extends BaseActivity {
 
     private void initCameraControl() {
         mCameraBtn = (Button) findViewById(R.id.camera_btn);
-        mCameraBtn.setEnabled(false);
+//        mCameraBtn.setEnabled(false);
         mCameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -534,7 +534,7 @@ public class MainActivity extends BaseActivity {
             setInfraredControlBtnState();
             setDoorLockBtnState();
         } else {
-            mCameraBtn.setEnabled(false);
+//            mCameraBtn.setEnabled(false);
             mIRCtrlBtn.setEnabled(false);
             mLockListBtn.setEnabled(false);
             mCameraBtn.setText(getText(R.string.camera));
@@ -627,7 +627,7 @@ public class MainActivity extends BaseActivity {
                         validCount++;
                 }
                 mCameraBtn.setText("" + getText(R.string.camera) + validCount + "/" + cameras.size());
-                mCameraBtn.setEnabled(validCount > 0);
+//                mCameraBtn.setEnabled(validCount > 0);
             }
         });
     }

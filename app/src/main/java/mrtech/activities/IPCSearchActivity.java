@@ -54,9 +54,9 @@ public class IPCSearchActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         //配置摄像头参数。
-                        device.getExtension(Models.CameraDevice.detail).toBuilder().setUser("admin").build();
-                        device.toBuilder().setType(Models.DeviceType.DEVICE_TYPE_CAMERA).build();
-                        mCameraManager.saveCamera(device, new Action1<Throwable>() {
+                        Models.CameraDevice cameraDevice= device.getExtension(Models.CameraDevice.detail).toBuilder().setUser("admin").setPassword("").build();
+                        Models.Device dev= device.toBuilder().setType(Models.DeviceType.DEVICE_TYPE_CAMERA).setExtension(Models.CameraDevice.detail,cameraDevice).build();
+                        mCameraManager.saveCamera(dev, new Action1<Throwable>() {
                             @Override
                             public void call(final Throwable throwable) {
                                 if (throwable != null) {
